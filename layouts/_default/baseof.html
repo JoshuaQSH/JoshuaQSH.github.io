@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ block "title" . }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    <style>
+      body { font: 16px/1.6 system-ui; margin: 40px auto; max-width: 760px; padding: 0 16px; color: #1f2937; }
+      a { color: #1d4ed8; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      nav { margin-bottom: 32px; }
+      nav a { margin-right: 16px; font-weight: 600; }
+      .meta { color: #6b7280; font-size: 0.9rem; }
+      ul { padding-left: 20px; }
+    </style>
+  </head>
+  <body>
+    <nav>
+      {{ range .Site.Menus.main }}
+        <a href="{{ .URL | relURL }}">{{ .Name }}</a>
+      {{ end }}
+    </nav>
+    <main>
+      {{ block "main" . }}{{ end }}
+    </main>
+  </body>
+</html>

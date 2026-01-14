@@ -1,0 +1,26 @@
+baseURL = "http://localhost:1313/"
+languageCode = "en-us"
+title = "Shenghao Qiu"
+
+[taxonomies]
+  category = "categories"
+
+[[menu.main]]
+  name = "About"
+  url = "/about/"
+  weight = 10
+
+[[menu.main]]
+  name = "Posts"
+  url = "/posts/"
+  weight = 20
+
+[[menu.main]]
+  name = "Categories"
+  url = "/categories/"
+  weight = 30
+
+[[menu.main]]
+  name = "Hodgepodge"
+  url = "/hodgepodge/"
+  weight = 40
