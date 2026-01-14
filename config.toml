@@ -1,0 +1,30 @@
+baseURL = "https://example.com/"
+languageCode = "en-us"
+title = "Shenghao Qiu"
+theme = "minimalist"
+
+enableRobotsTXT = true
+
+taxonomies = { category = "categories", tag = "tags" }
+
+[params]
+  description = "Research, writing, and projects by Shenghao Qiu."
+  homeSections = ["about", "posts", "contact"]
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Posts"
+    url = "/posts/"
+    weight = 2
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 3
+  [[menu.main]]
+    name = "CV"
+    url = "/shenghao-qiu-cv.pdf"
+    weight = 4

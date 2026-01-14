@@ -1,0 +1,37 @@
+{{ define "main" }}
+  <section class="hero">
+    <h1>{{ .Site.Title }}</h1>
+    {{ with .Site.Params.description }}<p class="lead">{{ . }}</p>{{ end }}
+  </section>
+
+  {{ $sections := .Site.Params.homeSections | default (slice "about" "posts" "contact") }}
+  {{ range $section := $sections }}
+    {{ if eq $section "posts" }}
+      <section class="home-section">
+        <h2>Recent Posts</h2>
+        <ul class="post-list">
+          {{ range first 3 (where .Site.RegularPages "Section" "posts") }}
+            <li>
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              <span class="post-meta">{{ .Date.Format "Jan 2, 2006" }}</span>
+              {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+            </li>
+          {{ else }}
+            <li>No posts yet.</li>
+          {{ end }}
+        </ul>
+        <a class="text-link" href="/posts/">View all posts →</a>
+      </section>
+    {{ else }}
+      {{ $page := .Site.GetPage $section }}
+      {{ if $page }}
+        <section class="home-section">
+          <h2>{{ $page.Title }}</h2>
+          <div class="content">
+            {{ $page.Content }}
+          </div>
+        </section>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
