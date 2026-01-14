@@ -83,6 +83,18 @@ If the Hodgepodge section has a specific content folder (for example `content/ho
 
 If you need to override a theme template, add a file to `layouts/` with the same path as the theme template.
 
+## RSS feed for home page
+
+The home page publishes RSS using Hugo's `outputs` setting in `config.toml` and a custom template in `layouts/index.xml`.
+
+- `config.toml` enables RSS for the home page with:
+  ```toml
+  outputs = { home = ["HTML", "RSS"] }
+  ```
+- `layouts/index.xml` renders the RSS feed using `.Site.BaseURL`, `.Site.Title`, and the most recent items from the `posts` section.
+
+After running `hugo`, the RSS feed is generated as `public/index.xml` and will be available at `<baseURL>/index.xml`.
+
 ## Deploy to GitHub Pages
 
 1. Build the site:
