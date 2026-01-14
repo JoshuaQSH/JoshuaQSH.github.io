@@ -2,4 +2,5 @@
 title: "About"
 ---
 
-I am Shenghao Qiu, focusing on human-centered technology and clear communication. This site shares writing, research notes, and selected work.
+Hi! I’m Shenghao. This site collects my writing, notes, and experiments.
+
