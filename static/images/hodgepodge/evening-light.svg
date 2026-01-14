@@ -1,0 +1,9 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="640" rx="48" fill="#1C1B2F"/>
+  <rect x="80" y="96" width="800" height="160" rx="32" fill="#FFB470"/>
+  <rect x="80" y="272" width="800" height="120" rx="32" fill="#F37C8E"/>
+  <rect x="80" y="408" width="800" height="120" rx="32" fill="#6B77FF"/>
+  <circle cx="200" cy="176" r="48" fill="#FFF1C9"/>
+  <circle cx="760" cy="464" r="64" fill="#C8D2FF"/>
+  <text x="100" y="560" font-family="'IBM Plex Sans', sans-serif" font-size="24" fill="#F5F3FF">Evening light study</text>
+</svg>

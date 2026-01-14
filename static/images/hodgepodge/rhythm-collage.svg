@@ -1,0 +1,10 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="640" rx="48" fill="#F1F5F9"/>
+  <circle cx="180" cy="200" r="72" fill="#9BD1FF"/>
+  <rect x="300" y="120" width="200" height="160" rx="40" fill="#FFB4B4"/>
+  <rect x="560" y="96" width="280" height="120" rx="32" fill="#FFE3A3"/>
+  <rect x="120" y="320" width="220" height="200" rx="36" fill="#D1C4FF"/>
+  <circle cx="520" cy="400" r="90" fill="#8BE1C2"/>
+  <rect x="660" y="320" width="200" height="220" rx="36" fill="#FFC6E8"/>
+  <text x="120" y="568" font-family="'IBM Plex Sans', sans-serif" font-size="24" fill="#64748B">Rhythm collage</text>
+</svg>

@@ -12,6 +12,43 @@
       nav a { margin-right: 16px; font-weight: 600; }
       .meta { color: #6b7280; font-size: 0.9rem; }
       ul { padding-left: 20px; }
+      .section-intro { margin-top: 12px; color: #4b5563; }
+      .hodgepodge-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+      }
+      .hodgepodge-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        background: #ffffff;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .hodgepodge-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+      }
+      .hodgepodge-link { display: block; color: inherit; text-decoration: none; }
+      .hodgepodge-thumb img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .hodgepodge-body { padding: 16px; }
+      .hodgepodge-body h2 { margin: 0 0 8px; font-size: 1.1rem; }
+      .hodgepodge-body p { margin: 0 0 12px; color: #4b5563; }
+      .hodgepodge-hero img {
+        width: 100%;
+        border-radius: 18px;
+        border: 1px solid #e5e7eb;
+        margin: 12px 0 24px;
+      }
+      @media (max-width: 640px) {
+        body { margin: 24px auto; }
+        nav { margin-bottom: 24px; }
+        .hodgepodge-grid { gap: 16px; }
+      }
     </style>
   </head>
   <body>

@@ -2,4 +2,6 @@
 title: "Hodgepodge"
 ---
 
-A mix of notes, links, and experiments that don’t fit anywhere else.
+## A grab bag of visual notes
+
+Short visual studies, layout experiments, and moodboard fragments that don't belong in the main posts feed.

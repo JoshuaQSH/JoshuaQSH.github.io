@@ -1,0 +1,19 @@
+{{ define "main" }}
+  <article class="post">
+    <header class="page-header">
+      <h1>{{ .Title }}</h1>
+      {{ with .Date }}
+        <span class="meta">{{ .Format "Jan 2, 2006" }}</span>
+      {{ end }}
+    </header>
+    {{ with .Params.image }}
+      <figure class="hodgepodge-hero">
+        <img src="{{ . | relURL }}" alt="{{ $.Params.imageAlt | default $.Title }}" />
+      </figure>
+    {{ end }}
+    <div class="content">
+      {{ .Content }}
+    </div>
+    <p class="text-link"><a href="{{ "/hodgepodge/" | relURL }}">Back to Hodgepodge</a></p>
+  </article>
+{{ end }}
