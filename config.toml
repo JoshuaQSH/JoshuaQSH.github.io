@@ -1,26 +1,30 @@
-baseURL = "http://localhost:1313/"
+baseURL = "https://example.com/"
 languageCode = "en-us"
 title = "Shenghao Qiu"
+theme = "minimalist"
 
-[taxonomies]
-  category = "categories"
+enableRobotsTXT = true
 
-[[menu.main]]
-  name = "About"
-  url = "/about/"
-  weight = 10
+taxonomies = { category = "categories", tag = "tags" }
 
-[[menu.main]]
-  name = "Posts"
-  url = "/posts/"
-  weight = 20
+[params]
+  description = "Research, writing, and projects by Shenghao Qiu."
+  homeSections = ["about", "posts", "contact"]
 
-[[menu.main]]
-  name = "Categories"
-  url = "/categories/"
-  weight = 30
-
-[[menu.main]]
-  name = "Hodgepodge"
-  url = "/hodgepodge/"
-  weight = 40
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Posts"
+    url = "/posts/"
+    weight = 2
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 3
+  [[menu.main]]
+    name = "CV"
+    url = "/shenghao-qiu-cv.pdf"
+    weight = 4
