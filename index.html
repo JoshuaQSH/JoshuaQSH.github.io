@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shenghao Qiu</title>
+  <meta name="description" content="Personal home page for Shenghao Qiu." />
+  <style>
+    :root {
+      color-scheme: light;
+      --text: #0b0b0f;
+      --muted: #52525b;
+      --border: #e4e4e7;
+      --accent: #2563eb;
+      --bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 56px 0 32px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    p {
+      margin: 0 0 16px;
+      color: var(--muted);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hero a {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    main {
+      padding: 36px 0 64px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    .card {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
+
+    .card:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .meta {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .links a {
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      color: var(--text);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0 48px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (min-width: 760px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container hero">
+      <h1>Shenghao Qiu</h1>
+      <p>Researcher and writer exploring minimalist storytelling, human-computer interaction, and thoughtful digital experiences.</p>
+      <a href="/">joshuaqsh.github.io</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="grid">
+      <section class="card">
+        <h2>About</h2>
+        <p class="meta">A short introduction</p>
+        <p>Welcome to my personal corner of the web. I focus on research-driven writing, curated projects, and long-form notes on design, interaction, and storytelling.</p>
+        <div class="links">
+          <a href="/about/">Read more</a>
+          <a href="/shenghao-qiu-cv.pdf">View CV</a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Writing</h2>
+        <p class="meta">Recent posts</p>
+        <p>Notes on technology, craft, and the quiet joy of building thoughtful tools. Visit the archive for the full list.</p>
+        <div class="links">
+          <a href="/posts/">Browse posts</a>
+          <a href="/index.xml">RSS</a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Hodgepodge</h2>
+        <p class="meta">Experiments + sketches</p>
+        <p>Small experiments, photos, and visual snippets collected along the way.</p>
+        <div class="links">
+          <a href="/hodgepodge/">Explore</a>
+          <a href="/images/">Images</a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Contact</h2>
+        <p class="meta">Let’s connect</p>
+        <p>If you’d like to collaborate, chat about research, or share feedback, feel free to reach out.</p>
+        <div class="links">
+          <a href="/contact/">Contact page</a>
+          <a href="mailto:hello@joshuaqsh.github.io">Email</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© 2025 Shenghao Qiu. Built with Hugo.</span>
+    </div>
+  </footer>
+</body>
+</html>

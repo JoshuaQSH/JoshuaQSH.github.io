@@ -29,6 +29,23 @@ hugo server
 
 The site will be available at http://localhost:1313/ and will live-reload as you edit files.
 
+### Test environment commands + gotchas
+
+When running inside this repo's test container, Hugo Extended is not preinstalled. I used the GitHub release tarball and installed the binary into `/usr/local/bin`:
+
+```sh
+HUGO_VERSION=0.154.5
+curl -L -o /tmp/hugo.tar.gz "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+sudo tar -C /usr/local/bin -xzf /tmp/hugo.tar.gz hugo
+hugo version
+```
+
+To make the local server reachable from the browser container, I bound it to all interfaces and set the port explicitly:
+
+```sh
+hugo server --bind 0.0.0.0 --port 1313
+```
+
 ## Add posts (front matter example)
 
 Create a new Markdown file under `content/` (or a section like `content/posts/`). For example:
@@ -105,5 +122,6 @@ After running `hugo`, the RSS feed is generated as `public/index.xml` and will b
 2. Publish `public/` to GitHub Pages. Common approaches:
    - Commit `public/` to the `gh-pages` branch and configure GitHub Pages to serve from that branch.
    - Or use GitHub Actions to run `hugo` with **Hugo Extended** and publish the `public/` directory as the Pages artifact.
+   - If GitHub Pages is set to serve from the repository root on the default branch, it will look for a top-level `index.html`. Without one, GitHub Pages will fall back to rendering `README.md`, which is why you might see the "Personal home page for a raccoon" content instead of the Hugo site. In that case, switch Pages to the `gh-pages` branch (or `/docs`), or commit the generated `public/` output to the root so `index.html` is available.
 
 If using a custom domain, configure it in the GitHub Pages settings and add the `CNAME` file in `static/` so it is included in `public/`.
