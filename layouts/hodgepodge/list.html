@@ -1,0 +1,36 @@
+{{ define "main" }}
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}
+      <div class="section-intro">{{ . }}</div>
+    {{ end }}
+  </header>
+
+  <div class="hodgepodge-grid">
+    {{ range .Pages.ByDate.Reverse }}
+      {{ $page := . }}
+      <article class="hodgepodge-card">
+        <a class="hodgepodge-link" href="{{ $page.RelPermalink }}">
+          {{ with $page.Params.image }}
+            <div class="hodgepodge-thumb">
+              <img src="{{ . | relURL }}" alt="{{ $page.Params.imageAlt | default $page.Title }}" loading="lazy" />
+            </div>
+          {{ end }}
+          <div class="hodgepodge-body">
+            <h2>{{ $page.Title }}</h2>
+            {{ with $page.Params.summary }}
+              <p>{{ . }}</p>
+            {{ else }}
+              <p>{{ $page.Summary }}</p>
+            {{ end }}
+            {{ with $page.Date }}
+              <span class="meta">{{ .Format "Jan 2, 2006" }}</span>
+            {{ end }}
+          </div>
+        </a>
+      </article>
+    {{ else }}
+      <p>No entries found.</p>
+    {{ end }}
+  </div>
+{{ end }}

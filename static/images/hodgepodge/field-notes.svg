@@ -1,0 +1,12 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="640" rx="48" fill="#F7F4EF"/>
+  <rect x="96" y="96" width="240" height="200" rx="28" fill="#E6EDFF"/>
+  <rect x="360" y="96" width="240" height="200" rx="28" fill="#FFEFD3"/>
+  <rect x="624" y="96" width="240" height="200" rx="28" fill="#E5F7EA"/>
+  <rect x="96" y="336" width="280" height="200" rx="28" fill="#FFE7E1"/>
+  <rect x="408" y="336" width="456" height="200" rx="28" fill="#E4E0FF"/>
+  <rect x="130" y="140" width="160" height="20" rx="10" fill="#B9C8FF"/>
+  <rect x="392" y="140" width="160" height="20" rx="10" fill="#F6C26A"/>
+  <rect x="656" y="140" width="160" height="20" rx="10" fill="#9FD4B3"/>
+  <text x="120" y="560" font-family="'IBM Plex Sans', sans-serif" font-size="24" fill="#6B7280">Field notes layout</text>
+</svg>
