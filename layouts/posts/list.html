@@ -1,0 +1,23 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  {{ with .Content }}
+    {{ . }}
+  {{ end }}
+
+  <ul>
+    {{ range .Pages }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{ with .Date }}<span class="meta">{{ .Format "Jan 2, 2006" }}</span>{{ end }}
+        {{ with .Params.categories }}
+          <span class="meta">Categories: {{ delimit . ", " }}</span>
+        {{ end }}
+        {{ with .Params.tags }}
+          <span class="meta">Tags: {{ delimit . ", " }}</span>
+        {{ end }}
+      </li>
+    {{ else }}
+      <li>No posts yet.</li>
+    {{ end }}
+  </ul>
+{{ end }}
