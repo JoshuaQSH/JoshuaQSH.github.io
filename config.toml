@@ -5,6 +5,8 @@ theme = "minimalist"
 
 enableRobotsTXT = true
 
+outputs = { home = ["HTML", "RSS"] }
+
 taxonomies = { category = "categories", tag = "tags" }
 
 [params]
