@@ -1,6 +1,6 @@
 # Hugo Usage Guide
 
-## Install Hugo
+## Install Hugo (Extended required)
 
 Hugo is available as a prebuilt binary for most platforms. Follow the official install instructions for your OS:
 
@@ -17,7 +17,7 @@ Hugo is available as a prebuilt binary for most platforms. Follow the official i
   sudo apt-get install hugo
   ```
 
-For other platforms or the extended version, see https://gohugo.io/installation/.
+This site requires **Hugo Extended** (for the theme asset pipeline). For other platforms or the extended version, see https://gohugo.io/installation/.
 
 ## Run the local server
 
@@ -92,6 +92,6 @@ If you need to override a theme template, add a file to `layouts/` with the same
    The generated site will be in `public/`.
 2. Publish `public/` to GitHub Pages. Common approaches:
    - Commit `public/` to the `gh-pages` branch and configure GitHub Pages to serve from that branch.
-   - Or use GitHub Actions to run `hugo` and publish the `public/` directory as the Pages artifact.
+   - Or use GitHub Actions to run `hugo` with **Hugo Extended** and publish the `public/` directory as the Pages artifact.
 
 If using a custom domain, configure it in the GitHub Pages settings and add the `CNAME` file in `static/` so it is included in `public/`.
