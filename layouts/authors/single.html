@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ .Title }}</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        font: 16px/1.6 system-ui;
+        margin: 40px auto;
+        max-width: 840px;
+        padding: 0 20px;
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        align-items: center;
+      }
+      h1 {
+        margin: 0;
+        font-size: 2.2rem;
+      }
+      h2 {
+        margin-top: 2.5rem;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .role {
+        font-weight: 600;
+        margin: 0.4rem 0 0;
+      }
+      .summary {
+        margin-top: 1rem;
+      }
+      .portrait,
+      .portrait-placeholder {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: #f0f0f0;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #666;
+        flex-shrink: 0;
+      }
+      .portrait {
+        object-fit: cover;
+      }
+      ul {
+        padding-left: 1.1rem;
+      }
+      .list-compact {
+        list-style: none;
+        padding: 0;
+        margin: 0.6rem 0 0;
+      }
+      .list-compact li {
+        margin-bottom: 0.8rem;
+      }
+      .muted {
+        color: #666;
+      }
+      a {
+        color: inherit;
+      }
+      .contact-grid {
+        display: grid;
+        gap: 0.4rem;
+        margin-top: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      {{ with .Params.portrait }}
+        <img class="portrait" src="{{ . }}" alt="Portrait of {{ $.Title }}" />
+      {{ else }}
+        <div class="portrait-placeholder">Portrait not available</div>
+      {{ end }}
+      <div>
+        <h1>{{ .Title }}</h1>
+        {{ with .Params.role }}<p class="role">{{ . }}</p>{{ end }}
+        {{ with .Params.summary }}<p class="summary">{{ . }}</p>{{ end }}
+      </div>
+    </header>
+
+    {{ if .Content }}
+      <section class="summary">
+        {{ .Content }}
+      </section>
+    {{ end }}
+
+    <section>
+      <h2>Contact</h2>
+      {{ with .Params.contact }}
+        <div class="contact-grid">
+          {{ with .address }}<div>{{ . }}</div>{{ end }}
+          {{ with .phone }}<div>{{ . }}</div>{{ end }}
+          {{ with .email }}<div><a href="mailto:{{ . }}">{{ . }}</a></div>{{ end }}
+          {{ with .website }}<div><a href="{{ . }}">{{ . }}</a></div>{{ end }}
+        </div>
+      {{ else }}
+        <p class="muted">Contact details available upon request.</p>
+      {{ end }}
+
+      {{ with .Params.links }}
+        <ul>
+          {{ range . }}
+            <li><a href="{{ .url }}">{{ .label }}</a></li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <p class="muted">No external links listed.</p>
+      {{ end }}
+    </section>
+
+    <section>
+      <h2>Research interests</h2>
+      {{ with .Params.research_interests }}
+        <ul>
+          {{ range . }}
+            <li>{{ . }}</li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <p class="muted">Research interests to be announced.</p>
+      {{ end }}
+    </section>
+
+    <section>
+      <h2>Roles</h2>
+      {{ with .Params.roles }}
+        <ul class="list-compact">
+          {{ range . }}
+            <li>
+              <strong>{{ .title }}</strong> — {{ .org }}
+              {{ with .location }}<span class="muted"> · {{ . }}</span>{{ end }}
+              {{ with .dates }}<div class="muted">{{ . }}</div>{{ end }}
+              {{ with .link }}<div><a href="{{ . }}">{{ . }}</a></div>{{ end }}
+            </li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <p class="muted">Roles coming soon.</p>
+      {{ end }}
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      {{ with .Params.education }}
+        <ul class="list-compact">
+          {{ range . }}
+            <li>
+              <strong>{{ .degree }}</strong> — {{ .institution }}
+              {{ with .location }}<span class="muted"> · {{ . }}</span>{{ end }}
+              {{ with .dates }}<div class="muted">{{ . }}</div>{{ end }}
+              {{ with .honors }}<div>{{ . }}</div>{{ end }}
+              {{ with .thesis }}<div>Thesis: {{ . }}</div>{{ end }}
+              {{ with .notes }}<div>{{ . }}</div>{{ end }}
+            </li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <p class="muted">Education history available upon request.</p>
+      {{ end }}
+    </section>
+  </body>
+</html>
