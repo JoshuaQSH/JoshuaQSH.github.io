@@ -2,7 +2,7 @@ name = "Minimalist"
 license = "MIT"
 licenselink = "https://opensource.org/licenses/MIT"
 description = "A minimalist Hugo theme with typography-focused styling."
-homepage = "https://example.com"
+homepage = "https://joshuaqsh.github.io/"
 min_version = "0.92.0"
 
 [author]
