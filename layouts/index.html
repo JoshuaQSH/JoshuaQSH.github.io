@@ -1,5 +1,5 @@
 {{ define "main" }}
-  <h1>{{ .Site.Title }}</h1>
+  {{ partial "profile-hero.html" . }}
   {{ with .Content }}
     {{ . }}
   {{ end }}

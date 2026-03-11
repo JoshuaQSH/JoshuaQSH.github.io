@@ -2,6 +2,7 @@
 title: "Evening Light Study"
 date: 2024-02-10
 categories: ["Hodgepodge"]
+tags: ["color-study", "lighting", "mood"]
 image: "/images/hodgepodge/evening-light.svg"
 imageAlt: "Soft gradient blocks representing evening light"
 summary: "Layered color blocks capturing late-day glow and shadow transitions."

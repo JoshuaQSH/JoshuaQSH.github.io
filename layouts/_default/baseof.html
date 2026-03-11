@@ -5,14 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ block "title" . }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
     <style>
-      body { font: 16px/1.6 system-ui; margin: 40px auto; max-width: 760px; padding: 0 16px; color: #1f2937; }
+      body {
+        margin: 40px auto;
+        max-width: 760px;
+        padding: 0 16px;
+        color: #1f2937;
+        font-size: 18px;
+        line-height: 1.6;
+        font-family: "Times New Roman", Times, serif;
+      }
       a { color: #1d4ed8; text-decoration: none; }
       a:hover { text-decoration: underline; }
-      nav { margin-bottom: 32px; }
-      nav a { margin-right: 16px; font-weight: 600; }
+      nav {
+        margin-bottom: 32px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 14px;
+      }
+      .nav-link {
+        color: #6b7280;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: color 0.2s ease;
+      }
+      .nav-link:hover {
+        color: #7f66b5;
+        text-decoration: none;
+      }
+      .nav-home {
+        font-size: 1.12rem;
+        font-weight: 700;
+        color: #4b5563;
+      }
+      h1 { margin: 0; font-size: 1.9rem; line-height: 1.2; }
+      h2 { margin-top: 0; }
       .meta { color: #6b7280; font-size: 0.9rem; }
       ul { padding-left: 20px; }
       .section-intro { margin-top: 12px; color: #4b5563; }
+      .profile-hero {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+      .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 999px;
+        object-fit: cover;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.1);
+        flex-shrink: 0;
+      }
+      .profile-copy {
+        min-width: 0;
+      }
+      .profile-title {
+        margin: 8px 0 6px;
+        color: #111827;
+        font-weight: 600;
+      }
+      .profile-description {
+        margin: 0;
+        color: #4b5563;
+      }
       .hodgepodge-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -47,6 +104,15 @@
       @media (max-width: 640px) {
         body { margin: 24px auto; }
         nav { margin-bottom: 24px; }
+        .profile-hero {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 14px;
+        }
+        .profile-avatar {
+          width: 96px;
+          height: 96px;
+        }
         .hodgepodge-grid { gap: 16px; }
       }
     </style>
@@ -54,7 +120,7 @@
   <body>
     <nav>
       {{ range .Site.Menus.main }}
-        <a href="{{ .URL | relURL }}">{{ .Name }}</a>
+        <a class="nav-link{{ if eq .Identifier "home" }} nav-home{{ end }}" href="{{ .URL | relURL }}">{{ .Name }}</a>
       {{ end }}
     </nav>
     <main>

@@ -2,6 +2,7 @@
 title: "Hodgepodge"
 ---
 
-## A grab bag of visual notes
+## Demos, Projects, and Ideas
 
-Short visual studies, layout experiments, and moodboard fragments that don't belong in the main posts feed.
+This page keeps interesting demos, working projects, and early ideas that do
+not belong in the main posts feed.

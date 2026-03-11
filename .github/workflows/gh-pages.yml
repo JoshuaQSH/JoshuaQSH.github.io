@@ -1,8 +1,10 @@
-name: Deploy Hugo site
+name: CI and Deploy Hugo site
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
   workflow_dispatch:
 
 permissions:
@@ -15,25 +17,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
       - name: Setup Hugo (Extended)
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: "0.136.5"
           extended: true
-      - name: Build
-        run: hugo --minify
+      - name: Check post tags
+        run: ./scripts/check_posts_have_tags.sh
+      - name: Build site
+        run: hugo --minify --cleanDestinationDir
+      - name: Check internal links
+        run: ./scripts/check_internal_links.sh public
       - name: Upload artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
   deploy:
-    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build-check
     runs-on: ubuntu-latest
     environment:
       name: github-pages

@@ -2,4 +2,4 @@
 title: "Categories"
 ---
 
-Browse posts by category.
+Browse category terms, then use the full index below to jump to any post/page.

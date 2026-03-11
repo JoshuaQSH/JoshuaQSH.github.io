@@ -1,0 +1,16 @@
+{{ $profile := .Site.Params.profile }}
+{{ with $profile }}
+  <section class="profile-hero">
+    <img
+      class="profile-avatar"
+      src="{{ .avatar | relURL }}"
+      alt="{{ .avatarAlt | default (printf "Portrait of %s" .name) }}"
+      loading="lazy"
+    />
+    <div class="profile-copy">
+      <h1>{{ .name }}</h1>
+      {{ with .title }}<p class="profile-title">{{ . }}</p>{{ end }}
+      {{ with .description }}<p class="profile-description">{{ . }}</p>{{ end }}
+    </div>
+  </section>
+{{ end }}

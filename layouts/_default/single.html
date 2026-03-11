@@ -1,6 +1,14 @@
 {{ define "main" }}
+  {{ $isAbout := and .File (eq .File.BaseFileName "about") }}
+  {{ if $isAbout }}
+    {{ partial "profile-hero.html" . }}
+  {{ end }}
   <article>
-    <h1>{{ .Title }}</h1>
+    {{ if $isAbout }}
+      <h2>{{ .Title }}</h2>
+    {{ else }}
+      <h1>{{ .Title }}</h1>
+    {{ end }}
     {{ with .Date }}<p class="meta">{{ .Format "Jan 2, 2006" }}</p>{{ end }}
     {{ .Content }}
   </article>

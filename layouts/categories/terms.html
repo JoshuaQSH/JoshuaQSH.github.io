@@ -1,0 +1,38 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  {{ with .Content }}
+    <div class="section-intro">{{ . }}</div>
+  {{ end }}
+
+  <h2>All Category Terms</h2>
+  <ul>
+    {{ range .Data.Terms.Alphabetical }}
+      <li>
+        <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a>
+        <span class="meta">({{ .Count }})</span>
+      </li>
+    {{ else }}
+      <li>No category terms found.</li>
+    {{ end }}
+  </ul>
+
+  <h2>All Posts and Pages</h2>
+  {{ $pages := where .Site.RegularPages "Section" "ne" "authors" }}
+  <ul>
+    {{ range $pages.ByDate.Reverse }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{ with .Date }}<span class="meta">{{ .Format "Jan 2, 2006" }}</span>{{ end }}
+        <span class="meta">Section: {{ if .Section }}{{ .Section }}{{ else }}pages{{ end }}</span>
+        {{ with .Params.categories }}
+          <span class="meta">Categories: {{ delimit . ", " }}</span>
+        {{ end }}
+        {{ with .Params.tags }}
+          <span class="meta">Tags: {{ delimit . ", " }}</span>
+        {{ end }}
+      </li>
+    {{ else }}
+      <li>No content pages found.</li>
+    {{ end }}
+  </ul>
+{{ end }}

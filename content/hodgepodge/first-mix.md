@@ -2,6 +2,7 @@
 title: "First Mix"
 date: 2024-01-02
 categories: ["Hodgepodge"]
+tags: ["workspace", "visual-notes", "composition"]
 image: "/images/hodgepodge/desk-layout.svg"
 imageAlt: "Abstract desk layout illustration"
 summary: "Exploring how a workspace layout can anchor quick visual notes."

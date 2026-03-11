@@ -13,9 +13,17 @@ taxonomies = { category = "categories", tag = "tags" }
   description = "Research, writing, and projects by Shenghao Qiu."
   homeSections = ["about", "posts", "contact"]
 
+  [params.profile]
+    name = "Shenghao Qiu"
+    title = "PhD Researcher & Research Fellow"
+    description = "Researching scalable deep learning systems and trustworthy AI."
+    avatar = "/images/avatar.png"
+    avatarAlt = "Portrait of Shenghao Qiu"
+
 [menu]
   [[menu.main]]
-    name = "Home"
+    identifier = "home"
+    name = "Raccoon's Home"
     url = "/"
     weight = 1
   [[menu.main]]
@@ -23,10 +31,18 @@ taxonomies = { category = "categories", tag = "tags" }
     url = "/posts/"
     weight = 2
   [[menu.main]]
-    name = "About"
-    url = "/about/"
+    name = "Categories"
+    url = "/categories/"
     weight = 3
   [[menu.main]]
-    name = "CV"
-    url = "/shenghao-qiu-cv.pdf"
+    name = "Tags"
+    url = "/tags/"
     weight = 4
+  [[menu.main]]
+    name = "Hodgepodge"
+    url = "/hodgepodge/"
+    weight = 5
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 6
