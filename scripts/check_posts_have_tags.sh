@@ -3,9 +3,20 @@ set -euo pipefail
 
 missing=0
 
+has_nonempty_inline_tags() {
+  local file="$1"
+  local pattern='^tags:[[:space:]]*\[[^]]+\][[:space:]]*$'
+
+  if command -v rg >/dev/null 2>&1; then
+    rg -q "$pattern" "$file"
+  else
+    grep -Eq "$pattern" "$file"
+  fi
+}
+
 check_file() {
   local file="$1"
-  if ! rg -q '^tags:\s*\[[^]]+\]\s*$' "$file"; then
+  if ! has_nonempty_inline_tags "$file"; then
     echo "Missing or empty inline tags in: $file"
     missing=1
   fi
