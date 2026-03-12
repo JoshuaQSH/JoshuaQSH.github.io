@@ -2,13 +2,13 @@
 title: "Preface"
 ---
 
-What's up! Thanks for viewing Raccoon's home and listen to his little chat here. This little guy is currently based in the **UK** and is interested in ML/DL stuffs. He used to work in ML4sys and now trustworthy AI. But he is still enthusiastic about compilers (MLIR, LLVM, Triton, etc.) and AI infra.
+Ciao! Thanks for viewing Raccoon's home and listen to his little chat here. This little guy is currently based in the **UK** and is interested in ML/DL stuffs. He used to work in ML4sys and now trustworthy AI. But he is still enthusiastic about compilers (MLIR, LLVM, Triton, etc.) and AI infra.
 
 ## About Me
 
-I am Shenghao, I gained my master and PhD degree from the University of Leeds (DSS group, supervised by Prof. Zheng Wang) and is now a Research Fellow in Univesity of York. I prefer to be called *Mr* rather than *Dr.*.
+I am Shenghao, I gained my master and PhD degree from the University of Leeds (DSS group, supervised by Prof. Zheng Wang) and is now a Research Fellow in the Univesity of York (ASE group). I prefer to be called *Mr.* rather than *Dr.*.
 
-I work on high-performance deep learning systems and trustworthy AI, with emphasis on scaling training efficiency and improving model transparency with explainable methods. 
+I work on high-performance deep learning systems and trustworthy AI, with emphasis on scaling training efficiency and improving model transparency with explainable (post-hoc attribution) methods. 
 
 I also served as the PC/reviewer (sub reviewers) for a couple of computer conferences: 
 
@@ -20,7 +20,9 @@ I also served as the PC/reviewer (sub reviewers) for a couple of computer confer
 + ICAC 2025 - Reviewer
 + ICDCS 2024 - subreviewer / external reviewer
 
-You can reach me via email: [qiushenghao6@gmail.com](mailto:qiushenghao6@gmail.com)
+## Contact
+
+Email: [shenghao.qiu {at} gmail.com](mailto:qiushenghao6@gmail.com)
 
 ## Recent Projects
 
