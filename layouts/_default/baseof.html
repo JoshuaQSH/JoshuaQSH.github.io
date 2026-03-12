@@ -30,7 +30,7 @@
         transition: color 0.2s ease;
       }
       .nav-link:hover {
-        color: #7f66b5;
+        color: #b6a1db;
         text-decoration: none;
       }
       .nav-home {
@@ -60,6 +60,7 @@
       }
       .profile-copy {
         min-width: 0;
+        flex: 1;
       }
       .profile-title {
         margin: 8px 0 6px;
@@ -69,6 +70,135 @@
       .profile-description {
         margin: 0;
         color: #4b5563;
+      }
+      .profile-links {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto;
+      }
+      .profile-icon-link {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        border: 1px solid #d0d7de;
+        background: #ffffff;
+        color: #57606a;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+      }
+      .profile-icon-link:hover {
+        color: #24292f;
+        border-color: #8c959f;
+        background-color: #f6f8fa;
+        text-decoration: none;
+      }
+      .profile-icon-link svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+      .about-contact {
+        margin-top: 28px;
+      }
+      .about-contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin: 8px 0;
+      }
+      .about-contact-icon {
+        width: 18px;
+        height: 18px;
+        color: #57606a;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+      .about-contact-icon svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+      pre,
+      pre.chroma,
+      .highlight pre {
+        background-color: #f6f8fa !important;
+        border: 1px solid #d0d7de;
+        border-radius: 6px;
+        color: #24292f;
+        font-size: 0.92rem;
+        line-height: 1.45;
+        margin: 16px 0;
+        overflow: auto;
+        padding: 16px;
+      }
+      .highlight {
+        background: transparent !important;
+      }
+      code,
+      pre,
+      .highlight code {
+        font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+      }
+      p code,
+      li code,
+      td code {
+        background-color: rgba(175, 184, 193, 0.2);
+        border-radius: 6px;
+        color: #24292f;
+        font-size: 0.9em;
+        padding: 0.2em 0.4em;
+      }
+      blockquote {
+        border-left: 0.25em solid #d0d7de;
+        color: #57606a;
+        margin: 16px 0;
+        padding: 0 1em;
+      }
+      .gh-alert {
+        border-left-width: 0.28em;
+        border-left-style: solid;
+        border-radius: 6px;
+        color: #24292f;
+        margin: 16px 0;
+        padding: 8px 14px;
+      }
+      .gh-alert > :last-child {
+        margin-bottom: 0;
+      }
+      .gh-alert-title {
+        align-items: center;
+        display: flex;
+        font-weight: 700;
+        gap: 8px;
+        margin: 0 0 6px;
+      }
+      .gh-alert-icon {
+        display: inline-flex;
+        font-size: 0.95em;
+        line-height: 1;
+      }
+      .gh-alert-note {
+        border-left-color: #0969da;
+        background-color: #f6f8fa;
+      }
+      .gh-alert-tip {
+        border-left-color: #1a7f37;
+        background-color: #f6f8fa;
+      }
+      .gh-alert-important {
+        border-left-color: #8250df;
+        background-color: #f6f8fa;
+      }
+      .gh-alert-warning {
+        border-left-color: #9a6700;
+        background-color: #fff8c5;
+      }
+      .gh-alert-caution {
+        border-left-color: #d1242f;
+        background-color: #ffebe9;
       }
       .hodgepodge-grid {
         display: grid;
@@ -113,6 +243,9 @@
           width: 96px;
           height: 96px;
         }
+        .profile-links {
+          margin-left: 0;
+        }
         .hodgepodge-grid { gap: 16px; }
       }
     </style>
@@ -126,5 +259,42 @@
     <main>
       {{ block "main" . }}{{ end }}
     </main>
+    <script>
+      (function () {
+        const alertMap = {
+          NOTE: { label: "Note", icon: "i" },
+          TIP: { label: "Tip", icon: "!" },
+          IMPORTANT: { label: "Important", icon: "*" },
+          WARNING: { label: "Warning", icon: "!" },
+          CAUTION: { label: "Caution", icon: "x" }
+        };
+
+        document.querySelectorAll("main blockquote").forEach(function (blockquote) {
+          const firstParagraph = blockquote.querySelector("p:first-child");
+          if (!firstParagraph) return;
+
+          const text = firstParagraph.textContent.trim();
+          const match = text.match(/^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*(.*)$/i);
+          if (!match) return;
+
+          const kind = match[1].toUpperCase();
+          const mapped = alertMap[kind];
+          const rest = match[2];
+
+          blockquote.classList.add("gh-alert", "gh-alert-" + kind.toLowerCase());
+
+          const title = document.createElement("p");
+          title.className = "gh-alert-title";
+          title.innerHTML = '<span class="gh-alert-icon" aria-hidden="true">' + mapped.icon + '</span>' + mapped.label;
+          blockquote.insertBefore(title, blockquote.firstChild);
+
+          if (rest) {
+            firstParagraph.textContent = rest;
+          } else {
+            firstParagraph.remove();
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

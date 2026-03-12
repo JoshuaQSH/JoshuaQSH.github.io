@@ -1,6 +1,6 @@
 ---
 title: "Using uv for Python project management"
-date: 2026-03-15
+date: 2026-03-12
 categories: ["Notes"]
 tags: ["uv", "python", "virtualenv"]
 ---
@@ -213,4 +213,3 @@ default = true
 [tool.uv.pip]
 index-url = "https://test.pypi.org/simple"
 ```
-

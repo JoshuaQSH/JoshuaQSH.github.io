@@ -19,6 +19,10 @@ taxonomies = { category = "categories", tag = "tags" }
     description = "Researching scalable deep learning systems and trustworthy AI."
     avatar = "/images/avatar.png"
     avatarAlt = "Portrait of Shenghao Qiu"
+    github = "https://github.com/JoshuaQSH"
+    email = "mailto:shenghao.qiu@york.ac.uk"
+    linkedin = "https://www.linkedin.com/in/shenghao-qiu-41162b1a7/"
+    location = "Department of Computer Science, University of York, Deramore Ln, York, YO10 5GH"
 
 [menu]
   [[menu.main]]
@@ -46,3 +50,11 @@ taxonomies = { category = "categories", tag = "tags" }
     name = "About"
     url = "/about/"
     weight = 6
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    style = "github"
+    lineNos = false
+    noClasses = true

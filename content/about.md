@@ -20,10 +20,6 @@ I also served as the PC/reviewer (sub reviewers) for a couple of computer confer
 + ICAC 2025 - Reviewer
 + ICDCS 2024 - subreviewer / external reviewer
 
-## Contact
-
-Email: [shenghao.qiu {at} gmail.com](mailto:qiushenghao6@gmail.com)
-
 ## Recent Projects
 
 ### SOPRANO (Horizon Europe)
