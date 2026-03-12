@@ -1,4 +1,9 @@
-# Using uv for Python project management
+---
+title: "Using uv for Python project management"
+date: 2026-03-15
+categories: ["Notes"]
+tags: ["uv", "python", "virtualenv"]
+---
 
 Reference: 【[Doc](https://docs.astral.sh/uv/)】【[GitHub Repo](https://github.com/astral-sh/uv)】
 
