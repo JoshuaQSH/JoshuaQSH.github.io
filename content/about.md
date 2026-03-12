@@ -6,7 +6,7 @@ Ciao! Thanks for viewing Raccoon's home and listen to his little chat here. This
 
 ## About Me
 
-I am Shenghao, I gained my master and PhD degree from the University of Leeds (DSS group, supervised by Prof. Zheng Wang) and is now a Research Fellow in the Univesity of York (ASE group). I prefer to be called *Mr.* rather than *Dr.*.
+I am Shenghao, I gained my Master and PhD degree from the University of Leeds (DSS group, supervised by Prof. [Zheng Wang](https://zwang4.github.io/) and Prof. [Jie Xu](https://eps.leeds.ac.uk/computing/staff/331/professor-jie-xu)). And I am currently a Research Fellow in the Univesity of York (ASE group). I prefer to be called *Mr.* rather than *Dr.*.
 
 I work on high-performance deep learning systems and trustworthy AI, with emphasis on scaling training efficiency and improving model transparency with explainable (post-hoc attribution) methods. 
 

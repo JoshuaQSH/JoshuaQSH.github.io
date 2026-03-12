@@ -9,7 +9,7 @@ portrait: ""
 contact:
   address: "1102 Mercer West, SoYo Square, St Cecilia Street, LS2 7FB"
   phone: "07579 877295"
-  email: "qiushenghao6@gmail.com"
+  email: "shenghao.qiu@york.ac.uk"
   website: "https://eps.leeds.ac.uk/computing/pgr/8738/shenghao-qiu"
 research_interests:
   - "Distributed and scalable deep learning systems"
@@ -49,7 +49,7 @@ roles:
     dates: "Aug 2021 - Oct 2021"
 links:
   - label: "Email"
-    url: "mailto:qiushenghao6@gmail.com"
+    url: "mailto:shenghao.qiu@york.ac.uk"
   - label: "Academic profile"
     url: "https://eps.leeds.ac.uk/computing/pgr/8738/shenghao-qiu"
   - label: "Nubificus"
