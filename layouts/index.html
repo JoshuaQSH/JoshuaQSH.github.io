@@ -1,18 +1,36 @@
 {{ define "main" }}
-  {{ partial "profile-hero.html" . }}
-  {{ with .Content }}
-    {{ . }}
-  {{ end }}
-
-  <h2>Latest posts</h2>
-  <ul>
-    {{ range first 5 (where .Site.RegularPages "Section" "posts") }}
-      <li>
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        <span class="meta">{{ .Date.Format "Jan 2, 2006" }}</span>
-      </li>
-    {{ else }}
-      <li>No posts yet.</li>
+  <section class="home-hero-panel">
+    {{ partial "profile-hero.html" . }}
+    {{ with .Content }}
+      <div class="home-hero-copy">
+        {{ . }}
+      </div>
     {{ end }}
-  </ul>
+  </section>
+
+  <section class="home-latest-panel">
+    <div class="home-section-header">
+      <h2>Latest Posts</h2>
+      <p class="section-intro">Recent writing, notes, and quick references from the main posts feed.</p>
+    </div>
+    <div class="post-card-list">
+      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "posts") }}
+        <article class="post-card">
+          <p class="post-card-date">{{ .Date.Format "Jan 2, 2006" }}</p>
+          <h3 class="post-card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          {{ with .Params.tags }}
+            <div class="tag-list">
+              {{ range . }}
+                <a class="tag-pill" href="{{ (printf "/tags/%s/" (. | urlize)) | relURL }}">{{ . }}</a>
+              {{ end }}
+            </div>
+          {{ end }}
+        </article>
+      {{ else }}
+        <article class="post-card">
+          <h3 class="post-card-title">No posts yet.</h3>
+        </article>
+      {{ end }}
+    </div>
+  </section>
 {{ end }}

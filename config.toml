@@ -16,7 +16,7 @@ taxonomies = { category = "categories", tag = "tags" }
   [params.profile]
     name = "Shenghao Qiu"
     title = "PhD Researcher & Research Fellow"
-    description = "Researching scalable deep learning systems and trustworthy AI."
+    description = "Researcher in Machine Learning System, Explainable and Trustworthy AI, Distributed Deep Learning and Compiler enthusiast"
     avatar = "/images/avatar.png"
     avatarAlt = "Portrait of Shenghao Qiu"
     github = "https://github.com/JoshuaQSH"

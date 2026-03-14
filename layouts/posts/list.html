@@ -1,23 +1,30 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ with .Content }}
-    {{ . }}
-  {{ end }}
+  <section class="home-latest-panel posts-panel">
+    <div class="home-section-header">
+      <h1>{{ .Title }}</h1>
+      {{ with .Content }}
+        <div class="section-intro">{{ . }}</div>
+      {{ end }}
+    </div>
 
-  <ul>
-    {{ range .Pages }}
-      <li>
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        {{ with .Date }}<span class="meta">{{ .Format "Jan 2, 2006" }}</span>{{ end }}
-        {{ with .Params.categories }}
-          <span class="meta">Categories: {{ delimit . ", " }}</span>
-        {{ end }}
-        {{ with .Params.tags }}
-          <span class="meta">Tags: {{ delimit . ", " }}</span>
-        {{ end }}
-      </li>
-    {{ else }}
-      <li>No posts yet.</li>
-    {{ end }}
-  </ul>
+    <div class="post-card-list">
+      {{ range .Pages.ByDate.Reverse }}
+        <article class="post-card">
+          {{ with .Date }}<p class="post-card-date">{{ .Format "Jan 2, 2006" }}</p>{{ end }}
+          <h2 class="post-card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          {{ with .Params.tags }}
+            <div class="tag-list">
+              {{ range . }}
+                <a class="tag-pill" href="{{ (printf "/tags/%s/" (. | urlize)) | relURL }}">{{ . }}</a>
+              {{ end }}
+            </div>
+          {{ end }}
+        </article>
+      {{ else }}
+        <article class="post-card">
+          <h2 class="post-card-title">No posts yet.</h2>
+        </article>
+      {{ end }}
+    </div>
+  </section>
 {{ end }}
