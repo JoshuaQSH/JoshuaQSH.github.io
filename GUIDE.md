@@ -197,6 +197,84 @@ You can reference it in content like:
 
 If the Hodgepodge section has a specific content folder (for example `content/hodgepodge/`), add a Markdown file there and embed images using the same `static/` path.
 
+## Hodgepodge Cover Upload Guide
+
+Hodgepodge cover images are currently rendered in two places:
+
+- In the Hodgepodge card grid, where the image fills the card width with `width: 100%` and `height: auto`
+- In the single-post hero image, where the image expands to the article width
+
+Because the layout does **not** crop covers automatically, landscape images with a consistent aspect ratio look best.
+
+### Recommended size
+
+- Best practical aspect ratio: about `3:2`
+- Good sizes:
+  - `900 x 600`
+  - `1200 x 800`
+  - `1500 x 1000`
+- Minimum suggested width: about `760px`
+- Best for sharper hero images on high-DPI screens: `1200px` to `1600px` wide
+
+Current examples in this repo are close to that shape:
+
+- `static/images/hodgepodge/polymarket.png` is `761 x 505`
+- `static/images/hodgepodge/storybin.png` is `940 x 612`
+
+### Supported formats
+
+The site serves files from `static/` directly, so normal browser-supported formats work:
+
+- `.png`
+- `.jpg` / `.jpeg`
+- `.webp`
+- `.svg`
+- `.gif`
+
+Practical advice:
+
+- Use `.png` for UI screenshots, charts, and dashboards
+- Use `.jpg` or `.webp` for photos
+- Use `.svg` for illustrations, diagrams, and vector artwork
+
+### Where to upload
+
+Put the cover file under:
+
+```text
+static/images/hodgepodge/
+```
+
+Example:
+
+```text
+static/images/hodgepodge/storybin.png
+```
+
+### How to reference the cover in a Hodgepodge post
+
+Add these fields in the front matter:
+
+```yaml
+---
+title: "Storybin"
+date: 2026-03-13
+categories: ["Hodgepodge"]
+tags: ["webapp", "crawler", "storybin"]
+image: "/images/hodgepodge/storybin.png"
+imageAlt: "Storybin dashboard preview"
+summary: "A live crawler that turns Traditional Chinese web novels into downloadable txt [WiP]"
+---
+```
+
+### Cover checklist
+
+- Prefer landscape images
+- Keep the aspect ratio close to `3:2`
+- Compress large screenshots before uploading
+- Add a clear `imageAlt`
+- Add a short `summary`, because it is shown in the Hodgepodge card
+
 ## Tweak styling
 
 - CSS lives under `static/` (site-wide assets) and/or inside the theme at `themes/<theme-name>/static/`.
