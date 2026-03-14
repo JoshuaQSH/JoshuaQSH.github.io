@@ -18,6 +18,10 @@
         <article class="post-card">
           <p class="post-card-date">{{ .Date.Format "Jan 2, 2006" }}</p>
           <h3 class="post-card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          {{ $summary := or .Params.summary (.Summary | plainify) }}
+          {{ with $summary }}
+            <p class="post-card-summary">{{ . | plainify | truncate 180 }}</p>
+          {{ end }}
           {{ with .Params.tags }}
             <div class="tag-list">
               {{ range . }}

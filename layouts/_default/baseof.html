@@ -6,9 +6,9 @@
     <title>{{ block "title" . }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
     <style>
       :root {
-        --page-bg: #f7f3fb;
+        --page-bg: #ffffff;
         --panel-bg: #ffffff;
-        --panel-soft: #f3eef9;
+        --panel-soft: #f6f8fa;
         --border-color: #ded6ea;
         --text-main: #1f2937;
         --text-muted: #6b7280;
@@ -21,7 +21,7 @@
         margin: 40px auto;
         max-width: 820px;
         padding: 0 16px;
-        background: linear-gradient(180deg, #fbf9fe 0%, #f5effc 100%);
+        background: var(--page-bg);
         color: var(--text-main);
         font-size: 19px;
         line-height: 1.72;
@@ -68,6 +68,10 @@
         border-radius: 0;
         box-shadow: none;
         padding: 0;
+      }
+      .home-hero-panel {
+        background: var(--panel-soft);
+        padding: 28px 30px;
       }
       .home-latest-panel,
       .posts-panel {
@@ -183,7 +187,7 @@
       }
       .post-card-summary {
         color: #4b5563;
-        margin: 0 0 14px;
+        margin: 0 0 12px;
       }
       .tag-list {
         display: flex;
@@ -343,6 +347,9 @@
         .home-hero-panel,
         .home-latest-panel {
           padding: 0;
+        }
+        .home-hero-panel {
+          padding: 20px;
         }
         .profile-hero {
           flex-direction: column;
