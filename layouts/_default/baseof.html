@@ -14,6 +14,8 @@
         --text-muted: #6b7280;
         --link-color: #1d4ed8;
         --link-hover: #b6a1db;
+        --post-hover: #2f6fdd;
+        --divider-color: #d0d7de;
       }
       body {
         margin: 40px auto;
@@ -51,7 +53,7 @@
       }
       main {
         display: grid;
-        gap: 24px;
+        gap: 0;
       }
       h1 { margin: 0; font-size: 2.55rem; line-height: 1.15; }
       h2 { margin-top: 0; font-size: 1.85rem; line-height: 1.2; }
@@ -61,16 +63,17 @@
       .section-intro { margin-top: 12px; color: #4b5563; }
       .home-hero-panel,
       .home-latest-panel {
-        border: 1px solid var(--border-color);
-        border-radius: 24px;
-        padding: 28px;
-        box-shadow: 0 14px 32px rgba(56, 32, 94, 0.06);
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0;
       }
-      .home-hero-panel {
-        background: var(--panel-bg);
-      }
-      .home-latest-panel {
-        background: var(--panel-soft);
+      .home-latest-panel,
+      .posts-panel {
+        border-top: 1px solid var(--divider-color);
+        margin-top: 26px;
+        padding-top: 28px;
       }
       .home-section-header {
         margin-bottom: 18px;
@@ -148,14 +151,19 @@
       }
       .post-card-list {
         display: grid;
-        gap: 16px;
+        gap: 0;
       }
       .post-card {
-        background: #ffffff;
-        border: 1px solid #d8d3e4;
-        border-radius: 18px;
-        box-shadow: 0 10px 22px rgba(55, 30, 92, 0.05);
-        padding: 20px 22px;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid var(--divider-color);
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px 0;
+      }
+      .post-card:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
       }
       .post-card-date {
         color: var(--text-muted);
@@ -170,7 +178,7 @@
         transition: color 0.2s ease;
       }
       .post-card-title a:hover {
-        color: var(--link-hover);
+        color: var(--post-hover);
         text-decoration: none;
       }
       .post-card-summary {
@@ -183,17 +191,16 @@
         gap: 8px;
       }
       .tag-pill {
-        background: #f7f2fd;
-        border: 1px solid #dbd0ef;
-        border-radius: 999px;
-        color: #5b4b79;
-        font-size: 0.88rem;
+        background: transparent;
+        border: 0;
+        color: var(--text-muted);
+        font-size: 0.9rem;
         line-height: 1;
-        padding: 7px 12px;
+        padding: 0;
       }
       .tag-pill:hover {
-        background: #efe6fb;
-        color: #463a5f;
+        background: transparent;
+        color: var(--post-hover);
         text-decoration: none;
       }
       .posts-panel h1 {
@@ -335,8 +342,7 @@
         nav { margin-bottom: 24px; }
         .home-hero-panel,
         .home-latest-panel {
-          border-radius: 20px;
-          padding: 20px;
+          padding: 0;
         }
         .profile-hero {
           flex-direction: column;

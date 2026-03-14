@@ -15,7 +15,7 @@
           {{ with .Params.tags }}
             <div class="tag-list">
               {{ range . }}
-                <a class="tag-pill" href="{{ (printf "/tags/%s/" (. | urlize)) | relURL }}">{{ . }}</a>
+                <a class="tag-pill" href="{{ (printf "/tags/%s/" (. | urlize)) | relURL }}">#t{{ . }}</a>
               {{ end }}
             </div>
           {{ end }}
