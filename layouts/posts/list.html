@@ -13,7 +13,15 @@
       {{ range union ($pinned.ByDate.Reverse) ($regular.ByDate.Reverse) }}
         <article class="post-card">
           {{ with .Date }}<p class="post-card-date">{{ .Format "Jan 2, 2006" }}</p>{{ end }}
-          <h2 class="post-card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          <div class="post-card-heading">
+            <h2 class="post-card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            {{ if .Params.pinned }}
+              <span class="post-card-flag" aria-label="Pinned post">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3l6 6-2.2 2.2-1.5-1.5-4.6 4.6.8 5.2-1.4 1.4-2.7-5.1-5.1-2.7 1.4-1.4 5.2.8 4.6-4.6-1.5-1.5L15 3z"/></svg>
+                <span>Pinned</span>
+              </span>
+            {{ end }}
+          </div>
           {{ $summary := or .Params.summary (.Summary | plainify) }}
           {{ with $summary }}
             <p class="post-card-summary">{{ . | plainify | truncate 180 }}</p>

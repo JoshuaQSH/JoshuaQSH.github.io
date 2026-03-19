@@ -17,11 +17,20 @@
       {{ $posts := where .Site.RegularPages "Section" "posts" }}
       {{ $pinned := where $posts "Params.pinned" true }}
       {{ $regular := where $posts "Params.pinned" "ne" true }}
-      {{ $ordered := union ($pinned.ByDate.Reverse) ($regular.ByDate.Reverse) }}
-      {{ range first 5 $ordered }}
+      {{ $alwaysShown := $pinned.ByDate.Reverse }}
+      {{ $latestRegular := first 5 ($regular.ByDate.Reverse) }}
+      {{ range union $alwaysShown $latestRegular }}
         <article class="post-card">
           <p class="post-card-date">{{ .Date.Format "Jan 2, 2006" }}</p>
-          <h3 class="post-card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <div class="post-card-heading">
+            <h3 class="post-card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            {{ if .Params.pinned }}
+              <span class="post-card-flag" aria-label="Pinned post">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3l6 6-2.2 2.2-1.5-1.5-4.6 4.6.8 5.2-1.4 1.4-2.7-5.1-5.1-2.7 1.4-1.4 5.2.8 4.6-4.6-1.5-1.5L15 3z"/></svg>
+                <span>Pinned</span>
+              </span>
+            {{ end }}
+          </div>
           {{ $summary := or .Params.summary (.Summary | plainify) }}
           {{ with $summary }}
             <p class="post-card-summary">{{ . | plainify | truncate 180 }}</p>
