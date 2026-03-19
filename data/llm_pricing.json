@@ -1,0 +1,440 @@
+{
+  "generated_at": "2026-03-19",
+  "generated_at_pretty": "March 19, 2026",
+  "generated_at_iso": "2026-03-19T00:00:00+00:00",
+  "summary_note": "Refresh reloads the latest pricing snapshot currently published on this site. Official pricing pages can still change between site deployments.",
+  "history_note": "History lines use official pricing snapshots that are stored in this repo. Some providers only have one official snapshot recorded so far, while others mix successive flagship or promo models.",
+  "chart_defaults": {
+    "provider": "deepseek",
+    "metric": "input_miss",
+    "grain": "months"
+  },
+  "api_pricing": [
+    {
+      "vendor": "OpenAI",
+      "product": "GPT-5.4",
+      "unit": "USD per 1M tokens",
+      "input_display": "$2.50",
+      "input_value": 2.5,
+      "cached_input_display": "$0.25",
+      "cached_input_value": 0.25,
+      "output_display": "$15.00",
+      "output_value": 15.0,
+      "notes": "Standard API pricing. Prompts above 272K input tokens are billed at higher long-context multipliers.",
+      "official_link": "https://openai.com/api/pricing/",
+      "source_label": "OpenAI API pricing"
+    },
+    {
+      "vendor": "Google",
+      "product": "Gemini 2.5 Pro",
+      "unit": "USD per 1M tokens",
+      "input_display": "$1.25 (<=200K prompts)",
+      "input_value": 1.25,
+      "cached_input_display": "$0.125 (<=200K prompts)",
+      "cached_input_value": 0.125,
+      "output_display": "$10.00 (<=200K prompts)",
+      "output_value": 10.0,
+      "notes": "Tiered pricing. For prompts above 200K tokens, Google lists $2.50 input, $0.25 cached input, and $15.00 output.",
+      "official_link": "https://ai.google.dev/gemini-api/docs/pricing",
+      "source_label": "Gemini API pricing"
+    },
+    {
+      "vendor": "Anthropic",
+      "product": "Claude Sonnet 4 / Claude Code backend",
+      "unit": "USD per 1M tokens",
+      "input_display": "$3.00",
+      "input_value": 3.0,
+      "cached_input_display": "$0.30 (cache hits)",
+      "cached_input_value": 0.3,
+      "output_display": "$15.00",
+      "output_value": 15.0,
+      "notes": "Claude Code team/API usage is billed from Claude API token consumption. Anthropic also lists separate cache-write prices.",
+      "official_link": "https://docs.anthropic.com/en/docs/about-claude/models/all-models",
+      "source_label": "Anthropic model pricing"
+    },
+    {
+      "vendor": "DeepSeek",
+      "product": "deepseek-chat",
+      "unit": "USD per 1M tokens",
+      "input_display": "$0.27 (cache miss)",
+      "input_value": 0.27,
+      "cached_input_display": "$0.07 (cache hit)",
+      "cached_input_value": 0.07,
+      "output_display": "$1.10",
+      "output_value": 1.1,
+      "notes": "Official USD table for the current DeepSeek chat endpoint.",
+      "official_link": "https://api-docs.deepseek.com/quick_start/pricing-details-usd",
+      "source_label": "DeepSeek pricing details (USD)"
+    },
+    {
+      "vendor": "Qwen / Alibaba Cloud",
+      "product": "qwen-max-latest",
+      "unit": "USD per 1M tokens",
+      "input_display": "$1.60",
+      "input_value": 1.6,
+      "cached_input_display": "-",
+      "cached_input_value": null,
+      "output_display": "$6.40",
+      "output_value": 6.4,
+      "notes": "Alibaba Cloud lists qwen-max-latest with non-thinking pricing and no tiered pricing on the current pricing page.",
+      "official_link": "https://www.alibabacloud.com/help/en/model-studio/model-pricing",
+      "source_label": "Alibaba Cloud Model Studio pricing"
+    },
+    {
+      "vendor": "Moonshot AI / Kimi",
+      "product": "kimi-latest",
+      "unit": "CNY per 1M tokens",
+      "input_display": "See live pricing page",
+      "input_value": null,
+      "cached_input_display": "¥1.00 (auto cache hit)",
+      "cached_input_value": 1.0,
+      "output_display": "See live pricing page",
+      "output_value": null,
+      "notes": "kimi-latest auto-selects the 8K/32K/128K billing tier. Moonshot publicly documents the auto-cache-hit price in the kimi-latest announcement, while the live token table is on the pricing docs page.",
+      "official_link": "https://platform.moonshot.cn/docs/pricing/chat",
+      "source_label": "Moonshot pricing docs"
+    },
+    {
+      "vendor": "MiniMax",
+      "product": "MiniMax-M2.5",
+      "unit": "CNY per 1M tokens",
+      "input_display": "¥2.10",
+      "input_value": 2.1,
+      "cached_input_display": "¥0.21 (cache read)",
+      "cached_input_value": 0.21,
+      "output_display": "¥8.40",
+      "output_value": 8.4,
+      "notes": "Current MiniMax pay-as-you-go text pricing. Cache writes are listed separately at ¥2.625 / 1M tokens.",
+      "official_link": "https://platform.minimaxi.com/docs/guides/pricing-paygo",
+      "source_label": "MiniMax pay-as-you-go pricing"
+    },
+    {
+      "vendor": "xAI",
+      "product": "grok-4.20-beta-0309-reasoning",
+      "unit": "USD per 1M tokens",
+      "input_display": "$2.00",
+      "input_value": 2.0,
+      "cached_input_display": "-",
+      "cached_input_value": null,
+      "output_display": "$6.00",
+      "output_value": 6.0,
+      "notes": "xAI lists Grok 4.20 reasoning and non-reasoning variants with the same token pricing on the public API page.",
+      "official_link": "https://x.ai/api",
+      "source_label": "xAI API pricing"
+    },
+    {
+      "vendor": "GitHub Copilot",
+      "product": "Copilot product pricing",
+      "unit": "N/A",
+      "input_display": "N/A",
+      "input_value": null,
+      "cached_input_display": "N/A",
+      "cached_input_value": null,
+      "output_display": "N/A",
+      "output_value": null,
+      "notes": "GitHub Copilot is sold as a subscription product. GitHub does not publicly publish a Copilot per-token API price comparable to the other vendors here.",
+      "official_link": "https://github.com/features/copilot/plans",
+      "source_label": "GitHub Copilot plans"
+    }
+  ],
+  "subscription_pricing": [
+    {
+      "vendor": "OpenAI",
+      "plan": "ChatGPT Plus",
+      "price_display": "$20 / month",
+      "notes": "Consumer plan. API usage is billed separately.",
+      "official_link": "https://openai.com/chatgpt/pricing/",
+      "source_label": "ChatGPT pricing"
+    },
+    {
+      "vendor": "OpenAI",
+      "plan": "ChatGPT Pro",
+      "price_display": "$200 / month",
+      "notes": "Highest individual-access plan.",
+      "official_link": "https://openai.com/chatgpt/pricing/",
+      "source_label": "ChatGPT pricing"
+    },
+    {
+      "vendor": "OpenAI",
+      "plan": "ChatGPT Business",
+      "price_display": "$25 / user / month billed annually or $30 monthly",
+      "notes": "Shared workspace for teams and growing businesses.",
+      "official_link": "https://openai.com/chatgpt/pricing/",
+      "source_label": "ChatGPT pricing"
+    },
+    {
+      "vendor": "Anthropic",
+      "plan": "Claude Pro",
+      "price_display": "$20 / month",
+      "notes": "Individual paid plan for Claude.",
+      "official_link": "https://www.anthropic.com/pricing",
+      "source_label": "Anthropic pricing"
+    },
+    {
+      "vendor": "Anthropic",
+      "plan": "Claude Max 5x",
+      "price_display": "$100 / month",
+      "notes": "5x more usage than Pro. Includes Claude Code.",
+      "official_link": "https://www.anthropic.com/max",
+      "source_label": "Claude Max"
+    },
+    {
+      "vendor": "Anthropic",
+      "plan": "Claude Max 20x",
+      "price_display": "$200 / month",
+      "notes": "20x more usage than Pro. Includes Claude Code.",
+      "official_link": "https://www.anthropic.com/max",
+      "source_label": "Claude Max"
+    },
+    {
+      "vendor": "Anthropic",
+      "plan": "Claude Team",
+      "price_display": "$25 / seat / month billed annually, $30 billed monthly",
+      "notes": "Standard team seats. Anthropic also lists premium seats at $150 / member / month, including Claude Code and higher usage.",
+      "official_link": "https://support.anthropic.com/en/articles/9267289-how-is-my-team-plan-bill-calculated",
+      "source_label": "Claude Team billing"
+    },
+    {
+      "vendor": "Google",
+      "plan": "Google AI Pro",
+      "price_display": "$19.99 / month",
+      "notes": "Formerly AI Premium. Consumer plan with Gemini app, Flow, NotebookLM and more.",
+      "official_link": "https://one.google.com/about/google-ai-plans/",
+      "source_label": "Google AI plans"
+    },
+    {
+      "vendor": "Google",
+      "plan": "Google AI Ultra",
+      "price_display": "$249.99 / month",
+      "notes": "Highest Google AI subscription tier for the Gemini app and related tools.",
+      "official_link": "https://one.google.com/about/google-ai-plans/",
+      "source_label": "Google AI plans"
+    },
+    {
+      "vendor": "DeepSeek",
+      "plan": "DeepSeek consumer app",
+      "price_display": "No public paid consumer plan listed",
+      "notes": "DeepSeek publicly documents API pricing, but I did not find a public monthly subscription plan on the official pricing docs checked for this post.",
+      "official_link": "https://chat.deepseek.com/",
+      "source_label": "DeepSeek app"
+    },
+    {
+      "vendor": "Qwen / Alibaba Cloud",
+      "plan": "Qwen consumer subscription",
+      "price_display": "No public paid consumer plan listed",
+      "notes": "Alibaba Cloud publishes API pricing for Qwen through Model Studio. I did not find a public per-user Qwen subscription price in the official sources checked here.",
+      "official_link": "https://chat.qwen.ai/",
+      "source_label": "Qwen chat"
+    },
+    {
+      "vendor": "Moonshot AI / Kimi",
+      "plan": "Kimi consumer subscription",
+      "price_display": "No public paid consumer plan listed",
+      "notes": "Moonshot publishes Kimi API pricing and product announcements. I did not find a public Kimi monthly subscription price on the official pages checked for this post.",
+      "official_link": "https://kimi.com/",
+      "source_label": "Kimi"
+    },
+    {
+      "vendor": "MiniMax",
+      "plan": "Coding Plan Starter",
+      "price_display": "¥29 / month",
+      "notes": "40 prompts every 5 hours.",
+      "official_link": "https://platform.minimaxi.com/docs/token-plan/intro",
+      "source_label": "MiniMax Coding Plan"
+    },
+    {
+      "vendor": "MiniMax",
+      "plan": "Coding Plan Plus",
+      "price_display": "¥49 / month",
+      "notes": "100 prompts every 5 hours.",
+      "official_link": "https://platform.minimaxi.com/docs/token-plan/intro",
+      "source_label": "MiniMax Coding Plan"
+    },
+    {
+      "vendor": "MiniMax",
+      "plan": "Coding Plan Max",
+      "price_display": "¥119 / month",
+      "notes": "300 prompts every 5 hours.",
+      "official_link": "https://platform.minimaxi.com/docs/token-plan/intro",
+      "source_label": "MiniMax Coding Plan"
+    },
+    {
+      "vendor": "xAI / Grok",
+      "plan": "X Premium+",
+      "price_display": "$40 / month in the US web pricing table",
+      "notes": "Help.x.com ties Premium+ to expanded Grok access. Regional prices vary.",
+      "official_link": "https://help.x.com/en/using-x/x-premium",
+      "source_label": "X Premium pricing"
+    },
+    {
+      "vendor": "GitHub Copilot",
+      "plan": "Copilot Pro",
+      "price_display": "$10 / month or $100 / year",
+      "notes": "Individual developer plan.",
+      "official_link": "https://github.com/features/copilot/plans",
+      "source_label": "GitHub Copilot plans"
+    },
+    {
+      "vendor": "GitHub Copilot",
+      "plan": "Copilot Pro+",
+      "price_display": "$39 / month or $390 / year",
+      "notes": "Higher premium-request limits and broader model access.",
+      "official_link": "https://github.com/features/copilot/plans",
+      "source_label": "GitHub Copilot plans"
+    },
+    {
+      "vendor": "GitHub Copilot",
+      "plan": "Copilot Business",
+      "price_display": "$19 / seat / month",
+      "notes": "Organization-managed plan from GitHub Docs.",
+      "official_link": "https://docs.github.com/en/copilot/get-started/plans",
+      "source_label": "GitHub Docs"
+    },
+    {
+      "vendor": "GitHub Copilot",
+      "plan": "Copilot Enterprise",
+      "price_display": "$39 / seat / month",
+      "notes": "Enterprise-managed plan from GitHub Docs.",
+      "official_link": "https://docs.github.com/en/copilot/get-started/plans",
+      "source_label": "GitHub Docs"
+    }
+  ],
+  "history_series": {
+    "openai": {
+      "label": "OpenAI",
+      "currency": "USD per 1M tokens",
+      "note": "Flagship OpenAI snapshot stored in this repo. More historical checkpoints can be added as future posts are updated.",
+      "points": [
+        {
+          "date": "2026-03-19",
+          "model": "GPT-5.4",
+          "input_miss": 2.5,
+          "input_hit": 0.25,
+          "output": 15.0,
+          "source": "https://openai.com/api/pricing/"
+        }
+      ]
+    },
+    "google": {
+      "label": "Google",
+      "currency": "USD per 1M tokens",
+      "note": "Gemini 2.5 Pro values here use the <=200K-token tier from the public Gemini API pricing page.",
+      "points": [
+        {
+          "date": "2026-03-19",
+          "model": "Gemini 2.5 Pro",
+          "input_miss": 1.25,
+          "input_hit": 0.125,
+          "output": 10.0,
+          "source": "https://ai.google.dev/gemini-api/docs/pricing"
+        }
+      ]
+    },
+    "anthropic": {
+      "label": "Anthropic",
+      "currency": "USD per 1M tokens",
+      "note": "Claude Sonnet 4 is shown as the current mainstream Anthropic coding/reasoning workhorse.",
+      "points": [
+        {
+          "date": "2026-03-19",
+          "model": "Claude Sonnet 4",
+          "input_miss": 3.0,
+          "input_hit": 0.3,
+          "output": 15.0,
+          "source": "https://docs.anthropic.com/en/docs/about-claude/models/all-models"
+        }
+      ]
+    },
+    "deepseek": {
+      "label": "DeepSeek",
+      "currency": "CNY per 1M tokens",
+      "note": "This line compares official DeepSeek API price checkpoints. The 2024 point is the DeepSeek-V3 intro promo; the 2026 point is the current public chat pricing table.",
+      "points": [
+        {
+          "date": "2024-12-26",
+          "model": "DeepSeek-V3 intro promo",
+          "input_miss": 1.0,
+          "input_hit": 0.1,
+          "output": 2.0,
+          "source": "https://api-docs.deepseek.com/news/news1226"
+        },
+        {
+          "date": "2026-03-19",
+          "model": "deepseek-chat",
+          "input_miss": 2.0,
+          "input_hit": 0.5,
+          "output": 8.0,
+          "source": "https://api-docs.deepseek.com/quick_start/pricing-details-cny/"
+        }
+      ]
+    },
+    "qwen": {
+      "label": "Qwen / Alibaba Cloud",
+      "currency": "USD per 1M tokens",
+      "note": "qwen-max-latest current snapshot from Alibaba Cloud Model Studio.",
+      "points": [
+        {
+          "date": "2026-03-19",
+          "model": "qwen-max-latest",
+          "input_miss": 1.6,
+          "input_hit": null,
+          "output": 6.4,
+          "source": "https://www.alibabacloud.com/help/en/model-studio/model-pricing"
+        }
+      ]
+    },
+    "kimi": {
+      "label": "Moonshot / Kimi",
+      "currency": "CNY per 1M tokens",
+      "note": "Moonshot’s official snapshots mix different public API products, so treat this as a provider-level price timeline rather than a like-for-like model revision history.",
+      "points": [
+        {
+          "date": "2024-07-01",
+          "model": "moonshot-v1-128k",
+          "input_miss": 60.0,
+          "input_hit": null,
+          "output": null,
+          "source": "https://platform.moonshot.cn/blog/posts/how-to-save-90-percent-with-context-caching"
+        },
+        {
+          "date": "2025-08-22",
+          "model": "kimi-k2-turbo-preview (promo)",
+          "input_miss": 8.0,
+          "input_hit": 2.0,
+          "output": 32.0,
+          "source": "https://platform.moonshot.cn/blog/posts/k2-turbo-enhance"
+        }
+      ]
+    },
+    "minimax": {
+      "label": "MiniMax",
+      "currency": "CNY per 1M tokens",
+      "note": "MiniMax current pay-as-you-go snapshot.",
+      "points": [
+        {
+          "date": "2026-03-19",
+          "model": "MiniMax-M2.5",
+          "input_miss": 2.1,
+          "input_hit": 0.21,
+          "output": 8.4,
+          "source": "https://platform.minimaxi.com/docs/guides/pricing-paygo"
+        }
+      ]
+    },
+    "xai": {
+      "label": "xAI",
+      "currency": "USD per 1M tokens",
+      "note": "Current public xAI API pricing snapshot.",
+      "points": [
+        {
+          "date": "2026-03-19",
+          "model": "grok-4.20-beta-0309-reasoning",
+          "input_miss": 2.0,
+          "input_hit": null,
+          "output": 6.0,
+          "source": "https://x.ai/api"
+        }
+      ]
+    }
+  }
+}

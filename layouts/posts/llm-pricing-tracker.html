@@ -1,0 +1,474 @@
+{{ define "extra_head" }}
+  <style>
+    .tracker-post {
+      display: grid;
+      gap: 26px;
+    }
+    .tracker-post h1 {
+      margin-bottom: 8px;
+    }
+    .tracker-tagline {
+      color: #4b5563;
+      margin: 8px 0 0;
+    }
+    .tracker-toolbar {
+      align-items: center;
+      background: #f6f8fa;
+      border: 0;
+      display: flex;
+      gap: 18px;
+      justify-content: space-between;
+      margin: 24px 0 8px;
+      padding: 16px 18px;
+    }
+    .tracker-status {
+      color: #4b5563;
+      margin: 0;
+    }
+    .tracker-status strong {
+      color: #111827;
+    }
+    .tracker-refresh {
+      background: #1d4ed8;
+      border: 0;
+      color: #ffffff;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 10px 16px;
+      transition: background-color 0.2s ease;
+      white-space: nowrap;
+    }
+    .tracker-refresh:hover {
+      background: #1e40af;
+    }
+    .tracker-refresh:disabled {
+      background: #94a3b8;
+      cursor: wait;
+    }
+    .tracker-grid {
+      display: grid;
+      gap: 28px;
+    }
+    .tracker-section {
+      border-top: 1px solid #d0d7de;
+      padding-top: 24px;
+    }
+    .tracker-section h2 {
+      margin-bottom: 8px;
+    }
+    .tracker-section-intro {
+      color: #4b5563;
+      margin-top: 0;
+    }
+    .tracker-table-wrap {
+      overflow-x: auto;
+    }
+    .tracker-table {
+      border-collapse: collapse;
+      min-width: 100%;
+      width: 100%;
+    }
+    .tracker-table th,
+    .tracker-table td {
+      border-bottom: 1px solid #d0d7de;
+      padding: 12px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .tracker-table th {
+      color: #374151;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .tracker-table td {
+      font-size: 0.98rem;
+    }
+    .tracker-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+    .tracker-price {
+      color: #111827;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tracker-cell-note {
+      color: #4b5563;
+      max-width: 28rem;
+    }
+    .tracker-controls {
+      align-items: end;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin: 16px 0 18px;
+    }
+    .tracker-control label {
+      color: #4b5563;
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+    .tracker-control select {
+      border: 1px solid #d0d7de;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 9px 10px;
+      width: 100%;
+    }
+    .tracker-chart-shell {
+      border-top: 1px solid #d0d7de;
+      margin-top: 8px;
+      padding-top: 20px;
+    }
+    .tracker-chart-meta {
+      color: #4b5563;
+      margin: 0 0 12px;
+    }
+    .tracker-chart-svg {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+    .tracker-chart-empty {
+      color: #6b7280;
+      font-style: italic;
+      padding: 14px 0;
+    }
+    .tracker-footnote {
+      color: #4b5563;
+      font-size: 0.95rem;
+      margin: 10px 0 0;
+    }
+    .tracker-source-link {
+      white-space: nowrap;
+    }
+    @media (max-width: 720px) {
+      .tracker-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .tracker-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+{{ end }}
+
+{{ define "main" }}
+  {{ $tracker := .Site.Data.llm_pricing }}
+  <article class="tracker-post">
+    <header>
+      <h1>{{ .Title }}</h1>
+      {{ with .Date }}<p class="meta">{{ .Format "Jan 2, 2006" }}</p>{{ end }}
+      {{ with .Params.summary }}<p class="tracker-tagline">{{ . }}</p>{{ end }}
+    </header>
+
+    <div class="tracker-body">
+      {{ .Content }}
+
+      <section class="tracker-toolbar">
+        <p class="tracker-status"><strong>Latest deployed data:</strong> <span id="llm-updated-at">{{ $tracker.generated_at_pretty }}</span><br /><span id="llm-update-message">{{ $tracker.summary_note }}</span></p>
+        <button class="tracker-refresh" id="llm-refresh-button" type="button">Update prices</button>
+      </section>
+
+      <div class="tracker-grid">
+        <section class="tracker-section">
+          <h2>API Token Fees</h2>
+          <p class="tracker-section-intro">Representative API pricing for major frontier-model vendors. Numbers are taken from official vendor pricing pages; mixed currencies are kept in the vendor’s quoted currency.</p>
+          <div class="tracker-table-wrap">
+            <table class="tracker-table">
+              <thead>
+                <tr>
+                  <th>Vendor</th>
+                  <th>Model / Product</th>
+                  <th>Input</th>
+                  <th>Cached input</th>
+                  <th>Output</th>
+                  <th>Notes</th>
+                  <th>Official</th>
+                </tr>
+              </thead>
+              <tbody id="llm-api-body">
+                {{ range $tracker.api_pricing }}
+                  <tr>
+                    <td>{{ .vendor }}</td>
+                    <td>{{ .product }}<br /><span class="meta">{{ .unit }}</span></td>
+                    <td class="tracker-price">{{ .input_display }}</td>
+                    <td class="tracker-price">{{ .cached_input_display }}</td>
+                    <td class="tracker-price">{{ .output_display }}</td>
+                    <td class="tracker-cell-note">{{ .notes }}</td>
+                    <td><a class="tracker-source-link" href="{{ .official_link }}">{{ .source_label }}</a></td>
+                  </tr>
+                {{ end }}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="tracker-section">
+          <h2>Subscription Plans</h2>
+          <p class="tracker-section-intro">Publicly listed consumer or team subscriptions from the official provider pages I checked for this tracker.</p>
+          <div class="tracker-table-wrap">
+            <table class="tracker-table">
+              <thead>
+                <tr>
+                  <th>Vendor</th>
+                  <th>Plan</th>
+                  <th>Price</th>
+                  <th>Notes</th>
+                  <th>Official</th>
+                </tr>
+              </thead>
+              <tbody id="llm-subscription-body">
+                {{ range $tracker.subscription_pricing }}
+                  <tr>
+                    <td>{{ .vendor }}</td>
+                    <td>{{ .plan }}</td>
+                    <td class="tracker-price">{{ .price_display }}</td>
+                    <td class="tracker-cell-note">{{ .notes }}</td>
+                    <td><a class="tracker-source-link" href="{{ .official_link }}">{{ .source_label }}</a></td>
+                  </tr>
+                {{ end }}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="tracker-section">
+          <h2>Price History</h2>
+          <p class="tracker-section-intro">Switch provider, metric, and time grain to compare the official pricing checkpoints I have stored so far.</p>
+          <div class="tracker-controls">
+            <div class="tracker-control">
+              <label for="llm-provider-select">Provider</label>
+              <select id="llm-provider-select"></select>
+            </div>
+            <div class="tracker-control">
+              <label for="llm-metric-select">Metric</label>
+              <select id="llm-metric-select">
+                <option value="input_miss">Input</option>
+                <option value="input_hit">Cached input</option>
+                <option value="output">Output</option>
+              </select>
+            </div>
+            <div class="tracker-control">
+              <label for="llm-grain-select">Time grain</label>
+              <select id="llm-grain-select">
+                <option value="months">Months</option>
+                <option value="years">Years</option>
+              </select>
+            </div>
+          </div>
+          <div class="tracker-chart-shell">
+            <p class="tracker-chart-meta" id="llm-chart-meta">Loading chart…</p>
+            <svg class="tracker-chart-svg" id="llm-chart" viewBox="0 0 760 320" role="img" aria-label="LLM price history chart"></svg>
+            <p class="tracker-footnote" id="llm-chart-note">{{ $tracker.history_note }}</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script id="llm-pricing-data" type="application/json">{{ $tracker | jsonify }}</script>
+  </article>
+{{ end }}
+
+{{ define "extra_scripts" }}
+  <script>
+    (function () {
+      const dataTag = document.getElementById("llm-pricing-data");
+      if (!dataTag) return;
+
+      let tracker = JSON.parse(dataTag.textContent);
+      const apiBody = document.getElementById("llm-api-body");
+      const subscriptionBody = document.getElementById("llm-subscription-body");
+      const updatedAt = document.getElementById("llm-updated-at");
+      const updateMessage = document.getElementById("llm-update-message");
+      const refreshButton = document.getElementById("llm-refresh-button");
+      const providerSelect = document.getElementById("llm-provider-select");
+      const metricSelect = document.getElementById("llm-metric-select");
+      const grainSelect = document.getElementById("llm-grain-select");
+      const chartMeta = document.getElementById("llm-chart-meta");
+      const chartNote = document.getElementById("llm-chart-note");
+      const chart = document.getElementById("llm-chart");
+      const refreshUrl = "{{ "data/llm-pricing.json" | relURL }}";
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function renderApiTable() {
+        apiBody.innerHTML = tracker.api_pricing.map(function (row) {
+          return "<tr>" +
+            "<td>" + escapeHtml(row.vendor) + "</td>" +
+            "<td>" + escapeHtml(row.product) + "<br /><span class=\"meta\">" + escapeHtml(row.unit) + "</span></td>" +
+            "<td class=\"tracker-price\">" + escapeHtml(row.input_display) + "</td>" +
+            "<td class=\"tracker-price\">" + escapeHtml(row.cached_input_display) + "</td>" +
+            "<td class=\"tracker-price\">" + escapeHtml(row.output_display) + "</td>" +
+            "<td class=\"tracker-cell-note\">" + escapeHtml(row.notes) + "</td>" +
+            "<td><a class=\"tracker-source-link\" href='" + escapeHtml(row.official_link) + "'>" + escapeHtml(row.source_label) + "</a></td>" +
+          "</tr>";
+        }).join("");
+      }
+
+      function renderSubscriptionTable() {
+        subscriptionBody.innerHTML = tracker.subscription_pricing.map(function (row) {
+          return "<tr>" +
+            "<td>" + escapeHtml(row.vendor) + "</td>" +
+            "<td>" + escapeHtml(row.plan) + "</td>" +
+            "<td class=\"tracker-price\">" + escapeHtml(row.price_display) + "</td>" +
+            "<td class=\"tracker-cell-note\">" + escapeHtml(row.notes) + "</td>" +
+            "<td><a class=\"tracker-source-link\" href='" + escapeHtml(row.official_link) + "'>" + escapeHtml(row.source_label) + "</a></td>" +
+          "</tr>";
+        }).join("");
+      }
+
+      function buildProviderOptions() {
+        const entries = Object.entries(tracker.history_series).sort(function (a, b) {
+          return a[1].label.localeCompare(b[1].label);
+        });
+        providerSelect.innerHTML = entries.map(function (entry) {
+          const key = entry[0];
+          const label = entry[1].label;
+          return "<option value=\"" + escapeHtml(key) + "\">" + escapeHtml(label) + "</option>";
+        }).join("");
+
+        const defaults = tracker.chart_defaults || {};
+        providerSelect.value = defaults.provider || entries[0][0];
+        metricSelect.value = defaults.metric || "input_miss";
+        grainSelect.value = defaults.grain || "months";
+      }
+
+      function groupedPoints(points, grain) {
+        if (grain !== "years") return points;
+        const latestPerYear = new Map();
+        points.forEach(function (point) {
+          latestPerYear.set(point.date.slice(0, 4), point);
+        });
+        return Array.from(latestPerYear.entries()).sort(function (a, b) {
+          return a[0].localeCompare(b[0]);
+        }).map(function (entry) {
+          const clone = Object.assign({}, entry[1]);
+          clone.displayDate = entry[0];
+          return clone;
+        });
+      }
+
+      function renderChart() {
+        const providerKey = providerSelect.value;
+        const metric = metricSelect.value;
+        const grain = grainSelect.value;
+        const metricLabel = {
+          input_miss: "Input",
+          input_hit: "Cached input",
+          output: "Output"
+        }[metric];
+        const series = tracker.history_series[providerKey];
+        const points = groupedPoints((series.points || []).filter(function (point) {
+          return point[metric] !== null && point[metric] !== undefined;
+        }).sort(function (a, b) {
+          return a.date.localeCompare(b.date);
+        }), grain);
+
+        chartNote.textContent = (series.note || "") + " " + (tracker.history_note || "");
+
+        if (!points.length) {
+          chartMeta.textContent = series.label + " · no official snapshots stored for " + metricLabel.toLowerCase() + ".";
+          chart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">No data available for this metric yet.</text>";
+          return;
+        }
+
+        const values = points.map(function (point) { return point[metric]; });
+        const min = Math.min.apply(null, values);
+        const max = Math.max.apply(null, values);
+        const span = max - min || Math.max(max * 0.2, 1);
+        const low = Math.max(0, min - span * 0.2);
+        const high = max + span * 0.2;
+        const width = 760;
+        const height = 320;
+        const margin = { top: 24, right: 24, bottom: 54, left: 68 };
+        const innerWidth = width - margin.left - margin.right;
+        const innerHeight = height - margin.top - margin.bottom;
+
+        function x(index) {
+          if (points.length === 1) return margin.left + innerWidth / 2;
+          return margin.left + (innerWidth * index) / (points.length - 1);
+        }
+
+        function y(value) {
+          return margin.top + innerHeight - ((value - low) / (high - low || 1)) * innerHeight;
+        }
+
+        const ticks = [low, low + (high - low) / 2, high];
+        const path = points.map(function (point, index) {
+          return (index === 0 ? "M" : "L") + x(index) + " " + y(point[metric]);
+        }).join(" ");
+
+        let svg = "";
+        svg += "<line x1='" + margin.left + "' y1='" + (margin.top + innerHeight) + "' x2='" + (margin.left + innerWidth) + "' y2='" + (margin.top + innerHeight) + "' stroke='#d0d7de' stroke-width='1' />";
+        svg += "<line x1='" + margin.left + "' y1='" + margin.top + "' x2='" + margin.left + "' y2='" + (margin.top + innerHeight) + "' stroke='#d0d7de' stroke-width='1' />";
+
+        ticks.forEach(function (tick) {
+          const yPos = y(tick);
+          svg += "<line x1='" + margin.left + "' y1='" + yPos + "' x2='" + (margin.left + innerWidth) + "' y2='" + yPos + "' stroke='#e5e7eb' stroke-dasharray='4 4' stroke-width='1' />";
+          svg += "<text x='" + (margin.left - 10) + "' y='" + (yPos + 4) + "' text-anchor='end' fill='#6b7280' font-size='13'>" + tick.toFixed(2).replace(/\.00$/, "") + "</text>";
+        });
+
+        svg += "<path d='" + path + "' fill='none' stroke='#1d4ed8' stroke-width='3' />";
+
+        points.forEach(function (point, index) {
+          const xPos = x(index);
+          const yPos = y(point[metric]);
+          const label = escapeHtml(point.displayDate || point.date);
+          svg += "<circle cx='" + xPos + "' cy='" + yPos + "' r='4.5' fill='#1d4ed8' />";
+          svg += "<text x='" + xPos + "' y='" + (margin.top + innerHeight + 24) + "' text-anchor='middle' fill='#6b7280' font-size='13'>" + label + "</text>";
+        });
+
+        chart.innerHTML = svg;
+        chartMeta.textContent = series.label + " · " + metricLabel + " · " + series.currency + (points.length < 2 ? " · only one official snapshot stored so far" : "");
+      }
+
+      function renderAll() {
+        renderApiTable();
+        renderSubscriptionTable();
+        updatedAt.textContent = tracker.generated_at_pretty || tracker.generated_at || "Unknown";
+        updateMessage.textContent = tracker.summary_note || "";
+        if (!providerSelect.options.length) {
+          buildProviderOptions();
+        }
+        renderChart();
+      }
+
+      providerSelect.addEventListener("change", renderChart);
+      metricSelect.addEventListener("change", renderChart);
+      grainSelect.addEventListener("change", renderChart);
+
+      refreshButton.addEventListener("click", async function () {
+        refreshButton.disabled = true;
+        refreshButton.textContent = "Updating…";
+        updateMessage.textContent = "Fetching the latest deployed snapshot…";
+        try {
+          const response = await fetch(refreshUrl + "?ts=" + Date.now(), { cache: "no-store" });
+          if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+          }
+          tracker = await response.json();
+          providerSelect.innerHTML = "";
+          renderAll();
+          updateMessage.textContent = "Reloaded the latest pricing snapshot currently published on this site.";
+        } catch (error) {
+          updateMessage.textContent = "Could not refresh right now. The last deployed snapshot is still shown.";
+        } finally {
+          refreshButton.disabled = false;
+          refreshButton.textContent = "Update prices";
+        }
+      });
+
+      renderAll();
+    })();
+  </script>
+{{ end }}

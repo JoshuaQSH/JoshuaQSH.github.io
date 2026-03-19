@@ -14,7 +14,11 @@
       <p class="section-intro">Recent writing, notes, and quick references from the main posts feed.</p>
     </div>
     <div class="post-card-list">
-      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "posts") }}
+      {{ $posts := where .Site.RegularPages "Section" "posts" }}
+      {{ $pinned := where $posts "Params.pinned" true }}
+      {{ $regular := where $posts "Params.pinned" "ne" true }}
+      {{ $ordered := union ($pinned.ByDate.Reverse) ($regular.ByDate.Reverse) }}
+      {{ range first 5 $ordered }}
         <article class="post-card">
           <p class="post-card-date">{{ .Date.Format "Jan 2, 2006" }}</p>
           <h3 class="post-card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>

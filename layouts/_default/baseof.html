@@ -375,6 +375,7 @@
         }
       }
     </style>
+    {{ block "extra_head" . }}{{ end }}
   </head>
   <body>
     <nav>
@@ -422,5 +423,6 @@
         });
       })();
     </script>
+    {{ block "extra_scripts" . }}{{ end }}
   </body>
 </html>

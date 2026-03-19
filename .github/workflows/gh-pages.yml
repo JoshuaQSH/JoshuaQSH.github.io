@@ -29,6 +29,8 @@ jobs:
         with:
           hugo-version: "0.136.5"
           extended: true
+      - name: Sync LLM pricing data
+        run: python3 ./scripts/sync_llm_pricing_data.py
       - name: Check post tags
         run: ./scripts/check_posts_have_tags.sh
       - name: Build site
