@@ -233,6 +233,7 @@
               </tbody>
             </table>
           </div>
+          <p class="tracker-footnote" id="llm-subscription-note">{{ $tracker.subscription_missing_note }}</p>
         </section>
 
         <section class="tracker-section">
@@ -265,6 +266,44 @@
             <p class="tracker-footnote" id="llm-chart-note">{{ $tracker.history_note }}</p>
           </div>
         </section>
+
+        <section class="tracker-section">
+          <h2>Artificial Analysis Benchmark Snapshot</h2>
+          <p class="tracker-section-intro">A curated benchmark snapshot from Artificial Analysis showing strong frontier models across the vendors above. This benchmark uses each vendor's strongest currently benchmarked model, so it does not always match the exact API product named in the pricing tables.</p>
+          <div class="tracker-chart-shell">
+            <p class="tracker-chart-meta" id="llm-benchmark-meta">Loading benchmark snapshot…</p>
+            <svg class="tracker-chart-svg" id="llm-benchmark-chart" viewBox="0 0 760 360" role="img" aria-label="LLM benchmark comparison chart"></svg>
+            <p class="tracker-footnote" id="llm-benchmark-note">{{ $tracker.benchmark_snapshot.note }} Source: <a class="tracker-source-link" href="{{ $tracker.benchmark_snapshot.source_url }}">{{ $tracker.benchmark_snapshot.source_label }}</a> (checked {{ $tracker.benchmark_snapshot.generated_at_pretty }}).</p>
+          </div>
+          <div class="tracker-table-wrap">
+            <table class="tracker-table">
+              <thead>
+                <tr>
+                  <th>Vendor</th>
+                  <th>Benchmark model</th>
+                  <th>Intelligence</th>
+                  <th>Speed</th>
+                  <th>Blended price</th>
+                  <th>Prompt pricing</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="llm-benchmark-body">
+                {{ range $tracker.benchmark_snapshot.models }}
+                  <tr>
+                    <td>{{ .vendor }}</td>
+                    <td>{{ .short_label }}<br /><span class="meta">{{ .model }}</span></td>
+                    <td class="tracker-price">{{ .intelligence }}</td>
+                    <td class="tracker-price">{{ .speed_tps }} t/s</td>
+                    <td class="tracker-price">${{ .blended_price }}</td>
+                    <td class="tracker-cell-note">Input ${{ .input_price }} · Output ${{ .output_price }}</td>
+                    <td><a class="tracker-source-link" href="{{ .detail_url }}">{{ .detail_label }}</a></td>
+                  </tr>
+                {{ end }}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
     </div>
   </article>
@@ -276,6 +315,7 @@
       let tracker = null;
       const apiBody = document.getElementById("llm-api-body");
       const subscriptionBody = document.getElementById("llm-subscription-body");
+      const subscriptionNote = document.getElementById("llm-subscription-note");
       const updatedAt = document.getElementById("llm-updated-at");
       const updateMessage = document.getElementById("llm-update-message");
       const refreshButton = document.getElementById("llm-refresh-button");
@@ -285,6 +325,10 @@
       const chartMeta = document.getElementById("llm-chart-meta");
       const chartNote = document.getElementById("llm-chart-note");
       const chart = document.getElementById("llm-chart");
+      const benchmarkBody = document.getElementById("llm-benchmark-body");
+      const benchmarkMeta = document.getElementById("llm-benchmark-meta");
+      const benchmarkNote = document.getElementById("llm-benchmark-note");
+      const benchmarkChart = document.getElementById("llm-benchmark-chart");
       const refreshUrl = "{{ "data/llm-pricing.json" | relURL }}";
 
       function escapeHtml(value) {
@@ -294,6 +338,28 @@
           .replace(/>/g, "&gt;")
           .replace(/\"/g, "&quot;")
           .replace(/'/g, "&#39;");
+      }
+
+      function formatNumber(value, digits) {
+        if (value === null || value === undefined || Number.isNaN(Number(value))) {
+          return "N/A";
+        }
+        return Number(value).toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: digits
+        });
+      }
+
+      function formatPrice(value) {
+        if (value === null || value === undefined || Number.isNaN(Number(value))) {
+          return "N/A";
+        }
+        const numeric = Number(value);
+        const digits = numeric < 1 ? 3 : numeric < 10 ? 2 : 2;
+        return "$" + numeric.toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: digits
+        });
       }
 
       function renderApiTable() {
@@ -322,6 +388,113 @@
             "<td><a class=\"tracker-source-link\" href='" + escapeHtml(row.official_link) + "'>" + escapeHtml(row.source_label) + "</a></td>" +
           "</tr>";
         }).join("");
+        subscriptionNote.textContent = tracker.subscription_missing_note || "";
+      }
+
+      function renderBenchmarkTable() {
+        if (!tracker || !tracker.benchmark_snapshot) return;
+        benchmarkBody.innerHTML = (tracker.benchmark_snapshot.models || []).map(function (row) {
+          return "<tr>" +
+            "<td>" + escapeHtml(row.vendor) + "</td>" +
+            "<td>" + escapeHtml(row.short_label || row.model) + "<br /><span class=\"meta\">" + escapeHtml(row.model) + "</span></td>" +
+            "<td class=\"tracker-price\">" + escapeHtml(formatNumber(row.intelligence, 2)) + "</td>" +
+            "<td class=\"tracker-price\">" + escapeHtml(formatNumber(row.speed_tps, 2)) + " t/s</td>" +
+            "<td class=\"tracker-price\">" + escapeHtml(formatPrice(row.blended_price)) + "</td>" +
+            "<td class=\"tracker-cell-note\">Input " + escapeHtml(formatPrice(row.input_price)) + " · Output " + escapeHtml(formatPrice(row.output_price)) + "</td>" +
+            "<td><a class=\"tracker-source-link\" href='" + escapeHtml(row.detail_url) + "'>" + escapeHtml(row.detail_label || "Details") + "</a></td>" +
+          "</tr>";
+        }).join("");
+      }
+
+      function renderBenchmarkChart() {
+        if (!tracker || !tracker.benchmark_snapshot) return;
+        const rows = (tracker.benchmark_snapshot.models || []).filter(function (row) {
+          return row.blended_price !== null && row.blended_price !== undefined &&
+            row.intelligence !== null && row.intelligence !== undefined &&
+            row.speed_tps !== null && row.speed_tps !== undefined;
+        });
+
+        if (!rows.length) {
+          benchmarkMeta.textContent = "No benchmark data available in this snapshot.";
+          benchmarkChart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">No benchmark data available.</text>";
+          return;
+        }
+
+        const width = 760;
+        const height = 360;
+        const margin = { top: 24, right: 40, bottom: 58, left: 72 };
+        const innerWidth = width - margin.left - margin.right;
+        const innerHeight = height - margin.top - margin.bottom;
+        const prices = rows.map(function (row) { return Number(row.blended_price); });
+        const intelligenceValues = rows.map(function (row) { return Number(row.intelligence); });
+        const speedValues = rows.map(function (row) { return Number(row.speed_tps); });
+        const minPrice = Math.min.apply(null, prices);
+        const maxPrice = Math.max.apply(null, prices);
+        const minIntelligence = Math.min.apply(null, intelligenceValues);
+        const maxIntelligence = Math.max.apply(null, intelligenceValues);
+        const minSpeed = Math.min.apply(null, speedValues);
+        const maxSpeed = Math.max.apply(null, speedValues);
+        const xLow = minPrice * 0.8;
+        const xHigh = maxPrice * 1.15;
+        const logLow = Math.log10(xLow);
+        const logHigh = Math.log10(xHigh);
+        const yLow = Math.max(0, minIntelligence - 4);
+        const yHigh = maxIntelligence + 4;
+
+        function x(value) {
+          return margin.left + ((Math.log10(value) - logLow) / (logHigh - logLow || 1)) * innerWidth;
+        }
+
+        function y(value) {
+          return margin.top + innerHeight - ((value - yLow) / (yHigh - yLow || 1)) * innerHeight;
+        }
+
+        function radius(value) {
+          if (maxSpeed === minSpeed) return 10;
+          return 6 + ((value - minSpeed) / (maxSpeed - minSpeed)) * 10;
+        }
+
+        const xTicks = [0.25, 0.5, 1, 2, 5, 10, 20].filter(function (tick) {
+          return tick >= xLow && tick <= xHigh;
+        });
+        const yTicks = [yLow, yLow + (yHigh - yLow) / 3, yLow + (2 * (yHigh - yLow)) / 3, yHigh];
+
+        let svg = "";
+        svg += "<line x1='" + margin.left + "' y1='" + (margin.top + innerHeight) + "' x2='" + (margin.left + innerWidth) + "' y2='" + (margin.top + innerHeight) + "' stroke='#d0d7de' stroke-width='1' />";
+        svg += "<line x1='" + margin.left + "' y1='" + margin.top + "' x2='" + margin.left + "' y2='" + (margin.top + innerHeight) + "' stroke='#d0d7de' stroke-width='1' />";
+
+        xTicks.forEach(function (tick) {
+          const xPos = x(tick);
+          svg += "<line x1='" + xPos + "' y1='" + margin.top + "' x2='" + xPos + "' y2='" + (margin.top + innerHeight) + "' stroke='#e5e7eb' stroke-dasharray='4 4' stroke-width='1' />";
+          svg += "<text x='" + xPos + "' y='" + (margin.top + innerHeight + 26) + "' text-anchor='middle' fill='#6b7280' font-size='13'>" + escapeHtml(formatPrice(tick)) + "</text>";
+        });
+
+        yTicks.forEach(function (tick) {
+          const yPos = y(tick);
+          svg += "<line x1='" + margin.left + "' y1='" + yPos + "' x2='" + (margin.left + innerWidth) + "' y2='" + yPos + "' stroke='#e5e7eb' stroke-dasharray='4 4' stroke-width='1' />";
+          svg += "<text x='" + (margin.left - 10) + "' y='" + (yPos + 4) + "' text-anchor='end' fill='#6b7280' font-size='13'>" + escapeHtml(formatNumber(tick, 1)) + "</text>";
+        });
+
+        svg += "<text x='" + (margin.left + innerWidth / 2) + "' y='" + (height - 10) + "' text-anchor='middle' fill='#6b7280' font-size='13'>Blended price (USD per 1M tokens)</text>";
+        svg += "<text x='18' y='" + (margin.top + innerHeight / 2) + "' text-anchor='middle' fill='#6b7280' font-size='13' transform='rotate(-90 18 " + (margin.top + innerHeight / 2) + ")'>Artificial Analysis Intelligence Index</text>";
+
+        rows.forEach(function (row, index) {
+          const xPos = x(Number(row.blended_price));
+          const yPos = y(Number(row.intelligence));
+          const bubble = radius(Number(row.speed_tps));
+          const anchor = xPos > margin.left + innerWidth * 0.72 ? "end" : "start";
+          const labelX = anchor === "end" ? xPos - bubble - 6 : xPos + bubble + 6;
+          const labelY = yPos - (index % 2 === 0 ? bubble + 2 : -bubble - 12);
+          svg += "<circle cx='" + xPos + "' cy='" + yPos + "' r='" + bubble + "' fill='" + escapeHtml(row.color || "#1d4ed8") + "' fill-opacity='0.78' stroke='#ffffff' stroke-width='1.5' />";
+          svg += "<text x='" + labelX + "' y='" + labelY + "' text-anchor='" + anchor + "' fill='" + escapeHtml(row.color || "#111827") + "' font-size='12'>" + escapeHtml(row.short_label || row.model) + "</text>";
+        });
+
+        benchmarkChart.innerHTML = svg;
+        benchmarkMeta.textContent = "Price = Artificial Analysis blended 3:1 USD per 1M tokens · Bubble size = output speed (tokens/s)";
+        benchmarkNote.innerHTML = escapeHtml(tracker.benchmark_snapshot.note || "") +
+          " Source: <a class='tracker-source-link' href='" + escapeHtml(tracker.benchmark_snapshot.source_url || "") + "'>" +
+          escapeHtml(tracker.benchmark_snapshot.source_label || "Artificial Analysis") +
+          "</a> (checked " + escapeHtml(tracker.benchmark_snapshot.generated_at_pretty || tracker.generated_at_pretty || "") + ").";
       }
 
       function buildProviderOptions() {
@@ -435,12 +608,14 @@
         if (!tracker) return;
         renderApiTable();
         renderSubscriptionTable();
+        renderBenchmarkTable();
         updatedAt.textContent = tracker.generated_at_pretty || tracker.generated_at || "Unknown";
         updateMessage.textContent = tracker.summary_note || "";
         if (!providerSelect.options.length) {
           buildProviderOptions();
         }
         renderChart();
+        renderBenchmarkChart();
       }
 
       async function loadTrackerData() {
@@ -480,6 +655,8 @@
           updateMessage.textContent = "Could not load pricing data right now. The static tables are still shown below.";
           chartMeta.textContent = "Unable to load chart data right now.";
           chart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">Unable to load the pricing dataset.</text>";
+          benchmarkMeta.textContent = "Unable to load benchmark data right now.";
+          benchmarkChart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">Unable to load the benchmark snapshot.</text>";
         }
       })();
     })();

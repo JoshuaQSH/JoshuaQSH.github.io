@@ -84,15 +84,15 @@
       "vendor": "Moonshot AI / Kimi",
       "product": "kimi-latest",
       "unit": "CNY per 1M tokens",
-      "input_display": "See live pricing page",
+      "input_display": "¥2 / ¥5 / ¥10 (8k/32k/128k)",
       "input_value": null,
       "cached_input_display": "¥1.00 (auto cache hit)",
       "cached_input_value": 1.0,
-      "output_display": "See live pricing page",
+      "output_display": "¥10 / ¥20 / ¥30 (8k/32k/128k)",
       "output_value": null,
-      "notes": "kimi-latest auto-selects the 8K/32K/128K billing tier. Moonshot publicly documents the auto-cache-hit price in the kimi-latest announcement, while the live token table is on the pricing docs page.",
-      "official_link": "https://platform.moonshot.cn/docs/pricing/chat",
-      "source_label": "Moonshot pricing docs"
+      "notes": "Moonshot's official April 7, 2025 pricing notice shows kimi-latest auto-selects the 8K / 32K / 128K tier at ¥2 / ¥5 / ¥10 input and ¥10 / ¥20 / ¥30 output per 1M tokens. Automatic cache-hit billing remains ¥1 / 1M tokens.",
+      "official_link": "https://platform.moonshot.cn/blog/posts/discount",
+      "source_label": "Moonshot official pricing update"
     },
     {
       "vendor": "MiniMax",
@@ -209,30 +209,6 @@
       "notes": "Highest Google AI subscription tier for the Gemini app and related tools.",
       "official_link": "https://one.google.com/about/google-ai-plans/",
       "source_label": "Google AI plans"
-    },
-    {
-      "vendor": "DeepSeek",
-      "plan": "DeepSeek consumer app",
-      "price_display": "No public paid consumer plan listed",
-      "notes": "DeepSeek publicly documents API pricing, but I did not find a public monthly subscription plan on the official pricing docs checked for this post.",
-      "official_link": "https://chat.deepseek.com/",
-      "source_label": "DeepSeek app"
-    },
-    {
-      "vendor": "Qwen / Alibaba Cloud",
-      "plan": "Qwen consumer subscription",
-      "price_display": "No public paid consumer plan listed",
-      "notes": "Alibaba Cloud publishes API pricing for Qwen through Model Studio. I did not find a public per-user Qwen subscription price in the official sources checked here.",
-      "official_link": "https://chat.qwen.ai/",
-      "source_label": "Qwen chat"
-    },
-    {
-      "vendor": "Moonshot AI / Kimi",
-      "plan": "Kimi consumer subscription",
-      "price_display": "No public paid consumer plan listed",
-      "notes": "Moonshot publishes Kimi API pricing and product announcements. I did not find a public Kimi monthly subscription price on the official pages checked for this post.",
-      "official_link": "https://kimi.com/",
-      "source_label": "Kimi"
     },
     {
       "vendor": "MiniMax",
@@ -436,5 +412,127 @@
         }
       ]
     }
+  },
+  "subscription_missing_note": "Some vendors in the API table are omitted here because I could not find a public official subscription plan for them in the sources checked for this snapshot: DeepSeek, Qwen / Alibaba Cloud, Moonshot AI / Kimi.",
+  "benchmark_snapshot": {
+    "generated_at": "2026-03-19",
+    "generated_at_pretty": "March 19, 2026",
+    "source_url": "https://artificialanalysis.ai/models/",
+    "source_label": "Artificial Analysis model comparison",
+    "note": "This snapshot uses the strongest currently benchmarked model per vendor from Artificial Analysis. Price is the Artificial Analysis blended 3:1 USD per 1M tokens metric, bubble size tracks output speed, and Copilot is omitted because Artificial Analysis benchmarks foundation models rather than GitHub Copilot's wrapper product.",
+    "models": [
+      {
+        "vendor": "Google",
+        "model": "Gemini 3.1 Pro Preview",
+        "short_label": "Gemini 3.1 Pro Preview",
+        "creator": "Google",
+        "color": "#34A853",
+        "intelligence": 57.18,
+        "speed_tps": 120.44,
+        "blended_price": 4.5,
+        "input_price": 2.0,
+        "output_price": 12.0,
+        "detail_url": "https://artificialanalysis.ai/models/gemini-3-1-pro-preview/providers",
+        "detail_label": "Artificial Analysis details"
+      },
+      {
+        "vendor": "OpenAI",
+        "model": "GPT-5.4 (xhigh)",
+        "short_label": "GPT-5.4 (xhigh)",
+        "creator": "OpenAI",
+        "color": "#1f1f1f",
+        "intelligence": 57.17,
+        "speed_tps": 76.26,
+        "blended_price": 5.625,
+        "input_price": 2.5,
+        "output_price": 15.0,
+        "detail_url": "https://artificialanalysis.ai/models/gpt-5-4/providers",
+        "detail_label": "Artificial Analysis details"
+      },
+      {
+        "vendor": "Anthropic",
+        "model": "Claude Opus 4.6 (Adaptive Reasoning, Max Effort)",
+        "short_label": "Claude Opus 4.6 (max)",
+        "creator": "Anthropic",
+        "color": "#cc785c",
+        "intelligence": 52.95,
+        "speed_tps": 56.86,
+        "blended_price": 10.0,
+        "input_price": 5.0,
+        "output_price": 25.0,
+        "detail_url": "https://artificialanalysis.ai/models/claude-opus-4-6-adaptive/providers",
+        "detail_label": "Artificial Analysis details"
+      },
+      {
+        "vendor": "MiniMax",
+        "model": "MiniMax-M2.7",
+        "short_label": "MiniMax-M2.7",
+        "creator": "MiniMax",
+        "color": "#EB3568",
+        "intelligence": 49.62,
+        "speed_tps": 49.68,
+        "blended_price": 0.525,
+        "input_price": 0.3,
+        "output_price": 1.2,
+        "detail_url": "https://artificialanalysis.ai/models/minimax-m2-7/providers",
+        "detail_label": "Artificial Analysis details"
+      },
+      {
+        "vendor": "xAI",
+        "model": "Grok 4.20 Beta 0309 (Reasoning)",
+        "short_label": "Grok 4.20 Beta 0309",
+        "creator": "xAI",
+        "color": "#736cd3",
+        "intelligence": 48.48,
+        "speed_tps": 230.67,
+        "blended_price": 3.0,
+        "input_price": 2.0,
+        "output_price": 6.0,
+        "detail_url": "https://artificialanalysis.ai/models/grok-4-20/providers",
+        "detail_label": "Artificial Analysis details"
+      },
+      {
+        "vendor": "Kimi",
+        "model": "Kimi K2.5 (Reasoning)",
+        "short_label": "Kimi K2.5",
+        "creator": "Kimi",
+        "color": "#047AFE",
+        "intelligence": 46.81,
+        "speed_tps": 47.14,
+        "blended_price": 1.2,
+        "input_price": 0.6,
+        "output_price": 3.0,
+        "detail_url": "https://artificialanalysis.ai/models/kimi-k2-5/providers",
+        "detail_label": "Artificial Analysis details"
+      },
+      {
+        "vendor": "Qwen / Alibaba",
+        "model": "Qwen3.5 397B A17B (Reasoning)",
+        "short_label": "Qwen3.5 397B A17B",
+        "creator": "Alibaba",
+        "color": "#ff7018",
+        "intelligence": 45.05,
+        "speed_tps": 84.48,
+        "blended_price": 1.35,
+        "input_price": 0.6,
+        "output_price": 3.6,
+        "detail_url": "https://artificialanalysis.ai/models/qwen3-5-397b-a17b/providers",
+        "detail_label": "Artificial Analysis details"
+      },
+      {
+        "vendor": "DeepSeek",
+        "model": "DeepSeek V3.2 (Reasoning)",
+        "short_label": "DeepSeek V3.2",
+        "creator": "DeepSeek",
+        "color": "#2243e6",
+        "intelligence": 41.71,
+        "speed_tps": 33.3,
+        "blended_price": 0.315,
+        "input_price": 0.28,
+        "output_price": 0.42,
+        "detail_url": "https://artificialanalysis.ai/models/deepseek-v3-2-reasoning/providers",
+        "detail_label": "Artificial Analysis details"
+      }
+    ]
   }
 }
