@@ -1,6 +1,7 @@
 ---
 title: "Using uv for Python project management"
 date: 2026-03-12
+summary: "UV usage and mini guide. Think of it as a long version cheatsheet to help you from uv basic to easy virtual environment building."
 categories: ["Notes"]
 tags: ["uv", "python", "virtualenv"]
 ---
@@ -193,10 +194,8 @@ Build a package if you want to:
 + Use a src and test layout
 + Write a library
 
-
-
-Project environment path `UV_PROJECT_ENVIRONMENT`, used to configure the project virtual environment path (`.venv` by default).
-
+> [!NOTE]
+> Project environment path `UV_PROJECT_ENVIRONMENT`, used to configure the project virtual environment path (`.venv` by default).
 
 
 ## Configuration files

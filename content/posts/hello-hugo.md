@@ -1,6 +1,7 @@
 ---
 title: "Hello, Hugo"
 date: 2024-01-01
+summary: First submission of the Hugo page, demo for testing."
 categories: ["Notes"]
 tags: ["hugo", "initpost"]
 ---
