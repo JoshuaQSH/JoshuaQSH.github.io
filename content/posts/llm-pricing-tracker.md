@@ -1,8 +1,8 @@
 ---
-title: "Pinned LLM Pricing Tracker: API and Subscription Costs"
+title: "LLM Pricing Tracker: API and Subscription Costs"
 date: 2026-03-19
 lastmod: 2026-03-19
-summary: "A pinned tracker for leading LLM API token prices and consumer subscriptions, with official links, refreshable tables, and a simple price-history chart."
+summary: "A tracker for leading LLM API token prices and consumer subscriptions, with official links, refreshable tables, and a simple price-history chart."
 tags: ["llm", "pricing", "api", "openai", "anthropic", "gemini", "copilot", "market-tracker"]
 categories: ["AI", "Pricing"]
 pinned: true
