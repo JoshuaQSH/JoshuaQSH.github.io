@@ -9,8 +9,7 @@ pinned: true
 layout: "llm-pricing-tracker"
 ---
 
-> [!NOTE]
-> Latest deployed snapshot: **{{< llm-pricing-last-updated >}}**. Click **Update prices** below to reload the newest dataset currently published on this site.
+{{< llm-pricing-update-note >}}
 
 This page tracks public pricing from official provider pages for major frontier-model vendors I regularly compare: OpenAI, Google, Anthropic, xAI, DeepSeek, Qwen, Moonshot/Kimi, MiniMax, and GitHub Copilot.
 

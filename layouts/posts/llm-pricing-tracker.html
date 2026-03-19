@@ -267,18 +267,13 @@
         </section>
       </div>
     </div>
-
-    <script id="llm-pricing-data" type="application/json">{{ $tracker | jsonify }}</script>
   </article>
 {{ end }}
 
 {{ define "extra_scripts" }}
   <script>
     (function () {
-      const dataTag = document.getElementById("llm-pricing-data");
-      if (!dataTag) return;
-
-      let tracker = JSON.parse(dataTag.textContent);
+      let tracker = null;
       const apiBody = document.getElementById("llm-api-body");
       const subscriptionBody = document.getElementById("llm-subscription-body");
       const updatedAt = document.getElementById("llm-updated-at");
@@ -302,6 +297,7 @@
       }
 
       function renderApiTable() {
+        if (!tracker) return;
         apiBody.innerHTML = tracker.api_pricing.map(function (row) {
           return "<tr>" +
             "<td>" + escapeHtml(row.vendor) + "</td>" +
@@ -316,6 +312,7 @@
       }
 
       function renderSubscriptionTable() {
+        if (!tracker) return;
         subscriptionBody.innerHTML = tracker.subscription_pricing.map(function (row) {
           return "<tr>" +
             "<td>" + escapeHtml(row.vendor) + "</td>" +
@@ -328,6 +325,7 @@
       }
 
       function buildProviderOptions() {
+        if (!tracker) return;
         const entries = Object.entries(tracker.history_series).sort(function (a, b) {
           return a[1].label.localeCompare(b[1].label);
         });
@@ -359,6 +357,7 @@
       }
 
       function renderChart() {
+        if (!tracker) return;
         const providerKey = providerSelect.value;
         const metric = metricSelect.value;
         const grain = grainSelect.value;
@@ -433,6 +432,7 @@
       }
 
       function renderAll() {
+        if (!tracker) return;
         renderApiTable();
         renderSubscriptionTable();
         updatedAt.textContent = tracker.generated_at_pretty || tracker.generated_at || "Unknown";
@@ -441,6 +441,14 @@
           buildProviderOptions();
         }
         renderChart();
+      }
+
+      async function loadTrackerData() {
+        const response = await fetch(refreshUrl + "?ts=" + Date.now(), { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+        tracker = await response.json();
       }
 
       providerSelect.addEventListener("change", renderChart);
@@ -452,11 +460,7 @@
         refreshButton.textContent = "Updating…";
         updateMessage.textContent = "Fetching the latest deployed snapshot…";
         try {
-          const response = await fetch(refreshUrl + "?ts=" + Date.now(), { cache: "no-store" });
-          if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-          }
-          tracker = await response.json();
+          await loadTrackerData();
           providerSelect.innerHTML = "";
           renderAll();
           updateMessage.textContent = "Reloaded the latest pricing snapshot currently published on this site.";
@@ -468,7 +472,16 @@
         }
       });
 
-      renderAll();
+      (async function initializeTracker() {
+        try {
+          await loadTrackerData();
+          renderAll();
+        } catch (error) {
+          updateMessage.textContent = "Could not load pricing data right now. The static tables are still shown below.";
+          chartMeta.textContent = "Unable to load chart data right now.";
+          chart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">Unable to load the pricing dataset.</text>";
+        }
+      })();
     })();
   </script>
 {{ end }}

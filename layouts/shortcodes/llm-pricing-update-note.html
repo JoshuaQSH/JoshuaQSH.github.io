@@ -1,0 +1,10 @@
+{{ $generatedAt := .Site.Data.llm_pricing.generated_at_pretty | default "Unknown" }}
+<blockquote class="gh-alert gh-alert-note">
+  <p class="gh-alert-title">
+    <span class="gh-alert-icon" aria-hidden="true">i</span>
+    Note
+  </p>
+  <p>
+    Latest deployed snapshot: <strong>{{ $generatedAt }}</strong>. Click <strong>Update prices</strong> below to reload the newest dataset currently published on this site.
+  </p>
+</blockquote>
