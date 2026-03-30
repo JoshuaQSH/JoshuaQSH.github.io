@@ -1,0 +1,65 @@
+{{ define "main" }}
+  <article class="post">
+    <header class="page-header">
+      <h1>{{ .Title }}</h1>
+      {{ with .Date }}
+        <span class="meta">{{ .Format "Jan 2, 2006" }}</span>
+      {{ end }}
+      {{ with .Content }}
+        <div class="content">{{ . }}</div>
+      {{ end }}
+    </header>
+
+    {{ $entries := sort .Site.Data.photo_album.entries "taken_at" "asc" }}
+    {{ if gt (len $entries) 0 }}
+      <div class="photo-album-timeline">
+        {{ range $entries }}
+          <section class="photo-album-entry">
+            <div class="photo-album-marker">{{ .marker }}</div>
+            <article class="photo-album-card">
+              <div class="photo-album-card-body">
+                <h2>{{ .title }}</h2>
+                <span class="meta">{{ .display_date }}</span>
+
+                <figure class="photo-album-figure">
+                  <img src="{{ .image | relURL }}" alt="{{ .alt | default .title }}" loading="lazy" />
+                </figure>
+
+                <dl class="photo-album-details">
+                  <div>
+                    <dt>Camera</dt>
+                    <dd>{{ default "—" .camera }}</dd>
+                  </div>
+                  <div>
+                    <dt>Lens</dt>
+                    <dd>{{ default "—" .lens }}</dd>
+                  </div>
+                  <div>
+                    <dt>Aperture</dt>
+                    <dd>{{ default "—" .aperture }}</dd>
+                  </div>
+                  <div>
+                    <dt>ISO</dt>
+                    <dd>{{ default "—" .iso }}</dd>
+                  </div>
+                  <div>
+                    <dt>Exposure</dt>
+                    <dd>{{ default "—" .exposure_time }}</dd>
+                  </div>
+                  <div>
+                    <dt>Taken</dt>
+                    <dd>{{ default "—" .display_date }}</dd>
+                  </div>
+                </dl>
+              </div>
+            </article>
+          </section>
+        {{ end }}
+      </div>
+    {{ else }}
+      <p class="photo-album-empty">No photos are published yet.</p>
+    {{ end }}
+
+    <p class="text-link"><a href="{{ "/hodgepodge/" | relURL }}">Back to Hodgepodge</a></p>
+  </article>
+{{ end }}

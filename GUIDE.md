@@ -275,6 +275,132 @@ summary: "A live crawler that turns Traditional Chinese web novels into download
 - Add a clear `imageAlt`
 - Add a short `summary`, because it is shown in the Hodgepodge card
 
+## Photo Album Guide
+
+The photo album page is powered by three places:
+
+- raw uploads: `photo_album_raw/`
+- published web images: `static/images/photo-album/`
+- timeline data: `data/photo_album.json`
+
+The page itself lives at:
+
+- `content/hodgepodge/photo-album.md`
+
+The timeline layout and styling live at:
+
+- `layouts/hodgepodge/photo-album.html`
+- `layouts/_default/baseof.html`
+
+### Update the compressed photos
+
+1. Put your original photos into `photo_album_raw/`.
+2. Keep the filenames clean, because the file name becomes the photo title on the page.
+3. Run:
+
+```sh
+python3 scripts/prepare_photo_album.py
+```
+
+4. This regenerates:
+   - compressed web copies in `static/images/photo-album/`
+   - timeline data in `data/photo_album.json`
+   - and removes stale published `.jpg` files if their raw originals were deleted
+5. Rebuild and test:
+
+```sh
+./scripts/check_posts_have_tags.sh
+hugo --minify --cleanDestinationDir
+./scripts/check_internal_links.sh public
+```
+
+### Change a photo's details
+
+If you want to edit the title, camera details, or display time for one photo:
+
+1. Open `data/photo_album.json`
+2. Find the matching entry
+3. Edit fields such as:
+   - `title`
+   - `marker`
+   - `display_date`
+   - `camera`
+   - `lens`
+   - `aperture`
+   - `iso`
+   - `exposure_time`
+   - `alt`
+
+Example:
+
+```json
+{
+  "title": "Aurora over York",
+  "marker": "Oct 2024",
+  "display_date": "Oct 11, 2024 07:16",
+  "camera": "Sony ILCE-7M4",
+  "lens": "FE 24-105mm F4 G OSS",
+  "aperture": "f/4",
+  "iso": "1600",
+  "exposure_time": "1/5s"
+}
+```
+
+Note:
+- The script keeps manual edits for existing entries, as long as the generated image path stays the same
+- If you rename the raw photo file, the generated image path will change too, so recheck the matching entry after regeneration
+
+### Add or remove photos
+
+To add photos:
+
+1. Drop new originals into `photo_album_raw/`
+2. Run:
+
+```sh
+python3 scripts/prepare_photo_album.py
+```
+
+To remove photos:
+
+1. Delete the original from `photo_album_raw/`
+2. Run the same script again
+3. Confirm the matching compressed file and JSON entry are gone
+
+### Change the album cover shown on the Hodgepodge page
+
+Edit the front matter in `content/hodgepodge/photo-album.md`:
+
+```yaml
+image: "/images/photo-album/aurora-shout-out-to-c-xia.jpg"
+imageAlt: "Aurora over a dark landscape"
+summary: "My personal photo gallery for fun."
+```
+
+### Change the album page text
+
+Edit:
+
+- `content/hodgepodge/photo-album.md`
+
+This controls:
+
+- the summary shown on the Hodgepodge card
+- the intro text on the album page
+- the poem quote
+
+### Tweak the page layout
+
+If you want to change the timeline structure or card content:
+
+1. Edit `layouts/hodgepodge/photo-album.html`
+2. Rebuild with Hugo
+
+If you want to change spacing, colors, borders, or the timeline line/dots:
+
+1. Edit the `.photo-album-*` CSS rules in `layouts/_default/baseof.html`
+2. Rebuild with Hugo
+
 ## Tweak styling
 
 - CSS lives under `static/` (site-wide assets) and/or inside the theme at `themes/<theme-name>/static/`.

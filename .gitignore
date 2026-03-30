@@ -1,2 +1,5 @@
 public/
 .hugo_build.lock
+photo_album_raw/*
+!photo_album_raw/.gitkeep
+!photo_album_raw/README.md
