@@ -4,18 +4,68 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ block "title" . }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    <script>
+      (function () {
+        const storedTheme = localStorage.getItem("theme-preference");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = storedTheme === "light" || storedTheme === "dark"
+          ? storedTheme
+          : (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
     <style>
       :root {
         --page-bg: #ffffff;
         --panel-bg: #ffffff;
         --panel-soft: #f6f8fa;
+        --panel-elevated: #ffffff;
         --border-color: #ded6ea;
         --text-main: #1f2937;
+        --text-strong: #111827;
         --text-muted: #6b7280;
+        --text-subtle: #57606a;
         --link-color: #1d4ed8;
         --link-hover: #b6a1db;
         --post-hover: #2f6fdd;
         --divider-color: #d0d7de;
+        --control-border: #d0d7de;
+        --control-bg: #ffffff;
+        --control-hover-bg: #f6f8fa;
+        --control-hover-border: #8c959f;
+        --code-bg: #f6f8fa;
+        --inline-code-bg: rgba(175, 184, 193, 0.2);
+        --shadow-soft: 0 14px 28px rgba(27, 31, 35, 0.12);
+        --shadow-card: 0 12px 24px rgba(15, 23, 42, 0.08);
+      }
+      :root[data-theme="dark"] {
+        --page-bg: #0d1117;
+        --panel-bg: #0d1117;
+        --panel-soft: #161b22;
+        --panel-elevated: #161b22;
+        --border-color: #30363d;
+        --text-main: #e6edf3;
+        --text-strong: #f0f6fc;
+        --text-muted: #8b949e;
+        --text-subtle: #8b949e;
+        --link-color: #58a6ff;
+        --link-hover: #a5d6ff;
+        --post-hover: #79c0ff;
+        --divider-color: #30363d;
+        --control-border: #30363d;
+        --control-bg: #161b22;
+        --control-hover-bg: #21262d;
+        --control-hover-border: #8b949e;
+        --code-bg: #161b22;
+        --inline-code-bg: rgba(110, 118, 129, 0.4);
+        --shadow-soft: 0 14px 28px rgba(0, 0, 0, 0.38);
+        --shadow-card: 0 12px 24px rgba(0, 0, 0, 0.28);
+      }
+      html {
+        color-scheme: light;
+      }
+      html[data-theme="dark"] {
+        color-scheme: dark;
       }
       body {
         margin: 40px auto;
@@ -29,12 +79,21 @@
       }
       a { color: var(--link-color); text-decoration: none; }
       a:hover { text-decoration: underline; }
-      nav {
+      .site-header {
+        align-items: flex-start;
+        display: flex;
+        gap: 14px;
+        justify-content: space-between;
         margin-bottom: 32px;
+      }
+      nav {
         display: flex;
         flex-wrap: wrap;
-        align-items: baseline;
+        align-items: center;
         gap: 14px;
+        flex: 1;
+        margin-bottom: 0;
+        min-width: 0;
       }
       .nav-link {
         color: var(--text-muted);
@@ -49,7 +108,33 @@
       .nav-home {
         font-size: 1.2rem;
         font-weight: 700;
-        color: #4b5563;
+        color: var(--text-subtle);
+      }
+      .theme-toggle {
+        align-items: center;
+        background: var(--control-bg);
+        border: 1px solid var(--control-border);
+        border-radius: 999px;
+        color: var(--text-subtle);
+        cursor: pointer;
+        display: inline-flex;
+        flex-shrink: 0;
+        height: 38px;
+        justify-content: center;
+        margin-left: auto;
+        transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+        width: 38px;
+      }
+      .theme-toggle:hover {
+        background: var(--control-hover-bg);
+        border-color: var(--control-hover-border);
+        color: var(--text-main);
+        transform: translateY(-1px);
+      }
+      .theme-toggle svg {
+        fill: currentColor;
+        height: 18px;
+        width: 18px;
       }
       main {
         display: grid;
@@ -60,7 +145,7 @@
       h3 { font-size: 1.4rem; line-height: 1.25; }
       .meta { color: var(--text-muted); font-size: 0.95rem; }
       ul { padding-left: 20px; }
-      .section-intro { margin-top: 12px; color: #4b5563; }
+      .section-intro { margin-top: 12px; color: var(--text-muted); }
       .home-hero-panel,
       .home-latest-panel {
         background: transparent;
@@ -100,8 +185,8 @@
         height: 164px;
         border-radius: 999px;
         object-fit: cover;
-        border: 1px solid #d9d2e6;
-        box-shadow: 0 14px 28px rgba(27, 31, 35, 0.12);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-soft);
         flex-shrink: 0;
       }
       .profile-copy {
@@ -113,13 +198,13 @@
       }
       .profile-title {
         margin: 10px 0 8px;
-        color: #111827;
+        color: var(--text-strong);
         font-weight: 600;
         font-size: 1.18rem;
       }
       .profile-description {
         margin: 0;
-        color: #4b5563;
+        color: var(--text-muted);
         font-size: 1.08rem;
         line-height: 1.7;
       }
@@ -134,18 +219,18 @@
         width: 38px;
         height: 38px;
         border-radius: 999px;
-        border: 1px solid #d0d7de;
-        background: #ffffff;
-        color: #57606a;
+        border: 1px solid var(--control-border);
+        background: var(--control-bg);
+        color: var(--text-subtle);
         display: inline-flex;
         align-items: center;
         justify-content: center;
         transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
       }
       .profile-icon-link:hover {
-        color: #24292f;
-        border-color: #8c959f;
-        background-color: #f6f8fa;
+        color: var(--text-main);
+        border-color: var(--control-hover-border);
+        background-color: var(--control-hover-bg);
         text-decoration: none;
       }
       .profile-icon-link svg {
@@ -185,7 +270,7 @@
         margin: 0;
       }
       .post-card-title a {
-        color: #111827;
+        color: var(--text-strong);
         transition: color 0.2s ease;
       }
       .post-card-title a:hover {
@@ -193,12 +278,12 @@
         text-decoration: none;
       }
       .post-card-summary {
-        color: #4b5563;
+        color: var(--text-muted);
         margin: 0 0 12px;
       }
       .post-card-flag {
         align-items: center;
-        color: #4b5563;
+        color: var(--text-muted);
         display: inline-flex;
         font-size: 0.88rem;
         gap: 5px;
@@ -243,7 +328,7 @@
       .about-contact-icon {
         width: 18px;
         height: 18px;
-        color: #57606a;
+        color: var(--text-subtle);
         margin-top: 2px;
         flex-shrink: 0;
       }
@@ -255,10 +340,10 @@
       pre,
       pre.chroma,
       .highlight pre {
-        background-color: #f6f8fa !important;
-        border: 1px solid #d0d7de;
+        background-color: var(--code-bg) !important;
+        border: 1px solid var(--divider-color);
         border-radius: 6px;
-        color: #24292f;
+        color: var(--text-main);
         font-size: 0.92rem;
         line-height: 1.45;
         margin: 16px 0;
@@ -276,15 +361,15 @@
       p code,
       li code,
       td code {
-        background-color: rgba(175, 184, 193, 0.2);
+        background-color: var(--inline-code-bg);
         border-radius: 6px;
-        color: #24292f;
+        color: var(--text-main);
         font-size: 0.9em;
         padding: 0.2em 0.4em;
       }
       blockquote {
-        border-left: 0.25em solid #d0d7de;
-        color: #57606a;
+        border-left: 0.25em solid var(--divider-color);
+        color: var(--text-subtle);
         margin: 16px 0;
         padding: 0 1em;
       }
@@ -292,7 +377,7 @@
         border-left-width: 0.28em;
         border-left-style: solid;
         border-radius: 6px;
-        color: #24292f;
+        color: var(--text-main);
         margin: 16px 0;
         padding: 8px 14px;
       }
@@ -351,15 +436,15 @@
         gap: 24px;
       }
       .hodgepodge-card {
-        border: 1px solid #e5e7eb;
+        border: 1px solid var(--divider-color);
         border-radius: 16px;
-        background: #ffffff;
+        background: var(--panel-elevated);
         overflow: hidden;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
       .hodgepodge-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+        box-shadow: var(--shadow-card);
       }
       .hodgepodge-link { display: block; color: inherit; text-decoration: none; }
       .hodgepodge-thumb img {
@@ -369,16 +454,16 @@
       }
       .hodgepodge-body { padding: 16px; }
       .hodgepodge-body h2 { margin: 0 0 8px; font-size: 1.1rem; }
-      .hodgepodge-body p { margin: 0 0 12px; color: #4b5563; }
+      .hodgepodge-body p { margin: 0 0 12px; color: var(--text-muted); }
       .hodgepodge-hero img {
         width: 100%;
         border-radius: 18px;
-        border: 1px solid #e5e7eb;
+        border: 1px solid var(--divider-color);
         margin: 12px 0 24px;
       }
       @media (max-width: 640px) {
         body { margin: 24px auto; }
-        nav { margin-bottom: 24px; }
+        .site-header { margin-bottom: 24px; }
         .home-hero-panel,
         .home-latest-panel {
           padding: 0;
@@ -413,14 +498,74 @@
     {{ block "extra_head" . }}{{ end }}
   </head>
   <body>
-    <nav>
-      {{ range .Site.Menus.main }}
-        <a class="nav-link{{ if eq .Identifier "home" }} nav-home{{ end }}" href="{{ .URL | relURL }}">{{ .Name }}</a>
-      {{ end }}
-    </nav>
+    <header class="site-header">
+      <nav>
+        {{ range .Site.Menus.main }}
+          <a class="nav-link{{ if eq .Identifier "home" }} nav-home{{ end }}" href="{{ .URL | relURL }}">{{ .Name }}</a>
+        {{ end }}
+      </nav>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span id="theme-toggle-icon" aria-hidden="true"></span>
+      </button>
+    </header>
     <main>
       {{ block "main" . }}{{ end }}
     </main>
+    <script>
+      (function () {
+        const root = document.documentElement;
+        const toggle = document.getElementById("theme-toggle");
+        const icon = document.getElementById("theme-toggle-icon");
+        const lightIcon = '<svg viewBox="0 0 24 24" focusable="false"><path d="M12 4.75a.75.75 0 0 1 .75.75V7a.75.75 0 0 1-1.5 0V5.5a.75.75 0 0 1 .75-.75Zm0 11.5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V17a.75.75 0 0 1 .75-.75Zm7.25-5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5Zm-11 0a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5Zm7.13-4.88a.75.75 0 0 1 1.06 0l1.06 1.06a.75.75 0 1 1-1.06 1.06l-1.06-1.06a.75.75 0 0 1 0-1.06ZM7.56 14.19a.75.75 0 0 1 1.06 0l1.06 1.06a.75.75 0 0 1-1.06 1.06L7.56 15.25a.75.75 0 0 1 0-1.06Zm8.12 2.12a.75.75 0 0 1 0-1.06l1.06-1.06a.75.75 0 1 1 1.06 1.06l-1.06 1.06a.75.75 0 0 1-1.06 0ZM8.62 7.43a.75.75 0 0 1 0 1.06L7.56 9.55A.75.75 0 0 1 6.5 8.49l1.06-1.06a.75.75 0 0 1 1.06 0ZM12 8.25a3.75 3.75 0 1 1 0 7.5 3.75 3.75 0 0 1 0-7.5Z"></path></svg>';
+        const darkIcon = '<svg viewBox="0 0 24 24" focusable="false"><path d="M14.5 3.25a.75.75 0 0 1 .79.94 8.25 8.25 0 1 0 10.52 10.52.75.75 0 0 1 .94.79A9.75 9.75 0 1 1 14.5 3.25Z"></path></svg>';
+
+        function getStoredTheme() {
+          return localStorage.getItem("theme-preference");
+        }
+
+        function getPreferredTheme() {
+          const stored = getStoredTheme();
+          if (stored === "light" || stored === "dark") {
+            return stored;
+          }
+          return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+
+        function renderToggle(theme) {
+          const nextTheme = theme === "dark" ? "light" : "dark";
+          icon.innerHTML = theme === "dark" ? lightIcon : darkIcon;
+          toggle.setAttribute("aria-label", "Switch to " + nextTheme + " mode");
+          toggle.setAttribute("title", "Switch to " + nextTheme + " mode");
+        }
+
+        if (!toggle || !icon) return;
+
+        toggle.addEventListener("click", function () {
+          const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+          const next = current === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          localStorage.setItem("theme-preference", next);
+          renderToggle(next);
+        });
+
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        const syncWithSystem = function (event) {
+          const stored = getStoredTheme();
+          if (stored === "light" || stored === "dark") return;
+          const theme = event.matches ? "dark" : "light";
+          root.setAttribute("data-theme", theme);
+          renderToggle(theme);
+        };
+
+        if (typeof media.addEventListener === "function") {
+          media.addEventListener("change", syncWithSystem);
+        } else if (typeof media.addListener === "function") {
+          media.addListener(syncWithSystem);
+        }
+
+        renderToggle(getPreferredTheme());
+      })();
+    </script>
     <script>
       (function () {
         const alertMap = {
