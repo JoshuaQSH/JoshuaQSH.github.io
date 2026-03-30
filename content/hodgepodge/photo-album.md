@@ -9,14 +9,8 @@ imageAlt: "Aurora over a dark landscape"
 summary: "My personal photo gallery for fun."
 ---
 
-This is my little corner for photos I like and want to keep around.
-Nothing too serious, just places, light, weather, and moments that felt worth
-keeping.
-
-> "A thing of beauty is a joy for ever."
+> "A thing of beauty is a joy forever."
 > 
-> John Keats, *Endymion*
+> John Keats, *Endymioni: A Poetic Romance*
 
-> [!NOTE]
-> Camera and lens defaults are prefilled from the current setup. Aperture, ISO,
-> and exposure time can be filled in later whenever I want to annotate them.
+This is my little corner for photos I like and want to keep around. Nothing too serious, just places and moments that felt worth keeping.

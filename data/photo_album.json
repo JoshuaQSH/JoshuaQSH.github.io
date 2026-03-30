@@ -9,9 +9,9 @@
       "alt": "Edale",
       "camera": "Sony ILCE-7M4",
       "lens": "FE 24-105mm F4 G OSS",
-      "aperture": "",
-      "iso": "",
-      "exposure_time": ""
+      "aperture": "f/4.5",
+      "iso": "100",
+      "exposure_time": "1/60"
     },
     {
       "title": "Aurora (Shout out to C. Xia)",
@@ -22,9 +22,9 @@
       "alt": "Aurora (Shout out to C. Xia)",
       "camera": "Sony ILCE-7M4",
       "lens": "FE 24-105mm F4 G OSS",
-      "aperture": "",
-      "iso": "",
-      "exposure_time": ""
+      "aperture": "f/4",
+      "iso": "1600",
+      "exposure_time": "4''"
     },
     {
       "title": "Chatsworth House Crystal Ball",
@@ -35,9 +35,9 @@
       "alt": "Chatsworth House Crystal Ball",
       "camera": "Sony ILCE-7M4",
       "lens": "FE 24-105mm F4 G OSS",
-      "aperture": "",
-      "iso": "",
-      "exposure_time": ""
+      "aperture": "f/4",
+      "iso": "12800",
+      "exposure_time": "1/125"
     },
     {
       "title": "Inverness Highland Skye Castle",
@@ -48,9 +48,9 @@
       "alt": "Inverness Highland Skye Castle",
       "camera": "Sony ILCE-7M4",
       "lens": "FE 24-105mm F4 G OSS",
-      "aperture": "",
-      "iso": "",
-      "exposure_time": ""
+      "aperture": "f/9",
+      "iso": "100",
+      "exposure_time": "1/125"
     },
     {
       "title": "Inverness Highland Skye Lake",
@@ -61,9 +61,9 @@
       "alt": "Inverness Highland Skye Lake",
       "camera": "Sony ILCE-7M4",
       "lens": "FE 24-105mm F4 G OSS",
-      "aperture": "",
-      "iso": "",
-      "exposure_time": ""
+      "aperture": "f/8",
+      "iso": "100",
+      "exposure_time": "1/200"
     },
     {
       "title": "Ox in the Snow",
@@ -74,9 +74,9 @@
       "alt": "Ox in the Snow",
       "camera": "Sony ILCE-7M4",
       "lens": "FE 24-105mm F4 G OSS",
-      "aperture": "",
-      "iso": "",
-      "exposure_time": ""
+      "aperture": "f/4",
+      "iso": "320",
+      "exposure_time": "1/160"
     },
     {
       "title": "Ribblehead",
@@ -87,9 +87,9 @@
       "alt": "Ribblehead",
       "camera": "Sony ILCE-7M4",
       "lens": "FE 24-105mm F4 G OSS",
-      "aperture": "",
-      "iso": "",
-      "exposure_time": ""
+      "aperture": "f/4",
+      "iso": "200",
+      "exposure_time": "1/1250"
     }
   ]
 }
