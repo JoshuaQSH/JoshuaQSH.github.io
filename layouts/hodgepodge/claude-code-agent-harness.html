@@ -1,0 +1,1079 @@
+{{ define "extra_head" }}
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <style>
+    .harness-page {
+      display: grid;
+      gap: 32px;
+    }
+    .harness-kicker {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .harness-summary-grid,
+    .harness-feature-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .harness-panel,
+    .harness-feature-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--divider-color);
+      border-radius: 20px;
+      padding: 22px;
+    }
+    .harness-panel h2,
+    .harness-feature-card h3 {
+      margin-top: 0;
+    }
+    .harness-panel p:last-child,
+    .harness-feature-card p:last-child {
+      margin-bottom: 0;
+    }
+    .harness-stat-list,
+    .harness-plain-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+    }
+    .harness-stat-list li,
+    .harness-plain-list li {
+      align-items: baseline;
+      border-top: 1px solid rgba(128, 128, 128, 0.12);
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      list-style: none;
+      padding-top: 12px;
+    }
+    .harness-stat-list li:first-child,
+    .harness-plain-list li:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .harness-stat-list strong,
+    .harness-plain-list strong {
+      color: var(--text-strong);
+      font-weight: 700;
+    }
+    .harness-inline-meta {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    .harness-code-path {
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+      font-size: 0.86rem;
+    }
+    .harness-explorer {
+      display: grid;
+      gap: 18px;
+    }
+    .harness-explorer-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+    }
+    .harness-explorer-header p {
+      margin: 0;
+      max-width: 520px;
+    }
+    .harness-toolbar {
+      align-items: flex-start;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: space-between;
+    }
+    .harness-toolbar-left,
+    .harness-toolbar-right {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .harness-button,
+    .harness-chip,
+    .harness-focus-button {
+      background: var(--control-bg);
+      border: 1px solid var(--control-border);
+      border-radius: 999px;
+      color: var(--text-main);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.92rem;
+      padding: 0.45rem 0.85rem;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+    .harness-button:hover,
+    .harness-chip:hover,
+    .harness-focus-button:hover {
+      background: var(--control-hover-bg);
+      border-color: var(--control-hover-border);
+      color: var(--post-hover);
+      transform: translateY(-1px);
+    }
+    .harness-breadcrumbs {
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 1.8rem;
+    }
+    .harness-breadcrumbs button {
+      background: transparent;
+      border: 0;
+      color: var(--text-subtle);
+      cursor: pointer;
+      font: inherit;
+      padding: 0;
+    }
+    .harness-breadcrumbs button:hover {
+      color: var(--post-hover);
+      text-decoration: underline;
+    }
+    .harness-search-wrap {
+      min-width: min(100%, 300px);
+      position: relative;
+    }
+    .harness-search-input {
+      background: var(--control-bg);
+      border: 1px solid var(--control-border);
+      border-radius: 16px;
+      color: var(--text-main);
+      font: inherit;
+      padding: 0.7rem 0.9rem;
+      width: min(100%, 320px);
+    }
+    .harness-search-input:focus {
+      border-color: var(--post-hover);
+      outline: none;
+    }
+    .harness-search-results {
+      background: var(--panel-elevated);
+      border: 1px solid var(--divider-color);
+      border-radius: 18px;
+      box-shadow: var(--shadow-card);
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding: 10px;
+      width: min(100vw - 32px, 420px);
+      z-index: 3;
+    }
+    .harness-search-result {
+      background: transparent;
+      border: 0;
+      border-radius: 14px;
+      color: inherit;
+      cursor: pointer;
+      display: grid;
+      gap: 4px;
+      padding: 10px 12px;
+      text-align: left;
+    }
+    .harness-search-result:hover {
+      background: rgba(29, 78, 216, 0.08);
+    }
+    .harness-search-kind {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .harness-search-path {
+      color: var(--text-strong);
+      font-weight: 700;
+    }
+    .harness-search-summary {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .harness-explorer-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.9fr);
+    }
+    .harness-diagram-card,
+    .harness-detail-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--divider-color);
+      border-radius: 24px;
+      padding: 20px;
+    }
+    .harness-diagram-meta {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      min-height: 1.5rem;
+    }
+    .harness-diagram-shell {
+      min-height: 440px;
+      overflow: auto;
+    }
+    .harness-diagram-shell svg {
+      height: auto;
+      min-width: 100%;
+      width: 100%;
+    }
+    .harness-detail-card h3 {
+      margin-top: 0;
+    }
+    .harness-detail-grid {
+      display: grid;
+      gap: 14px;
+    }
+    .harness-detail-section {
+      border-top: 1px solid rgba(128, 128, 128, 0.12);
+      padding-top: 14px;
+    }
+    .harness-detail-section:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .harness-detail-section h4 {
+      margin: 0 0 8px;
+    }
+    .harness-metric-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .harness-metric-card {
+      background: rgba(29, 78, 216, 0.06);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+    .harness-metric-value {
+      color: var(--text-strong);
+      display: block;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .harness-metric-label {
+      color: var(--text-muted);
+      font-size: 0.84rem;
+    }
+    .harness-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .harness-chip-static {
+      background: rgba(29, 78, 216, 0.08);
+      border-radius: 999px;
+      color: var(--text-main);
+      display: inline-flex;
+      font-size: 0.88rem;
+      padding: 0.38rem 0.7rem;
+    }
+    .harness-feature-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .harness-feature-card p {
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .harness-feature-files {
+      color: var(--text-subtle);
+      font-size: 0.84rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .harness-footer-link {
+      margin-top: 0;
+    }
+    @media (max-width: 900px) {
+      .harness-summary-grid,
+      .harness-feature-grid,
+      .harness-explorer-grid {
+        grid-template-columns: 1fr;
+      }
+      .harness-search-input,
+      .harness-search-results {
+        width: 100%;
+      }
+    }
+    @media (max-width: 640px) {
+      .harness-panel,
+      .harness-feature-card,
+      .harness-diagram-card,
+      .harness-detail-card {
+        border-radius: 18px;
+        padding: 18px;
+      }
+      .harness-metric-grid {
+        grid-template-columns: 1fr;
+      }
+      .harness-toolbar-left,
+      .harness-toolbar-right,
+      .harness-explorer-header {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
+  </style>
+{{ end }}
+
+{{ define "main" }}
+  {{ $meta := site.Data.claude_code_harness_meta }}
+  {{ $featureCards := slice
+    (dict
+      "title" "Query Loop"
+      "focus" "src/query.ts"
+      "description" "The core turn engine. Messages enter here, tools are detected here, compaction and retries are triggered here, and the loop decides whether another model round is needed."
+      "files" (slice "src/query.ts" "src/QueryEngine.ts" "src/services/compact/compact.ts" "src/services/tools/StreamingToolExecutor.ts"))
+    (dict
+      "title" "Tool Runtime"
+      "focus" "src/services/tools"
+      "description" "Claude Code treats tools as a runtime, not just function calls. The registry, orchestration, execution, telemetry, and result-shaping layers are all explicit."
+      "files" (slice "src/tools.ts" "src/Tool.ts" "src/services/tools/toolExecution.ts" "src/services/tools/toolOrchestration.ts"))
+    (dict
+      "title" "Permission Engine"
+      "focus" "src/hooks/toolPermission"
+      "description" "Permission decisions can come from the user, hooks, bridge clients, channels, or classifiers. The harness resolves those races carefully instead of assuming one approval path."
+      "files" (slice "src/hooks/toolPermission/PermissionContext.ts" "src/hooks/toolPermission/handlers/interactiveHandler.ts" "src/utils/permissions/permissions.ts"))
+    (dict
+      "title" "Tasks And Agents"
+      "focus" "src/tasks"
+      "description" "Worker agents, bash jobs, remote sessions, and long-running background work all map onto a shared task model with disk-backed output and resumable metadata."
+      "files" (slice "src/tasks/LocalAgentTask/LocalAgentTask.tsx" "src/tasks/RemoteAgentTask/RemoteAgentTask.tsx" "src/coordinator/coordinatorMode.ts"))
+    (dict
+      "title" "MCP, Plugins, Skills"
+      "focus" "src/services/mcp"
+      "description" "The harness is built like a platform. MCP servers, plugin bundles, and markdown skills expand capability without needing to fork the core query loop."
+      "files" (slice "src/services/mcp/client.ts" "src/services/mcp/MCPConnectionManager.tsx" "src/utils/plugins/pluginLoader.ts" "src/skills/bundled/index.ts"))
+    (dict
+      "title" "Bridge And Remote"
+      "focus" "src/bridge"
+      "description" "The same runtime ideas power IDE bridge mode, remote control, and browser-linked sessions. That lets the terminal, IDE, and web flows share the same message and tool machinery."
+      "files" (slice "src/bridge/bridgeMain.ts" "src/bridge/replBridge.ts" "src/bridge/initReplBridge.ts"))
+    (dict
+      "title" "BUDDY"
+      "focus" "src/buddy"
+      "description" "BUDDY is not just decorative UI. It has its own sprite system, deterministic identity generation, prompt attachments, and placement logic inside the REPL."
+      "files" (slice "src/buddy/CompanionSprite.tsx" "src/buddy/companion.ts" "src/buddy/prompt.ts"))
+    (dict
+      "title" "KAIROS"
+      "focus" "src/tools/ScheduleCronTool/prompt.ts"
+      "description" "KAIROS behaves like a resident assistant layer: bridge continuity, scheduled prompts, brief mode, and longer-lived assistant behavior gated into the same harness."
+      "files" (slice "src/tools/ScheduleCronTool/prompt.ts" "src/assistant/sessionHistory.ts" "src/bridge/initReplBridge.ts"))
+    (dict
+      "title" "ULTRAPLAN"
+      "focus" "src/commands/ultraplan.tsx"
+      "description" "ULTRAPLAN shows how the runtime stretches beyond the terminal: launch a remote plan session, monitor it locally, and either teleport the plan back or keep execution in the browser."
+      "files" (slice "src/commands/ultraplan.tsx" "src/utils/ultraplan/ccrSession.ts" "src/tasks/RemoteAgentTask/RemoteAgentTask.tsx"))
+  }}
+
+  <article class="post harness-page">
+    <header class="page-header">
+      <p class="harness-kicker">Hodgepodge · Agent Runtime Review</p>
+      <h1>{{ .Title }}</h1>
+      {{ with $meta.generated_at }}
+        <p class="meta">Analyzed from <code>~/claude-code-fork-main/src</code> on {{ . }}</p>
+      {{ end }}
+    </header>
+
+    {{ with .Params.image }}
+      <figure class="hodgepodge-hero">
+        <img src="{{ . | relURL }}" alt="{{ $.Params.imageAlt | default $.Title }}" />
+      </figure>
+    {{ end }}
+
+    <div class="content">
+      {{ .Content }}
+    </div>
+
+    <section class="harness-summary-grid" aria-label="Harness summary panels">
+      <section class="harness-panel">
+        <h2>Snapshot</h2>
+        <div class="harness-metric-grid">
+          <div class="harness-metric-card">
+            <span class="harness-metric-value">{{ $meta.total_files }}</span>
+            <span class="harness-metric-label">Source files</span>
+          </div>
+          <div class="harness-metric-card">
+            <span class="harness-metric-value">{{ $meta.total_directories }}</span>
+            <span class="harness-metric-label">Directories</span>
+          </div>
+          <div class="harness-metric-card">
+            <span class="harness-metric-value">{{ $meta.total_lines }}</span>
+            <span class="harness-metric-label">Lines of code</span>
+          </div>
+          <div class="harness-metric-card">
+            <span class="harness-metric-value">{{ (index $meta.top_modules 0).name }}</span>
+            <span class="harness-metric-label">Largest subsystem</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="harness-panel">
+        <h2>Biggest Subsystems</h2>
+        <ul class="harness-stat-list">
+          {{ range first 6 $meta.top_modules }}
+            <li>
+              <span>
+                <strong>{{ .name }}</strong>
+                <span class="harness-inline-meta">· {{ .line_count }} lines</span>
+              </span>
+              <button class="harness-focus-button" type="button" data-harness-focus="{{ if eq .name "(root)" }}src{{ else }}src/{{ .name }}{{ end }}">Open</button>
+            </li>
+          {{ end }}
+        </ul>
+      </section>
+
+      <section class="harness-panel">
+        <h2>Heavyweight Files</h2>
+        <ul class="harness-plain-list">
+          {{ range first 6 $meta.largest_files }}
+            <li>
+              <span>
+                <strong>{{ replace .path "src/" "" }}</strong>
+                <span class="harness-inline-meta">· {{ .line_count }} lines</span>
+              </span>
+              <button class="harness-focus-button" type="button" data-harness-focus="{{ .path }}">Inspect</button>
+            </li>
+          {{ end }}
+        </ul>
+      </section>
+
+      <section class="harness-panel">
+        <h2>Feature Gates That Pop Up Most</h2>
+        <ul class="harness-plain-list">
+          {{ range first 8 $meta.top_feature_flags }}
+            <li>
+              <span>
+                <strong>{{ .name }}</strong>
+                <span class="harness-inline-meta">· {{ .count }} files</span>
+              </span>
+              <span class="harness-code-path">feature('{{ .name }}')</span>
+            </li>
+          {{ end }}
+        </ul>
+      </section>
+    </section>
+
+    <section class="harness-explorer" aria-labelledby="harness-explorer-title">
+      <div class="harness-explorer-header">
+        <div>
+          <h2 id="harness-explorer-title">Interactive Architecture Explorer</h2>
+          <p>Start from the runtime overview, then click into a directory or file to unfold its neighborhood. The diagram is rendered with Mermaid, but the data comes from the actual `src/` tree and import graph.</p>
+        </div>
+        <p class="meta">Tip: use search to jump straight to `QueryEngine.ts`, `bridge/replBridge.ts`, `toolExecution.ts`, or `commands/ultraplan.tsx`.</p>
+      </div>
+
+      <div class="harness-toolbar">
+        <div class="harness-toolbar-left">
+          <button class="harness-button" id="harness-overview-button" type="button">Overview</button>
+          <button class="harness-button" id="harness-up-button" type="button">Up One Level</button>
+          <div class="harness-breadcrumbs" id="harness-breadcrumbs" aria-live="polite"></div>
+        </div>
+        <div class="harness-toolbar-right">
+          <div class="harness-search-wrap">
+            <input class="harness-search-input" id="harness-search-input" type="search" placeholder="Search files or folders in src/" autocomplete="off" />
+            <div class="harness-search-results" id="harness-search-results" hidden></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="harness-explorer-grid">
+        <section class="harness-diagram-card">
+          <div class="harness-diagram-meta" id="harness-diagram-meta">Loading architecture data…</div>
+          <div class="harness-diagram-shell" id="harness-diagram-shell"></div>
+        </section>
+        <aside class="harness-detail-card" id="harness-detail-card">
+          <div class="harness-detail-grid" id="harness-detail-grid"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section aria-labelledby="harness-feature-title">
+      <h2 id="harness-feature-title">Key Feature Cards</h2>
+      <div class="harness-feature-grid">
+        {{ range $featureCards }}
+          <article class="harness-feature-card">
+            <h3>{{ .title }}</h3>
+            <p>{{ .description }}</p>
+            <div class="harness-feature-files">
+              {{ range .files }}
+                <div><code>{{ . }}</code></div>
+              {{ end }}
+            </div>
+            <button class="harness-focus-button" type="button" data-harness-focus="{{ .focus }}">Open in explorer</button>
+          </article>
+        {{ end }}
+      </div>
+    </section>
+
+    <p class="harness-footer-link"><a href="{{ "/hodgepodge/" | relURL }}">Back to Hodgepodge</a></p>
+  </article>
+
+  <script>
+    (function () {
+      const dataUrl = {{ "/data/claude-code-harness.json" | relURL | jsonify }};
+      const meta = {{ $meta | jsonify }};
+      const diagramMetaEl = document.getElementById("harness-diagram-meta");
+      const diagramShellEl = document.getElementById("harness-diagram-shell");
+      const detailEl = document.getElementById("harness-detail-grid");
+      const breadcrumbsEl = document.getElementById("harness-breadcrumbs");
+      const searchInputEl = document.getElementById("harness-search-input");
+      const searchResultsEl = document.getElementById("harness-search-results");
+      const overviewButtonEl = document.getElementById("harness-overview-button");
+      const upButtonEl = document.getElementById("harness-up-button");
+
+      const state = {
+        payload: null,
+        focus: "overview",
+        mermaidReady: false,
+      };
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;");
+      }
+
+      function shortPath(path) {
+        return String(path).replace(/^src\//, "");
+      }
+
+      function basename(path) {
+        const parts = String(path).split("/");
+        return parts[parts.length - 1] || path;
+      }
+
+      function isDirectory(path) {
+        return !!(state.payload && state.payload.directories && state.payload.directories[path]);
+      }
+
+      function isFile(path) {
+        return !!(state.payload && state.payload.files && state.payload.files[path]);
+      }
+
+      function focusPath(path) {
+        if (!state.payload) return;
+        if (!path || path === "overview") {
+          state.focus = "overview";
+        } else if (isDirectory(path) || isFile(path)) {
+          state.focus = path;
+        } else {
+          state.focus = "overview";
+        }
+        render();
+      }
+
+      window.claudeHarnessExplorer = {
+        focus: focusPath,
+      };
+
+      function parentPath(path) {
+        if (!path || path === "overview" || path === "src") return "overview";
+        if (isFile(path)) {
+          const record = state.payload.files[path];
+          return record && record.dir_path ? record.dir_path : "overview";
+        }
+        const parts = String(path).split("/");
+        parts.pop();
+        return parts.length ? parts.join("/") : "overview";
+      }
+
+      function currentPalette() {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        if (isDark) {
+          return {
+            focusFill: "#173356",
+            focusStroke: "#58a6ff",
+            focusText: "#f0f6fc",
+            dirFill: "#111923",
+            fileFill: "#161b22",
+            incomingFill: "#362814",
+            neutralFill: "#0d1117",
+            neutralStroke: "#30363d",
+            text: "#e6edf3",
+          };
+        }
+        return {
+          focusFill: "#dbeafe",
+          focusStroke: "#1d4ed8",
+          focusText: "#0f172a",
+          dirFill: "#eef4ff",
+          fileFill: "#f8fafc",
+          incomingFill: "#fff4df",
+          neutralFill: "#f3f4f6",
+          neutralStroke: "#d0d7de",
+          text: "#1f2937",
+        };
+      }
+
+      function initMermaid() {
+        if (!window.mermaid) return false;
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        window.mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: "loose",
+          theme: isDark ? "dark" : "neutral",
+          flowchart: {
+            curve: "basis",
+            htmlLabels: true,
+          },
+        });
+        return true;
+      }
+
+      function mermaidText(value) {
+        return escapeHtml(String(value))
+          .replace(/\\n/g, "<br/>")
+          .replace(/\n/g, "<br/>");
+      }
+
+      function chipButton(path, label) {
+        return '<button class="harness-chip" type="button" data-harness-focus="' + escapeHtml(path) + '">' + escapeHtml(label || shortPath(path)) + "</button>";
+      }
+
+      function staticChip(label) {
+        return '<span class="harness-chip-static">' + escapeHtml(label) + "</span>";
+      }
+
+      function renderBreadcrumbs() {
+        if (state.focus === "overview") {
+          breadcrumbsEl.innerHTML = '<span>overview</span>';
+          return;
+        }
+
+        const segments = [];
+        const fullPath = state.focus;
+        if (isDirectory(fullPath)) {
+          let current = "";
+          fullPath.split("/").forEach(function (part, index) {
+            current = index === 0 ? part : current + "/" + part;
+            segments.push({ label: part, path: current });
+          });
+        } else {
+          const fileRecord = state.payload.files[fullPath];
+          let current = "";
+          fileRecord.dir_path.split("/").forEach(function (part, index) {
+            current = index === 0 ? part : current + "/" + part;
+            segments.push({ label: part, path: current });
+          });
+          segments.push({ label: fileRecord.name, path: fullPath });
+        }
+
+        breadcrumbsEl.innerHTML = segments.map(function (segment, index) {
+          const separator = index === 0 ? "" : '<span>/</span>';
+          return separator + '<button type="button" data-harness-focus="' + escapeHtml(segment.path) + '">' + escapeHtml(segment.label) + "</button>";
+        }).join("");
+      }
+
+      function buildGraphBuilder() {
+        const palette = currentPalette();
+        const lines = [
+          "flowchart LR",
+          "classDef focus fill:" + palette.focusFill + ",stroke:" + palette.focusStroke + ",stroke-width:1.8px,color:" + palette.focusText,
+          "classDef dir fill:" + palette.dirFill + ",stroke:" + palette.neutralStroke + ",stroke-width:1.2px,color:" + palette.text,
+          "classDef file fill:" + palette.fileFill + ",stroke:" + palette.neutralStroke + ",stroke-width:1.2px,color:" + palette.text,
+          "classDef incoming fill:" + palette.incomingFill + ",stroke:" + palette.neutralStroke + ",stroke-width:1.2px,color:" + palette.text,
+          "classDef neutral fill:" + palette.neutralFill + ",stroke:" + palette.neutralStroke + ",stroke-width:1px,color:" + palette.text,
+        ];
+        const callbacks = {};
+        let counter = 0;
+
+        function addNode(label, target, className) {
+          counter += 1;
+          const nodeId = "n" + counter;
+          lines.push(nodeId + '["' + mermaidText(label) + '"]');
+          if (className) {
+            lines.push("class " + nodeId + " " + className);
+          }
+          if (target) {
+            const callbackName = "harnessNodeClick_" + nodeId;
+            callbacks[callbackName] = function () {
+              focusPath(target);
+            };
+            lines.push("click " + nodeId + " call " + callbackName + '() "Open ' + mermaidText(shortPath(target)) + '"');
+          }
+          return nodeId;
+        }
+
+        return {
+          lines: lines,
+          callbacks: callbacks,
+          addNode: addNode,
+        };
+      }
+
+      function buildOverviewGraph() {
+        const builder = buildGraphBuilder();
+        const bootstrap = builder.addNode("CLI bootstrap\\nmain.tsx", "src/main.tsx", "focus");
+        const setup = builder.addNode("Setup and session prep\\nsetup.ts", "src/setup.ts", "dir");
+        const surfaces = builder.addNode("Interactive surfaces\\nREPL.tsx + cli/print.ts", "src/screens/REPL.tsx", "dir");
+        const queryLoop = builder.addNode("Query loop\\nQueryEngine.ts + query.ts", "src/query.ts", "focus");
+        const tools = builder.addNode("Tool runtime\\nTool.ts + services/tools/*", "src/services/tools", "dir");
+        const tasks = builder.addNode("Tasks and agents\\ntasks/* + coordinator", "src/tasks", "dir");
+        const storage = builder.addNode("State and recovery\\nsessionStorage.ts", "src/utils/sessionStorage.ts", "dir");
+        const extensions = builder.addNode("Extensions\\nMCP + plugins + skills", "src/services/mcp", "dir");
+        const bridge = builder.addNode("Bridge and remote\\nbridge/*", "src/bridge", "dir");
+        const features = builder.addNode("Feature layers\\nBUDDY / KAIROS / ULTRAPLAN", "src/commands/ultraplan.tsx", "incoming");
+
+        builder.lines.push(
+          bootstrap + " --> " + setup,
+          setup + " --> " + surfaces,
+          surfaces + " --> " + queryLoop,
+          queryLoop + " --> " + tools,
+          tools + " --> " + tasks,
+          queryLoop + " --> " + storage,
+          queryLoop + " --> " + extensions,
+          surfaces + " --> " + bridge,
+          surfaces + " --> " + features,
+          bridge + " --> " + storage,
+          tasks + " --> " + storage
+        );
+
+        return {
+          source: builder.lines.join("\n"),
+          callbacks: builder.callbacks,
+          meta: "Overview graph: boot → surfaces → query loop → tools/tasks/state, with extension and remote layers branching off the same runtime.",
+        };
+      }
+
+      function buildDirectoryGraph(path) {
+        const dirRecord = state.payload.directories[path];
+        const builder = buildGraphBuilder();
+        const center = builder.addNode(shortPath(path) + "\\n" + dirRecord.file_count + " files", path, "focus");
+        const parent = parentPath(path);
+        if (parent !== "overview") {
+          const parentNode = builder.addNode("parent\\n" + shortPath(parent), parent, "neutral");
+          builder.lines.push(parentNode + " --> " + center);
+        }
+
+        dirRecord.child_dirs.slice(0, 10).forEach(function (child) {
+          const childRecord = state.payload.directories[child];
+          const childNode = builder.addNode(basename(child) + "\\n" + childRecord.file_count + " files", child, "dir");
+          builder.lines.push(center + " --> " + childNode);
+        });
+
+        dirRecord.top_files.slice(0, 8).forEach(function (filePath) {
+          const fileRecord = state.payload.files[filePath];
+          const fileNode = builder.addNode(fileRecord.name + "\\n" + fileRecord.line_count + " lines", filePath, "file");
+          builder.lines.push(center + " --> " + fileNode);
+        });
+
+        return {
+          source: builder.lines.join("\n"),
+          callbacks: builder.callbacks,
+          meta: "Directory view for " + shortPath(path) + ". Showing immediate child folders and the most structurally important files in this folder.",
+        };
+      }
+
+      function buildFileGraph(path) {
+        const fileRecord = state.payload.files[path];
+        const builder = buildGraphBuilder();
+        const parentNode = builder.addNode("folder\\n" + shortPath(fileRecord.dir_path), fileRecord.dir_path, "neutral");
+        const center = builder.addNode(fileRecord.name + "\\n" + fileRecord.line_count + " lines", path, "focus");
+        builder.lines.push(parentNode + " --> " + center);
+
+        fileRecord.imports.slice(0, 8).forEach(function (depPath) {
+          const depRecord = state.payload.files[depPath];
+          if (!depRecord) return;
+          const depNode = builder.addNode(depRecord.name + "\\n" + shortPath(depRecord.dir_path), depPath, "dir");
+          builder.lines.push(center + " --> " + depNode);
+        });
+
+        fileRecord.imported_by.slice(0, 8).forEach(function (importerPath) {
+          const importerRecord = state.payload.files[importerPath];
+          if (!importerRecord) return;
+          const importerNode = builder.addNode(importerRecord.name + "\\n" + shortPath(importerRecord.dir_path), importerPath, "incoming");
+          builder.lines.push(importerNode + " --> " + center);
+        });
+
+        return {
+          source: builder.lines.join("\n"),
+          callbacks: builder.callbacks,
+          meta: "File view for " + shortPath(path) + ". Left and right neighbors show direct imports and reverse imports from the analyzed source tree.",
+        };
+      }
+
+      async function renderMermaidGraph(graph) {
+        if (!state.mermaidReady) {
+          diagramShellEl.innerHTML = '<p class="meta">Mermaid did not load, so the diagram could not be rendered.</p>';
+          return;
+        }
+
+        Object.keys(graph.callbacks).forEach(function (name) {
+          window[name] = graph.callbacks[name];
+        });
+
+        const renderId = "claudeHarnessGraph_" + Date.now();
+        const rendered = await window.mermaid.render(renderId, graph.source);
+        diagramShellEl.innerHTML = rendered.svg;
+        if (typeof rendered.bindFunctions === "function") {
+          rendered.bindFunctions(diagramShellEl);
+        }
+        diagramMetaEl.textContent = graph.meta;
+      }
+
+      function renderOverviewDetail() {
+        const topModuleButtons = meta.top_modules.slice(0, 8).map(function (moduleInfo) {
+          const focus = moduleInfo.name === "(root)" ? "src" : "src/" + moduleInfo.name;
+          return chipButton(focus, moduleInfo.name + " · " + moduleInfo.file_count + " files");
+        }).join("");
+
+        const anchorButtons = [
+          chipButton("src/main.tsx", "main.tsx"),
+          chipButton("src/screens/REPL.tsx", "REPL.tsx"),
+          chipButton("src/query.ts", "query.ts"),
+          chipButton("src/services/tools", "services/tools"),
+          chipButton("src/utils/sessionStorage.ts", "sessionStorage.ts"),
+          chipButton("src/bridge", "bridge"),
+        ].join("");
+
+        detailEl.innerHTML = [
+          '<section class="harness-detail-section">',
+          "<h3>Runtime overview</h3>",
+          "<p>This codebase is most interesting as a harness: a persistent terminal runtime that merges UI, tool execution, permissions, remote control, and extension layers into one session model.</p>",
+          '<div class="harness-metric-grid">',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(meta.total_files) + '</span><span class="harness-metric-label">Files analyzed</span></div>',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(meta.total_directories) + '</span><span class="harness-metric-label">Directories</span></div>',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(meta.total_lines) + '</span><span class="harness-metric-label">Lines</span></div>',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(meta.generated_at) + '</span><span class="harness-metric-label">Analysis date</span></div>',
+          "</div>",
+          "</section>",
+          '<section class="harness-detail-section"><h4>Jump to top modules</h4><div class="harness-chip-list">' + topModuleButtons + "</div></section>",
+          '<section class="harness-detail-section"><h4>Good places to start</h4><div class="harness-chip-list">' + anchorButtons + "</div></section>",
+          "</div>",
+        ].join("");
+      }
+
+      function renderDirectoryDetail(path) {
+        const dirRecord = state.payload.directories[path];
+        const topFiles = dirRecord.top_files.slice(0, 8).map(function (filePath) {
+          const fileRecord = state.payload.files[filePath];
+          return chipButton(filePath, fileRecord.name);
+        }).join("");
+        const childDirs = dirRecord.child_dirs.slice(0, 12).map(function (childPath) {
+          return chipButton(childPath, basename(childPath));
+        }).join("");
+        const flags = dirRecord.top_feature_flags.map(function (flag) {
+          return staticChip(flag.name + " · " + flag.count);
+        }).join("");
+
+        detailEl.innerHTML = [
+          '<section class="harness-detail-section">',
+          "<h3>" + escapeHtml(shortPath(path)) + "</h3>",
+          '<p class="harness-code-path">' + escapeHtml(path) + "</p>",
+          "<p>This directory rolls up " + escapeHtml(dirRecord.file_count) + " files and " + escapeHtml(dirRecord.total_lines) + " lines. The explorer is showing its immediate folders plus a handful of structurally important local files.</p>",
+          "</section>",
+          '<section class="harness-detail-section"><div class="harness-metric-grid">',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(dirRecord.child_dirs.length) + '</span><span class="harness-metric-label">Child directories</span></div>',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(dirRecord.direct_file_count) + '</span><span class="harness-metric-label">Direct files</span></div>',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(dirRecord.file_count) + '</span><span class="harness-metric-label">Files under subtree</span></div>',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(dirRecord.total_lines) + '</span><span class="harness-metric-label">Lines under subtree</span></div>',
+          "</div></section>",
+          '<section class="harness-detail-section"><h4>Child folders</h4><div class="harness-chip-list">' + (childDirs || '<span class="meta">No nested folders.</span>') + "</div></section>",
+          '<section class="harness-detail-section"><h4>Key files here</h4><div class="harness-chip-list">' + (topFiles || '<span class="meta">No direct files.</span>') + "</div></section>",
+          '<section class="harness-detail-section"><h4>Feature flags seen in this subtree</h4><div class="harness-chip-list">' + (flags || '<span class="meta">No feature gates detected.</span>') + "</div></section>",
+        ].join("");
+      }
+
+      function renderFileDetail(path) {
+        const record = state.payload.files[path];
+        const importButtons = record.imports.slice(0, 16).map(function (depPath) {
+          return chipButton(depPath, basename(depPath));
+        }).join("");
+        const importerButtons = record.imported_by.slice(0, 16).map(function (importerPath) {
+          return chipButton(importerPath, basename(importerPath));
+        }).join("");
+        const exports = record.exports.map(function (name) {
+          return staticChip(name);
+        }).join("");
+        const flags = record.feature_flags.map(function (name) {
+          return staticChip(name);
+        }).join("");
+
+        detailEl.innerHTML = [
+          '<section class="harness-detail-section">',
+          "<h3>" + escapeHtml(record.name) + "</h3>",
+          '<p class="harness-code-path">' + escapeHtml(record.path) + "</p>",
+          "<p>" + escapeHtml(record.summary) + "</p>",
+          "</section>",
+          '<section class="harness-detail-section"><div class="harness-metric-grid">',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(record.line_count) + '</span><span class="harness-metric-label">Lines</span></div>',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(record.imports.length) + '</span><span class="harness-metric-label">Direct imports</span></div>',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(record.imported_by.length) + '</span><span class="harness-metric-label">Reverse imports</span></div>',
+          '<div class="harness-metric-card"><span class="harness-metric-value">' + escapeHtml(record.top_module) + '</span><span class="harness-metric-label">Top module</span></div>',
+          "</div></section>",
+          '<section class="harness-detail-section"><h4>Exports</h4><div class="harness-chip-list">' + (exports || '<span class="meta">No obvious exports found.</span>') + "</div></section>",
+          '<section class="harness-detail-section"><h4>Feature flags</h4><div class="harness-chip-list">' + (flags || '<span class="meta">No feature flags found in this file.</span>') + "</div></section>",
+          '<section class="harness-detail-section"><h4>Imports</h4><div class="harness-chip-list">' + (importButtons || '<span class="meta">No internal imports recorded.</span>') + "</div></section>",
+          '<section class="harness-detail-section"><h4>Imported by</h4><div class="harness-chip-list">' + (importerButtons || '<span class="meta">No internal reverse imports recorded.</span>') + "</div></section>",
+        ].join("");
+      }
+
+      async function render() {
+        renderBreadcrumbs();
+
+        if (state.focus === "overview") {
+          renderOverviewDetail();
+          await renderMermaidGraph(buildOverviewGraph());
+          return;
+        }
+
+        if (isDirectory(state.focus)) {
+          renderDirectoryDetail(state.focus);
+          await renderMermaidGraph(buildDirectoryGraph(state.focus));
+          return;
+        }
+
+        if (isFile(state.focus)) {
+          renderFileDetail(state.focus);
+          await renderMermaidGraph(buildFileGraph(state.focus));
+          return;
+        }
+
+        state.focus = "overview";
+        renderOverviewDetail();
+        await renderMermaidGraph(buildOverviewGraph());
+      }
+
+      function scoreMatch(query, text) {
+        const lowerText = text.toLowerCase();
+        const lowerQuery = query.toLowerCase();
+        if (!lowerText.includes(lowerQuery)) return -1;
+        if (lowerText === lowerQuery) return 4;
+        if (lowerText.startsWith(lowerQuery)) return 3;
+        if (lowerText.includes("/" + lowerQuery)) return 2;
+        return 1;
+      }
+
+      function renderSearchResults(query) {
+        const trimmed = query.trim().toLowerCase();
+        if (!trimmed || !state.payload) {
+          searchResultsEl.hidden = true;
+          searchResultsEl.innerHTML = "";
+          return;
+        }
+
+        const matches = [];
+        Object.keys(state.payload.directories).forEach(function (path) {
+          if (path === "src") return;
+          const score = scoreMatch(trimmed, path);
+          if (score < 0) return;
+          matches.push({
+            type: "Directory",
+            path: path,
+            summary: "Folder containing " + state.payload.directories[path].file_count + " files",
+            score: score,
+          });
+        });
+        Object.keys(state.payload.files).forEach(function (path) {
+          const record = state.payload.files[path];
+          const pathScore = scoreMatch(trimmed, path);
+          const summaryScore = scoreMatch(trimmed, record.summary);
+          const score = Math.max(pathScore, summaryScore);
+          if (score < 0) return;
+          matches.push({
+            type: "File",
+            path: path,
+            summary: record.summary,
+            score: score,
+          });
+        });
+
+        matches.sort(function (left, right) {
+          if (right.score !== left.score) return right.score - left.score;
+          return left.path.length - right.path.length;
+        });
+
+        const limited = matches.slice(0, 12);
+        if (limited.length === 0) {
+          searchResultsEl.innerHTML = '<div class="harness-search-result"><span class="harness-search-summary">No matches found.</span></div>';
+          searchResultsEl.hidden = false;
+          return;
+        }
+
+        searchResultsEl.innerHTML = limited.map(function (match) {
+          return [
+            '<button class="harness-search-result" type="button" data-harness-focus="' + escapeHtml(match.path) + '">',
+            '<span class="harness-search-kind">' + escapeHtml(match.type) + '</span>',
+            '<span class="harness-search-path">' + escapeHtml(shortPath(match.path)) + "</span>",
+            '<span class="harness-search-summary">' + escapeHtml(match.summary) + "</span>",
+            "</button>",
+          ].join("");
+        }).join("");
+        searchResultsEl.hidden = false;
+      }
+
+      async function loadPayload() {
+        const response = await fetch(dataUrl, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("Failed to load architecture data");
+        }
+        return response.json();
+      }
+
+      function bindStaticControls() {
+        overviewButtonEl.addEventListener("click", function () {
+          focusPath("overview");
+        });
+        upButtonEl.addEventListener("click", function () {
+          focusPath(parentPath(state.focus));
+        });
+        searchInputEl.addEventListener("input", function (event) {
+          renderSearchResults(event.target.value);
+        });
+        searchInputEl.addEventListener("focus", function (event) {
+          renderSearchResults(event.target.value);
+        });
+        document.addEventListener("click", function (event) {
+          const target = event.target.closest("[data-harness-focus]");
+          if (target) {
+            const path = target.getAttribute("data-harness-focus");
+            focusPath(path);
+            searchResultsEl.hidden = true;
+            return;
+          }
+          if (
+            !searchResultsEl.contains(event.target) &&
+            event.target !== searchInputEl
+          ) {
+            searchResultsEl.hidden = true;
+          }
+        });
+      }
+
+      async function start() {
+        try {
+          state.payload = await loadPayload();
+          state.mermaidReady = initMermaid();
+          bindStaticControls();
+          const themeObserver = new MutationObserver(function () {
+            state.mermaidReady = initMermaid();
+            render();
+          });
+          themeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme"],
+          });
+          await render();
+        } catch (error) {
+          diagramMetaEl.textContent = "Could not load the architecture dataset.";
+          diagramShellEl.innerHTML = '<p class="meta">The interactive explorer could not be initialized.</p>';
+          detailEl.innerHTML = '<section class="harness-detail-section"><h3>Explorer unavailable</h3><p>' + escapeHtml(error && error.message ? error.message : String(error)) + "</p></section>";
+        }
+      }
+
+      start();
+    })();
+  </script>
+{{ end }}

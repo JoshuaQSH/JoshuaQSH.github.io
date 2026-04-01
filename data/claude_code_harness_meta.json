@@ -1,0 +1,475 @@
+{
+  "generated_at": "2026-04-01",
+  "source_root": "/home/joshua/claude-code-fork-main/src",
+  "total_files": 1884,
+  "total_directories": 283,
+  "total_lines": 514548,
+  "top_modules": [
+    {
+      "name": "utils",
+      "file_count": 564,
+      "line_count": 181036
+    },
+    {
+      "name": "components",
+      "file_count": 389,
+      "line_count": 81935
+    },
+    {
+      "name": "commands",
+      "file_count": 189,
+      "line_count": 26617
+    },
+    {
+      "name": "tools",
+      "file_count": 184,
+      "line_count": 51012
+    },
+    {
+      "name": "services",
+      "file_count": 130,
+      "line_count": 53810
+    },
+    {
+      "name": "hooks",
+      "file_count": 104,
+      "line_count": 19308
+    },
+    {
+      "name": "ink",
+      "file_count": 96,
+      "line_count": 19938
+    },
+    {
+      "name": "bridge",
+      "file_count": 31,
+      "line_count": 12644
+    },
+    {
+      "name": "constants",
+      "file_count": 21,
+      "line_count": 2669
+    },
+    {
+      "name": "skills",
+      "file_count": 20,
+      "line_count": 4086
+    },
+    {
+      "name": "cli",
+      "file_count": 19,
+      "line_count": 12372
+    },
+    {
+      "name": "(root)",
+      "file_count": 18,
+      "line_count": 11986
+    }
+  ],
+  "top_feature_flags": [
+    {
+      "name": "KAIROS",
+      "count": 57
+    },
+    {
+      "name": "TRANSCRIPT_CLASSIFIER",
+      "count": 44
+    },
+    {
+      "name": "KAIROS_BRIEF",
+      "count": 20
+    },
+    {
+      "name": "BASH_CLASSIFIER",
+      "count": 19
+    },
+    {
+      "name": "TEAMMEM",
+      "count": 17
+    },
+    {
+      "name": "COORDINATOR_MODE",
+      "count": 15
+    },
+    {
+      "name": "PROACTIVE",
+      "count": 15
+    },
+    {
+      "name": "VOICE_MODE",
+      "count": 14
+    },
+    {
+      "name": "KAIROS_CHANNELS",
+      "count": 13
+    },
+    {
+      "name": "BRIDGE_MODE",
+      "count": 12
+    },
+    {
+      "name": "CONTEXT_COLLAPSE",
+      "count": 12
+    },
+    {
+      "name": "CHICAGO_MCP",
+      "count": 10
+    }
+  ],
+  "largest_files": [
+    {
+      "path": "src/cli/print.ts",
+      "line_count": 5595,
+      "summary": "Join prompt values from multiple queued commands into one. Strings are newline-joined; if any value is a block array, all values are normalized to blocks and concatenated."
+    },
+    {
+      "path": "src/utils/messages.ts",
+      "line_count": 5513,
+      "summary": "Appends a memory correction hint to a rejection/cancellation message when auto-memory is enabled and the GrowthBook flag is on."
+    },
+    {
+      "path": "src/utils/sessionStorage.ts",
+      "line_count": 5106,
+      "summary": "Transcript persistence backbone. Writes JSONL session history, file snapshots, metadata, and sidecar task state so sessions can resume and background work can be recovered."
+    },
+    {
+      "path": "src/utils/hooks.ts",
+      "line_count": 5023,
+      "summary": "Hooks are user-defined shell commands that can be executed at various points in Claude Code's lifecycle."
+    },
+    {
+      "path": "src/screens/REPL.tsx",
+      "line_count": 5006,
+      "summary": "Interactive terminal runtime. Owns the message list, prompt UX, hooks, permissions UI, background tasks, bridge state, MCP state, and the main user-facing agent loop."
+    },
+    {
+      "path": "src/main.tsx",
+      "line_count": 4684,
+      "summary": "Primary CLI bootstrap. Starts early prefetch work, wires feature-gated modules, initializes plugins and skills, parses the command line, and launches the interactive runtime."
+    },
+    {
+      "path": "src/utils/bash/bashParser.ts",
+      "line_count": 4437,
+      "summary": "Pure-TypeScript bash parser producing tree-sitter-bash-compatible ASTs. Downstream code in parser.ts, ast.ts, prefix.ts, ParsedCommand.ts walks this by field name. startIndex/endIndex are UTF-8 BYTE offsets (not JS string"
+    },
+    {
+      "path": "src/utils/attachments.ts",
+      "line_count": 3998,
+      "summary": "Whether the file was truncated due to size limits"
+    },
+    {
+      "path": "src/services/api/claude.ts",
+      "line_count": 3420,
+      "summary": "Assemble the extra body parameters for the API request, based on the CLAUDE_CODE_EXTRA_BODY environment variable if present and on any beta headers (primarily for Bedrock requests)."
+    },
+    {
+      "path": "src/services/mcp/client.ts",
+      "line_count": 3349,
+      "summary": "MCP client runtime. Connects to MCP servers, exposes tools/resources/commands, and handles authentication, transport normalization, and error shaping."
+    },
+    {
+      "path": "src/utils/plugins/pluginLoader.ts",
+      "line_count": 3303,
+      "summary": "Plugin discovery and loading pipeline. Resolves plugins from marketplaces or local sources, validates manifests, and merges commands, agents, and hooks into the runtime."
+    },
+    {
+      "path": "src/commands/insights.ts",
+      "line_count": 3201,
+      "summary": "Deduplicate conversation branches within the same session. When a session file has multiple leaf messages (from retries or branching), loadAllLogsFromSessionFile produces one LogOption per leaf. Each branch"
+    },
+    {
+      "path": "src/bridge/bridgeMain.ts",
+      "line_count": 3000,
+      "summary": "Standalone bridge daemon. Connects IDE clients and remote-control flows to the same runtime primitives used by the terminal REPL."
+    },
+    {
+      "path": "src/utils/bash/ast.ts",
+      "line_count": 2680,
+      "summary": "AST-based bash command analysis using tree-sitter. This module replaces the shell-quote + hand-rolled char-walker approach in bashSecurity.ts / commands.ts. Instead of detecting parser differentials"
+    },
+    {
+      "path": "src/utils/plugins/marketplaceManager.ts",
+      "line_count": 2644,
+      "summary": "Marketplace manager for Claude Code plugins This module provides functionality to: - Manage known marketplace sources (URLs, GitHub repos, npm packages, local files)"
+    },
+    {
+      "path": "src/tools/BashTool/bashPermissions.ts",
+      "line_count": 2622,
+      "summary": "Bash-specific safety layer. Checks command rules, speculative classifiers, read-only fast paths, and rich permission metadata before a shell command is allowed to run."
+    },
+    {
+      "path": "src/tools/BashTool/bashSecurity.ts",
+      "line_count": 2593,
+      "summary": "fullyUnquoted before stripSafeRedirections \u2014 used by validateBraceExpansion to avoid false negatives from redirection stripping creating backslash adjacencies"
+    },
+    {
+      "path": "src/native-ts/yoga-layout/index.ts",
+      "line_count": 2579,
+      "summary": "Pure-TypeScript port of yoga-layout (Meta's flexbox engine). This matches the `yoga-layout/load` API surface used by src/ink/layout/yoga.ts. The upstream C++ source is ~2500 lines in CalculateLayout.cpp alone; this port"
+    },
+    {
+      "path": "src/services/mcp/auth.ts",
+      "line_count": 2466,
+      "summary": "Timeout for individual OAuth requests (metadata discovery, token refresh, etc.)"
+    },
+    {
+      "path": "src/bridge/replBridge.ts",
+      "line_count": 2407,
+      "summary": "REPL bridge adapter. Mirrors local conversation state into a bridge session so IDEs and remote surfaces can watch or interact with the same workflow."
+    }
+  ],
+  "most_imported_files": [
+    {
+      "path": "src/ink.ts",
+      "imported_by_count": 442,
+      "summary": "Wrap all CC render calls with ThemeProvider so ThemedBox/ThemedText work without every call site having to mount it. Ink itself is theme-agnostic."
+    },
+    {
+      "path": "src/utils/debug.ts",
+      "imported_by_count": 369,
+      "summary": "Minimum log level to include in debug output. Defaults to 'debug', which filters out 'verbose' messages. Set CLAUDE_CODE_DEBUG_LOG_LEVEL=verbose to include high-volume diagnostics (e.g. full statusLine command, shell, cwd,"
+    },
+    {
+      "path": "src/utils/errors.ts",
+      "imported_by_count": 244,
+      "summary": "True iff `e` is any of the abort-shaped errors the codebase encounters: our AbortError class, a DOMException from AbortController.abort() (.name === 'AbortError'), or the SDK's APIUserAbortError. The SDK class"
+    },
+    {
+      "path": "src/utils/log.ts",
+      "imported_by_count": 243,
+      "summary": "Gets the display title for a log/session with fallback logic. Skips firstPrompt if it starts with a tick/goal tag (autonomous mode auto-prompt). Strips display-unfriendly tags (like <ide_opened_file>) from the result."
+    },
+    {
+      "path": "src/utils/envUtils.ts",
+      "imported_by_count": 212,
+      "summary": "Check if NODE_OPTIONS contains a specific flag. Splits on whitespace and checks for exact match to avoid false positives."
+    },
+    {
+      "path": "src/Tool.ts",
+      "imported_by_count": 207,
+      "summary": "Core tool protocol definitions: schemas, permission hooks, progress reporting, rendering, and the shared context object passed into every tool."
+    },
+    {
+      "path": "src/utils/slowOperations.ts",
+      "imported_by_count": 202,
+      "summary": "Threshold in milliseconds for logging slow JSON/clone operations. Operations taking longer than this will be logged for debugging. - Override: set CLAUDE_CODE_SLOW_OPERATION_THRESHOLD_MS to a number"
+    },
+    {
+      "path": "src/bootstrap/state.ts",
+      "imported_by_count": 198,
+      "summary": "Atomically switch the active session. `sessionId` and `sessionProjectDir` always change together \u2014 there is no separate setter for either, so they cannot drift out of sync (CC-34)."
+    },
+    {
+      "path": "src/commands.ts",
+      "imported_by_count": 172,
+      "summary": "Slash-command registry. Loads user-facing commands and uses build-time feature gates to trim command surface by product mode."
+    },
+    {
+      "path": "src/utils/config.ts",
+      "imported_by_count": 168,
+      "summary": "Spawn mode for `claude remote-control` multi-session. Set by first-run dialog or `w` toggle."
+    },
+    {
+      "path": "src/services/analytics/index.ts",
+      "imported_by_count": 162,
+      "summary": "Analytics service - public API for event logging This module serves as the main entry point for analytics events in Claude CLI. DESIGN: This module has NO dependencies to avoid import cycles."
+    },
+    {
+      "path": "src/state/AppState.tsx",
+      "imported_by_count": 146,
+      "summary": "Subscribe to a slice of AppState. Only re-renders when the selected value changes (compared via Object.is). For multiple independent fields, call the hook multiple times:"
+    },
+    {
+      "path": "src/services/analytics/growthbook.ts",
+      "imported_by_count": 120,
+      "summary": "User attributes sent to GrowthBook for targeting. Uses UUID suffix (not Uuid) to align with GrowthBook conventions."
+    },
+    {
+      "path": "src/utils/messages.ts",
+      "imported_by_count": 111,
+      "summary": "Appends a memory correction hint to a rejection/cancellation message when auto-memory is enabled and the GrowthBook flag is on."
+    },
+    {
+      "path": "src/utils/cwd.ts",
+      "imported_by_count": 104,
+      "summary": "Run a function with an overridden working directory for the current async context. All calls to pwd()/getCwd() within the function (and its async descendants) will return the overridden cwd instead of the global one. This enables concurrent"
+    },
+    {
+      "path": "src/utils/settings/settings.ts",
+      "imported_by_count": 101,
+      "summary": "Get the path to the managed settings file based on the current platform"
+    },
+    {
+      "path": "src/utils/format.ts",
+      "imported_by_count": 100,
+      "summary": "Formats a byte count to a human-readable string (KB, MB, GB). @example formatFileSize(1536) \u2192 \"1.5KB\""
+    },
+    {
+      "path": "src/utils/lazySchema.ts",
+      "imported_by_count": 95,
+      "summary": "Returns a memoized factory function that constructs the value on first call. Used to defer Zod schema construction from module init time to first access."
+    },
+    {
+      "path": "src/keybindings/useKeybinding.ts",
+      "imported_by_count": 94,
+      "summary": "Which context this binding belongs to (default: 'Global')"
+    },
+    {
+      "path": "src/utils/fsOperations.ts",
+      "imported_by_count": 92,
+      "summary": "Simplified filesystem operations interface based on Node.js fs module. Provides a subset of commonly used sync operations with type safety. Allows abstraction for alternative implementations (e.g., mock, virtual)."
+    }
+  ],
+  "module_edges": [
+    {
+      "from": "components",
+      "to": "utils",
+      "count": 846
+    },
+    {
+      "from": "tools",
+      "to": "utils",
+      "count": 594
+    },
+    {
+      "from": "services",
+      "to": "utils",
+      "count": 549
+    },
+    {
+      "from": "components",
+      "to": "(root)",
+      "count": 400
+    },
+    {
+      "from": "commands",
+      "to": "utils",
+      "count": 344
+    },
+    {
+      "from": "hooks",
+      "to": "utils",
+      "count": 228
+    },
+    {
+      "from": "(root)",
+      "to": "utils",
+      "count": 227
+    },
+    {
+      "from": "utils",
+      "to": "services",
+      "count": 175
+    },
+    {
+      "from": "commands",
+      "to": "(root)",
+      "count": 173
+    },
+    {
+      "from": "utils",
+      "to": "tools",
+      "count": 172
+    },
+    {
+      "from": "components",
+      "to": "hooks",
+      "count": 153
+    },
+    {
+      "from": "cli",
+      "to": "utils",
+      "count": 142
+    },
+    {
+      "from": "components",
+      "to": "services",
+      "count": 134
+    },
+    {
+      "from": "tools",
+      "to": "(root)",
+      "count": 110
+    },
+    {
+      "from": "components",
+      "to": "tools",
+      "count": 107
+    },
+    {
+      "from": "components",
+      "to": "ink",
+      "count": 106
+    },
+    {
+      "from": "commands",
+      "to": "components",
+      "count": 102
+    },
+    {
+      "from": "(root)",
+      "to": "commands",
+      "count": 99
+    },
+    {
+      "from": "bridge",
+      "to": "utils",
+      "count": 97
+    },
+    {
+      "from": "components",
+      "to": "keybindings",
+      "count": 91
+    },
+    {
+      "from": "screens",
+      "to": "utils",
+      "count": 91
+    },
+    {
+      "from": "tools",
+      "to": "components",
+      "count": 81
+    },
+    {
+      "from": "commands",
+      "to": "services",
+      "count": 78
+    },
+    {
+      "from": "utils",
+      "to": "(root)",
+      "count": 78
+    },
+    {
+      "from": "utils",
+      "to": "bootstrap",
+      "count": 78
+    },
+    {
+      "from": "commands",
+      "to": "types",
+      "count": 68
+    },
+    {
+      "from": "components",
+      "to": "state",
+      "count": 67
+    },
+    {
+      "from": "screens",
+      "to": "hooks",
+      "count": 64
+    },
+    {
+      "from": "tools",
+      "to": "services",
+      "count": 61
+    },
+    {
+      "from": "services",
+      "to": "tools",
+      "count": 58
+    }
+  ]
+}
