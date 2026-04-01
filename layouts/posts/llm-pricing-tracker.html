@@ -44,7 +44,7 @@
     }
     .tracker-refresh:disabled {
       background: #94a3b8;
-      cursor: wait;
+      cursor: not-allowed;
     }
     .tracker-grid {
       display: grid;
@@ -143,6 +143,56 @@
     .tracker-source-link {
       white-space: nowrap;
     }
+    .tracker-bar-chart {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .tracker-bar-row {
+      align-items: center;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: minmax(0, 240px) minmax(0, 1fr) auto;
+    }
+    .tracker-bar-label {
+      min-width: 0;
+    }
+    .tracker-bar-provider {
+      color: #111827;
+      display: block;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tracker-bar-model {
+      color: #6b7280;
+      display: block;
+      font-size: 0.88rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tracker-bar-track {
+      background: #e5e7eb;
+      border-radius: 999px;
+      height: 14px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .tracker-bar-fill {
+      background: #1d4ed8;
+      border-radius: 999px;
+      height: 100%;
+      opacity: 0.82;
+    }
+    .tracker-bar-value {
+      color: #374151;
+      font-size: 0.92rem;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      white-space: nowrap;
+    }
     @media (max-width: 720px) {
       .tracker-toolbar {
         align-items: flex-start;
@@ -150,6 +200,12 @@
       }
       .tracker-controls {
         grid-template-columns: 1fr;
+      }
+      .tracker-bar-row {
+        grid-template-columns: 1fr;
+      }
+      .tracker-bar-value {
+        text-align: left;
       }
     }
   </style>
@@ -168,8 +224,8 @@
       {{ .Content }}
 
       <section class="tracker-toolbar">
-        <p class="tracker-status"><strong>Latest deployed data:</strong> <span id="llm-updated-at">{{ $tracker.generated_at_pretty }}</span><br /><span id="llm-update-message">{{ $tracker.summary_note }}</span></p>
-        <button class="tracker-refresh" id="llm-refresh-button" type="button">Update prices</button>
+        <p class="tracker-status"><strong>Latest loaded snapshot:</strong> <span id="llm-updated-at">{{ $tracker.generated_at_pretty }}</span><br /><span id="llm-update-message">{{ $tracker.summary_note }}</span></p>
+        <button class="tracker-refresh" id="llm-refresh-button" type="button">Check for newer snapshot</button>
       </section>
 
       <div class="tracker-grid">
@@ -269,7 +325,7 @@
 
         <section class="tracker-section">
           <h2>Artificial Analysis Benchmark Snapshot</h2>
-          <p class="tracker-section-intro">A curated benchmark snapshot from Artificial Analysis showing strong frontier models across the vendors above. This benchmark uses each vendor's strongest currently benchmarked model, so it does not always match the exact API product named in the pricing tables.</p>
+          <p class="tracker-section-intro">The current top 10 models on the Artificial Analysis Intelligence Index. This list is intentionally model-level, so repeated vendors can appear more than once when they occupy multiple top-10 slots.</p>
           <div class="tracker-chart-shell">
             <p class="tracker-chart-meta" id="llm-benchmark-meta">Loading benchmark snapshot…</p>
             <svg class="tracker-chart-svg" id="llm-benchmark-chart" viewBox="0 0 760 360" role="img" aria-label="LLM benchmark comparison chart"></svg>
@@ -304,6 +360,31 @@
             </table>
           </div>
         </section>
+
+        <section class="tracker-section">
+          <h2>Top-25 API Provider Leaderboard</h2>
+          <p class="tracker-section-intro">Artificial Analysis provider leaderboard snapshot, aggregated to the best currently benchmarked endpoint for each provider. Switch metrics to compare intelligence, blended price, latency, and context window separately.</p>
+          <div class="tracker-controls">
+            <div class="tracker-control">
+              <label for="llm-provider-leaderboard-select">Leaderboard metric</label>
+              <select id="llm-provider-leaderboard-select">
+                <option value="intelligence">Intelligence Index</option>
+                <option value="price">Blended price</option>
+                <option value="latency">Latency</option>
+                <option value="context_window">Context window</option>
+              </select>
+            </div>
+          </div>
+          <div class="tracker-chart-shell">
+            <p class="tracker-chart-meta" id="llm-provider-leaderboard-meta">Loading provider leaderboard…</p>
+            <div class="tracker-bar-chart" id="llm-provider-leaderboard-bars" role="img" aria-label="Top 25 LLM API provider leaderboard"></div>
+            {{ with $tracker.provider_leaderboard }}
+              <p class="tracker-footnote" id="llm-provider-leaderboard-note">{{ .note }} Source: <a class="tracker-source-link" href="{{ .source_url }}">{{ .source_label }}</a> (checked {{ .generated_at_pretty }}).</p>
+            {{ else }}
+              <p class="tracker-footnote" id="llm-provider-leaderboard-note"></p>
+            {{ end }}
+          </div>
+        </section>
       </div>
     </div>
   </article>
@@ -329,7 +410,13 @@
       const benchmarkMeta = document.getElementById("llm-benchmark-meta");
       const benchmarkNote = document.getElementById("llm-benchmark-note");
       const benchmarkChart = document.getElementById("llm-benchmark-chart");
+      const providerLeaderboardSelect = document.getElementById("llm-provider-leaderboard-select");
+      const providerLeaderboardMeta = document.getElementById("llm-provider-leaderboard-meta");
+      const providerLeaderboardBars = document.getElementById("llm-provider-leaderboard-bars");
+      const providerLeaderboardNote = document.getElementById("llm-provider-leaderboard-note");
       const refreshUrl = "{{ "data/llm-pricing.json" | relURL }}";
+      const repoSnapshotUrl = "https://raw.githubusercontent.com/JoshuaQSH/JoshuaQSH.github.io/master/static/data/llm-pricing.json";
+      const dailyRefreshKey = "llm-pricing-repo-check-date";
 
       function escapeHtml(value) {
         return String(value ?? "")
@@ -360,6 +447,44 @@
           minimumFractionDigits: 0,
           maximumFractionDigits: digits
         });
+      }
+
+      function formatContextWindow(value) {
+        if (value === null || value === undefined || Number.isNaN(Number(value))) {
+          return "N/A";
+        }
+        const numeric = Number(value);
+        if (numeric >= 1000000) {
+          return (numeric / 1000000).toLocaleString("en-US", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          }) + "M";
+        }
+        if (numeric >= 1000) {
+          return (numeric / 1000).toLocaleString("en-US", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 1
+          }) + "k";
+        }
+        return numeric.toLocaleString("en-US");
+      }
+
+      function trackerTimestamp(payload) {
+        return Date.parse(payload.generated_at_iso || payload.generated_at || "") || 0;
+      }
+
+      function todayStamp() {
+        return new Date().toISOString().slice(0, 10);
+      }
+
+      function checkedToday() {
+        return localStorage.getItem(dailyRefreshKey) === todayStamp();
+      }
+
+      function syncRefreshButtonState() {
+        const alreadyChecked = checkedToday();
+        refreshButton.disabled = alreadyChecked;
+        refreshButton.textContent = alreadyChecked ? "Checked today" : "Check for newer snapshot";
       }
 
       function renderApiTable() {
@@ -497,6 +622,68 @@
           "</a> (checked " + escapeHtml(tracker.benchmark_snapshot.generated_at_pretty || tracker.generated_at_pretty || "") + ").";
       }
 
+      function renderProviderLeaderboard() {
+        if (!tracker || !tracker.provider_leaderboard) return;
+        const selectedMetric = providerLeaderboardSelect.value ||
+          tracker.provider_leaderboard.default_metric ||
+          "intelligence";
+        const metricPayload = (tracker.provider_leaderboard.metrics || {})[selectedMetric];
+
+        if (!metricPayload || !Array.isArray(metricPayload.rows) || !metricPayload.rows.length) {
+          providerLeaderboardMeta.textContent = "No provider leaderboard data available in this snapshot.";
+          providerLeaderboardBars.innerHTML = "<p class=\"tracker-chart-empty\">No provider leaderboard data available.</p>";
+          providerLeaderboardNote.textContent = "";
+          return;
+        }
+
+        const values = metricPayload.rows
+          .map(function (row) { return Number(row.value); })
+          .filter(function (value) { return !Number.isNaN(value); });
+        const maxValue = Math.max.apply(null, values);
+        const minValue = Math.min.apply(null, values);
+
+        function normalizedWidth(value) {
+          if (metricPayload.higher_is_better) {
+            return ((value / (maxValue || 1)) * 100).toFixed(2);
+          }
+          if (value <= 0) return "100";
+          return ((minValue / value) * 100).toFixed(2);
+        }
+
+        function formatMetricValue(value) {
+          if (selectedMetric === "price") {
+            return formatPrice(value) + " / 1M";
+          }
+          if (selectedMetric === "latency") {
+            return formatNumber(value, 3) + " s";
+          }
+          if (selectedMetric === "context_window") {
+            return formatContextWindow(value) + " tokens";
+          }
+          return formatNumber(value, 2);
+        }
+
+        providerLeaderboardBars.innerHTML = metricPayload.rows.map(function (row) {
+          const detailLink = row.detail_url
+            ? "<a class=\"tracker-bar-provider\" href='" + escapeHtml(row.detail_url) + "'>" + escapeHtml(row.rank + ". " + row.provider) + "</a>"
+            : "<span class=\"tracker-bar-provider\">" + escapeHtml(row.rank + ". " + row.provider) + "</span>";
+          return "<div class=\"tracker-bar-row\">" +
+            "<div class=\"tracker-bar-label\">" +
+              detailLink +
+              "<span class=\"tracker-bar-model\">" + escapeHtml(row.model || "") + "</span>" +
+            "</div>" +
+            "<div class=\"tracker-bar-track\"><div class=\"tracker-bar-fill\" style=\"width:" + normalizedWidth(Number(row.value)) + "%\"></div></div>" +
+            "<div class=\"tracker-bar-value\">" + escapeHtml(formatMetricValue(Number(row.value))) + "</div>" +
+          "</div>";
+        }).join("");
+
+        providerLeaderboardMeta.textContent = metricPayload.description;
+        providerLeaderboardNote.innerHTML = escapeHtml(tracker.provider_leaderboard.note || "") +
+          " Source: <a class='tracker-source-link' href='" + escapeHtml(tracker.provider_leaderboard.source_url || "") + "'>" +
+          escapeHtml(tracker.provider_leaderboard.source_label || "Artificial Analysis provider leaderboard") +
+          "</a> (checked " + escapeHtml(tracker.provider_leaderboard.generated_at_pretty || tracker.generated_at_pretty || "") + ").";
+      }
+
       function buildProviderOptions() {
         if (!tracker) return;
         const entries = Object.entries(tracker.history_series).sort(function (a, b) {
@@ -614,36 +801,58 @@
         if (!providerSelect.options.length) {
           buildProviderOptions();
         }
+        if (providerLeaderboardSelect && tracker.provider_leaderboard) {
+          providerLeaderboardSelect.value = tracker.provider_leaderboard.default_metric || "intelligence";
+        }
         renderChart();
         renderBenchmarkChart();
+        renderProviderLeaderboard();
+        syncRefreshButtonState();
       }
 
-      async function loadTrackerData() {
-        const response = await fetch(refreshUrl + "?ts=" + Date.now(), { cache: "no-store" });
+      async function fetchTrackerData(url) {
+        const separator = url.indexOf("?") === -1 ? "?" : "&";
+        const response = await fetch(url + separator + "ts=" + Date.now(), { cache: "no-store" });
         if (!response.ok) {
           throw new Error("HTTP " + response.status);
         }
-        tracker = await response.json();
+        return response.json();
+      }
+
+      async function loadTrackerData() {
+        tracker = await fetchTrackerData(refreshUrl);
       }
 
       providerSelect.addEventListener("change", renderChart);
       metricSelect.addEventListener("change", renderChart);
       grainSelect.addEventListener("change", renderChart);
+      providerLeaderboardSelect.addEventListener("change", renderProviderLeaderboard);
 
       refreshButton.addEventListener("click", async function () {
+        if (checkedToday()) {
+          syncRefreshButtonState();
+          updateMessage.textContent = "This browser already checked GitHub for a newer snapshot today. Try again tomorrow.";
+          return;
+        }
         refreshButton.disabled = true;
-        refreshButton.textContent = "Updating…";
-        updateMessage.textContent = "Fetching the latest deployed snapshot…";
+        refreshButton.textContent = "Checking…";
+        updateMessage.textContent = "Checking GitHub for a newer tracker snapshot…";
         try {
-          await loadTrackerData();
-          providerSelect.innerHTML = "";
-          renderAll();
-          updateMessage.textContent = "Reloaded the latest pricing snapshot currently published on this site.";
+          const candidate = await fetchTrackerData(repoSnapshotUrl);
+          localStorage.setItem(dailyRefreshKey, todayStamp());
+          if (!tracker || trackerTimestamp(candidate) > trackerTimestamp(tracker)) {
+            tracker = candidate;
+            providerSelect.innerHTML = "";
+            renderAll();
+            updateMessage.textContent = "Loaded a newer repo snapshot from GitHub.";
+          } else {
+            syncRefreshButtonState();
+            updateMessage.textContent = "Checked GitHub today. No newer repo snapshot is available yet.";
+          }
         } catch (error) {
-          updateMessage.textContent = "Could not refresh right now. The last deployed snapshot is still shown.";
-        } finally {
           refreshButton.disabled = false;
-          refreshButton.textContent = "Update prices";
+          refreshButton.textContent = "Check for newer snapshot";
+          updateMessage.textContent = "Could not check GitHub right now. The currently loaded snapshot is still shown.";
         }
       });
 
@@ -657,6 +866,9 @@
           chart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">Unable to load the pricing dataset.</text>";
           benchmarkMeta.textContent = "Unable to load benchmark data right now.";
           benchmarkChart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">Unable to load the benchmark snapshot.</text>";
+          providerLeaderboardMeta.textContent = "Unable to load provider leaderboard data right now.";
+          providerLeaderboardBars.innerHTML = "<p class=\"tracker-chart-empty\">Unable to load the provider leaderboard snapshot.</p>";
+          syncRefreshButtonState();
         }
       })();
     })();

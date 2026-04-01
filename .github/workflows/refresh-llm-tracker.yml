@@ -1,0 +1,63 @@
+name: Refresh LLM Tracker Snapshot
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: python3 -m pip install requests
+
+      - name: Setup Hugo (Extended)
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.136.5"
+          extended: true
+
+      - name: Refresh tracker data
+        run: python3 ./scripts/refresh_llm_tracker_snapshot.py
+
+      - name: Sync published pricing JSON
+        run: python3 ./scripts/sync_llm_pricing_data.py
+
+      - name: Check post tags
+        run: ./scripts/check_posts_have_tags.sh
+
+      - name: Build site
+        run: hugo --minify --cleanDestinationDir
+
+      - name: Check internal links
+        run: ./scripts/check_internal_links.sh public
+
+      - name: Detect changes
+        id: detect_changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit refreshed snapshot
+        if: steps.detect_changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/llm_pricing.json static/data/llm-pricing.json
+          git commit -m "Refresh LLM tracker snapshot"
+          git push origin master
