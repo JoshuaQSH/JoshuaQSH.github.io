@@ -10,7 +10,16 @@ layout: "claude-code-agent-harness"
 ---
 
 > [!NOTE]
-> This walkthrough is based on a local source snapshot under `~/claude-code-fork-main/src`, analyzed on April 1, 2026. It is not an official architecture document.
+> This walkthrough is based on a local source snapshot under [claw-code](https://github.com/instructkr/claw-code), analyzed on April 1, 2026 with the major help of `Codex`. It is not an official architecture document. I am working on the full runtime diagram and a lightweight CLI. 
+
+I know the leaks from Claude Code from X a little bit late, so when I head to the Reddit and GitHub, the first forked repo was already unavailable. But I still got many other useful sources and somehow many other genius geekers have already wrapped the key features of this grail into something new. As someone who wants to know about the latest developments in AI Agent harnessing engineering, I have no intest on making money on this, but rather love to dig into it a little bit. So here we are. But honestly, majorities of the analysis and reviews were done by `Codex`, what I did was merely checking the key points, picking something I felt is interesting. Shout out to `Codex`, my pal, you do save my time. 
+
+Here are some useful resources before I get started:
+
+- A blog by Alex Kim talking about the Claude Code Source Leak: [The Claude Code Source Leak: fake tools, frustration regexes, undercover mode, and more](https://alex000kim.com/posts/2026-03-31-claude-code-source-leak/)
+- My reference repo, a guy turned the leak code into Python and now is working on the Rust version: [claw-code](https://github.com/instructkr/claw-code)
+- A really awesome architecture diagram of Claude Code Agent Runtime by Wayland Zhang: [Claude Code Diagram](https://www.waylandz.com/diagrams/claude-code-architecture.html)
+   - Another project from Wayland: [Shannon](https://www.shannon.run/) - A multi-tenant platform built on Temporal workflows, with Rust enforcement and Firecracker isolation.
 
 Claude Code’s terminal runtime stands out because it is not built like a thin CLI wrapper around a model API. It behaves much more like an **agent harness platform**: a long-lived session runtime with explicit tool protocols, permission races, background tasks, remote execution, transcript persistence, and multiple extension layers that all meet in the same query loop.
 
