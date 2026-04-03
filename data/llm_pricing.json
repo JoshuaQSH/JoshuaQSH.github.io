@@ -39,6 +39,20 @@
       "source_label": "Gemini API pricing"
     },
     {
+      "vendor": "Google",
+      "product": "Gemma 4",
+      "unit": "USD per 1M tokens",
+      "input_display": "Free of charge",
+      "input_value": 0.0,
+      "cached_input_display": "Free of charge",
+      "cached_input_value": 0.0,
+      "output_display": "Free of charge",
+      "output_value": 0.0,
+      "notes": "Google's current Gemini Developer API pricing page lists Gemma 4 with free input, output, and context caching, while the paid tier remains unavailable.",
+      "official_link": "https://ai.google.dev/gemini-api/docs/pricing",
+      "source_label": "Google Gemini Developer API pricing"
+    },
+    {
       "vendor": "Anthropic",
       "product": "Claude Sonnet 4 / Claude Code backend",
       "unit": "USD per 1M tokens",

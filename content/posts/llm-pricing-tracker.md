@@ -11,7 +11,7 @@ layout: "llm-pricing-tracker"
 
 {{< llm-pricing-update-note >}}
 
-This page tracks public pricing from official provider pages for major frontier-model vendors I regularly compare: OpenAI, Google, Anthropic, xAI, DeepSeek, Qwen, Moonshot/Kimi, MiniMax, Together AI (including GLM-5 and public Llama endpoints), Meta/Llama references, and GitHub Copilot.
+This page tracks public pricing from official provider pages for major frontier-model vendors I regularly compare: OpenAI, Google (Gemini and Gemma), Anthropic, xAI, DeepSeek, Qwen, Moonshot/Kimi, MiniMax, Together AI (including GLM-5 and public Llama endpoints), Meta/Llama references, and GitHub Copilot.
 
 A few quick cautions before using the numbers:
 
