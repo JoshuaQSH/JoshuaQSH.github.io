@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-04-02",
-  "generated_at_pretty": "April 2, 2026",
-  "generated_at_iso": "2026-04-02T07:42:07+00:00",
+  "generated_at": "2026-04-07",
+  "generated_at_pretty": "April 7, 2026",
+  "generated_at_iso": "2026-04-07T07:50:13+00:00",
   "summary_note": "This tracker loads the latest repo snapshot. The button below checks GitHub for a newer snapshot at most once per day in this browser; official pricing pages can still change between repo refreshes.",
   "history_note": "History lines use official pricing snapshots that are stored in this repo. Some providers only have one official snapshot recorded so far, while others mix successive flagship or promo models.",
   "chart_defaults": {
@@ -37,6 +37,20 @@
       "notes": "Tiered pricing. For prompts above 200K tokens, Google lists $2.50 input, $0.25 cached input, and $15.00 output.",
       "official_link": "https://ai.google.dev/gemini-api/docs/pricing",
       "source_label": "Gemini API pricing"
+    },
+    {
+      "vendor": "Google",
+      "product": "Gemma 4",
+      "unit": "USD per 1M tokens",
+      "input_display": "Free of charge",
+      "input_value": 0.0,
+      "cached_input_display": "Free of charge",
+      "cached_input_value": 0.0,
+      "output_display": "Free of charge",
+      "output_value": 0.0,
+      "notes": "Google's current Gemini Developer API pricing page lists Gemma 4 with free input, output, and context caching, while the paid tier remains unavailable.",
+      "official_link": "https://ai.google.dev/gemini-api/docs/pricing",
+      "source_label": "Google Gemini Developer API pricing"
     },
     {
       "vendor": "Anthropic",
@@ -476,14 +490,14 @@
     "note": "Top 10 current models by Artificial Analysis Intelligence Index. Prices and speeds below come from Artificial Analysis' benchmark snapshot, so they may differ from the manual API rows above when multiple deployments or reasoning modes exist.",
     "source_url": "https://artificialanalysis.ai/models",
     "source_label": "Artificial Analysis models leaderboard",
-    "generated_at_pretty": "April 2, 2026",
+    "generated_at_pretty": "April 7, 2026",
     "models": [
       {
         "vendor": "Google",
         "model": "Gemini 3.1 Pro Preview",
         "short_label": "Gemini 3.1 Pro Preview",
         "intelligence": 57.18,
-        "speed_tps": 113.88,
+        "speed_tps": 130.79,
         "blended_price": 4.5,
         "input_price": 2.0,
         "output_price": 12.0,
@@ -496,7 +510,7 @@
         "model": "GPT-5.4 (xhigh)",
         "short_label": "GPT-5.4 (xhigh)",
         "intelligence": 57.17,
-        "speed_tps": 68.57,
+        "speed_tps": 74.2,
         "blended_price": 5.625,
         "input_price": 2.5,
         "output_price": 15.0,
@@ -509,7 +523,7 @@
         "model": "GPT-5.3 Codex (xhigh)",
         "short_label": "GPT-5.3 Codex (xhigh)",
         "intelligence": 53.97,
-        "speed_tps": 71.71,
+        "speed_tps": 83.59,
         "blended_price": 4.8125,
         "input_price": 1.75,
         "output_price": 14.0,
@@ -522,7 +536,7 @@
         "model": "Claude Opus 4.6 (Adaptive Reasoning, Max Effort)",
         "short_label": "Claude Opus 4.6 (max)",
         "intelligence": 52.95,
-        "speed_tps": 42.42,
+        "speed_tps": 47.57,
         "blended_price": 10.0,
         "input_price": 5.0,
         "output_price": 25.0,
@@ -535,7 +549,7 @@
         "model": "Claude Sonnet 4.6 (Adaptive Reasoning, Max Effort)",
         "short_label": "Claude Sonnet 4.6 (max)",
         "intelligence": 51.72,
-        "speed_tps": 45.71,
+        "speed_tps": 64.2,
         "blended_price": 6.0,
         "input_price": 3.0,
         "output_price": 15.0,
@@ -548,7 +562,7 @@
         "model": "GLM-5 (Reasoning)",
         "short_label": "GLM-5",
         "intelligence": 49.77,
-        "speed_tps": 68.53,
+        "speed_tps": 69.69,
         "blended_price": 1.55,
         "input_price": 1.0,
         "output_price": 3.2,
@@ -561,7 +575,7 @@
         "model": "MiniMax-M2.7",
         "short_label": "MiniMax-M2.7",
         "intelligence": 49.62,
-        "speed_tps": 45.61,
+        "speed_tps": 53.82,
         "blended_price": 0.525,
         "input_price": 0.3,
         "output_price": 1.2,
@@ -587,7 +601,7 @@
         "model": "Grok 4.20 Beta 0309 (Reasoning)",
         "short_label": "Grok 4.20 Beta 0309",
         "intelligence": 48.48,
-        "speed_tps": 247.79,
+        "speed_tps": 271.21,
         "blended_price": 3.0,
         "input_price": 2.0,
         "output_price": 6.0,
@@ -600,7 +614,7 @@
         "model": "GPT-5.4 mini (xhigh)",
         "short_label": "GPT-5.4 mini (xhigh)",
         "intelligence": 48.1,
-        "speed_tps": 192.23,
+        "speed_tps": 181.22,
         "blended_price": 1.6875,
         "input_price": 0.75,
         "output_price": 4.5,
@@ -612,7 +626,7 @@
   },
   "provider_leaderboard": {
     "default_metric": "intelligence",
-    "generated_at_pretty": "April 2, 2026",
+    "generated_at_pretty": "April 7, 2026",
     "source_url": "https://artificialanalysis.ai/leaderboards/providers",
     "source_label": "Artificial Analysis provider leaderboard",
     "note": "Each provider rank uses that provider's best currently benchmarked endpoint for the selected metric, so the representative model can change across metrics.",
@@ -640,18 +654,18 @@
           },
           {
             "rank": 3,
-            "provider": "Microsoft Azure",
-            "model": "GPT-5.4 (xhigh)",
-            "value": 57.17,
-            "detail_url": "https://artificialanalysis.ai/providers/azure",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 4,
             "provider": "OpenAI",
             "model": "GPT-5.4 (xhigh)",
             "value": 57.17,
             "detail_url": "https://artificialanalysis.ai/providers/openai",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 4,
+            "provider": "Microsoft Azure",
+            "model": "GPT-5.4 (xhigh)",
+            "value": 57.17,
+            "detail_url": "https://artificialanalysis.ai/providers/azure",
             "detail_label": "Provider details"
           },
           {
@@ -688,6 +702,14 @@
           },
           {
             "rank": 9,
+            "provider": "Lightning AI",
+            "model": "GLM-5",
+            "value": 49.77,
+            "detail_url": "https://artificialanalysis.ai/providers/lightningai",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 10,
             "provider": "Fireworks",
             "model": "GLM-5",
             "value": 49.77,
@@ -695,7 +717,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 10,
+            "rank": 11,
             "provider": "Eigen AI",
             "model": "GLM-5",
             "value": 49.77,
@@ -703,7 +725,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 11,
+            "rank": 12,
             "provider": "Parasail (FP8)",
             "model": "GLM-5",
             "value": 49.77,
@@ -711,7 +733,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 12,
+            "rank": 13,
             "provider": "FriendliAI",
             "model": "GLM-5",
             "value": 49.77,
@@ -719,7 +741,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 13,
+            "rank": 14,
             "provider": "SiliconFlow (FP8)",
             "model": "GLM-5",
             "value": 49.77,
@@ -727,7 +749,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 14,
+            "rank": 15,
             "provider": "Novita FP8",
             "model": "GLM-5",
             "value": 49.77,
@@ -735,7 +757,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 15,
+            "rank": 16,
             "provider": "Nebius (FP4)",
             "model": "GLM-5",
             "value": 49.77,
@@ -743,7 +765,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 16,
+            "rank": 17,
             "provider": "DeepInfra FP8",
             "model": "GLM-5",
             "value": 49.77,
@@ -751,7 +773,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 17,
+            "rank": 18,
             "provider": "GMI FP8",
             "model": "GLM-5",
             "value": 49.77,
@@ -759,7 +781,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 18,
+            "rank": 19,
             "provider": "Weights & Biases (FP8)",
             "model": "GLM-5",
             "value": 49.77,
@@ -767,7 +789,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 19,
+            "rank": 20,
             "provider": "Together.ai (FP4)",
             "model": "GLM-5",
             "value": 49.77,
@@ -775,7 +797,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 20,
+            "rank": 21,
             "provider": "Google Vertex",
             "model": "Claude Opus 4.5",
             "value": 49.73,
@@ -783,7 +805,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 21,
+            "rank": 22,
             "provider": "Novita (FP8)",
             "model": "MiniMax-M2.7",
             "value": 49.62,
@@ -791,7 +813,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 22,
+            "rank": 23,
             "provider": "MiniMax",
             "model": "MiniMax-M2.7",
             "value": 49.62,
@@ -799,7 +821,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 23,
+            "rank": 24,
             "provider": "xAI",
             "model": "Grok 4.20 Beta 0309",
             "value": 48.48,
@@ -807,19 +829,11 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 24,
-            "provider": "Novita",
-            "model": "Kimi K2.5",
-            "value": 46.81,
-            "detail_url": "https://artificialanalysis.ai/providers/novita",
-            "detail_label": "Provider details"
-          },
-          {
             "rank": 25,
-            "provider": "DeepInfra",
+            "provider": "Parasail",
             "model": "Kimi K2.5",
             "value": 46.81,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "detail_url": "https://artificialanalysis.ai/providers/parasail",
             "detail_label": "Provider details"
           }
         ]
@@ -831,38 +845,6 @@
         "rows": [
           {
             "rank": 1,
-            "provider": "Microsoft Azure",
-            "model": "Grok 3 mini Reasoning (high)",
-            "value": 0.0,
-            "detail_url": "https://artificialanalysis.ai/providers/azure",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 2,
-            "provider": "Novita",
-            "model": "Llama 3.2 1B",
-            "value": 0.0,
-            "detail_url": "https://artificialanalysis.ai/providers/novita",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 3,
-            "provider": "Together.ai",
-            "model": "Apriel-v1.6-15B-Thinker",
-            "value": 0.0,
-            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 4,
-            "provider": "Cloudflare",
-            "model": "Llama 3.1 8B",
-            "value": 0.0,
-            "detail_url": "https://artificialanalysis.ai/providers/cloudflare",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 5,
             "provider": "Parasail",
             "model": "Olmo 3.1 32B Think",
             "value": 0.0,
@@ -870,9 +852,41 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 6,
+            "rank": 2,
+            "provider": "Cloudflare",
+            "model": "Llama 3.1 8B",
+            "value": 0.0,
+            "detail_url": "https://artificialanalysis.ai/providers/cloudflare",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 3,
+            "provider": "Microsoft Azure",
+            "model": "Grok 3 mini Reasoning (high)",
+            "value": 0.0,
+            "detail_url": "https://artificialanalysis.ai/providers/azure",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 4,
+            "provider": "Novita",
+            "model": "Llama 3.2 1B",
+            "value": 0.0,
+            "detail_url": "https://artificialanalysis.ai/providers/novita",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 5,
             "provider": "Google (AI Studio)",
-            "model": "Gemma 3 12B",
+            "model": "Gemma 4 31B",
+            "value": 0.0,
+            "detail_url": "https://artificialanalysis.ai/providers/google",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 6,
+            "provider": "Google AI Studio",
+            "model": "Gemma 4 26B A4B",
             "value": 0.0,
             "detail_url": "https://artificialanalysis.ai/providers/google",
             "detail_label": "Provider details"
@@ -888,7 +902,7 @@
           {
             "rank": 8,
             "provider": "Sarvam",
-            "model": "Sarvam 30B (high)",
+            "model": "Sarvam 105B (high)",
             "value": 0.0,
             "detail_url": "https://artificialanalysis.ai/providers/sarvam",
             "detail_label": "Provider details"
@@ -919,14 +933,6 @@
           },
           {
             "rank": 12,
-            "provider": "DeepInfra (FP8)",
-            "model": "Qwen3.5 0.8B",
-            "value": 0.02,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 13,
             "provider": "DeepInfra FP8",
             "model": "Qwen3.5 0.8B",
             "value": 0.02,
@@ -934,11 +940,19 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 14,
+            "rank": 13,
             "provider": "DeepInfra (Turbo, FP8)",
             "model": "Llama 3.1 8B",
             "value": 0.0225,
             "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 14,
+            "provider": "Together.ai",
+            "model": "Gemma 3n E4B",
+            "value": 0.025,
+            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
             "detail_label": "Provider details"
           },
           {
@@ -975,6 +989,14 @@
           },
           {
             "rank": 19,
+            "provider": "DeepInfra (FP8)",
+            "model": "Qwen3.5 4B",
+            "value": 0.06,
+            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 20,
             "provider": "CompactifAI",
             "model": "Llama 3.1 8B",
             "value": 0.07,
@@ -982,15 +1004,15 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 20,
+            "rank": 21,
             "provider": "Eigen AI",
-            "model": "Qwen3 VL 30B A3B",
+            "model": "Qwen3 8B",
             "value": 0.08,
             "detail_url": "https://artificialanalysis.ai/providers/eigenai",
             "detail_label": "Provider details"
           },
           {
-            "rank": 21,
+            "rank": 22,
             "provider": "Replicate",
             "model": "Granite 3.3 8B",
             "value": 0.085,
@@ -998,35 +1020,27 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 22,
+            "rank": 23,
             "provider": "Lightning AI",
-            "model": "gpt-oss-20B (high)",
+            "model": "gpt-oss-20B (low)",
             "value": 0.0875,
             "detail_url": "https://artificialanalysis.ai/providers/lightningai",
             "detail_label": "Provider details"
           },
           {
-            "rank": 23,
+            "rank": 24,
             "provider": "Weights & Biases",
-            "model": "gpt-oss-20B (high)",
+            "model": "gpt-oss-20B (low)",
             "value": 0.0875,
             "detail_url": "https://artificialanalysis.ai/providers/wandb",
             "detail_label": "Provider details"
           },
           {
-            "rank": 24,
+            "rank": 25,
             "provider": "Cerebras",
             "model": "Llama 3.1 8B",
             "value": 0.1,
             "detail_url": "https://artificialanalysis.ai/providers/cerebras",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 25,
-            "provider": "FriendliAI",
-            "model": "Llama 3.1 8B",
-            "value": 0.1,
-            "detail_url": "https://artificialanalysis.ai/providers/friendli-ai",
             "detail_label": "Provider details"
           }
         ]
@@ -1038,202 +1052,202 @@
         "rows": [
           {
             "rank": 1,
-            "provider": "Baseten",
-            "model": "gpt-oss-120B (high)",
-            "value": 0.201836,
-            "detail_url": "https://artificialanalysis.ai/providers/baseten",
+            "provider": "Fireworks",
+            "model": "Qwen3 VL 30B A3B",
+            "value": 0.224144,
+            "detail_url": "https://artificialanalysis.ai/providers/fireworks",
             "detail_label": "Provider details"
           },
           {
             "rank": 2,
-            "provider": "DeepInfra (FP8)",
-            "model": "Qwen3.5 0.8B",
-            "value": 0.312334,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "provider": "Baseten",
+            "model": "gpt-oss-120B (high)",
+            "value": 0.228682,
+            "detail_url": "https://artificialanalysis.ai/providers/baseten",
             "detail_label": "Provider details"
           },
           {
             "rank": 3,
             "provider": "Google Vertex",
-            "model": "gpt-oss-20B (low)",
-            "value": 0.313265,
+            "model": "gpt-oss-120B (high)",
+            "value": 0.320986,
             "detail_url": "https://artificialanalysis.ai/providers/google",
             "detail_label": "Provider details"
           },
           {
             "rank": 4,
-            "provider": "Fireworks",
-            "model": "Qwen3 VL 30B A3B",
-            "value": 0.345806,
-            "detail_url": "https://artificialanalysis.ai/providers/fireworks",
+            "provider": "DeepInfra FP8",
+            "model": "Qwen3.5 2B",
+            "value": 0.359014,
+            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
           {
             "rank": 5,
-            "provider": "DeepInfra FP8",
-            "model": "Qwen3.5 0.8B",
-            "value": 0.348966,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 6,
-            "provider": "Together.ai",
-            "model": "gpt-oss-20B (low)",
-            "value": 0.365659,
-            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 7,
-            "provider": "Lightning AI",
-            "model": "gpt-oss-20B (high)",
-            "value": 0.377332,
-            "detail_url": "https://artificialanalysis.ai/providers/lightningai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 8,
             "provider": "Clarifai",
-            "model": "gpt-oss-120B (low)",
-            "value": 0.39792,
+            "model": "gpt-oss-120B (high)",
+            "value": 0.38519,
             "detail_url": "https://artificialanalysis.ai/providers/clarifai",
             "detail_label": "Provider details"
           },
           {
-            "rank": 9,
+            "rank": 6,
             "provider": "DeepInfra",
-            "model": "gpt-oss-20B (high)",
-            "value": 0.412253,
+            "model": "NVIDIA Nemotron 3 Nano",
+            "value": 0.389396,
             "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 7,
+            "provider": "Together.ai",
+            "model": "gpt-oss-20B (low)",
+            "value": 0.392426,
+            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 8,
+            "provider": "Google (Vertex)",
+            "model": "Gemini 2.5 Flash",
+            "value": 0.41997,
+            "detail_url": "https://artificialanalysis.ai/providers/google",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 9,
+            "provider": "Lightning AI",
+            "model": "gpt-oss-20B (low)",
+            "value": 0.421557,
+            "detail_url": "https://artificialanalysis.ai/providers/lightningai",
             "detail_label": "Provider details"
           },
           {
             "rank": 10,
-            "provider": "DeepInfra (Turbo)",
-            "model": "gpt-oss-120B (high)",
-            "value": 0.437144,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 11,
             "provider": "Mistral",
             "model": "Ministral 3 3B",
-            "value": 0.443966,
+            "value": 0.431628,
             "detail_url": "https://artificialanalysis.ai/providers/mistral",
             "detail_label": "Provider details"
           },
           {
+            "rank": 11,
+            "provider": "Google (AI Studio)",
+            "model": "Gemini 2.5 Flash-Lite",
+            "value": 0.431649,
+            "detail_url": "https://artificialanalysis.ai/providers/google",
+            "detail_label": "Provider details"
+          },
+          {
             "rank": 12,
-            "provider": "Cerebras",
-            "model": "gpt-oss-120B (high)",
-            "value": 0.458211,
-            "detail_url": "https://artificialanalysis.ai/providers/cerebras",
+            "provider": "Groq",
+            "model": "Llama 4 Scout",
+            "value": 0.456686,
+            "detail_url": "https://artificialanalysis.ai/providers/groq",
             "detail_label": "Provider details"
           },
           {
             "rank": 13,
-            "provider": "DeepInfra Turbo",
-            "model": "Kimi K2.5",
-            "value": 0.482251,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "provider": "Together.ai (FP4)",
+            "model": "MiniMax-M2.5",
+            "value": 0.460771,
+            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
             "detail_label": "Provider details"
           },
           {
             "rank": 14,
-            "provider": "xAI",
-            "model": "Grok 4.1 Fast",
-            "value": 0.50575,
-            "detail_url": "https://artificialanalysis.ai/providers/xai",
+            "provider": "DeepInfra (FP8)",
+            "model": "Qwen3 30B",
+            "value": 0.476461,
+            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
           {
             "rank": 15,
-            "provider": "xAI Fast",
-            "model": "Grok 3 mini Reasoning (high)",
-            "value": 0.511523,
-            "detail_url": "https://artificialanalysis.ai/providers/xai",
+            "provider": "DeepInfra (Turbo)",
+            "model": "gpt-oss-120B (high)",
+            "value": 0.479655,
+            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
           {
             "rank": 16,
-            "provider": "DeepInfra (Turbo, FP4)",
-            "model": "DeepSeek R1 (Jan)",
-            "value": 0.526504,
+            "provider": "DeepInfra Turbo",
+            "model": "Kimi K2.5",
+            "value": 0.4894,
             "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
           {
             "rank": 17,
-            "provider": "Google (AI Studio)",
-            "model": "Gemini 2.5 Flash",
-            "value": 0.526763,
-            "detail_url": "https://artificialanalysis.ai/providers/google",
+            "provider": "xAI",
+            "model": "Grok 4.1 Fast",
+            "value": 0.491397,
+            "detail_url": "https://artificialanalysis.ai/providers/xai",
             "detail_label": "Provider details"
           },
           {
             "rank": 18,
-            "provider": "Microsoft Azure",
+            "provider": "DeepInfra (Turbo, FP8)",
             "model": "Llama 3.1 8B",
-            "value": 0.53222,
-            "detail_url": "https://artificialanalysis.ai/providers/azure",
+            "value": 0.495253,
+            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
           {
             "rank": 19,
-            "provider": "Amazon Bedrock",
-            "model": "Llama 3.1 8B",
-            "value": 0.534702,
-            "detail_url": "https://artificialanalysis.ai/providers/amazon_bedrock",
+            "provider": "Cerebras",
+            "model": "gpt-oss-120B (high)",
+            "value": 0.504369,
+            "detail_url": "https://artificialanalysis.ai/providers/cerebras",
             "detail_label": "Provider details"
           },
           {
             "rank": 20,
-            "provider": "CompactifAI",
-            "model": "Llama 3.1 8B",
-            "value": 0.5357,
-            "detail_url": "https://artificialanalysis.ai/providers/compactifai",
+            "provider": "Eigen AI",
+            "model": "gpt-oss-120B (high)",
+            "value": 0.514065,
+            "detail_url": "https://artificialanalysis.ai/providers/eigenai",
             "detail_label": "Provider details"
           },
           {
             "rank": 21,
-            "provider": "Google (Vertex)",
-            "model": "Gemini 2.5 Flash",
-            "value": 0.542498,
-            "detail_url": "https://artificialanalysis.ai/providers/google",
+            "provider": "DeepInfra (FP4)",
+            "model": "DeepSeek V3.1 Terminus",
+            "value": 0.521335,
+            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
           {
             "rank": 22,
-            "provider": "Together.ai (FP8)",
-            "model": "Qwen3 235B 2507",
-            "value": 0.546529,
-            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
+            "provider": "Amazon Bedrock",
+            "model": "Llama 3.1 8B",
+            "value": 0.523601,
+            "detail_url": "https://artificialanalysis.ai/providers/amazon_bedrock",
             "detail_label": "Provider details"
           },
           {
             "rank": 23,
-            "provider": "OpenAI",
-            "model": "GPT-5.4 mini",
-            "value": 0.583694,
-            "detail_url": "https://artificialanalysis.ai/providers/openai",
+            "provider": "DeepInfra (Turbo, FP4)",
+            "model": "Qwen3 Coder 480B",
+            "value": 0.529067,
+            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
           {
             "rank": 24,
-            "provider": "FriendliAI",
+            "provider": "CompactifAI",
             "model": "Llama 3.1 8B",
-            "value": 0.593257,
-            "detail_url": "https://artificialanalysis.ai/providers/friendli-ai",
+            "value": 0.529574,
+            "detail_url": "https://artificialanalysis.ai/providers/compactifai",
             "detail_label": "Provider details"
           },
           {
             "rank": 25,
-            "provider": "Together.ai (FP4)",
-            "model": "MiniMax-M2.5",
-            "value": 0.60678,
-            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
+            "provider": "Microsoft Azure",
+            "model": "Llama 3.1 8B",
+            "value": 0.537179,
+            "detail_url": "https://artificialanalysis.ai/providers/azure",
             "detail_label": "Provider details"
           }
         ]
@@ -1277,14 +1291,6 @@
           },
           {
             "rank": 5,
-            "provider": "Together.ai",
-            "model": "Llama 4 Maverick",
-            "value": 1048576.0,
-            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 6,
             "provider": "Parasail (FP8)",
             "model": "Llama 4 Maverick",
             "value": 1048576.0,
@@ -1292,7 +1298,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 7,
+            "rank": 6,
             "provider": "DeepInfra (FP8)",
             "model": "Llama 4 Maverick",
             "value": 1048576.0,
@@ -1300,7 +1306,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 8,
+            "rank": 7,
             "provider": "Novita (FP8)",
             "model": "Llama 4 Maverick",
             "value": 1048576.0,
@@ -1308,7 +1314,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 9,
+            "rank": 8,
             "provider": "Google (AI Studio)",
             "model": "Gemini 3 Pro Preview (low)",
             "value": 1048576.0,
@@ -1316,23 +1322,15 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 10,
-            "provider": "Novita",
-            "model": "MiniMax M1 80k",
-            "value": 1000000.0,
-            "detail_url": "https://artificialanalysis.ai/providers/novita",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 11,
+            "rank": 9,
             "provider": "Amazon Bedrock",
-            "model": "Claude Opus 4.6 (max)",
+            "model": "Claude Opus 4.6",
             "value": 1000000.0,
             "detail_url": "https://artificialanalysis.ai/providers/amazon_bedrock",
             "detail_label": "Provider details"
           },
           {
-            "rank": 12,
+            "rank": 10,
             "provider": "Databricks",
             "model": "Gemini 3 Pro Preview (high)",
             "value": 1000000.0,
@@ -1340,7 +1338,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 13,
+            "rank": 11,
             "provider": "Eigen AI",
             "model": "Llama 4 Maverick",
             "value": 1000000.0,
@@ -1348,7 +1346,15 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 14,
+            "rank": 12,
+            "provider": "Novita",
+            "model": "MiniMax M1 80k",
+            "value": 1000000.0,
+            "detail_url": "https://artificialanalysis.ai/providers/novita",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 13,
             "provider": "Google (Vertex)",
             "model": "Gemini 3.1 Pro Preview",
             "value": 1000000.0,
@@ -1356,7 +1362,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 15,
+            "rank": 14,
             "provider": "Anthropic",
             "model": "Claude Sonnet 4.6 (max)",
             "value": 1000000.0,
@@ -1364,15 +1370,15 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 16,
+            "rank": 15,
             "provider": "Google",
-            "model": "Claude Opus 4.6 (max)",
+            "model": "Claude Opus 4.6",
             "value": 1000000.0,
             "detail_url": "https://artificialanalysis.ai/providers/google",
             "detail_label": "Provider details"
           },
           {
-            "rank": 17,
+            "rank": 16,
             "provider": "Nebius",
             "model": "NVIDIA Nemotron 3 Nano",
             "value": 1000000.0,
@@ -1380,7 +1386,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 18,
+            "rank": 17,
             "provider": "Alibaba Cloud",
             "model": "Qwen2.5 Turbo",
             "value": 1000000.0,
@@ -1388,7 +1394,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 19,
+            "rank": 18,
             "provider": "DeepInfra",
             "model": "Llama 4 Scout",
             "value": 327680.0,
@@ -1396,7 +1402,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 20,
+            "rank": 19,
             "provider": "Cohere",
             "model": "Command A",
             "value": 288000.0,
@@ -1404,7 +1410,31 @@
             "detail_label": "Provider details"
           },
           {
+            "rank": 20,
+            "provider": "Parasail",
+            "model": "Gemma 4 31B",
+            "value": 262144.0,
+            "detail_url": "https://artificialanalysis.ai/providers/parasail",
+            "detail_label": "Provider details"
+          },
+          {
             "rank": 21,
+            "provider": "Together.ai",
+            "model": "Kimi K2.5",
+            "value": 262144.0,
+            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 22,
+            "provider": "Fireworks",
+            "model": "Kimi K2.5",
+            "value": 262144.0,
+            "detail_url": "https://artificialanalysis.ai/providers/fireworks",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 23,
             "provider": "Groq",
             "model": "Kimi K2 0905",
             "value": 262144.0,
@@ -1412,27 +1442,11 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 22,
-            "provider": "Parasail",
-            "model": "Qwen3 Next 80B A3B",
-            "value": 262144.0,
-            "detail_url": "https://artificialanalysis.ai/providers/parasail",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 23,
+            "rank": 24,
             "provider": "Clarifai",
-            "model": "Qwen3 Coder 30B A3B",
+            "model": "Qwen3 30B A3B 2507",
             "value": 262144.0,
             "detail_url": "https://artificialanalysis.ai/providers/clarifai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 24,
-            "provider": "Fireworks",
-            "model": "Kimi K2.5",
-            "value": 262144.0,
-            "detail_url": "https://artificialanalysis.ai/providers/fireworks",
             "detail_label": "Provider details"
           },
           {
