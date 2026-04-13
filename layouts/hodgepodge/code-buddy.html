@@ -467,13 +467,24 @@
       const RARITY_FLOOR = { common: 5, uncommon: 15, rare: 25, epic: 35, legendary: 50 };
       const RARITY_STARS = { common: "★", uncommon: "★★", rare: "★★★", epic: "★★★★", legendary: "★★★★★" };
       const RARITY_VALUE = { common: 100, uncommon: 240, rare: 520, epic: 1200, legendary: 3000 };
-      const RARITY_JUMP = { common: 12.2, uncommon: 12.4, rare: 12.65, epic: 12.85, legendary: 13.05 };
+      const RARITY_JUMP = { common: 12.05, uncommon: 12.25, rare: 12.45, epic: 12.65, legendary: 13.25 };
       const THEORETICAL_MAX_SCORE = 9999;
+      const RUNNER_GROUND_Y = 222;
+      const RUNNER_PLAYER_X = 70;
+      const RUNNER_PLAYER_TOP = 172;
+      const RUNNER_PLAYER_W = 58;
+      const RUNNER_PLAYER_H = 54;
       const SPECIES = ["duck", "goose", "blob", "cat", "dragon", "octopus", "owl", "penguin", "turtle", "snail", "ghost", "axolotl", "capybara", "cactus", "robot", "rabbit", "mushroom", "chonk"];
       const SECRET_SPECIES = "raccoon";
       const EYES = ["·", "✦", "×", "◉", "@", "°"];
       const HATS = ["none", "crown", "tophat", "propeller", "halo", "wizard", "beanie", "tinyduck"];
       const STAT_NAMES = ["DEBUGGING", "PATIENCE", "CHAOS", "WISDOM", "SNARK"];
+      const OBSTACLE_SPRITES = {
+        tree: ["  /\\  ", " /**\\ ", "/****\\", "  ||  "],
+        flower: ["  @  ", " \\|/ ", "  |  "],
+        bird: ["  __  ", "<(o ) ", " /|\\  "],
+        ufo: [" .---. ", "( o o )", " `-^-´ "]
+      };
       const HAT_LINES = {
         none: "",
         crown: "   \\^^^/    ",
@@ -1015,12 +1026,14 @@
       }
 
       function addObstacle() {
-        const kind = Math.random() < 0.58 ? "tree" : "flower";
-        const w = kind === "tree" ? 34 : 30;
-        const h = kind === "tree" ? 48 : 34;
+        const roll = Math.random();
+        const kind = roll < 0.34 ? "tree" : roll < 0.68 ? "flower" : roll < 0.84 ? "bird" : "ufo";
+        const air = kind === "bird" || kind === "ufo";
+        const w = kind === "ufo" ? 58 : kind === "bird" ? 48 : kind === "tree" ? 42 : 36;
+        const h = kind === "ufo" ? 30 : kind === "bird" ? 30 : kind === "tree" ? 50 : 34;
         game.obstacles.push({
           x: 790,
-          y: 222 - h,
+          y: air ? 118 : RUNNER_GROUND_Y - h,
           w: w,
           h: h,
           kind: kind
@@ -1054,7 +1067,12 @@
           return obstacle.x + obstacle.w > -20;
         });
 
-        const player = { x: 70, y: 172 - game.y, w: 58, h: 54 };
+        const player = {
+          x: RUNNER_PLAYER_X,
+          y: RUNNER_PLAYER_TOP - game.y,
+          w: RUNNER_PLAYER_W,
+          h: RUNNER_PLAYER_H
+        };
         const hit = game.obstacles.some(function (obstacle) {
           return collide(player, obstacle);
         });
@@ -1098,46 +1116,20 @@
         ctx.restore();
       }
 
-      function drawTreeObstacle(obstacle) {
-        const baseY = obstacle.y + obstacle.h;
-        const x = obstacle.x;
-        ctx.fillStyle = "#7c3f18";
-        ctx.fillRect(x + 13, baseY - 26, 8, 26);
-        ctx.fillStyle = "#1f7a4d";
-        ctx.beginPath();
-        ctx.moveTo(x + 17, baseY - 52);
-        ctx.lineTo(x + 2, baseY - 24);
-        ctx.lineTo(x + 32, baseY - 24);
-        ctx.closePath();
-        ctx.fill();
-        ctx.fillStyle = "#2f9e5a";
-        ctx.beginPath();
-        ctx.moveTo(x + 17, baseY - 42);
-        ctx.lineTo(x + 5, baseY - 16);
-        ctx.lineTo(x + 29, baseY - 16);
-        ctx.closePath();
-        ctx.fill();
-      }
-
-      function drawFlowerObstacle(obstacle) {
-        const x = obstacle.x + 15;
-        const baseY = obstacle.y + obstacle.h;
-        ctx.strokeStyle = "#2f9e5a";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(x, baseY);
-        ctx.lineTo(x, baseY - 24);
-        ctx.stroke();
-        ctx.fillStyle = "#ef5da8";
-        [[0, -31], [-8, -25], [8, -25], [-6, -35], [6, -35]].forEach(function (offset) {
-          ctx.beginPath();
-          ctx.arc(x + offset[0], baseY + offset[1], 6, 0, Math.PI * 2);
-          ctx.fill();
+      function drawObstacleIcon(obstacle, dark) {
+        const lines = OBSTACLE_SPRITES[obstacle.kind] || OBSTACLE_SPRITES.tree;
+        ctx.save();
+        ctx.translate(obstacle.x, obstacle.y);
+        ctx.font = "14px ui-monospace, Menlo, Consolas, monospace";
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = dark ? "rgba(17, 24, 39, 0.86)" : "rgba(248, 250, 252, 0.86)";
+        ctx.fillStyle = dark ? "#d1d5db" : "#334155";
+        lines.forEach(function (line, index) {
+          const yOffset = 12 + index * 12;
+          ctx.strokeText(line, 0, yOffset);
+          ctx.fillText(line, 0, yOffset);
         });
-        ctx.fillStyle = "#facc15";
-        ctx.beginPath();
-        ctx.arc(x, baseY - 30, 5, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.restore();
       }
 
       function drawGame() {
@@ -1146,21 +1138,17 @@
         ctx.fillStyle = dark ? "#111827" : "#f8fafc";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = dark ? "#1f2937" : "#e2e8f0";
-        ctx.fillRect(0, 222, canvas.width, 3);
+        ctx.fillRect(0, RUNNER_GROUND_Y, canvas.width, 3);
         ctx.fillStyle = dark ? "#94a3b8" : "#475569";
         ctx.font = "14px ui-monospace, Menlo, Consolas, monospace";
         ctx.fillText("ID: " + currentId.slice(0, 34), 18, 28);
         ctx.fillText("Score: " + Math.floor(game.score), 18, 48);
         ctx.fillText(currentRoll.bones.species + " / " + currentRoll.bones.rarity, 18, 68);
 
-        drawBuddyRunner(70, 172 - game.y, dark);
+        drawBuddyRunner(RUNNER_PLAYER_X, RUNNER_PLAYER_TOP - game.y, dark);
 
         game.obstacles.forEach(function (obstacle) {
-          if (obstacle.kind === "tree") {
-            drawTreeObstacle(obstacle);
-          } else {
-            drawFlowerObstacle(obstacle);
-          }
+          drawObstacleIcon(obstacle, dark);
         });
 
         if (!game.running) {
