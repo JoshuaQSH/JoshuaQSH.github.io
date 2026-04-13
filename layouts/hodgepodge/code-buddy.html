@@ -4,6 +4,10 @@
       display: grid;
       gap: 28px;
     }
+    .buddy-page,
+    .buddy-page * {
+      box-sizing: border-box;
+    }
     .buddy-kicker {
       color: var(--text-muted);
       font-size: 0.9rem;
@@ -42,7 +46,7 @@
     .buddy-controls {
       display: grid;
       gap: 14px;
-      grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr));
     }
     .buddy-control {
       display: grid;
@@ -393,7 +397,6 @@
         <div class="buddy-actions" aria-label="BUDDY actions">
           <button class="buddy-button buddy-button-primary" id="buddy-roll-button" type="button">Hatch this ID</button>
           <button class="buddy-button buddy-button-danger" id="buddy-search-button" type="button">Violent search</button>
-          <button class="buddy-button" id="buddy-secret-button" type="button">Try the secret raccoon ID</button>
         </div>
         <p class="buddy-search-status" id="buddy-search-status" aria-live="polite"></p>
       </div>
@@ -435,8 +438,8 @@
           <p class="buddy-game-help">Space, Up Arrow, click, or tap to jump.</p>
         </div>
 
-        <aside class="buddy-panel buddy-scoreboard" aria-label="Top 10 BUDDY runner scores">
-          <h3>Top 10 Local Scores</h3>
+        <aside class="buddy-panel buddy-scoreboard" aria-label="BUDDY runner hall of fame">
+          <h3>Hall of Fame</h3>
           <ol class="buddy-score-list" id="buddy-score-list"></ol>
         </aside>
       </div>
@@ -464,6 +467,8 @@
       const RARITY_FLOOR = { common: 5, uncommon: 15, rare: 25, epic: 35, legendary: 50 };
       const RARITY_STARS = { common: "★", uncommon: "★★", rare: "★★★", epic: "★★★★", legendary: "★★★★★" };
       const RARITY_VALUE = { common: 100, uncommon: 240, rare: 520, epic: 1200, legendary: 3000 };
+      const RARITY_JUMP = { common: 12.2, uncommon: 12.4, rare: 12.65, epic: 12.85, legendary: 13.05 };
+      const THEORETICAL_MAX_SCORE = 9999;
       const SPECIES = ["duck", "goose", "blob", "cat", "dragon", "octopus", "owl", "penguin", "turtle", "snail", "ghost", "axolotl", "capybara", "cactus", "robot", "rabbit", "mushroom", "chonk"];
       const SECRET_SPECIES = "raccoon";
       const EYES = ["·", "✦", "×", "◉", "@", "°"];
@@ -571,9 +576,9 @@
           ["            ", "  /\\    /\\  ", " ( {E}    {E} ) ", " (   ..   ) ", "  `------´~ "]
         ],
         raccoon: [
-          ["   \\___/    ", "  ( {E}={E} )   ", "  /|  ^ |\\  ", " /_|____|_\\ ", "   /_||_\\   "],
-          ["   \\___/    ", "  ( {E}={E} )   ", "  /|  o |\\  ", " /_|____|_\\ ", "   /_||_\\~  "],
-          ["  .\\___/.   ", "  ( {E}={E} )   ", "  /|  ^ |\\  ", " /_|____|_\\ ", "   /_||_\\   "]
+          ["   /\\_/\\    ", "  ({E})_({E})~~ ", "  /== V ==\\ ", " /|  ___  |\\", "   /_/ \\_\\  "],
+          ["   /\\_/\\    ", "  ({E})_({E})~=", "  /== o ==\\ ", " /|  ___  |\\", "   /_/ \\_\\  "],
+          ["  ./\\_/\\.   ", "  ({E})_({E})~~ ", "  /== V ==\\ ", " /|  ___  |\\", "   /_/ \\_\\  "]
         ]
       };
       const NAME_BITS = ["Byte", "Patch", "Kernel", "Cursor", "Token", "Lint", "Stack", "Merge", "Shell", "Prompt", "Vector", "Cache"];
@@ -584,7 +589,6 @@
       const targetSpecies = document.getElementById("buddy-target-species");
       const rollButton = document.getElementById("buddy-roll-button");
       const searchButton = document.getElementById("buddy-search-button");
-      const secretButton = document.getElementById("buddy-secret-button");
       const searchStatus = document.getElementById("buddy-search-status");
       const terminalTitle = document.getElementById("buddy-terminal-title");
       const spriteEl = document.getElementById("buddy-sprite");
@@ -723,6 +727,7 @@
       }
 
       function companionName(payload) {
+        if (payload.secret || payload.bones.species === SECRET_SPECIES) return "Rocket";
         const seed = payload.inspirationSeed;
         const first = NAME_BITS[seed % NAME_BITS.length];
         const second = NAME_TAILS[Math.floor(seed / NAME_BITS.length) % NAME_TAILS.length];
@@ -922,7 +927,7 @@
       }
 
       function leaderboardKey() {
-        return "code-buddy-runner-scores-v1";
+        return "code-buddy-runner-scores-v2";
       }
 
       function readScores() {
@@ -935,7 +940,7 @@
       }
 
       function writeScores(scores) {
-        localStorage.setItem(leaderboardKey(), JSON.stringify(scores.slice(0, 10)));
+        localStorage.setItem(leaderboardKey(), JSON.stringify(scores.slice(0, 5)));
       }
 
       function saveScore(score) {
@@ -957,8 +962,10 @@
 
       function renderLeaderboard() {
         const rows = readScores();
-        const items = [];
-        for (let i = 0; i < 10; i += 1) {
+        const items = [
+          "<li class=\"buddy-score-row\"><span class=\"buddy-score-rank\">*</span><span class=\"buddy-score-id\" title=\"" + RACCOON_ID + "\">" + RACCOON_ID + " · Rocket</span><span class=\"buddy-score-value\">" + THEORETICAL_MAX_SCORE + "</span></li>"
+        ];
+        for (let i = 0; i < 5; i += 1) {
           const row = rows[i];
           if (row) {
             items.push("<li class=\"buddy-score-row\"><span class=\"buddy-score-rank\">" + (i + 1) + "</span><span class=\"buddy-score-id\" title=\"" + escapeHtml(row.id) + "\">" + escapeHtml(row.id) + " · " + escapeHtml(row.species) + "</span><span class=\"buddy-score-value\">" + escapeHtml(row.score) + "</span></li>");
@@ -967,6 +974,10 @@
           }
         }
         scoreListEl.innerHTML = items.join("");
+      }
+
+      function jumpImpulse() {
+        return RARITY_JUMP[currentRoll.bones.rarity] || RARITY_JUMP.common;
       }
 
       function resetGame() {
@@ -988,7 +999,7 @@
           return;
         }
         if (game.y <= 0.1) {
-          game.vy = 12.5;
+          game.vy = jumpImpulse();
         }
       }
 
@@ -1004,12 +1015,14 @@
       }
 
       function addObstacle() {
-        const kind = Math.random() < 0.5 ? "BUG" : "ERR";
+        const kind = Math.random() < 0.58 ? "tree" : "flower";
+        const w = kind === "tree" ? 34 : 30;
+        const h = kind === "tree" ? 48 : 34;
         game.obstacles.push({
           x: 790,
-          y: 198,
-          w: kind === "BUG" ? 28 : 34,
-          h: kind === "BUG" ? 30 : 38,
+          y: 222 - h,
+          w: w,
+          h: h,
           kind: kind
         });
       }
@@ -1027,7 +1040,7 @@
           game.vy = 0;
         }
 
-        game.score += dt * 0.8;
+        game.score = Math.min(THEORETICAL_MAX_SCORE, game.score + dt * 0.8);
         game.speed = 5 + Math.min(5, game.score / 260);
         game.spawnTimer -= dt;
         if (game.spawnTimer <= 0) {
@@ -1047,7 +1060,7 @@
         });
         liveScoreEl.textContent = String(Math.floor(game.score));
 
-        if (hit) {
+        if (hit || game.score >= THEORETICAL_MAX_SCORE) {
           game.running = false;
           game.ended = true;
           saveScore(game.score);
@@ -1059,19 +1072,72 @@
         requestAnimationFrame(gameLoop);
       }
 
-      function drawBuddyRunner(x, y) {
+      function rarityColor(rarity) {
+        if (rarity === "legendary") return "#b45309";
+        if (rarity === "epic") return "#a21caf";
+        if (rarity === "rare") return "#2563eb";
+        if (rarity === "uncommon") return "#1f7a4d";
+        return "#475569";
+      }
+
+      function drawBuddyRunner(x, y, dark) {
         const bones = currentRoll.bones;
         const lines = renderSprite(bones, Math.floor(tick / 2));
         ctx.save();
         ctx.translate(x, y);
-        ctx.fillStyle = bones.rarity === "legendary" ? "#b45309" : bones.rarity === "epic" ? "#a21caf" : bones.rarity === "rare" ? "#2563eb" : bones.rarity === "uncommon" ? "#1f7a4d" : "#475569";
-        ctx.fillRect(0, 0, 62, 54);
-        ctx.fillStyle = "#f8fafc";
-        ctx.font = "9px ui-monospace, Menlo, Consolas, monospace";
+        ctx.font = "10px ui-monospace, Menlo, Consolas, monospace";
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = dark ? "rgba(17, 24, 39, 0.72)" : "rgba(248, 250, 252, 0.8)";
+        ctx.fillStyle = rarityColor(bones.rarity);
         lines.slice(-4).forEach(function (line, index) {
-          ctx.fillText(line.slice(0, 11), 4, 13 + index * 10);
+          const text = line.slice(0, 12);
+          const yOffset = 13 + index * 10;
+          ctx.strokeText(text, 0, yOffset);
+          ctx.fillText(text, 0, yOffset);
         });
         ctx.restore();
+      }
+
+      function drawTreeObstacle(obstacle) {
+        const baseY = obstacle.y + obstacle.h;
+        const x = obstacle.x;
+        ctx.fillStyle = "#7c3f18";
+        ctx.fillRect(x + 13, baseY - 26, 8, 26);
+        ctx.fillStyle = "#1f7a4d";
+        ctx.beginPath();
+        ctx.moveTo(x + 17, baseY - 52);
+        ctx.lineTo(x + 2, baseY - 24);
+        ctx.lineTo(x + 32, baseY - 24);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#2f9e5a";
+        ctx.beginPath();
+        ctx.moveTo(x + 17, baseY - 42);
+        ctx.lineTo(x + 5, baseY - 16);
+        ctx.lineTo(x + 29, baseY - 16);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function drawFlowerObstacle(obstacle) {
+        const x = obstacle.x + 15;
+        const baseY = obstacle.y + obstacle.h;
+        ctx.strokeStyle = "#2f9e5a";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x, baseY);
+        ctx.lineTo(x, baseY - 24);
+        ctx.stroke();
+        ctx.fillStyle = "#ef5da8";
+        [[0, -31], [-8, -25], [8, -25], [-6, -35], [6, -35]].forEach(function (offset) {
+          ctx.beginPath();
+          ctx.arc(x + offset[0], baseY + offset[1], 6, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.fillStyle = "#facc15";
+        ctx.beginPath();
+        ctx.arc(x, baseY - 30, 5, 0, Math.PI * 2);
+        ctx.fill();
       }
 
       function drawGame() {
@@ -1087,14 +1153,14 @@
         ctx.fillText("Score: " + Math.floor(game.score), 18, 48);
         ctx.fillText(currentRoll.bones.species + " / " + currentRoll.bones.rarity, 18, 68);
 
-        drawBuddyRunner(70, 172 - game.y);
+        drawBuddyRunner(70, 172 - game.y, dark);
 
         game.obstacles.forEach(function (obstacle) {
-          ctx.fillStyle = obstacle.kind === "BUG" ? "#b42342" : "#b45309";
-          ctx.fillRect(obstacle.x, obstacle.y - obstacle.h + 24, obstacle.w, obstacle.h);
-          ctx.fillStyle = "#ffffff";
-          ctx.font = "10px ui-monospace, Menlo, Consolas, monospace";
-          ctx.fillText(obstacle.kind, obstacle.x + 4, obstacle.y + 6);
+          if (obstacle.kind === "tree") {
+            drawTreeObstacle(obstacle);
+          } else {
+            drawFlowerObstacle(obstacle);
+          }
         });
 
         if (!game.running) {
@@ -1120,12 +1186,6 @@
         }
       });
       searchButton.addEventListener("click", violentSearch);
-      secretButton.addEventListener("click", function () {
-        searchRun += 1;
-        idInput.value = RACCOON_ID;
-        renderCompanion(RACCOON_ID);
-        searchStatus.textContent = "Secret legendary raccoon unlocked.";
-      });
       startGameButton.addEventListener("click", startGame);
       jumpGameButton.addEventListener("click", jump);
       canvas.addEventListener("pointerdown", function (event) {
