@@ -128,7 +128,14 @@
     .tracker-chart-svg {
       display: block;
       height: auto;
+      overflow: visible;
       width: 100%;
+    }
+    .tracker-chart-label {
+      paint-order: stroke;
+      stroke: var(--page-bg);
+      stroke-linejoin: round;
+      stroke-width: 4px;
     }
     .tracker-chart-empty {
       color: #6b7280;
@@ -328,7 +335,7 @@
           <p class="tracker-section-intro">The current top 10 models on the Artificial Analysis Intelligence Index. This list is intentionally model-level, so repeated vendors can appear more than once when they occupy multiple top-10 slots.</p>
           <div class="tracker-chart-shell">
             <p class="tracker-chart-meta" id="llm-benchmark-meta">Loading benchmark snapshot…</p>
-            <svg class="tracker-chart-svg" id="llm-benchmark-chart" viewBox="0 0 760 360" role="img" aria-label="LLM benchmark comparison chart"></svg>
+            <svg class="tracker-chart-svg" id="llm-benchmark-chart" viewBox="0 0 820 390" role="img" aria-label="LLM benchmark comparison chart"></svg>
             <p class="tracker-footnote" id="llm-benchmark-note">{{ $tracker.benchmark_snapshot.note }} Source: <a class="tracker-source-link" href="{{ $tracker.benchmark_snapshot.source_url }}">{{ $tracker.benchmark_snapshot.source_label }}</a> (checked {{ $tracker.benchmark_snapshot.generated_at_pretty }}).</p>
           </div>
           <div class="tracker-table-wrap">
@@ -534,9 +541,10 @@
       function renderBenchmarkChart() {
         if (!tracker || !tracker.benchmark_snapshot) return;
         const rows = (tracker.benchmark_snapshot.models || []).filter(function (row) {
-          return row.blended_price !== null && row.blended_price !== undefined &&
-            row.intelligence !== null && row.intelligence !== undefined &&
-            row.speed_tps !== null && row.speed_tps !== undefined;
+          return Number.isFinite(Number(row.blended_price)) &&
+            Number(row.blended_price) >= 0 &&
+            Number.isFinite(Number(row.intelligence)) &&
+            Number.isFinite(Number(row.speed_tps));
         });
 
         if (!rows.length) {
@@ -545,29 +553,42 @@
           return;
         }
 
-        const width = 760;
-        const height = 360;
-        const margin = { top: 24, right: 40, bottom: 58, left: 72 };
+        const width = 820;
+        const height = 390;
+        const margin = { top: 26, right: 94, bottom: 66, left: 92 };
         const innerWidth = width - margin.left - margin.right;
         const innerHeight = height - margin.top - margin.bottom;
         const prices = rows.map(function (row) { return Number(row.blended_price); });
         const intelligenceValues = rows.map(function (row) { return Number(row.intelligence); });
         const speedValues = rows.map(function (row) { return Number(row.speed_tps); });
+        const positivePrices = prices.filter(function (value) { return value > 0; });
+        const hasZeroPrice = prices.some(function (value) { return value === 0; });
         const minPrice = Math.min.apply(null, prices);
         const maxPrice = Math.max.apply(null, prices);
         const minIntelligence = Math.min.apply(null, intelligenceValues);
         const maxIntelligence = Math.max.apply(null, intelligenceValues);
         const minSpeed = Math.min.apply(null, speedValues);
         const maxSpeed = Math.max.apply(null, speedValues);
-        const xLow = minPrice * 0.8;
-        const xHigh = maxPrice * 1.15;
-        const logLow = Math.log10(xLow);
-        const logHigh = Math.log10(xHigh);
+        const minPositivePrice = positivePrices.length ? Math.min.apply(null, positivePrices) : 1;
+        const xPadding = hasZeroPrice ? minPositivePrice * 0.5 : 0;
+        const xLow = hasZeroPrice ? 0 : minPrice * 0.8;
+        const xHigh = Math.max(maxPrice * 1.15, minPositivePrice * (hasZeroPrice ? 3 : 1.15));
+        const transformedLow = xTransform(xLow);
+        const transformedHigh = xTransform(xHigh);
         const yLow = Math.max(0, minIntelligence - 4);
         const yHigh = maxIntelligence + 4;
 
+        function clamp(value, min, max) {
+          return Math.min(Math.max(value, min), max);
+        }
+
+        function xTransform(value) {
+          const numeric = Math.max(0, Number(value));
+          return Math.log10(Math.max(numeric + xPadding, Number.EPSILON));
+        }
+
         function x(value) {
-          return margin.left + ((Math.log10(value) - logLow) / (logHigh - logLow || 1)) * innerWidth;
+          return margin.left + ((xTransform(value) - transformedLow) / (transformedHigh - transformedLow || 1)) * innerWidth;
         }
 
         function y(value) {
@@ -579,7 +600,7 @@
           return 6 + ((value - minSpeed) / (maxSpeed - minSpeed)) * 10;
         }
 
-        const xTicks = [0.25, 0.5, 1, 2, 5, 10, 20].filter(function (tick) {
+        const xTicks = (hasZeroPrice ? [0, 0.5, 1, 2, 5, 10, 20] : [0.25, 0.5, 1, 2, 5, 10, 20]).filter(function (tick) {
           return tick >= xLow && tick <= xHigh;
         });
         const yTicks = [yLow, yLow + (yHigh - yLow) / 3, yLow + (2 * (yHigh - yLow)) / 3, yHigh];
@@ -600,22 +621,24 @@
           svg += "<text x='" + (margin.left - 10) + "' y='" + (yPos + 4) + "' text-anchor='end' fill='#6b7280' font-size='13'>" + escapeHtml(formatNumber(tick, 1)) + "</text>";
         });
 
-        svg += "<text x='" + (margin.left + innerWidth / 2) + "' y='" + (height - 10) + "' text-anchor='middle' fill='#6b7280' font-size='13'>Blended price (USD per 1M tokens)</text>";
-        svg += "<text x='18' y='" + (margin.top + innerHeight / 2) + "' text-anchor='middle' fill='#6b7280' font-size='13' transform='rotate(-90 18 " + (margin.top + innerHeight / 2) + ")'>Artificial Analysis Intelligence Index</text>";
+        svg += "<text x='" + (margin.left + innerWidth / 2) + "' y='" + (height - 14) + "' text-anchor='middle' fill='#6b7280' font-size='13'>Blended price (USD per 1M tokens)</text>";
+        svg += "<text x='24' y='" + (margin.top + innerHeight / 2) + "' text-anchor='middle' fill='#6b7280' font-size='13' transform='rotate(-90 24 " + (margin.top + innerHeight / 2) + ")'>Artificial Analysis Intelligence Index</text>";
 
         rows.forEach(function (row, index) {
-          const xPos = x(Number(row.blended_price));
-          const yPos = y(Number(row.intelligence));
+          const xPos = clamp(x(Number(row.blended_price)), margin.left, margin.left + innerWidth);
+          const yPos = clamp(y(Number(row.intelligence)), margin.top, margin.top + innerHeight);
           const bubble = radius(Number(row.speed_tps));
           const anchor = xPos > margin.left + innerWidth * 0.72 ? "end" : "start";
           const labelX = anchor === "end" ? xPos - bubble - 6 : xPos + bubble + 6;
-          const labelY = yPos - (index % 2 === 0 ? bubble + 2 : -bubble - 12);
+          const labelY = clamp(yPos - (index % 2 === 0 ? bubble + 2 : -bubble - 12), margin.top + 12, margin.top + innerHeight - 8);
           svg += "<circle cx='" + xPos + "' cy='" + yPos + "' r='" + bubble + "' fill='" + escapeHtml(row.color || "#1d4ed8") + "' fill-opacity='0.78' stroke='#ffffff' stroke-width='1.5' />";
-          svg += "<text x='" + labelX + "' y='" + labelY + "' text-anchor='" + anchor + "' fill='" + escapeHtml(row.color || "#111827") + "' font-size='12'>" + escapeHtml(row.short_label || row.model) + "</text>";
+          svg += "<text class='tracker-chart-label' x='" + labelX + "' y='" + labelY + "' text-anchor='" + anchor + "' fill='" + escapeHtml(row.color || "#111827") + "' font-size='12'>" + escapeHtml(row.short_label || row.model) + "</text>";
         });
 
         benchmarkChart.innerHTML = svg;
-        benchmarkMeta.textContent = "Price = Artificial Analysis blended 3:1 USD per 1M tokens · Bubble size = output speed (tokens/s)";
+        benchmarkMeta.textContent = "Price = Artificial Analysis blended 3:1 USD per 1M tokens, log-scaled" +
+          (hasZeroPrice ? " with $0 entries pinned to the left" : "") +
+          " · Bubble size = output speed (tokens/s)";
         benchmarkNote.innerHTML = escapeHtml(tracker.benchmark_snapshot.note || "") +
           " Source: <a class='tracker-source-link' href='" + escapeHtml(tracker.benchmark_snapshot.source_url || "") + "'>" +
           escapeHtml(tracker.benchmark_snapshot.source_label || "Artificial Analysis") +
