@@ -1,0 +1,1152 @@
+{{ define "extra_head" }}
+  <style>
+    .buddy-page {
+      display: grid;
+      gap: 28px;
+    }
+    .buddy-kicker {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+    }
+    .buddy-cover {
+      margin: 12px 0 0;
+    }
+    .buddy-cover img {
+      border: 1px solid var(--divider-color);
+      border-radius: 8px;
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+    .buddy-copy > :first-child {
+      margin-top: 0;
+    }
+    .buddy-lab,
+    .buddy-runner,
+    .buddy-notes {
+      border-top: 1px solid var(--divider-color);
+      display: grid;
+      gap: 18px;
+      padding-top: 24px;
+    }
+    .buddy-panel {
+      background: var(--panel-soft);
+      border: 1px solid var(--divider-color);
+      border-radius: 8px;
+      min-width: 0;
+      padding: 18px;
+    }
+    .buddy-controls {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+    }
+    .buddy-control {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+    .buddy-control label {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+    .buddy-control input,
+    .buddy-control select {
+      background: var(--control-bg);
+      border: 1px solid var(--control-border);
+      border-radius: 6px;
+      color: var(--text-main);
+      font: inherit;
+      min-width: 0;
+      padding: 9px 10px;
+      width: 100%;
+    }
+    .buddy-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .buddy-button {
+      background: var(--control-bg);
+      border: 1px solid var(--control-border);
+      border-radius: 6px;
+      color: var(--text-main);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      padding: 9px 13px;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+    .buddy-button:hover,
+    .buddy-button:focus-visible {
+      background: var(--control-hover-bg);
+      border-color: var(--control-hover-border);
+      color: var(--post-hover);
+      outline: none;
+      transform: translateY(-1px);
+    }
+    .buddy-button-primary {
+      background: #1f7a4d;
+      border-color: #1f7a4d;
+      color: #ffffff;
+    }
+    .buddy-button-primary:hover,
+    .buddy-button-primary:focus-visible {
+      background: #16603c;
+      border-color: #16603c;
+      color: #ffffff;
+    }
+    .buddy-button-danger {
+      background: #b42342;
+      border-color: #b42342;
+      color: #ffffff;
+    }
+    .buddy-button-danger:hover,
+    .buddy-button-danger:focus-visible {
+      background: #8f1d35;
+      border-color: #8f1d35;
+      color: #ffffff;
+    }
+    .buddy-result-grid {
+      align-items: start;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(270px, 0.9fr) minmax(0, 1.1fr);
+    }
+    .buddy-terminal {
+      align-content: start;
+      background: #101418;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #dbeafe;
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      padding: 16px;
+    }
+    .buddy-terminal-bar {
+      align-items: center;
+      color: #94a3b8;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      line-height: 1.35;
+    }
+    .buddy-terminal-pill {
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      color: #e5e7eb;
+      display: inline-flex;
+      font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+      font-size: 0.82rem;
+      padding: 3px 7px;
+    }
+    .buddy-sprite {
+      background: transparent !important;
+      border: 0 !important;
+      color: #f8fafc;
+      font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+      font-size: 1rem;
+      line-height: 1.08;
+      margin: 0;
+      min-height: 5.4rem;
+      overflow: auto;
+      padding: 0 !important;
+      white-space: pre;
+    }
+    .buddy-bubble {
+      background: #f7fee7;
+      border: 1px solid #84cc16;
+      border-radius: 8px;
+      color: #243b0b;
+      line-height: 1.45;
+      margin: 0;
+      padding: 10px 12px;
+    }
+    .buddy-facts {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+    }
+    .buddy-fact-row,
+    .buddy-stat-row,
+    .buddy-score-row {
+      align-items: center;
+      border-top: 1px solid rgba(128, 128, 128, 0.18);
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      min-width: 0;
+      padding-top: 10px;
+    }
+    .buddy-fact-row:first-child,
+    .buddy-stat-row:first-child,
+    .buddy-score-row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .buddy-fact-row dt,
+    .buddy-stat-row dt {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .buddy-fact-row dd,
+    .buddy-stat-row dd {
+      color: var(--text-strong);
+      font-weight: 700;
+      margin: 0;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
+    .buddy-stat-meter {
+      background: rgba(128, 128, 128, 0.16);
+      border-radius: 6px;
+      height: 8px;
+      margin-top: 6px;
+      overflow: hidden;
+      width: min(170px, 36vw);
+    }
+    .buddy-stat-fill {
+      background: #1f7a4d;
+      height: 100%;
+    }
+    .buddy-rarity {
+      border-radius: 6px;
+      color: #ffffff;
+      display: inline-flex;
+      font-size: 0.88rem;
+      padding: 3px 8px;
+      text-transform: capitalize;
+      white-space: nowrap;
+    }
+    .buddy-rarity-common { background: #64748b; }
+    .buddy-rarity-uncommon { background: #1f7a4d; }
+    .buddy-rarity-rare { background: #2563eb; }
+    .buddy-rarity-epic { background: #a21caf; }
+    .buddy-rarity-legendary { background: #b45309; }
+    .buddy-search-status {
+      color: var(--text-muted);
+      margin: 0;
+      min-height: 1.5rem;
+    }
+    .buddy-runner-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(0, 1fr) minmax(230px, 0.42fr);
+    }
+    .buddy-game-wrap {
+      min-width: 0;
+    }
+    .buddy-game-toolbar {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .buddy-game-meta {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .buddy-game {
+      background: #f8fafc;
+      border: 1px solid var(--divider-color);
+      border-radius: 8px;
+      display: block;
+      height: auto;
+      max-width: 100%;
+      touch-action: manipulation;
+      width: 100%;
+    }
+    :root[data-theme="dark"] .buddy-game {
+      background: #111827;
+    }
+    .buddy-game-help {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin: 8px 0 0;
+    }
+    .buddy-scoreboard {
+      display: grid;
+      gap: 10px;
+    }
+    .buddy-scoreboard h3 {
+      margin: 0;
+    }
+    .buddy-score-list {
+      display: grid;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+    }
+    .buddy-score-row {
+      font-size: 0.95rem;
+      list-style: none;
+    }
+    .buddy-score-rank {
+      color: var(--text-muted);
+      flex: 0 0 2rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .buddy-score-id {
+      color: var(--text-strong);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .buddy-score-value {
+      color: var(--text-strong);
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+    .buddy-species-list {
+      columns: 2;
+      color: var(--text-muted);
+      margin-bottom: 0;
+    }
+    .buddy-species-list code {
+      color: var(--text-main);
+    }
+    @media (max-width: 760px) {
+      .buddy-controls,
+      .buddy-result-grid,
+      .buddy-runner-grid {
+        grid-template-columns: 1fr;
+      }
+      .buddy-panel {
+        padding: 14px;
+      }
+      .buddy-actions,
+      .buddy-game-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .buddy-button {
+        width: 100%;
+      }
+      .buddy-species-list {
+        columns: 1;
+      }
+    }
+  </style>
+{{ end }}
+
+{{ define "main" }}
+  <article class="post buddy-page">
+    <header class="page-header">
+      <p class="buddy-kicker">Hodgepodge · Claude Code BUDDY</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Date }}
+        <span class="meta">{{ .Format "Jan 2, 2006" }}</span>
+      {{ end }}
+      {{ with .Params.image }}
+        <figure class="buddy-cover">
+          <img src="{{ . | relURL }}" alt="{{ $.Params.imageAlt | default $.Title }}" />
+        </figure>
+      {{ end }}
+    </header>
+
+    <div class="content buddy-copy">
+      {{ .Content }}
+    </div>
+
+    <section class="buddy-lab" aria-labelledby="buddy-lab-title">
+      <div>
+        <h2 id="buddy-lab-title">BUDDY Hatchery</h2>
+        <p class="section-intro">The roll path uses the same salt, rarity weights, species list, eyes, hats, shiny chance, and stat floors from the source snapshot. The raccoon is a hidden legendary override for one very specific ID.</p>
+      </div>
+
+      <div class="buddy-panel">
+        <div class="buddy-controls">
+          <div class="buddy-control">
+            <label for="buddy-id">User ID</label>
+            <input id="buddy-id" type="text" autocomplete="off" spellcheck="false" value="anon" />
+          </div>
+          <div class="buddy-control">
+            <label for="buddy-target-rarity">Wanted rarity</label>
+            <select id="buddy-target-rarity">
+              <option value="">Any rarity</option>
+              <option value="common">Common</option>
+              <option value="uncommon">Uncommon</option>
+              <option value="rare">Rare</option>
+              <option value="epic">Epic</option>
+              <option value="legendary">Legendary</option>
+            </select>
+          </div>
+          <div class="buddy-control">
+            <label for="buddy-target-species">Wanted species</label>
+            <select id="buddy-target-species"></select>
+          </div>
+        </div>
+        <div class="buddy-actions" aria-label="BUDDY actions">
+          <button class="buddy-button buddy-button-primary" id="buddy-roll-button" type="button">Hatch this ID</button>
+          <button class="buddy-button buddy-button-danger" id="buddy-search-button" type="button">Violent search</button>
+          <button class="buddy-button" id="buddy-secret-button" type="button">Try the secret raccoon ID</button>
+        </div>
+        <p class="buddy-search-status" id="buddy-search-status" aria-live="polite"></p>
+      </div>
+
+      <div class="buddy-result-grid">
+        <section class="buddy-terminal" aria-label="Generated BUDDY terminal preview">
+          <div class="buddy-terminal-bar">
+            <span class="buddy-terminal-pill">/buddy</span>
+            <span id="buddy-terminal-title">waiting for hatch</span>
+          </div>
+          <pre class="buddy-sprite" id="buddy-sprite" aria-label="BUDDY sprite"></pre>
+          <p class="buddy-bubble" id="buddy-bubble"></p>
+        </section>
+
+        <section class="buddy-panel" aria-label="BUDDY values">
+          <dl class="buddy-facts" id="buddy-facts"></dl>
+          <h3>Stats</h3>
+          <dl class="buddy-facts" id="buddy-stats"></dl>
+        </section>
+      </div>
+    </section>
+
+    <section class="buddy-runner" aria-labelledby="buddy-runner-title">
+      <div>
+        <h2 id="buddy-runner-title">Tiny BUDDY Runner</h2>
+        <p class="section-intro">Jump over the little runtime hazards. The current companion from the hatchery is the runner.</p>
+      </div>
+
+      <div class="buddy-runner-grid">
+        <div class="buddy-game-wrap">
+          <div class="buddy-game-toolbar">
+            <div class="buddy-game-meta">Player: <strong id="buddy-player-id">anon</strong> · Score: <strong id="buddy-live-score">0</strong></div>
+            <div class="buddy-actions">
+              <button class="buddy-button buddy-button-primary" id="buddy-start-game" type="button">Start run</button>
+              <button class="buddy-button" id="buddy-jump-game" type="button">Jump</button>
+            </div>
+          </div>
+          <canvas class="buddy-game" id="buddy-game" width="760" height="260" aria-label="BUDDY endless runner game"></canvas>
+          <p class="buddy-game-help">Space, Up Arrow, click, or tap to jump.</p>
+        </div>
+
+        <aside class="buddy-panel buddy-scoreboard" aria-label="Top 10 BUDDY runner scores">
+          <h3>Top 10 Local Scores</h3>
+          <ol class="buddy-score-list" id="buddy-score-list"></ol>
+        </aside>
+      </div>
+    </section>
+
+    <section class="buddy-notes" aria-labelledby="buddy-notes-title">
+      <h2 id="buddy-notes-title">Roll Notes</h2>
+      <div class="buddy-panel">
+        <p>Rarity weights are common 60, uncommon 25, rare 10, epic 4, legendary 1. Stats use rarity floors of 5, 15, 25, 35, and 50, then pick one peak stat and one dump stat.</p>
+        <p>Normal species:</p>
+        <ul class="buddy-species-list" id="buddy-species-list"></ul>
+      </div>
+      <p class="text-link"><a href="{{ "/hodgepodge/" | relURL }}">Back to Hodgepodge</a></p>
+    </section>
+  </article>
+{{ end }}
+
+{{ define "extra_scripts" }}
+  <script>
+    (function () {
+      const SALT = "friend-2026-401";
+      const RACCOON_ID = "shenghao_is_not_a_raccoon";
+      const RARITIES = ["common", "uncommon", "rare", "epic", "legendary"];
+      const RARITY_WEIGHTS = { common: 60, uncommon: 25, rare: 10, epic: 4, legendary: 1 };
+      const RARITY_FLOOR = { common: 5, uncommon: 15, rare: 25, epic: 35, legendary: 50 };
+      const RARITY_STARS = { common: "★", uncommon: "★★", rare: "★★★", epic: "★★★★", legendary: "★★★★★" };
+      const RARITY_VALUE = { common: 100, uncommon: 240, rare: 520, epic: 1200, legendary: 3000 };
+      const SPECIES = ["duck", "goose", "blob", "cat", "dragon", "octopus", "owl", "penguin", "turtle", "snail", "ghost", "axolotl", "capybara", "cactus", "robot", "rabbit", "mushroom", "chonk"];
+      const SECRET_SPECIES = "raccoon";
+      const EYES = ["·", "✦", "×", "◉", "@", "°"];
+      const HATS = ["none", "crown", "tophat", "propeller", "halo", "wizard", "beanie", "tinyduck"];
+      const STAT_NAMES = ["DEBUGGING", "PATIENCE", "CHAOS", "WISDOM", "SNARK"];
+      const HAT_LINES = {
+        none: "",
+        crown: "   \\^^^/    ",
+        tophat: "   [___]    ",
+        propeller: "    -+-     ",
+        halo: "   (   )    ",
+        wizard: "    /^\\     ",
+        beanie: "   (___)    ",
+        tinyduck: "    ,>      "
+      };
+      const BODIES = {
+        duck: [
+          ["            ", "    __      ", "  <({E} )___  ", "   (  ._>   ", "    `--´    "],
+          ["            ", "    __      ", "  <({E} )___  ", "   (  ._>   ", "    `--´~   "],
+          ["            ", "    __      ", "  <({E} )___  ", "   (  .__>  ", "    `--´    "]
+        ],
+        goose: [
+          ["            ", "     ({E}>    ", "     ||     ", "   _(__)_   ", "    ^^^^    "],
+          ["            ", "    ({E}>     ", "     ||     ", "   _(__)_   ", "    ^^^^    "],
+          ["            ", "     ({E}>>   ", "     ||     ", "   _(__)_   ", "    ^^^^    "]
+        ],
+        blob: [
+          ["            ", "   .----.   ", "  ( {E}  {E} )  ", "  (      )  ", "   `----´   "],
+          ["            ", "  .------.  ", " (  {E}  {E}  ) ", " (        ) ", "  `------´  "],
+          ["            ", "    .--.    ", "   ({E}  {E})   ", "   (    )   ", "    `--´    "]
+        ],
+        cat: [
+          ["            ", "   /\\_/\\    ", "  ( {E}   {E})  ", "  (  ω  )   ", "  (\")_(\")   "],
+          ["            ", "   /\\_/\\    ", "  ( {E}   {E})  ", "  (  ω  )   ", "  (\")_(\")~  "],
+          ["            ", "   /\\-/\\    ", "  ( {E}   {E})  ", "  (  ω  )   ", "  (\")_(\")   "]
+        ],
+        dragon: [
+          ["            ", "  /^\\  /^\\  ", " <  {E}  {E}  > ", " (   ~~   ) ", "  `-vvvv-´  "],
+          ["            ", "  /^\\  /^\\  ", " <  {E}  {E}  > ", " (        ) ", "  `-vvvv-´  "],
+          ["   ~    ~   ", "  /^\\  /^\\  ", " <  {E}  {E}  > ", " (   ~~   ) ", "  `-vvvv-´  "]
+        ],
+        octopus: [
+          ["            ", "   .----.   ", "  ( {E}  {E} )  ", "  (______)  ", "  /\\/\\/\\/\\  "],
+          ["            ", "   .----.   ", "  ( {E}  {E} )  ", "  (______)  ", "  \\/\\/\\/\\/  "],
+          ["     o      ", "   .----.   ", "  ( {E}  {E} )  ", "  (______)  ", "  /\\/\\/\\/\\  "]
+        ],
+        owl: [
+          ["            ", "   /\\  /\\   ", "  (({E})({E}))  ", "  (  ><  )  ", "   `----´   "],
+          ["            ", "   /\\  /\\   ", "  (({E})({E}))  ", "  (  ><  )  ", "   .----.   "],
+          ["            ", "   /\\  /\\   ", "  (({E})(-))  ", "  (  ><  )  ", "   `----´   "]
+        ],
+        penguin: [
+          ["            ", "  .---.     ", "  ({E}>{E})     ", " /(   )\\    ", "  `---´     "],
+          ["            ", "  .---.     ", "  ({E}>{E})     ", " |(   )|    ", "  `---´     "],
+          ["  .---.     ", "  ({E}>{E})     ", " /(   )\\    ", "  `---´     ", "   ~ ~      "]
+        ],
+        turtle: [
+          ["            ", "   _,--._   ", "  ( {E}  {E} )  ", " /[______]\\ ", "  ``    ``  "],
+          ["            ", "   _,--._   ", "  ( {E}  {E} )  ", " /[______]\\ ", "   ``  ``   "],
+          ["            ", "   _,--._   ", "  ( {E}  {E} )  ", " /[======]\\ ", "  ``    ``  "]
+        ],
+        snail: [
+          ["            ", " {E}    .--.  ", "  \\  ( @ )  ", "   \\_`--´   ", "  ~~~~~~~   "],
+          ["            ", "  {E}   .--.  ", "  |  ( @ )  ", "   \\_`--´   ", "  ~~~~~~~   "],
+          ["            ", " {E}    .--.  ", "  \\  ( @  ) ", "   \\_`--´   ", "   ~~~~~~   "]
+        ],
+        ghost: [
+          ["            ", "   .----.   ", "  / {E}  {E} \\  ", "  |      |  ", "  ~`~``~`~  "],
+          ["            ", "   .----.   ", "  / {E}  {E} \\  ", "  |      |  ", "  `~`~~`~`  "],
+          ["    ~  ~    ", "   .----.   ", "  / {E}  {E} \\  ", "  |      |  ", "  ~~`~~`~~  "]
+        ],
+        axolotl: [
+          ["            ", "}~(______)~{", "}~({E} .. {E})~{", "  ( .--. )  ", "  (_/  \\_)  "],
+          ["            ", "~}(______){~", "~}({E} .. {E}){~", "  ( .--. )  ", "  (_/  \\_)  "],
+          ["            ", "}~(______)~{", "}~({E} .. {E})~{", "  (  --  )  ", "  ~_/  \\_~  "]
+        ],
+        capybara: [
+          ["            ", "  n______n  ", " ( {E}    {E} ) ", " (   oo   ) ", "  `------´  "],
+          ["            ", "  n______n  ", " ( {E}    {E} ) ", " (   Oo   ) ", "  `------´  "],
+          ["    ~  ~    ", "  u______n  ", " ( {E}    {E} ) ", " (   oo   ) ", "  `------´  "]
+        ],
+        cactus: [
+          ["            ", " n  ____  n ", " | |{E}  {E}| | ", " |_|    |_| ", "   |    |   "],
+          ["            ", "    ____    ", " n |{E}  {E}| n ", " |_|    |_| ", "   |    |   "],
+          [" n        n ", " |  ____  | ", " | |{E}  {E}| | ", " |_|    |_| ", "   |    |   "]
+        ],
+        robot: [
+          ["            ", "   .[||].   ", "  [ {E}  {E} ]  ", "  [ ==== ]  ", "  `------´  "],
+          ["            ", "   .[||].   ", "  [ {E}  {E} ]  ", "  [ -==- ]  ", "  `------´  "],
+          ["     *      ", "   .[||].   ", "  [ {E}  {E} ]  ", "  [ ==== ]  ", "  `------´  "]
+        ],
+        rabbit: [
+          ["            ", "   (\\__/)   ", "  ( {E}  {E} )  ", " =(  ..  )= ", "  (\")__(\")  "],
+          ["            ", "   (|__/)   ", "  ( {E}  {E} )  ", " =(  ..  )= ", "  (\")__(\")  "],
+          ["            ", "   (\\__/)   ", "  ( {E}  {E} )  ", " =( .  . )= ", "  (\")__(\")  "]
+        ],
+        mushroom: [
+          ["            ", " .-o-OO-o-. ", "(__________)", "   |{E}  {E}|   ", "   |____|   "],
+          ["            ", " .-O-oo-O-. ", "(__________)", "   |{E}  {E}|   ", "   |____|   "],
+          ["   . o  .   ", " .-o-OO-o-. ", "(__________)", "   |{E}  {E}|   ", "   |____|   "]
+        ],
+        chonk: [
+          ["            ", "  /\\    /\\  ", " ( {E}    {E} ) ", " (   ..   ) ", "  `------´  "],
+          ["            ", "  /\\    /|  ", " ( {E}    {E} ) ", " (   ..   ) ", "  `------´  "],
+          ["            ", "  /\\    /\\  ", " ( {E}    {E} ) ", " (   ..   ) ", "  `------´~ "]
+        ],
+        raccoon: [
+          ["   \\___/    ", "  ( {E}={E} )   ", "  /|  ^ |\\  ", " /_|____|_\\ ", "   /_||_\\   "],
+          ["   \\___/    ", "  ( {E}={E} )   ", "  /|  o |\\  ", " /_|____|_\\ ", "   /_||_\\~  "],
+          ["  .\\___/.   ", "  ( {E}={E} )   ", "  /|  ^ |\\  ", " /_|____|_\\ ", "   /_||_\\   "]
+        ]
+      };
+      const NAME_BITS = ["Byte", "Patch", "Kernel", "Cursor", "Token", "Lint", "Stack", "Merge", "Shell", "Prompt", "Vector", "Cache"];
+      const NAME_TAILS = ["whisker", "paws", "beak", "blink", "snout", "sprout", "fang", "loop", "spark", "moss", "dash", "node"];
+
+      const idInput = document.getElementById("buddy-id");
+      const targetRarity = document.getElementById("buddy-target-rarity");
+      const targetSpecies = document.getElementById("buddy-target-species");
+      const rollButton = document.getElementById("buddy-roll-button");
+      const searchButton = document.getElementById("buddy-search-button");
+      const secretButton = document.getElementById("buddy-secret-button");
+      const searchStatus = document.getElementById("buddy-search-status");
+      const terminalTitle = document.getElementById("buddy-terminal-title");
+      const spriteEl = document.getElementById("buddy-sprite");
+      const bubbleEl = document.getElementById("buddy-bubble");
+      const factsEl = document.getElementById("buddy-facts");
+      const statsEl = document.getElementById("buddy-stats");
+      const speciesListEl = document.getElementById("buddy-species-list");
+      const playerIdEl = document.getElementById("buddy-player-id");
+      const liveScoreEl = document.getElementById("buddy-live-score");
+      const scoreListEl = document.getElementById("buddy-score-list");
+      const canvas = document.getElementById("buddy-game");
+      const ctx = canvas.getContext("2d");
+      const startGameButton = document.getElementById("buddy-start-game");
+      const jumpGameButton = document.getElementById("buddy-jump-game");
+
+      let currentRoll = roll("anon");
+      let currentId = "anon";
+      let tick = 0;
+      let searchRun = 0;
+      const game = {
+        running: false,
+        ended: false,
+        lastTime: 0,
+        y: 0,
+        vy: 0,
+        score: 0,
+        speed: 5,
+        spawnTimer: 0,
+        obstacles: []
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function titleCase(value) {
+        return String(value).slice(0, 1).toUpperCase() + String(value).slice(1);
+      }
+
+      function mulberry32(seed) {
+        let a = seed >>> 0;
+        return function () {
+          a |= 0;
+          a = (a + 0x6d2b79f5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      function hashString(value) {
+        let h = 2166136261;
+        for (let i = 0; i < value.length; i += 1) {
+          h ^= value.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return h >>> 0;
+      }
+
+      function pick(rng, arr) {
+        return arr[Math.floor(rng() * arr.length)];
+      }
+
+      function rollRarity(rng) {
+        const total = Object.values(RARITY_WEIGHTS).reduce(function (sum, weight) {
+          return sum + weight;
+        }, 0);
+        let value = rng() * total;
+        for (const rarity of RARITIES) {
+          value -= RARITY_WEIGHTS[rarity];
+          if (value < 0) return rarity;
+        }
+        return "common";
+      }
+
+      function rollStats(rng, rarity) {
+        const floor = RARITY_FLOOR[rarity];
+        const peak = pick(rng, STAT_NAMES);
+        let dump = pick(rng, STAT_NAMES);
+        while (dump === peak) dump = pick(rng, STAT_NAMES);
+
+        const stats = {};
+        for (const name of STAT_NAMES) {
+          if (name === peak) {
+            stats[name] = Math.min(100, floor + 50 + Math.floor(rng() * 30));
+          } else if (name === dump) {
+            stats[name] = Math.max(1, floor - 10 + Math.floor(rng() * 15));
+          } else {
+            stats[name] = floor + Math.floor(rng() * 40);
+          }
+        }
+        return stats;
+      }
+
+      function rollFrom(rng) {
+        const rarity = rollRarity(rng);
+        return {
+          bones: {
+            rarity: rarity,
+            species: pick(rng, SPECIES),
+            eye: pick(rng, EYES),
+            hat: rarity === "common" ? "none" : pick(rng, HATS),
+            shiny: rng() < 0.01,
+            stats: rollStats(rng, rarity)
+          },
+          inspirationSeed: Math.floor(rng() * 1e9)
+        };
+      }
+
+      function rollRaccoon(id) {
+        const rng = mulberry32(hashString(id + SALT));
+        const hats = HATS.filter(function (hat) { return hat !== "none"; });
+        return {
+          bones: {
+            rarity: "legendary",
+            species: SECRET_SPECIES,
+            eye: pick(rng, EYES),
+            hat: pick(rng, hats),
+            shiny: true,
+            stats: rollStats(rng, "legendary")
+          },
+          inspirationSeed: Math.floor(rng() * 1e9),
+          secret: true
+        };
+      }
+
+      function roll(userId) {
+        const id = String(userId || "anon").trim() || "anon";
+        if (id === RACCOON_ID) return rollRaccoon(id);
+        return rollFrom(mulberry32(hashString(id + SALT)));
+      }
+
+      function companionName(payload) {
+        const seed = payload.inspirationSeed;
+        const first = NAME_BITS[seed % NAME_BITS.length];
+        const second = NAME_TAILS[Math.floor(seed / NAME_BITS.length) % NAME_TAILS.length];
+        return first + second;
+      }
+
+      function statTotal(bones) {
+        return STAT_NAMES.reduce(function (sum, name) {
+          return sum + bones.stats[name];
+        }, 0);
+      }
+
+      function companionValue(payload) {
+        const bones = payload.bones;
+        return RARITY_VALUE[bones.rarity] + statTotal(bones) + (bones.shiny ? 777 : 0) + Math.floor(payload.inspirationSeed % 97);
+      }
+
+      function renderSprite(bones, frame) {
+        const frames = BODIES[bones.species] || BODIES.blob;
+        const body = frames[frame % frames.length].map(function (line) {
+          return line.replaceAll("{E}", bones.eye);
+        });
+        const lines = body.slice();
+        if (bones.hat !== "none" && !lines[0].trim()) {
+          lines[0] = HAT_LINES[bones.hat] || "";
+        }
+        if (!lines[0].trim() && frames.every(function (candidate) { return !candidate[0].trim(); })) {
+          lines.shift();
+        }
+        return lines;
+      }
+
+      function renderFace(bones) {
+        const eye = bones.eye;
+        switch (bones.species) {
+          case "duck":
+          case "goose":
+            return "(" + eye + ">";
+          case "blob":
+            return "(" + eye + eye + ")";
+          case "cat":
+            return "=" + eye + "ω" + eye + "=";
+          case "dragon":
+            return "<" + eye + "~" + eye + ">";
+          case "octopus":
+            return "~(" + eye + eye + ")~";
+          case "owl":
+            return "(" + eye + ")(" + eye + ")";
+          case "penguin":
+            return "(" + eye + ">)";
+          case "turtle":
+            return "[" + eye + "_" + eye + "]";
+          case "snail":
+            return eye + "(@)";
+          case "ghost":
+            return "/" + eye + eye + "\\";
+          case "axolotl":
+            return "}" + eye + "." + eye + "{";
+          case "capybara":
+            return "(" + eye + "oo" + eye + ")";
+          case "cactus":
+          case "mushroom":
+            return "|" + eye + "  " + eye + "|";
+          case "robot":
+            return "[" + eye + eye + "]";
+          case "rabbit":
+            return "(" + eye + ".." + eye + ")";
+          case "chonk":
+            return "(" + eye + "." + eye + ")";
+          case "raccoon":
+            return "(" + eye + "=" + eye + ")";
+          default:
+            return "(" + eye + eye + ")";
+        }
+      }
+
+      function topStat(bones) {
+        return STAT_NAMES.slice().sort(function (a, b) {
+          return bones.stats[b] - bones.stats[a];
+        })[0];
+      }
+
+      function renderCompanion(userId) {
+        currentId = String(userId || "anon").trim() || "anon";
+        currentRoll = roll(currentId);
+        const bones = currentRoll.bones;
+        const name = companionName(currentRoll);
+        const top = topStat(bones);
+        const frame = tick % (BODIES[bones.species] || BODIES.blob).length;
+        terminalTitle.textContent = name + " · " + bones.species + " · " + bones.rarity;
+        spriteEl.textContent = renderSprite(bones, frame).join("\n");
+        bubbleEl.textContent = currentRoll.secret
+          ? "I was absolutely not expected. Please ignore the striped tail."
+          : "I rolled highest in " + top.toLowerCase() + ". I will now supervise quietly.";
+
+        factsEl.innerHTML = [
+          { label: "Player ID", value: currentId },
+          { label: "Name", value: name },
+          { label: "Species", value: bones.species },
+          { label: "Rarity", html: "<span class=\"buddy-rarity buddy-rarity-" + bones.rarity + "\">" + RARITY_STARS[bones.rarity] + " " + titleCase(bones.rarity) + "</span>" },
+          { label: "Face", value: renderFace(bones) },
+          { label: "Eye", value: bones.eye },
+          { label: "Hat", value: bones.hat },
+          { label: "Shiny", value: bones.shiny ? "yes" : "no" },
+          { label: "Inspiration seed", value: String(currentRoll.inspirationSeed) },
+          { label: "Companion value", value: String(companionValue(currentRoll)) }
+        ].map(function (row) {
+          return "<div class=\"buddy-fact-row\"><dt>" + escapeHtml(row.label) + "</dt><dd>" + (row.html || escapeHtml(row.value)) + "</dd></div>";
+        }).join("");
+
+        statsEl.innerHTML = STAT_NAMES.map(function (name) {
+          const value = bones.stats[name];
+          return "<div class=\"buddy-stat-row\"><dt>" + escapeHtml(name) + "</dt><dd>" +
+            escapeHtml(value) +
+            "<div class=\"buddy-stat-meter\" aria-hidden=\"true\"><div class=\"buddy-stat-fill\" style=\"width:" + value + "%\"></div></div>" +
+            "</dd></div>";
+        }).join("");
+
+        playerIdEl.textContent = currentId;
+        liveScoreEl.textContent = String(Math.floor(game.score));
+        drawGame();
+      }
+
+      function populateSpeciesControls() {
+        targetSpecies.innerHTML = "<option value=\"\">Any species</option>" +
+          SPECIES.concat([SECRET_SPECIES]).map(function (species) {
+            return "<option value=\"" + escapeHtml(species) + "\">" + escapeHtml(titleCase(species)) + "</option>";
+          }).join("");
+        speciesListEl.innerHTML = SPECIES.map(function (species) {
+          return "<li><code>" + escapeHtml(species) + "</code></li>";
+        }).join("");
+      }
+
+      function sleepFrame() {
+        return new Promise(function (resolve) {
+          if (typeof requestAnimationFrame === "function") {
+            requestAnimationFrame(function () { resolve(); });
+          } else {
+            setTimeout(resolve, 0);
+          }
+        });
+      }
+
+      function matchesTarget(payload, rarity, species) {
+        const bones = payload.bones;
+        return (!rarity || bones.rarity === rarity) && (!species || bones.species === species);
+      }
+
+      async function violentSearch() {
+        const rarity = targetRarity.value;
+        const species = targetSpecies.value;
+        const base = String(idInput.value || "anon").trim() || "anon";
+        const token = searchRun + 1;
+        searchRun = token;
+
+        if (species === SECRET_SPECIES) {
+          if (rarity && rarity !== "legendary") {
+            searchStatus.textContent = "No match: the raccoon is always legendary.";
+            return;
+          }
+          idInput.value = RACCOON_ID;
+          renderCompanion(RACCOON_ID);
+          searchStatus.textContent = "Matched the hidden raccoon ID immediately.";
+          return;
+        }
+
+        searchButton.disabled = true;
+        searchStatus.textContent = "Searching IDs near " + base + "...";
+        const maxTries = 200000;
+        const chunk = 800;
+        let tries = 0;
+        let found = "";
+
+        while (tries < maxTries && searchRun === token && !found) {
+          for (let i = 0; i < chunk && tries < maxTries; i += 1) {
+            const candidate = base + "__buddy_" + tries.toString(36);
+            const payload = roll(candidate);
+            if (matchesTarget(payload, rarity, species)) {
+              found = candidate;
+              break;
+            }
+            tries += 1;
+          }
+          searchStatus.textContent = "Searched " + tries.toLocaleString("en-US") + " IDs...";
+          await sleepFrame();
+        }
+
+        searchButton.disabled = false;
+        if (searchRun !== token) return;
+        if (found) {
+          idInput.value = found;
+          renderCompanion(found);
+          searchStatus.textContent = "Found " + found + " after " + (tries + 1).toLocaleString("en-US") + " tries.";
+        } else {
+          searchStatus.textContent = "No match inside " + maxTries.toLocaleString("en-US") + " tries. Try a looser target.";
+        }
+      }
+
+      function leaderboardKey() {
+        return "code-buddy-runner-scores-v1";
+      }
+
+      function readScores() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(leaderboardKey()) || "[]");
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (_) {
+          return [];
+        }
+      }
+
+      function writeScores(scores) {
+        localStorage.setItem(leaderboardKey(), JSON.stringify(scores.slice(0, 10)));
+      }
+
+      function saveScore(score) {
+        const bones = currentRoll.bones;
+        const scores = readScores();
+        scores.push({
+          id: currentId,
+          score: Math.floor(score),
+          species: bones.species,
+          rarity: bones.rarity,
+          at: new Date().toISOString()
+        });
+        scores.sort(function (a, b) {
+          return Number(b.score) - Number(a.score);
+        });
+        writeScores(scores);
+        renderLeaderboard();
+      }
+
+      function renderLeaderboard() {
+        const rows = readScores();
+        const items = [];
+        for (let i = 0; i < 10; i += 1) {
+          const row = rows[i];
+          if (row) {
+            items.push("<li class=\"buddy-score-row\"><span class=\"buddy-score-rank\">" + (i + 1) + "</span><span class=\"buddy-score-id\" title=\"" + escapeHtml(row.id) + "\">" + escapeHtml(row.id) + " · " + escapeHtml(row.species) + "</span><span class=\"buddy-score-value\">" + escapeHtml(row.score) + "</span></li>");
+          } else {
+            items.push("<li class=\"buddy-score-row\"><span class=\"buddy-score-rank\">" + (i + 1) + "</span><span class=\"buddy-score-id\">empty</span><span class=\"buddy-score-value\">0</span></li>");
+          }
+        }
+        scoreListEl.innerHTML = items.join("");
+      }
+
+      function resetGame() {
+        game.running = true;
+        game.ended = false;
+        game.lastTime = 0;
+        game.y = 0;
+        game.vy = 0;
+        game.score = 0;
+        game.speed = 5;
+        game.spawnTimer = 52;
+        game.obstacles = [];
+        liveScoreEl.textContent = "0";
+      }
+
+      function jump() {
+        if (!game.running) {
+          startGame();
+          return;
+        }
+        if (game.y <= 0.1) {
+          game.vy = 12.5;
+        }
+      }
+
+      function startGame() {
+        renderCompanion(idInput.value);
+        resetGame();
+        startGameButton.textContent = "Restart run";
+        requestAnimationFrame(gameLoop);
+      }
+
+      function collide(a, b) {
+        return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+      }
+
+      function addObstacle() {
+        const kind = Math.random() < 0.5 ? "BUG" : "ERR";
+        game.obstacles.push({
+          x: 790,
+          y: 198,
+          w: kind === "BUG" ? 28 : 34,
+          h: kind === "BUG" ? 30 : 38,
+          kind: kind
+        });
+      }
+
+      function gameLoop(time) {
+        if (!game.running) return;
+        if (!game.lastTime) game.lastTime = time;
+        const dt = Math.min(2.2, (time - game.lastTime) / 16.67);
+        game.lastTime = time;
+
+        game.vy -= 0.74 * dt;
+        game.y += game.vy * dt;
+        if (game.y < 0) {
+          game.y = 0;
+          game.vy = 0;
+        }
+
+        game.score += dt * 0.8;
+        game.speed = 5 + Math.min(5, game.score / 260);
+        game.spawnTimer -= dt;
+        if (game.spawnTimer <= 0) {
+          addObstacle();
+          game.spawnTimer = 56 + Math.random() * 46 - Math.min(20, game.score / 22);
+        }
+        game.obstacles.forEach(function (obstacle) {
+          obstacle.x -= game.speed * dt;
+        });
+        game.obstacles = game.obstacles.filter(function (obstacle) {
+          return obstacle.x + obstacle.w > -20;
+        });
+
+        const player = { x: 70, y: 172 - game.y, w: 58, h: 54 };
+        const hit = game.obstacles.some(function (obstacle) {
+          return collide(player, obstacle);
+        });
+        liveScoreEl.textContent = String(Math.floor(game.score));
+
+        if (hit) {
+          game.running = false;
+          game.ended = true;
+          saveScore(game.score);
+          drawGame();
+          return;
+        }
+
+        drawGame();
+        requestAnimationFrame(gameLoop);
+      }
+
+      function drawBuddyRunner(x, y) {
+        const bones = currentRoll.bones;
+        const lines = renderSprite(bones, Math.floor(tick / 2));
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.fillStyle = bones.rarity === "legendary" ? "#b45309" : bones.rarity === "epic" ? "#a21caf" : bones.rarity === "rare" ? "#2563eb" : bones.rarity === "uncommon" ? "#1f7a4d" : "#475569";
+        ctx.fillRect(0, 0, 62, 54);
+        ctx.fillStyle = "#f8fafc";
+        ctx.font = "9px ui-monospace, Menlo, Consolas, monospace";
+        lines.slice(-4).forEach(function (line, index) {
+          ctx.fillText(line.slice(0, 11), 4, 13 + index * 10);
+        });
+        ctx.restore();
+      }
+
+      function drawGame() {
+        const dark = document.documentElement.getAttribute("data-theme") === "dark";
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = dark ? "#111827" : "#f8fafc";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = dark ? "#1f2937" : "#e2e8f0";
+        ctx.fillRect(0, 222, canvas.width, 3);
+        ctx.fillStyle = dark ? "#94a3b8" : "#475569";
+        ctx.font = "14px ui-monospace, Menlo, Consolas, monospace";
+        ctx.fillText("ID: " + currentId.slice(0, 34), 18, 28);
+        ctx.fillText("Score: " + Math.floor(game.score), 18, 48);
+        ctx.fillText(currentRoll.bones.species + " / " + currentRoll.bones.rarity, 18, 68);
+
+        drawBuddyRunner(70, 172 - game.y);
+
+        game.obstacles.forEach(function (obstacle) {
+          ctx.fillStyle = obstacle.kind === "BUG" ? "#b42342" : "#b45309";
+          ctx.fillRect(obstacle.x, obstacle.y - obstacle.h + 24, obstacle.w, obstacle.h);
+          ctx.fillStyle = "#ffffff";
+          ctx.font = "10px ui-monospace, Menlo, Consolas, monospace";
+          ctx.fillText(obstacle.kind, obstacle.x + 4, obstacle.y + 6);
+        });
+
+        if (!game.running) {
+          ctx.fillStyle = dark ? "rgba(17, 24, 39, 0.78)" : "rgba(248, 250, 252, 0.82)";
+          ctx.fillRect(196, 84, 368, 84);
+          ctx.strokeStyle = dark ? "#475569" : "#cbd5e1";
+          ctx.strokeRect(196, 84, 368, 84);
+          ctx.fillStyle = dark ? "#f8fafc" : "#1f2937";
+          ctx.font = "18px Times New Roman, serif";
+          ctx.fillText(game.ended ? "Run ended. Start again?" : "Press Start, Space, or tap.", 232, 132);
+        }
+      }
+
+      rollButton.addEventListener("click", function () {
+        searchRun += 1;
+        renderCompanion(idInput.value);
+        searchStatus.textContent = "";
+      });
+      idInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          renderCompanion(idInput.value);
+          searchStatus.textContent = "";
+        }
+      });
+      searchButton.addEventListener("click", violentSearch);
+      secretButton.addEventListener("click", function () {
+        searchRun += 1;
+        idInput.value = RACCOON_ID;
+        renderCompanion(RACCOON_ID);
+        searchStatus.textContent = "Secret legendary raccoon unlocked.";
+      });
+      startGameButton.addEventListener("click", startGame);
+      jumpGameButton.addEventListener("click", jump);
+      canvas.addEventListener("pointerdown", function (event) {
+        event.preventDefault();
+        jump();
+      });
+      window.addEventListener("keydown", function (event) {
+        if (event.code === "Space" || event.code === "ArrowUp") {
+          event.preventDefault();
+          jump();
+        }
+      });
+
+      populateSpeciesControls();
+      renderLeaderboard();
+      renderCompanion("anon");
+      drawGame();
+      setInterval(function () {
+        tick += 1;
+        if (!game.running) renderCompanion(currentId);
+      }, 500);
+    })();
+  </script>
+{{ end }}
