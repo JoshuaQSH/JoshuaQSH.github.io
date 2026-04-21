@@ -3,9 +3,9 @@ title: "Coffee Wall"
 date: 2026-04-21
 categories: ["Hodgepodge"]
 tags: ["coffee", "interactive", "data-viz", "collection", "coffee-wall"]
-image: "/images/coffee-brand/Monmouth_Coffee_Company.svg"
-imageAlt: "Monmouth Coffee Company brand mark"
-summary: "An interactive coffee wall with weight-scaled brand nodes, branch trails for each bag, and hover details for roast, grind, and farm notes."
+image: "/images/hodgepodge/Coffee_Wall.png"
+imageAlt: "My blood type is COFFEE"
+summary: "An coffee wall with branch trails for each bag, and hover details for roast, grind, and farm notes."
 layout: "coffee-wall"
 ---
 
