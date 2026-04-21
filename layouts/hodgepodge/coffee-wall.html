@@ -459,9 +459,17 @@
     }
     .coffee-ledger {
       border-top: 1px solid var(--divider-color);
+      padding-top: 24px;
+    }
+    .coffee-ledger-grid {
+      align-items: start;
+      display: grid;
+      gap: 24px;
+      grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+    }
+    .coffee-ledger-main {
       display: grid;
       gap: 16px;
-      padding-top: 24px;
     }
     .coffee-ledger h2 {
       margin: 0;
@@ -498,6 +506,24 @@
       color: var(--text-muted);
       font-size: 0.92rem;
     }
+    .coffee-guide-figure {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+    }
+    .coffee-guide-figure img {
+      background: var(--panel-soft);
+      border: 1px solid var(--divider-color);
+      border-radius: 8px;
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+    .coffee-guide-caption {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
     @keyframes coffeeSheen {
       from { transform: translateX(-12%) translateY(-2%); }
       to { transform: translateX(10%) translateY(3%); }
@@ -524,6 +550,9 @@
       }
       .coffee-detail-panel {
         max-width: none;
+      }
+      .coffee-ledger-grid {
+        grid-template-columns: 1fr;
       }
     }
     @media (max-width: 720px) {
@@ -576,9 +605,18 @@
     </div>
 
     <section class="coffee-ledger" aria-labelledby="coffee-ledger-title">
-      <h2 id="coffee-ledger-title">Shelf Totals</h2>
-      <p class="coffee-ledger-copy">The wall stays data-driven. Add another brand or bag in the coffee ledger and the brand sizing, branch count, totals, and detail panel all update on the next build.</p>
-      <ul class="coffee-ledger-list" id="coffee-ledger-list"></ul>
+      <div class="coffee-ledger-grid">
+        <div class="coffee-ledger-main">
+          <h2 id="coffee-ledger-title">Shelf Totals</h2>
+          <p class="coffee-ledger-copy">The wall stays data-driven. Add another brand or bag in the coffee ledger and the brand sizing, branch count, totals, and detail panel all update on the next build.</p>
+          <ul class="coffee-ledger-list" id="coffee-ledger-list"></ul>
+        </div>
+
+        <figure class="coffee-guide-figure">
+          <img src="{{ "/images/coffee-brand/Coffee_Guide.png" | relURL }}" alt="Coffee guide poster" loading="lazy">
+          <figcaption class="coffee-guide-caption">A quick guide to keep nearby when the next bag lands.</figcaption>
+        </figure>
+      </div>
     </section>
 
     <p class="text-link"><a href="{{ "/hodgepodge/" | relURL }}">Back to Hodgepodge</a></p>
