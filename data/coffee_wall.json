@@ -1,0 +1,130 @@
+{
+  "brands": [
+    {
+      "id": "monmouth",
+      "name": "Monmouth Coffee Company",
+      "location": "London, UK",
+      "image": "/images/coffee-brand/Monmouth_Coffee_Company.svg",
+      "accent": "#4ade80",
+      "variants": [
+        {
+          "id": "fazenda-santa-lucia",
+          "name": "Fazenda Santa Lucia",
+          "farm": "Fazenda Santa Lucia, Brazil",
+          "process": "Pulped Natural Process",
+          "producer": "Helcio Carneiro Pinto",
+          "notes": "",
+          "roast": "Dark",
+          "grind": "Beans",
+          "weightGrams": 250
+        },
+        {
+          "id": "finca-la-bella",
+          "name": "Finca La Bella",
+          "farm": "Finca La Bella, Guatemala",
+          "process": "Traditional Washed Process",
+          "producer": "Xilate S.A.",
+          "notes": "",
+          "roast": "Medium/Dark",
+          "grind": "Beans",
+          "weightGrams": 250
+        },
+        {
+          "id": "monmouth-espresso",
+          "name": "Monmouth Espresso",
+          "farm": "",
+          "process": "",
+          "producer": "",
+          "notes": "",
+          "roast": "Medium/Dark",
+          "grind": "Beans",
+          "weightGrams": 100
+        },
+        {
+          "id": "organic-espresso",
+          "name": "Organic Espresso",
+          "farm": "Non-UK Agriculture",
+          "process": "",
+          "producer": "GB-ORC-04",
+          "notes": "",
+          "roast": "Medium/Dark",
+          "grind": "Beans",
+          "weightGrams": 250
+        }
+      ]
+    },
+    {
+      "id": "roost",
+      "name": "Roost Coffee & Roastery",
+      "location": "Malton, North Yorkshire",
+      "image": "/images/coffee-brand/roost_coffee_malton_north_yorkshire.svg",
+      "accent": "#f97316",
+      "variants": [
+        {
+          "id": "manjarabad-smallholders",
+          "name": "Manjarabad",
+          "farm": "Manjarabad - smallholders",
+          "region": "Sakalespur",
+          "process": "",
+          "producer": "",
+          "notes": "Spice, Wood Smoked & Dark Chocolate",
+          "roast": "Dark",
+          "grind": "Beans",
+          "weightGrams": 1000
+        }
+      ]
+    },
+    {
+      "id": "mancoco",
+      "name": "MANCOCO",
+      "location": "Manchester, UK",
+      "image": "/images/coffee-brand/mancoco.webp",
+      "accent": "#facc15",
+      "variants": [
+        {
+          "id": "espresso-blend",
+          "name": "Espresso Blend",
+          "farm": "Brazil, Sumatra & Ethiopia",
+          "process": "",
+          "producer": "",
+          "notes": "Dark chocolate, treacle & hazelnut",
+          "roast": "Dark",
+          "grind": "Beans",
+          "weightGrams": 250
+        },
+        {
+          "id": "colombia-jairo-arcila",
+          "name": "Colombia Jairo Arcila",
+          "farm": "Colombia Jairo Arcila",
+          "region": "Colombia Jairo Arcila",
+          "process": "Caturra washed",
+          "producer": "",
+          "notes": "Cacao nibs, molasses, tangerine zest",
+          "roast": "Dark",
+          "grind": "Beans",
+          "weightGrams": 250
+        }
+      ]
+    },
+    {
+      "id": "quinn",
+      "name": "Quinn Coffee",
+      "location": "",
+      "image": "/images/coffee-brand/Quinn_Coffee.jpg",
+      "accent": "#60a5fa",
+      "variants": [
+        {
+          "id": "butter-blend",
+          "name": "Butter Blend",
+          "farm": "Colombia, Uganda, Mantenin, Brazil",
+          "process": "",
+          "producer": "",
+          "notes": "Butter white chocolate, nuts, caramel cookies, cream chocolate",
+          "roast": "Dark",
+          "grind": "Beans",
+          "weightGrams": 454
+        }
+      ]
+    }
+  ]
+}

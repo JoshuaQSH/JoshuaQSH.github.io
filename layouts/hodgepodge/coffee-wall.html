@@ -1,0 +1,1108 @@
+{{ define "extra_head" }}
+  <style>
+    .coffee-page {
+      display: grid;
+      gap: 36px;
+    }
+    .coffee-shell {
+      margin-left: calc(50% - 50vw + 16px);
+      margin-right: calc(50% - 50vw + 16px);
+    }
+    .coffee-stage-shell {
+      background:
+        linear-gradient(140deg, rgba(16, 24, 39, 0.97), rgba(17, 34, 33, 0.94) 44%, rgba(43, 24, 22, 0.95)),
+        repeating-linear-gradient(120deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 26px);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 8px;
+      color: #f8fafc;
+      overflow: hidden;
+      position: relative;
+    }
+    .coffee-stage-shell::before {
+      background:
+        linear-gradient(90deg, transparent 0%, rgba(250, 204, 21, 0.08) 35%, transparent 70%),
+        linear-gradient(180deg, rgba(74, 222, 128, 0.08), transparent 70%);
+      content: "";
+      inset: 0;
+      position: absolute;
+      transform: translateX(-12%);
+      animation: coffeeSheen 14s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .coffee-stage-grid {
+      display: grid;
+      gap: 22px 26px;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.72fr);
+      grid-template-areas:
+        "copy detail"
+        "wall detail";
+      padding: clamp(22px, 4vw, 38px);
+      position: relative;
+      z-index: 1;
+    }
+    .coffee-stage-copy {
+      display: grid;
+      gap: 16px;
+      grid-area: copy;
+      align-content: start;
+    }
+    .coffee-kicker {
+      color: rgba(244, 244, 245, 0.7);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+    .coffee-stage-copy h1 {
+      color: #ffffff;
+      font-size: clamp(2.4rem, 5.2vw, 4.3rem);
+      line-height: 0.98;
+      margin: 0;
+      max-width: 10ch;
+    }
+    .coffee-stage-intro {
+      color: rgba(226, 232, 240, 0.88);
+      font-size: 1.05rem;
+      margin: 0;
+      max-width: 62ch;
+    }
+    .coffee-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    .coffee-metric {
+      align-items: baseline;
+      display: grid;
+      gap: 2px;
+    }
+    .coffee-metric-value {
+      color: #f8fafc;
+      font-size: clamp(1.55rem, 3vw, 2.2rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .coffee-metric-label {
+      color: rgba(226, 232, 240, 0.7);
+      font-size: 0.92rem;
+    }
+    .coffee-brand-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .coffee-brand-pill {
+      align-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: #f8fafc;
+      cursor: pointer;
+      display: inline-flex;
+      gap: 10px;
+      min-height: 48px;
+      padding: 8px 12px;
+      transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    }
+    .coffee-brand-pill:hover,
+    .coffee-brand-pill:focus-visible,
+    .coffee-brand-pill.is-active {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.28);
+      outline: none;
+      transform: translateY(-1px);
+    }
+    .coffee-brand-pill-media {
+      align-items: center;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 6px;
+      display: inline-flex;
+      height: 32px;
+      justify-content: center;
+      overflow: hidden;
+      width: 32px;
+    }
+    .coffee-brand-pill-media img {
+      display: block;
+      height: 100%;
+      object-fit: contain;
+      width: 100%;
+    }
+    .coffee-brand-pill-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+    .coffee-brand-pill-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .coffee-brand-pill-value {
+      color: rgba(226, 232, 240, 0.74);
+      font-size: 0.82rem;
+    }
+    .coffee-detail-panel {
+      align-content: start;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      display: grid;
+      gap: 16px;
+      grid-area: detail;
+      min-width: 0;
+      padding: 18px;
+      position: relative;
+      backdrop-filter: blur(16px);
+    }
+    .coffee-detail-panel::after {
+      background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.06));
+      content: "";
+      inset: 0;
+      pointer-events: none;
+      position: absolute;
+    }
+    .coffee-detail-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+    .coffee-detail-media {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 8px;
+      display: inline-flex;
+      height: 74px;
+      justify-content: center;
+      overflow: hidden;
+      padding: 10px;
+      width: 74px;
+    }
+    .coffee-detail-media img {
+      display: block;
+      height: 100%;
+      object-fit: contain;
+      width: 100%;
+    }
+    .coffee-detail-type {
+      color: rgba(244, 244, 245, 0.62);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+    .coffee-detail-title {
+      color: #ffffff;
+      font-size: 1.7rem;
+      line-height: 1.05;
+      margin: 0;
+    }
+    .coffee-detail-subtitle {
+      color: rgba(226, 232, 240, 0.8);
+      margin: 0;
+    }
+    .coffee-detail-note {
+      color: #f8fafc;
+      margin: 0;
+      min-height: 3.4rem;
+    }
+    .coffee-detail-meta {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+    }
+    .coffee-detail-row {
+      align-items: baseline;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      padding-top: 10px;
+    }
+    .coffee-detail-row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .coffee-detail-row dt {
+      color: rgba(226, 232, 240, 0.68);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .coffee-detail-row dd {
+      color: #f8fafc;
+      font-weight: 700;
+      margin: 0;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
+    .coffee-detail-extras {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .coffee-detail-chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      color: rgba(248, 250, 252, 0.92);
+      font-size: 0.84rem;
+      padding: 6px 10px;
+    }
+    .coffee-detail-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+    .coffee-detail-list-item {
+      align-items: baseline;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      font-size: 0.93rem;
+      gap: 10px;
+      justify-content: space-between;
+      list-style: none;
+      padding-top: 10px;
+    }
+    .coffee-detail-list-item:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .coffee-detail-list-name {
+      color: #f8fafc;
+      font-weight: 700;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .coffee-detail-list-value {
+      color: rgba(226, 232, 240, 0.74);
+      flex: 0 0 auto;
+    }
+    .coffee-wall-viewport {
+      grid-area: wall;
+      min-height: 720px;
+      position: relative;
+    }
+    .coffee-wall-viewport::before {
+      background:
+        radial-gradient(circle at center, rgba(250, 204, 21, 0.14) 0, rgba(250, 204, 21, 0) 58%),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 100%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 100%);
+      background-size: auto, 84px 84px, 84px 84px;
+      content: "";
+      inset: 0;
+      opacity: 0.55;
+      position: absolute;
+      pointer-events: none;
+    }
+    .coffee-wall-lines,
+    .coffee-node-layer {
+      inset: 0;
+      position: absolute;
+    }
+    .coffee-wall-lines {
+      height: 100%;
+      overflow: visible;
+      width: 100%;
+    }
+    .coffee-brand-node,
+    .coffee-variant-node {
+      cursor: pointer;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      transition: transform 0.24s ease, filter 0.24s ease;
+      will-change: transform;
+    }
+    .coffee-brand-node {
+      align-items: center;
+      background: transparent;
+      border: 0;
+      color: #ffffff;
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      max-width: 210px;
+      padding: 0;
+      text-align: center;
+    }
+    .coffee-brand-node:hover,
+    .coffee-brand-node:focus-visible,
+    .coffee-brand-node.is-active {
+      filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.32));
+      outline: none;
+      transform: translate(-50%, -50%) scale(1.04);
+    }
+    .coffee-brand-disc {
+      align-items: center;
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      box-shadow: 0 20px 34px rgba(0, 0, 0, 0.24);
+      display: inline-flex;
+      height: var(--node-size);
+      justify-content: center;
+      overflow: hidden;
+      padding: 16px;
+      position: relative;
+      width: var(--node-size);
+      animation: coffeeFloat 7.8s ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+    .coffee-brand-disc::before {
+      border: 1px solid color-mix(in srgb, var(--accent) 72%, white);
+      border-radius: inherit;
+      content: "";
+      inset: -8px;
+      opacity: 0.72;
+      position: absolute;
+    }
+    .coffee-brand-disc img {
+      display: block;
+      height: 100%;
+      object-fit: contain;
+      width: 100%;
+    }
+    .coffee-brand-disc.is-fallback {
+      background: rgba(30, 41, 59, 0.9);
+      color: #ffffff;
+      font-size: clamp(1.1rem, 2vw, 1.6rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .coffee-brand-label {
+      display: grid;
+      gap: 4px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+    .coffee-brand-name {
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.12;
+    }
+    .coffee-brand-total {
+      color: rgba(226, 232, 240, 0.78);
+      font-size: 0.84rem;
+    }
+    .coffee-variant-node {
+      align-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      color: #f8fafc;
+      display: inline-flex;
+      gap: 8px;
+      max-width: 220px;
+      min-height: 42px;
+      padding: 10px 14px 10px 11px;
+      text-align: left;
+      animation: coffeeFloatSmall 9.6s ease-in-out infinite;
+      animation-delay: var(--delay);
+      backdrop-filter: blur(12px);
+    }
+    .coffee-variant-node::before {
+      background: var(--accent);
+      border-radius: 999px;
+      content: "";
+      flex: 0 0 var(--variant-dot);
+      height: var(--variant-dot);
+      width: var(--variant-dot);
+    }
+    .coffee-variant-node:hover,
+    .coffee-variant-node:focus-visible,
+    .coffee-variant-node.is-active {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: color-mix(in srgb, var(--accent) 70%, white);
+      outline: none;
+      transform: translate(-50%, -50%) scale(1.03);
+    }
+    .coffee-variant-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+    .coffee-variant-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .coffee-variant-meta {
+      color: rgba(226, 232, 240, 0.72);
+      font-size: 0.78rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .coffee-branch-path {
+      fill: none;
+      opacity: 0.42;
+      stroke: rgba(226, 232, 240, 0.46);
+      stroke-dasharray: 8 12;
+      stroke-linecap: round;
+      stroke-width: 2;
+      animation: coffeeFlow 18s linear infinite;
+    }
+    .coffee-branch-path.is-active {
+      opacity: 0.95;
+      stroke: var(--accent);
+      stroke-width: 3;
+    }
+    .coffee-copy {
+      max-width: 72ch;
+    }
+    .coffee-ledger {
+      border-top: 1px solid var(--divider-color);
+      display: grid;
+      gap: 16px;
+      padding-top: 24px;
+    }
+    .coffee-ledger h2 {
+      margin: 0;
+    }
+    .coffee-ledger-copy {
+      color: var(--text-muted);
+      margin: 0;
+      max-width: 70ch;
+    }
+    .coffee-ledger-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+    .coffee-ledger-item {
+      align-items: center;
+      border-top: 1px solid rgba(128, 128, 128, 0.16);
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      list-style: none;
+      padding-top: 10px;
+    }
+    .coffee-ledger-item:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .coffee-ledger-brand {
+      color: var(--text-strong);
+      font-weight: 700;
+    }
+    .coffee-ledger-value {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    @keyframes coffeeSheen {
+      from { transform: translateX(-12%) translateY(-2%); }
+      to { transform: translateX(10%) translateY(3%); }
+    }
+    @keyframes coffeeFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes coffeeFloatSmall {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes coffeeFlow {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -120; }
+    }
+    @media (max-width: 920px) {
+      .coffee-stage-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "copy"
+          "detail"
+          "wall";
+      }
+      .coffee-detail-panel {
+        max-width: none;
+      }
+    }
+    @media (max-width: 720px) {
+      .coffee-shell {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .coffee-stage-shell {
+        border-radius: 8px;
+      }
+      .coffee-stage-grid {
+        padding: 18px;
+      }
+      .coffee-metrics {
+        gap: 12px 18px;
+      }
+      .coffee-wall-viewport {
+        min-height: 860px;
+      }
+      .coffee-variant-node {
+        max-width: 180px;
+      }
+    }
+  </style>
+{{ end }}
+
+{{ define "main" }}
+  <article class="post coffee-page">
+    <section class="coffee-shell coffee-stage-shell" aria-labelledby="coffee-wall-title">
+      <div class="coffee-stage-grid">
+        <div class="coffee-stage-copy">
+          <p class="coffee-kicker">Hodgepodge · Coffee archive</p>
+          <h1 id="coffee-wall-title">{{ .Title }}</h1>
+          <p class="coffee-stage-intro">Brand nodes swell with the total bean weight on the shelf. Trace the branches out to each bag, then hover or tap to bring the farm, notes, roast, grind, and dose into focus.</p>
+          <div class="coffee-metrics" id="coffee-metrics"></div>
+          <div class="coffee-brand-strip" id="coffee-brand-strip" aria-label="Coffee brands"></div>
+        </div>
+
+        <aside class="coffee-detail-panel" id="coffee-detail-panel" aria-live="polite"></aside>
+
+        <div class="coffee-wall-viewport" id="coffee-wall-viewport">
+          <svg class="coffee-wall-lines" id="coffee-wall-lines" aria-hidden="true"></svg>
+          <div class="coffee-node-layer" id="coffee-node-layer"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="content coffee-copy">
+      {{ .Content }}
+    </div>
+
+    <section class="coffee-ledger" aria-labelledby="coffee-ledger-title">
+      <h2 id="coffee-ledger-title">Shelf Totals</h2>
+      <p class="coffee-ledger-copy">The wall stays data-driven. Add another brand or bag in the coffee ledger and the brand sizing, branch count, totals, and detail panel all update on the next build.</p>
+      <ul class="coffee-ledger-list" id="coffee-ledger-list"></ul>
+    </section>
+
+    <p class="text-link"><a href="{{ "/hodgepodge/" | relURL }}">Back to Hodgepodge</a></p>
+  </article>
+
+  <script type="application/json" id="coffee-wall-data">{{ readFile "data/coffee_wall.json" | safeHTML }}</script>
+{{ end }}
+
+{{ define "extra_scripts" }}
+  <script>
+    (function () {
+      const rawData = JSON.parse(document.getElementById("coffee-wall-data").textContent);
+      const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+      const accentFallback = ["#4ade80", "#f97316", "#facc15", "#60a5fa", "#fb7185", "#2dd4bf"];
+
+      const metricsEl = document.getElementById("coffee-metrics");
+      const brandStripEl = document.getElementById("coffee-brand-strip");
+      const detailPanelEl = document.getElementById("coffee-detail-panel");
+      const ledgerListEl = document.getElementById("coffee-ledger-list");
+      const viewportEl = document.getElementById("coffee-wall-viewport");
+      const linesEl = document.getElementById("coffee-wall-lines");
+      const nodeLayerEl = document.getElementById("coffee-node-layer");
+
+      const state = {
+        brands: normalizeBrands(data.brands || []),
+        activeKey: "",
+        lineLinks: []
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function initials(value) {
+        return String(value || "")
+          .split(/\s+/)
+          .filter(Boolean)
+          .slice(0, 2)
+          .map(function (part) { return part.slice(0, 1).toUpperCase(); })
+          .join("");
+      }
+
+      function formatWeight(weight) {
+        const grams = Number(weight) || 0;
+        if (grams >= 1000) {
+          const kilos = grams / 1000;
+          return (Number.isInteger(kilos) ? kilos.toString() : kilos.toFixed(2).replace(/0+$/, "").replace(/\.$/, "")) + "kg";
+        }
+        return grams + "g";
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function scale(value, minValue, maxValue, minOutput, maxOutput) {
+        if (maxValue <= minValue) return (minOutput + maxOutput) / 2;
+        return minOutput + ((value - minValue) / (maxValue - minValue)) * (maxOutput - minOutput);
+      }
+
+      function normalizeBrands(brands) {
+        return brands.map(function (brand, brandIndex) {
+          const variants = (brand.variants || []).map(function (variant, variantIndex) {
+            const key = "variant:" + brand.id + ":" + (variant.id || variantIndex);
+            return {
+              id: variant.id || "variant-" + variantIndex,
+              key: key,
+              brandId: brand.id,
+              brandName: brand.name,
+              name: variant.name || "Unnamed roast",
+              farm: variant.farm || "",
+              region: variant.region || "",
+              process: variant.process || "",
+              producer: variant.producer || "",
+              notes: variant.notes || "",
+              roast: variant.roast || variant["roastLevel"] || "",
+              grind: variant.grind || "",
+              weightGrams: Number(variant.weightGrams) || 0,
+              weightLabel: formatWeight(variant.weightGrams),
+              node: null
+            };
+          });
+
+          const totalWeight = variants.reduce(function (sum, variant) {
+            return sum + variant.weightGrams;
+          }, 0);
+          const uniqueRoasts = Array.from(new Set(variants.map(function (variant) { return variant.roast; }).filter(Boolean)));
+          const uniqueGrinds = Array.from(new Set(variants.map(function (variant) { return variant.grind; }).filter(Boolean)));
+          const notesPreview = variants
+            .map(function (variant) { return variant.notes; })
+            .filter(Boolean)
+            .slice(0, 2)
+            .join(" • ");
+
+          return {
+            id: brand.id || "brand-" + brandIndex,
+            key: "brand:" + (brand.id || brandIndex),
+            name: brand.name || "Unnamed brand",
+            location: brand.location || "",
+            image: brand.image || "",
+            accent: brand.accent || accentFallback[brandIndex % accentFallback.length],
+            initials: initials(brand.name),
+            totalWeight: totalWeight,
+            totalWeightLabel: formatWeight(totalWeight),
+            variantCount: variants.length,
+            roastSummary: uniqueRoasts.join(" • ") || "Roast not logged",
+            grindSummary: uniqueGrinds.join(" • ") || "Grind not logged",
+            notesPreview: notesPreview || "No tasting notes logged yet.",
+            variants: variants,
+            node: null
+          };
+        }).sort(function (a, b) {
+          return b.totalWeight - a.totalWeight || a.name.localeCompare(b.name);
+        });
+      }
+
+      function renderHeroMeta() {
+        const bagCount = state.brands.reduce(function (sum, brand) { return sum + brand.variantCount; }, 0);
+        const totalWeight = state.brands.reduce(function (sum, brand) { return sum + brand.totalWeight; }, 0);
+        const roastCount = state.brands.reduce(function (sum, brand) {
+          return sum + brand.variants.filter(function (variant) {
+            return (variant.roast || "").toLowerCase().indexOf("dark") !== -1;
+          }).length;
+        }, 0);
+
+        metricsEl.innerHTML = [
+          { value: String(state.brands.length), label: "Brands logged" },
+          { value: String(bagCount), label: "Bags mapped" },
+          { value: formatWeight(totalWeight), label: roastCount + " dark-leaning roasts" }
+        ].map(function (metric) {
+          return "<div class=\"coffee-metric\"><span class=\"coffee-metric-value\">" + escapeHtml(metric.value) + "</span><span class=\"coffee-metric-label\">" + escapeHtml(metric.label) + "</span></div>";
+        }).join("");
+
+        brandStripEl.replaceChildren();
+
+        state.brands.forEach(function (brand) {
+          const button = document.createElement("button");
+          button.className = "coffee-brand-pill";
+          button.type = "button";
+          button.dataset.target = brand.key;
+
+          const media = document.createElement("span");
+          media.className = "coffee-brand-pill-media";
+
+          if (brand.image) {
+            const img = document.createElement("img");
+            img.alt = brand.name + " logo";
+            img.loading = "lazy";
+            img.src = brand.image;
+            media.appendChild(img);
+          } else {
+            const fallback = document.createElement("span");
+            fallback.textContent = brand.initials;
+            media.appendChild(fallback);
+          }
+
+          const copy = document.createElement("span");
+          copy.className = "coffee-brand-pill-copy";
+
+          const name = document.createElement("span");
+          name.className = "coffee-brand-pill-name";
+          name.textContent = brand.name;
+
+          const value = document.createElement("span");
+          value.className = "coffee-brand-pill-value";
+          value.textContent = brand.totalWeightLabel + " total";
+
+          copy.appendChild(name);
+          copy.appendChild(value);
+          button.appendChild(media);
+          button.appendChild(copy);
+          brandStripEl.appendChild(button);
+        });
+
+        brandStripEl.querySelectorAll(".coffee-brand-pill").forEach(function (button) {
+          button.addEventListener("pointerenter", function () {
+            setActive(button.getAttribute("data-target"));
+          });
+          button.addEventListener("focus", function () {
+            setActive(button.getAttribute("data-target"));
+          });
+          button.addEventListener("click", function () {
+            setActive(button.getAttribute("data-target"));
+          });
+        });
+
+        ledgerListEl.innerHTML = state.brands.map(function (brand) {
+          return "<li class=\"coffee-ledger-item\"><span class=\"coffee-ledger-brand\">" + escapeHtml(brand.name) + "</span><span class=\"coffee-ledger-value\">" + escapeHtml(brand.totalWeightLabel) + " · " + escapeHtml(String(brand.variantCount)) + " bags</span></li>";
+        }).join("");
+      }
+
+      function makeBrandNode(brand, index) {
+        const button = document.createElement("button");
+        button.className = "coffee-brand-node";
+        button.type = "button";
+        button.dataset.key = brand.key;
+        button.style.setProperty("--accent", brand.accent);
+        button.style.setProperty("--delay", (index * -1.15).toFixed(2) + "s");
+
+        const disc = document.createElement("span");
+        disc.className = "coffee-brand-disc";
+
+        if (brand.image) {
+          const img = document.createElement("img");
+          img.alt = brand.name + " logo";
+          img.src = brand.image;
+          img.addEventListener("error", function () {
+            disc.classList.add("is-fallback");
+            disc.textContent = brand.initials;
+          });
+          disc.appendChild(img);
+        } else {
+          disc.classList.add("is-fallback");
+          disc.textContent = brand.initials;
+        }
+
+        const label = document.createElement("span");
+        label.className = "coffee-brand-label";
+        label.innerHTML = "<span class=\"coffee-brand-name\">" + escapeHtml(brand.name) + "</span><span class=\"coffee-brand-total\">" + escapeHtml(brand.totalWeightLabel) + " total</span>";
+
+        button.appendChild(disc);
+        button.appendChild(label);
+
+        ["pointerenter", "focus", "click"].forEach(function (eventName) {
+          button.addEventListener(eventName, function () {
+            setActive(brand.key);
+          });
+        });
+
+        brand.node = button;
+        nodeLayerEl.appendChild(button);
+      }
+
+      function makeVariantNode(brand, variant, brandIndex, variantIndex) {
+        const button = document.createElement("button");
+        button.className = "coffee-variant-node";
+        button.type = "button";
+        button.dataset.key = variant.key;
+        button.style.setProperty("--accent", brand.accent);
+        button.style.setProperty("--delay", (-0.65 * (brandIndex + variantIndex + 1)).toFixed(2) + "s");
+
+        const dotSize = scale(variant.weightGrams, 100, 1000, 8, 16);
+        button.style.setProperty("--variant-dot", dotSize.toFixed(1) + "px");
+
+        const copy = document.createElement("span");
+        copy.className = "coffee-variant-copy";
+        copy.innerHTML = "<span class=\"coffee-variant-name\">" + escapeHtml(variant.name) + "</span><span class=\"coffee-variant-meta\">" + escapeHtml(variant.weightLabel + " · " + (variant.roast || "Roast not logged")) + "</span>";
+        button.appendChild(copy);
+
+        ["pointerenter", "focus", "click"].forEach(function (eventName) {
+          button.addEventListener(eventName, function () {
+            setActive(variant.key);
+          });
+        });
+
+        variant.node = button;
+        nodeLayerEl.appendChild(button);
+      }
+
+      function buildNodeLayer() {
+        nodeLayerEl.innerHTML = "";
+        state.lineLinks = [];
+
+        state.brands.forEach(function (brand, brandIndex) {
+          makeBrandNode(brand, brandIndex);
+          brand.variants.forEach(function (variant, variantIndex) {
+            makeVariantNode(brand, variant, brandIndex, variantIndex);
+            state.lineLinks.push({ brand: brand, variant: variant });
+          });
+        });
+      }
+
+      function renderDetail(targetKey) {
+        const brand = state.brands.find(function (candidate) {
+          return candidate.key === targetKey || candidate.variants.some(function (variant) { return variant.key === targetKey; });
+        });
+        if (!brand) return;
+
+        const variant = brand.variants.find(function (candidate) { return candidate.key === targetKey; }) || null;
+        const typeLabel = variant ? "Variant detail" : "Brand overview";
+        const title = variant ? variant.name : brand.name;
+        const subtitle = variant ? brand.name + (brand.location ? " · " + brand.location : "") : (brand.location || brand.roastSummary);
+        const note = variant
+          ? (variant.notes || "No tasting note recorded yet.")
+          : (brand.notesPreview || "No tasting note recorded yet.");
+
+        const rows = variant ? [
+          { label: "Farm", value: variant.farm || "Not logged yet" },
+          { label: "Notes", value: note },
+          { label: "Roast", value: variant.roast || "Not logged yet" },
+          { label: "Grind", value: variant.grind || "Not logged yet" },
+          { label: "Weight", value: variant.weightLabel }
+        ] : [
+          { label: "Total weight", value: brand.totalWeightLabel },
+          { label: "Notes", value: note },
+          { label: "Roast spread", value: brand.roastSummary },
+          { label: "Grind", value: brand.grindSummary },
+          { label: "Bags", value: String(brand.variantCount) }
+        ];
+
+        const extras = variant ? [
+          variant.process ? "Process: " + variant.process : "",
+          variant.producer ? "Producer: " + variant.producer : "",
+          variant.region ? "Region: " + variant.region : ""
+        ].filter(Boolean) : brand.variants.map(function (item) {
+          return item.name + " · " + item.weightLabel;
+        });
+
+        detailPanelEl.replaceChildren();
+
+        if (brand.image) {
+          const media = document.createElement("div");
+          media.className = "coffee-detail-media";
+
+          const img = document.createElement("img");
+          img.alt = brand.name + " logo";
+          img.loading = "lazy";
+          img.src = brand.image;
+
+          media.appendChild(img);
+          detailPanelEl.appendChild(media);
+        }
+
+        const typeEl = document.createElement("p");
+        typeEl.className = "coffee-detail-type";
+        typeEl.textContent = typeLabel;
+        detailPanelEl.appendChild(typeEl);
+
+        const titleEl = document.createElement("h2");
+        titleEl.className = "coffee-detail-title";
+        titleEl.textContent = title;
+        detailPanelEl.appendChild(titleEl);
+
+        const subtitleEl = document.createElement("p");
+        subtitleEl.className = "coffee-detail-subtitle";
+        subtitleEl.textContent = subtitle;
+        detailPanelEl.appendChild(subtitleEl);
+
+        const noteEl = document.createElement("p");
+        noteEl.className = "coffee-detail-note";
+        noteEl.textContent = note;
+        detailPanelEl.appendChild(noteEl);
+
+        const meta = document.createElement("dl");
+        meta.className = "coffee-detail-meta";
+        rows.forEach(function (row) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "coffee-detail-row";
+
+          const label = document.createElement("dt");
+          label.textContent = row.label;
+
+          const value = document.createElement("dd");
+          value.textContent = row.value;
+
+          wrapper.appendChild(label);
+          wrapper.appendChild(value);
+          meta.appendChild(wrapper);
+        });
+        detailPanelEl.appendChild(meta);
+
+        if (variant) {
+          const extrasWrap = document.createElement("div");
+          extrasWrap.className = "coffee-detail-extras";
+          extras.forEach(function (extra) {
+            const chip = document.createElement("span");
+            chip.className = "coffee-detail-chip";
+            chip.textContent = extra;
+            extrasWrap.appendChild(chip);
+          });
+          detailPanelEl.appendChild(extrasWrap);
+          return;
+        }
+
+        const list = document.createElement("ul");
+        list.className = "coffee-detail-list";
+        extras.forEach(function (extra) {
+          const parts = extra.split(" · ");
+          const item = document.createElement("li");
+          item.className = "coffee-detail-list-item";
+
+          const name = document.createElement("span");
+          name.className = "coffee-detail-list-name";
+          name.textContent = parts[0];
+
+          const value = document.createElement("span");
+          value.className = "coffee-detail-list-value";
+          value.textContent = parts.slice(1).join(" · ");
+
+          item.appendChild(name);
+          item.appendChild(value);
+          list.appendChild(item);
+        });
+        detailPanelEl.appendChild(list);
+      }
+
+      function setActive(targetKey) {
+        state.activeKey = targetKey;
+
+        state.brands.forEach(function (brand) {
+          if (brand.node) {
+            brand.node.classList.toggle("is-active", brand.key === targetKey || brand.variants.some(function (variant) { return variant.key === targetKey; }));
+          }
+          brand.variants.forEach(function (variant) {
+            if (variant.node) {
+              variant.node.classList.toggle("is-active", variant.key === targetKey);
+            }
+          });
+        });
+
+        brandStripEl.querySelectorAll(".coffee-brand-pill").forEach(function (button) {
+          const buttonKey = button.getAttribute("data-target");
+          button.classList.toggle("is-active", buttonKey === targetKey);
+        });
+
+        renderLines();
+        renderDetail(targetKey);
+      }
+
+      function renderLines() {
+        const width = viewportEl.clientWidth;
+        const height = viewportEl.clientHeight;
+        linesEl.setAttribute("viewBox", "0 0 " + width + " " + height);
+
+        linesEl.innerHTML = state.lineLinks.map(function (link) {
+          const brandBox = link.brand.node.getBoundingClientRect();
+          const variantBox = link.variant.node.getBoundingClientRect();
+          const viewportBox = viewportEl.getBoundingClientRect();
+
+          const brandX = brandBox.left - viewportBox.left + brandBox.width / 2;
+          const brandY = brandBox.top - viewportBox.top + brandBox.height / 2;
+          const variantX = variantBox.left - viewportBox.left + variantBox.width / 2;
+          const variantY = variantBox.top - viewportBox.top + variantBox.height / 2;
+
+          const angle = Math.atan2(brandY - height / 2, brandX - width / 2);
+          const controlDistance = 52;
+          const controlX = brandX + Math.cos(angle) * controlDistance;
+          const controlY = brandY + Math.sin(angle) * controlDistance;
+          const isActive = state.activeKey === link.variant.key || state.activeKey === link.brand.key;
+
+          return "<path class=\"coffee-branch-path" + (isActive ? " is-active" : "") + "\" style=\"--accent:" + escapeHtml(link.brand.accent) + "\" d=\"M " + brandX.toFixed(1) + " " + brandY.toFixed(1) + " Q " + controlX.toFixed(1) + " " + controlY.toFixed(1) + " " + variantX.toFixed(1) + " " + variantY.toFixed(1) + "\"></path>";
+        }).join("");
+      }
+
+      function positionNode(node, x, y) {
+        node.style.left = x.toFixed(1) + "px";
+        node.style.top = y.toFixed(1) + "px";
+      }
+
+      function layoutWall() {
+        const width = viewportEl.clientWidth;
+        const mobile = width < 720;
+        const height = mobile ? 880 : 720;
+        viewportEl.style.height = height + "px";
+        nodeLayerEl.style.height = height + "px";
+
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const weights = state.brands.map(function (brand) { return brand.totalWeight; });
+        const minWeight = Math.min.apply(Math, weights);
+        const maxWeight = Math.max.apply(Math, weights);
+        const radiusX = width * (mobile ? 0.26 : 0.33);
+        const radiusY = height * (mobile ? 0.32 : 0.25);
+        const startAngle = -Math.PI * 0.72;
+
+        state.brands.forEach(function (brand, brandIndex) {
+          const size = scale(brand.totalWeight, minWeight, maxWeight, mobile ? 116 : 126, mobile ? 148 : 168);
+          brand.node.style.setProperty("--node-size", size.toFixed(1) + "px");
+
+          const angle = startAngle + brandIndex * ((Math.PI * 2) / state.brands.length);
+          const x = centerX + Math.cos(angle) * radiusX;
+          const y = centerY + Math.sin(angle) * radiusY;
+
+          brand.layout = {
+            x: x,
+            y: y,
+            radius: size / 2,
+            angle: angle
+          };
+
+          positionNode(brand.node, x, y);
+
+          const outwardAngle = Math.atan2(y - centerY, x - centerX);
+          const variantCount = brand.variants.length;
+          const spread = variantCount === 1 ? 0 : Math.min(1.9, 0.78 + variantCount * 0.22);
+
+          brand.variants.forEach(function (variant, variantIndex) {
+            const theta = variantCount === 1
+              ? outwardAngle
+              : outwardAngle - spread / 2 + (spread * variantIndex) / (variantCount - 1);
+            const orbit = brand.layout.radius + (mobile ? 92 : 102) + (variantIndex % 2 === 0 ? 0 : 16);
+
+            const approxX = x + Math.cos(theta) * orbit;
+            const approxY = y + Math.sin(theta) * orbit;
+            const nodeWidth = variant.node.offsetWidth;
+            const nodeHeight = variant.node.offsetHeight;
+            const clampedX = clamp(approxX, nodeWidth / 2 + 18, width - nodeWidth / 2 - 18);
+            const clampedY = clamp(approxY, nodeHeight / 2 + 24, height - nodeHeight / 2 - 24);
+
+            positionNode(variant.node, clampedX, clampedY);
+          });
+        });
+
+        renderLines();
+      }
+
+      buildNodeLayer();
+      renderHeroMeta();
+      layoutWall();
+      setActive(state.brands[0].key);
+
+      if (typeof ResizeObserver === "function") {
+        const resizeObserver = new ResizeObserver(function () {
+          layoutWall();
+        });
+        resizeObserver.observe(viewportEl);
+      } else {
+        window.addEventListener("resize", layoutWall);
+      }
+    })();
+  </script>
+{{ end }}
