@@ -17,7 +17,7 @@
           "roast": "Dark",
           "grind": "Beans",
           "weightGrams": 250,
-          "consumedBags": 0
+          "consumedBags": 1
         },
         {
           "id": "finca-la-bella",
@@ -29,7 +29,7 @@
           "roast": "Medium/Dark",
           "grind": "Beans",
           "weightGrams": 250,
-          "consumedBags": 0
+          "consumedBags": 1
         },
         {
           "id": "monmouth-espresso",
@@ -41,7 +41,7 @@
           "roast": "Medium/Dark",
           "grind": "Beans",
           "weightGrams": 100,
-          "consumedBags": 0
+          "consumedBags": 1
         },
         {
           "id": "organic-espresso",
@@ -53,7 +53,7 @@
           "roast": "Medium/Dark",
           "grind": "Beans",
           "weightGrams": 250,
-          "consumedBags": 0
+          "consumedBags": 1
         }
       ]
     },
@@ -75,7 +75,7 @@
           "roast": "Dark",
           "grind": "Beans",
           "weightGrams": 1000,
-          "consumedBags": 0
+          "consumedBags": 1
         }
       ]
     },
@@ -96,7 +96,7 @@
           "roast": "Dark",
           "grind": "Beans",
           "weightGrams": 250,
-          "consumedBags": 0
+          "consumedBags": 1
         },
         {
           "id": "colombia-jairo-arcila",
@@ -109,7 +109,7 @@
           "roast": "Dark",
           "grind": "Beans",
           "weightGrams": 250,
-          "consumedBags": 0
+          "consumedBags": 1
         }
       ]
     },
@@ -130,7 +130,7 @@
           "roast": "Dark",
           "grind": "Beans",
           "weightGrams": 454,
-          "consumedBags": 0
+          "consumedBags": 4
         }
       ]
     }
