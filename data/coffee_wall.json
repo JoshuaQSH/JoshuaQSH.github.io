@@ -16,7 +16,8 @@
           "notes": "",
           "roast": "Dark",
           "grind": "Beans",
-          "weightGrams": 250
+          "weightGrams": 250,
+          "consumedBags": 0
         },
         {
           "id": "finca-la-bella",
@@ -27,7 +28,8 @@
           "notes": "",
           "roast": "Medium/Dark",
           "grind": "Beans",
-          "weightGrams": 250
+          "weightGrams": 250,
+          "consumedBags": 0
         },
         {
           "id": "monmouth-espresso",
@@ -38,7 +40,8 @@
           "notes": "",
           "roast": "Medium/Dark",
           "grind": "Beans",
-          "weightGrams": 100
+          "weightGrams": 100,
+          "consumedBags": 0
         },
         {
           "id": "organic-espresso",
@@ -49,7 +52,8 @@
           "notes": "",
           "roast": "Medium/Dark",
           "grind": "Beans",
-          "weightGrams": 250
+          "weightGrams": 250,
+          "consumedBags": 0
         }
       ]
     },
@@ -70,7 +74,8 @@
           "notes": "Spice, Wood Smoked & Dark Chocolate",
           "roast": "Dark",
           "grind": "Beans",
-          "weightGrams": 1000
+          "weightGrams": 1000,
+          "consumedBags": 0
         }
       ]
     },
@@ -90,7 +95,8 @@
           "notes": "Dark chocolate, treacle & hazelnut",
           "roast": "Dark",
           "grind": "Beans",
-          "weightGrams": 250
+          "weightGrams": 250,
+          "consumedBags": 0
         },
         {
           "id": "colombia-jairo-arcila",
@@ -102,7 +108,8 @@
           "notes": "Cacao nibs, molasses, tangerine zest",
           "roast": "Dark",
           "grind": "Beans",
-          "weightGrams": 250
+          "weightGrams": 250,
+          "consumedBags": 0
         }
       ]
     },
@@ -122,7 +129,8 @@
           "notes": "Butter white chocolate, nuts, caramel cookies, cream chocolate",
           "roast": "Dark",
           "grind": "Beans",
-          "weightGrams": 454
+          "weightGrams": 454,
+          "consumedBags": 0
         }
       ]
     }

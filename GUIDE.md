@@ -275,6 +275,182 @@ summary: "A live crawler that turns Traditional Chinese web novels into download
 - Add a clear `imageAlt`
 - Add a short `summary`, because it is shown in the Hodgepodge card
 
+## Coffee Wall Guide
+
+The coffee wall is driven by one content file, one data file, and the brand image folder:
+
+- page content and cover: `content/hodgepodge/coffee-wall.md`
+- coffee data: `data/coffee_wall.json`
+- page layout and interactions: `layouts/hodgepodge/coffee-wall.html`
+- brand logos: `static/images/coffee-brand/`
+
+### What each file controls
+
+- `content/hodgepodge/coffee-wall.md`
+  - title
+  - Hodgepodge card summary
+  - cover image
+  - intro copy on the page
+- `data/coffee_wall.json`
+  - brands
+  - coffee variants
+  - farm / notes / roast / grind / weight
+  - how many bags of that coffee you have already finished
+- `layouts/hodgepodge/coffee-wall.html`
+  - node layout
+  - hover panel
+  - styling
+  - metrics shown on the page
+
+### Edit the page text or cover
+
+Open:
+
+```text
+content/hodgepodge/coffee-wall.md
+```
+
+The front matter controls the title, summary, and cover:
+
+```yaml
+---
+title: "Coffee Wall"
+image: "/images/hodgepodge/Coffee_Wall.png"
+imageAlt: "My blood type is COFFEE"
+summary: "An coffee wall with branch trails for each bag, and hover details for roast, grind, and farm notes."
+layout: "coffee-wall"
+---
+```
+
+The Markdown body below the front matter controls the intro paragraphs on the page.
+
+### Add a new coffee brand
+
+1. Upload the brand image into:
+
+```text
+static/images/coffee-brand/
+```
+
+2. Open:
+
+```text
+data/coffee_wall.json
+```
+
+3. Add a new object inside the top-level `brands` array.
+
+Example:
+
+```json
+{
+  "id": "sample-roaster",
+  "name": "Sample Roaster",
+  "location": "York, UK",
+  "image": "/images/coffee-brand/sample-roaster.png",
+  "accent": "#ef4444",
+  "variants": [
+    {
+      "id": "house-espresso",
+      "name": "House Espresso",
+      "farm": "Brazil",
+      "process": "Natural",
+      "producer": "",
+      "notes": "Dark chocolate, cherry",
+      "roast": "Medium/Dark",
+      "grind": "Beans",
+      "weightGrams": 250,
+      "consumedBags": 0
+    }
+  ]
+}
+```
+
+Tips:
+
+- Keep `id` values lowercase and kebab-case
+- `image` must start with `/images/coffee-brand/`
+- `accent` can be any CSS hex color like `#4ade80`
+- `weightGrams` controls the node sizing on the wall
+
+### Add a new coffee bean under an existing brand
+
+Open `data/coffee_wall.json`, find the brand, and add another item inside its `variants` array.
+
+Example:
+
+```json
+{
+  "id": "new-lot",
+  "name": "New Lot",
+  "farm": "Finca Example, Colombia",
+  "region": "Huila",
+  "process": "Washed",
+  "producer": "Example Producer",
+  "notes": "Cacao, plum, orange peel",
+  "roast": "Medium",
+  "grind": "Beans",
+  "weightGrams": 250,
+  "consumedBags": 0
+}
+```
+
+### Change how many bags you have consumed
+
+Each coffee variant now has a `consumedBags` field:
+
+```json
+"consumedBags": 3
+```
+
+This means you have finished 3 bags of that coffee.
+
+To update it:
+
+1. Open `data/coffee_wall.json`
+2. Find the coffee variant you want
+3. Change only the number in `consumedBags`
+
+Example:
+
+```json
+{
+  "id": "butter-blend",
+  "name": "Butter Blend",
+  "weightGrams": 454,
+  "consumedBags": 4
+}
+```
+
+Notes:
+
+- `consumedBags` is a history counter
+- it does **not** change the node size
+- node size still comes from `weightGrams`
+- the coffee wall now shows finished-bag totals in the metrics, detail panel, and shelf totals
+
+### Remove a coffee
+
+Delete the relevant object from the `variants` array.
+
+If you want to remove a whole brand, delete the whole brand object from `brands`.
+
+### Rebuild and test after editing
+
+From the repo root:
+
+```sh
+./scripts/check_posts_have_tags.sh
+hugo --minify --cleanDestinationDir
+./scripts/check_internal_links.sh public
+```
+
+Then open the page locally:
+
+```text
+/hodgepodge/coffee-wall/
+```
+
 ## Photo Album Guide
 
 The photo album page is powered by three places:

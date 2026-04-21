@@ -635,6 +635,11 @@
         return grams + "g";
       }
 
+      function formatBagCount(count) {
+        const bags = Math.max(0, Math.floor(Number(count) || 0));
+        return bags + (bags === 1 ? " bag" : " bags");
+      }
+
       function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
       }
@@ -663,12 +668,16 @@
               grind: variant.grind || "",
               weightGrams: Number(variant.weightGrams) || 0,
               weightLabel: formatWeight(variant.weightGrams),
+              consumedBags: Math.max(0, Math.floor(Number(variant.consumedBags) || 0)),
               node: null
             };
           });
 
           const totalWeight = variants.reduce(function (sum, variant) {
             return sum + variant.weightGrams;
+          }, 0);
+          const totalConsumedBags = variants.reduce(function (sum, variant) {
+            return sum + variant.consumedBags;
           }, 0);
           const uniqueRoasts = Array.from(new Set(variants.map(function (variant) { return variant.roast; }).filter(Boolean)));
           const uniqueGrinds = Array.from(new Set(variants.map(function (variant) { return variant.grind; }).filter(Boolean)));
@@ -688,6 +697,7 @@
             initials: initials(brand.name),
             totalWeight: totalWeight,
             totalWeightLabel: formatWeight(totalWeight),
+            totalConsumedBags: totalConsumedBags,
             variantCount: variants.length,
             roastSummary: uniqueRoasts.join(" • ") || "Roast not logged",
             grindSummary: uniqueGrinds.join(" • ") || "Grind not logged",
@@ -702,6 +712,7 @@
 
       function renderHeroMeta() {
         const bagCount = state.brands.reduce(function (sum, brand) { return sum + brand.variantCount; }, 0);
+        const consumedBagCount = state.brands.reduce(function (sum, brand) { return sum + brand.totalConsumedBags; }, 0);
         const totalWeight = state.brands.reduce(function (sum, brand) { return sum + brand.totalWeight; }, 0);
         const roastCount = state.brands.reduce(function (sum, brand) {
           return sum + brand.variants.filter(function (variant) {
@@ -711,7 +722,8 @@
 
         metricsEl.innerHTML = [
           { value: String(state.brands.length), label: "Brands logged" },
-          { value: String(bagCount), label: "Bags mapped" },
+          { value: String(bagCount), label: "Variants mapped" },
+          { value: String(consumedBagCount), label: "Bags finished" },
           { value: formatWeight(totalWeight), label: roastCount + " dark-leaning roasts" }
         ].map(function (metric) {
           return "<div class=\"coffee-metric\"><span class=\"coffee-metric-value\">" + escapeHtml(metric.value) + "</span><span class=\"coffee-metric-label\">" + escapeHtml(metric.label) + "</span></div>";
@@ -771,7 +783,7 @@
         });
 
         ledgerListEl.innerHTML = state.brands.map(function (brand) {
-          return "<li class=\"coffee-ledger-item\"><span class=\"coffee-ledger-brand\">" + escapeHtml(brand.name) + "</span><span class=\"coffee-ledger-value\">" + escapeHtml(brand.totalWeightLabel) + " · " + escapeHtml(String(brand.variantCount)) + " bags</span></li>";
+          return "<li class=\"coffee-ledger-item\"><span class=\"coffee-ledger-brand\">" + escapeHtml(brand.name) + "</span><span class=\"coffee-ledger-value\">" + escapeHtml(brand.totalWeightLabel) + " · " + escapeHtml(String(brand.variantCount)) + " variants · " + escapeHtml(formatBagCount(brand.totalConsumedBags)) + " finished</span></li>";
         }).join("");
       }
 
@@ -875,13 +887,15 @@
           { label: "Notes", value: note },
           { label: "Roast", value: variant.roast || "Not logged yet" },
           { label: "Grind", value: variant.grind || "Not logged yet" },
-          { label: "Weight", value: variant.weightLabel }
+          { label: "Weight", value: variant.weightLabel },
+          { label: "Consumed", value: formatBagCount(variant.consumedBags) }
         ] : [
           { label: "Total weight", value: brand.totalWeightLabel },
           { label: "Notes", value: note },
           { label: "Roast spread", value: brand.roastSummary },
           { label: "Grind", value: brand.grindSummary },
-          { label: "Bags", value: String(brand.variantCount) }
+          { label: "Variants", value: String(brand.variantCount) },
+          { label: "Finished bags", value: formatBagCount(brand.totalConsumedBags) }
         ];
 
         const extras = variant ? [
