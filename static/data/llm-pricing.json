@@ -1,7 +1,7 @@
 {
   "generated_at": "2026-04-24",
   "generated_at_pretty": "April 24, 2026",
-  "generated_at_iso": "2026-04-24T08:23:35+00:00",
+  "generated_at_iso": "2026-04-24T18:16:45+00:00",
   "summary_note": "This tracker loads the latest repo snapshot. The button below checks GitHub for a newer snapshot at most once per day in this browser; official pricing pages can still change between repo refreshes.",
   "history_note": "History lines use official pricing snapshots that are stored in this repo. Some providers only have one official snapshot recorded so far, while others mix successive flagship or promo models.",
   "chart_defaults": {
@@ -12,15 +12,15 @@
   "api_pricing": [
     {
       "vendor": "OpenAI",
-      "product": "GPT-5.4",
+      "product": "GPT-5.5",
       "unit": "USD per 1M tokens",
-      "input_display": "$2.50",
-      "input_value": 2.5,
-      "cached_input_display": "$0.25",
-      "cached_input_value": 0.25,
-      "output_display": "$15.00",
-      "output_value": 15.0,
-      "notes": "Standard API pricing. Prompts above 272K input tokens are billed at higher long-context multipliers.",
+      "input_display": "$5.00",
+      "input_value": 5.0,
+      "cached_input_display": "$0.50",
+      "cached_input_value": 0.5,
+      "output_display": "$30.00",
+      "output_value": 30.0,
+      "notes": "OpenAI's pricing page now lists GPT-5.5 as the latest flagship model. The page labels it coming soon and notes higher long-context multipliers above 270K input tokens.",
       "official_link": "https://openai.com/api/pricing/",
       "source_label": "OpenAI API pricing"
     },
@@ -68,17 +68,31 @@
     },
     {
       "vendor": "DeepSeek",
-      "product": "deepseek-chat",
+      "product": "deepseek-v4-flash",
       "unit": "USD per 1M tokens",
-      "input_display": "$0.27 (cache miss)",
-      "input_value": 0.27,
-      "cached_input_display": "$0.07 (cache hit)",
-      "cached_input_value": 0.07,
-      "output_display": "$1.10",
-      "output_value": 1.1,
-      "notes": "Official USD table for the current DeepSeek chat endpoint.",
-      "official_link": "https://api-docs.deepseek.com/quick_start/pricing-details-usd",
-      "source_label": "DeepSeek pricing details (USD)"
+      "input_display": "$0.14 (<=128K cache miss)",
+      "input_value": 0.14,
+      "cached_input_display": "$0.028 (<=128K cache hit)",
+      "cached_input_value": 0.028,
+      "output_display": "$0.28 (<=128K)",
+      "output_value": 0.28,
+      "notes": "Official DeepSeek V4 Flash overseas pricing. For prompts above 128K tokens, DeepSeek lists $0.28 input, $0.056 cached input, and $0.56 output per 1M tokens.",
+      "official_link": "https://api-docs.deepseek.com/quick_start/pricing/",
+      "source_label": "DeepSeek models & pricing"
+    },
+    {
+      "vendor": "DeepSeek",
+      "product": "deepseek-v4-pro",
+      "unit": "USD per 1M tokens",
+      "input_display": "$1.74 (<=128K cache miss)",
+      "input_value": 1.74,
+      "cached_input_display": "$0.145 (<=128K cache hit)",
+      "cached_input_value": 0.145,
+      "output_display": "$3.48 (<=128K)",
+      "output_value": 3.48,
+      "notes": "Official DeepSeek V4 Pro overseas pricing. For prompts above 128K tokens, DeepSeek lists $3.48 input, $0.29 cached input, and $6.96 output per 1M tokens.",
+      "official_link": "https://api-docs.deepseek.com/quick_start/pricing/",
+      "source_label": "DeepSeek models & pricing"
     },
     {
       "vendor": "Qwen / Alibaba Cloud",
@@ -135,6 +149,20 @@
       "notes": "Moonshot's official April 7, 2025 pricing notice shows kimi-latest auto-selects the 8K / 32K / 128K tier at ¥2 / ¥5 / ¥10 input and ¥10 / ¥20 / ¥30 output per 1M tokens. Automatic cache-hit billing remains ¥1 / 1M tokens.",
       "official_link": "https://platform.moonshot.cn/blog/posts/discount",
       "source_label": "Moonshot official pricing update"
+    },
+    {
+      "vendor": "Xiaomi / MiMo",
+      "product": "MiMo-V2.5-Pro",
+      "unit": "USD per 1M tokens",
+      "input_display": "$1.00 (<=256K cache miss)",
+      "input_value": 1.0,
+      "cached_input_display": "$0.20 (<=256K cache hit)",
+      "cached_input_value": 0.2,
+      "output_display": "$3.00 (<=256K)",
+      "output_value": 3.0,
+      "notes": "Official overseas pricing for Xiaomi's flagship MiMo-V2.5-Pro / MiMo-V2-Pro tier. For prompts above 256K tokens, Xiaomi lists $2.00 input, $0.40 cached input, and $6.00 output per 1M tokens.",
+      "official_link": "https://platform.xiaomimimo.com/static/docs/pricing.md",
+      "source_label": "Xiaomi MiMo pricing"
     },
     {
       "vendor": "MiniMax",
@@ -253,6 +281,22 @@
       "source_label": "Google AI plans"
     },
     {
+      "vendor": "Xiaomi / MiMo",
+      "plan": "Token Plan (monthly)",
+      "price_display": "$6 / $16 / $50 / $100 per month",
+      "notes": "Official monthly Token Plan tiers: Lite, Standard, Pro, and Max. The package covers MiMo-V2.5-Pro, MiMo-V2.5, and the rest of Xiaomi's current V2 / V2.5 programming-tool lineup.",
+      "official_link": "https://platform.xiaomimimo.com/static/docs/tokenplan/subscription.md",
+      "source_label": "MiMo Token Plan subscription"
+    },
+    {
+      "vendor": "Xiaomi / MiMo",
+      "plan": "Token Plan (annual)",
+      "price_display": "$63.36 / $168.96 / $528.00 / $1056.00 per year",
+      "notes": "Official annual Token Plan tiers: Lite, Standard, Pro, and Max.",
+      "official_link": "https://platform.xiaomimimo.com/static/docs/tokenplan/subscription.md",
+      "source_label": "MiMo Token Plan subscription"
+    },
+    {
       "vendor": "MiniMax",
       "plan": "Coding Plan Starter",
       "price_display": "¥29 / month",
@@ -321,7 +365,7 @@
     "openai": {
       "label": "OpenAI",
       "currency": "USD per 1M tokens",
-      "note": "Flagship OpenAI snapshot stored in this repo. More historical checkpoints can be added as future posts are updated.",
+      "note": "Flagship OpenAI checkpoints stored in this repo. The latest snapshot reflects GPT-5.5 pricing from OpenAI's current pricing page.",
       "points": [
         {
           "date": "2026-03-19",
@@ -329,6 +373,14 @@
           "input_miss": 2.5,
           "input_hit": 0.25,
           "output": 15.0,
+          "source": "https://openai.com/api/pricing/"
+        },
+        {
+          "date": "2026-04-24",
+          "model": "GPT-5.5",
+          "input_miss": 5.0,
+          "input_hit": 0.5,
+          "output": 30.0,
           "source": "https://openai.com/api/pricing/"
         }
       ]
@@ -366,7 +418,7 @@
     "deepseek": {
       "label": "DeepSeek",
       "currency": "CNY per 1M tokens",
-      "note": "This line compares official DeepSeek API price checkpoints. The 2024 point is the DeepSeek-V3 intro promo; the 2026 point is the current public chat pricing table.",
+      "note": "This line compares official DeepSeek API price checkpoints. The 2024 point is the DeepSeek-V3 intro promo, followed by the older chat endpoint and the latest V4 Flash pricing from DeepSeek's current docs.",
       "points": [
         {
           "date": "2024-12-26",
@@ -383,6 +435,14 @@
           "input_hit": 0.5,
           "output": 8.0,
           "source": "https://api-docs.deepseek.com/quick_start/pricing-details-cny/"
+        },
+        {
+          "date": "2026-04-24",
+          "model": "deepseek-v4-flash",
+          "input_miss": 1.0,
+          "input_hit": 0.2,
+          "output": 2.0,
+          "source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/"
         }
       ]
     },
@@ -483,6 +543,21 @@
           "source": "https://www.together.ai/models/llama-4-maverick"
         }
       ]
+    },
+    "xiaomi": {
+      "label": "Xiaomi / MiMo",
+      "currency": "USD per 1M tokens",
+      "note": "Official Xiaomi MiMo overseas flagship pricing. This history line starts with MiMo-V2.5-Pro, the current flagship programming model family.",
+      "points": [
+        {
+          "date": "2026-04-24",
+          "model": "MiMo-V2.5-Pro",
+          "input_miss": 1.0,
+          "input_hit": 0.2,
+          "output": 3.0,
+          "source": "https://platform.xiaomimimo.com/static/docs/pricing.md"
+        }
+      ]
     }
   },
   "subscription_missing_note": "Some vendors in the API table are omitted here because I could not find a public official subscription plan for them in the sources checked for this snapshot: DeepSeek, Qwen / Alibaba Cloud, Moonshot AI / Kimi.",
@@ -523,7 +598,7 @@
         "model": "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)",
         "short_label": "Claude Opus 4.7 (max)",
         "intelligence": 57.28,
-        "speed_tps": 42.1,
+        "speed_tps": 45.76,
         "blended_price": 10.0,
         "input_price": 5.0,
         "output_price": 25.0,
@@ -536,7 +611,7 @@
         "model": "Gemini 3.1 Pro Preview",
         "short_label": "Gemini 3.1 Pro Preview",
         "intelligence": 57.18,
-        "speed_tps": 129.62,
+        "speed_tps": 129.0,
         "blended_price": 4.5,
         "input_price": 2.0,
         "output_price": 12.0,
@@ -549,7 +624,7 @@
         "model": "GPT-5.4 (xhigh)",
         "short_label": "GPT-5.4 (xhigh)",
         "intelligence": 56.8,
-        "speed_tps": 77.53,
+        "speed_tps": 79.3,
         "blended_price": 5.625,
         "input_price": 2.5,
         "output_price": 15.0,
@@ -575,7 +650,7 @@
         "model": "Kimi K2.6",
         "short_label": "Kimi K2.6",
         "intelligence": 53.9,
-        "speed_tps": 100.35,
+        "speed_tps": 112.19,
         "blended_price": 1.7125,
         "input_price": 0.95,
         "output_price": 4.0,
@@ -588,7 +663,7 @@
         "model": "MiMo-V2.5-Pro",
         "short_label": "MiMo-V2.5-Pro",
         "intelligence": 53.83,
-        "speed_tps": 60.58,
+        "speed_tps": 59.54,
         "blended_price": 1.5,
         "input_price": 1.0,
         "output_price": 3.0,
@@ -601,7 +676,7 @@
         "model": "GPT-5.3 Codex (xhigh)",
         "short_label": "GPT-5.3 Codex (xhigh)",
         "intelligence": 53.56,
-        "speed_tps": 73.03,
+        "speed_tps": 73.59,
         "blended_price": 4.8125,
         "input_price": 1.75,
         "output_price": 14.0,
@@ -758,6 +833,14 @@
           },
           {
             "rank": 16,
+            "provider": "DeepSeek",
+            "model": "DeepSeek V4 Pro (Max)",
+            "value": 51.51,
+            "detail_url": "https://artificialanalysis.ai/providers/deepseek",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 17,
             "provider": "Together.ai",
             "model": "GLM-5.1",
             "value": 51.41,
@@ -765,7 +848,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 17,
+            "rank": 18,
             "provider": "Weights & Biases",
             "model": "GLM-5.1",
             "value": 51.41,
@@ -773,7 +856,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 18,
+            "rank": 19,
             "provider": "FriendliAI",
             "model": "GLM-5.1",
             "value": 51.41,
@@ -781,7 +864,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 19,
+            "rank": 20,
             "provider": "Parasail (FP8)",
             "model": "GLM-5.1",
             "value": 51.41,
@@ -789,7 +872,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 20,
+            "rank": 21,
             "provider": "Novita (FP8)",
             "model": "GLM-5.1",
             "value": 51.41,
@@ -797,7 +880,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 21,
+            "rank": 22,
             "provider": "DeepInfra (FP8)",
             "model": "GLM-5.1",
             "value": 51.41,
@@ -805,7 +888,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 22,
+            "rank": 23,
             "provider": "GMI (FP8)",
             "model": "GLM-5.1",
             "value": 51.41,
@@ -813,7 +896,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 23,
+            "rank": 24,
             "provider": "SiliconFlow",
             "model": "GLM-5.1",
             "value": 51.41,
@@ -821,19 +904,11 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 24,
+            "rank": 25,
             "provider": "Databricks",
             "model": "GPT-5.2 (xhigh)",
             "value": 51.28,
             "detail_url": "https://artificialanalysis.ai/providers/databricks",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 25,
-            "provider": "Baseten",
-            "model": "GLM-5",
-            "value": 49.77,
-            "detail_url": "https://artificialanalysis.ai/providers/baseten",
             "detail_label": "Provider details"
           }
         ]
@@ -1054,31 +1129,31 @@
             "rank": 1,
             "provider": "Google Vertex",
             "model": "gpt-oss-120B (high)",
-            "value": 0.345538,
+            "value": 0.3542,
             "detail_url": "https://artificialanalysis.ai/providers/google",
             "detail_label": "Provider details"
           },
           {
             "rank": 2,
-            "provider": "Baseten",
-            "model": "gpt-oss-120B (low)",
-            "value": 0.360197,
-            "detail_url": "https://artificialanalysis.ai/providers/baseten",
+            "provider": "DeepInfra",
+            "model": "gpt-oss-20B (high)",
+            "value": 0.398524,
+            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
           {
             "rank": 3,
-            "provider": "DeepInfra",
-            "model": "gpt-oss-20B (high)",
-            "value": 0.396982,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "provider": "Baseten",
+            "model": "gpt-oss-120B (low)",
+            "value": 0.411471,
+            "detail_url": "https://artificialanalysis.ai/providers/baseten",
             "detail_label": "Provider details"
           },
           {
             "rank": 4,
             "provider": "Lightning AI",
             "model": "gpt-oss-20B (high)",
-            "value": 0.408787,
+            "value": 0.412682,
             "detail_url": "https://artificialanalysis.ai/providers/lightningai",
             "detail_label": "Provider details"
           },
@@ -1086,79 +1161,79 @@
             "rank": 5,
             "provider": "Clarifai",
             "model": "gpt-oss-120B (high)",
-            "value": 0.41415,
+            "value": 0.418876,
             "detail_url": "https://artificialanalysis.ai/providers/clarifai",
             "detail_label": "Provider details"
           },
           {
             "rank": 6,
-            "provider": "Fireworks",
-            "model": "Qwen3 VL 30B A3B",
-            "value": 0.432331,
-            "detail_url": "https://artificialanalysis.ai/providers/fireworks",
+            "provider": "Together.ai",
+            "model": "gpt-oss-20B (high)",
+            "value": 0.432273,
+            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
             "detail_label": "Provider details"
           },
           {
             "rank": 7,
-            "provider": "Mistral",
-            "model": "Ministral 3 3B",
-            "value": 0.446515,
-            "detail_url": "https://artificialanalysis.ai/providers/mistral",
+            "provider": "Fireworks",
+            "model": "Qwen3 VL 30B A3B",
+            "value": 0.434867,
+            "detail_url": "https://artificialanalysis.ai/providers/fireworks",
             "detail_label": "Provider details"
           },
           {
             "rank": 8,
-            "provider": "Together.ai",
-            "model": "gpt-oss-20B (high)",
-            "value": 0.448046,
-            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
+            "provider": "Mistral",
+            "model": "Ministral 3 3B",
+            "value": 0.462548,
+            "detail_url": "https://artificialanalysis.ai/providers/mistral",
             "detail_label": "Provider details"
           },
           {
             "rank": 9,
-            "provider": "DeepInfra FP8",
-            "model": "Qwen3.5 2B",
-            "value": 0.493545,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "provider": "Together.ai (FP4)",
+            "model": "MiniMax-M2.5",
+            "value": 0.472579,
+            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
             "detail_label": "Provider details"
           },
           {
             "rank": 10,
-            "provider": "DeepInfra (Turbo)",
-            "model": "gpt-oss-120B (high)",
-            "value": 0.500931,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "provider": "Google (AI Studio)",
+            "model": "Gemini 2.5 Flash-Lite",
+            "value": 0.486709,
+            "detail_url": "https://artificialanalysis.ai/providers/google",
             "detail_label": "Provider details"
           },
           {
             "rank": 11,
-            "provider": "Cerebras",
-            "model": "gpt-oss-120B (low)",
-            "value": 0.509704,
-            "detail_url": "https://artificialanalysis.ai/providers/cerebras",
+            "provider": "DeepInfra (Turbo)",
+            "model": "gpt-oss-120B (high)",
+            "value": 0.511328,
+            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
           {
             "rank": 12,
-            "provider": "Eigen AI",
-            "model": "gpt-oss-120B (high)",
-            "value": 0.516252,
-            "detail_url": "https://artificialanalysis.ai/providers/eigenai",
+            "provider": "Cerebras",
+            "model": "gpt-oss-120B (low)",
+            "value": 0.516021,
+            "detail_url": "https://artificialanalysis.ai/providers/cerebras",
             "detail_label": "Provider details"
           },
           {
             "rank": 13,
-            "provider": "Together.ai (FP4)",
-            "model": "MiniMax-M2.5",
-            "value": 0.531861,
-            "detail_url": "https://artificialanalysis.ai/providers/togetherai",
+            "provider": "Eigen AI",
+            "model": "gpt-oss-120B (high)",
+            "value": 0.523371,
+            "detail_url": "https://artificialanalysis.ai/providers/eigenai",
             "detail_label": "Provider details"
           },
           {
             "rank": 14,
             "provider": "DeepInfra (FP8)",
             "model": "Qwen3 30B",
-            "value": 0.54182,
+            "value": 0.536704,
             "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
@@ -1166,72 +1241,72 @@
             "rank": 15,
             "provider": "Microsoft",
             "model": "Llama 3.1 8B",
-            "value": 0.560771,
+            "value": 0.55708,
             "detail_url": "https://artificialanalysis.ai/providers/azure",
             "detail_label": "Provider details"
           },
           {
             "rank": 16,
-            "provider": "Clarifai (FP8)",
-            "model": "Qwen3.6 35B A3B",
-            "value": 0.565769,
-            "detail_url": "https://artificialanalysis.ai/providers/clarifai",
+            "provider": "xAI",
+            "model": "Grok 4 Fast",
+            "value": 0.569353,
+            "detail_url": "https://artificialanalysis.ai/providers/xai",
             "detail_label": "Provider details"
           },
           {
             "rank": 17,
-            "provider": "xAI Fast",
-            "model": "Grok 3 mini Reasoning (high)",
-            "value": 0.570762,
-            "detail_url": "https://artificialanalysis.ai/providers/xai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 18,
-            "provider": "CompactifAI",
-            "model": "Llama 3.1 8B",
-            "value": 0.579418,
-            "detail_url": "https://artificialanalysis.ai/providers/compactifai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 19,
-            "provider": "xAI",
-            "model": "Grok 4 Fast",
-            "value": 0.583721,
-            "detail_url": "https://artificialanalysis.ai/providers/xai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 20,
             "provider": "Databricks",
             "model": "gpt-oss-120B (high)",
-            "value": 0.588621,
+            "value": 0.572776,
             "detail_url": "https://artificialanalysis.ai/providers/databricks",
             "detail_label": "Provider details"
           },
           {
-            "rank": 21,
+            "rank": 18,
+            "provider": "Clarifai (FP8)",
+            "model": "Qwen3.6 35B A3B",
+            "value": 0.578439,
+            "detail_url": "https://artificialanalysis.ai/providers/clarifai",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 19,
             "provider": "Google (Vertex)",
             "model": "Gemini 2.5 Flash",
-            "value": 0.606797,
+            "value": 0.581196,
             "detail_url": "https://artificialanalysis.ai/providers/google",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 20,
+            "provider": "xAI Fast",
+            "model": "Grok 3 mini Reasoning (high)",
+            "value": 0.582698,
+            "detail_url": "https://artificialanalysis.ai/providers/xai",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 21,
+            "provider": "CompactifAI",
+            "model": "Llama 3.1 8B",
+            "value": 0.584334,
+            "detail_url": "https://artificialanalysis.ai/providers/compactifai",
             "detail_label": "Provider details"
           },
           {
             "rank": 22,
-            "provider": "DeepInfra (Turbo, FP8)",
-            "model": "Llama 3.1 8B",
-            "value": 0.607871,
-            "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
+            "provider": "OpenAI",
+            "model": "GPT-4.1 nano",
+            "value": 0.598429,
+            "detail_url": "https://artificialanalysis.ai/providers/openai",
             "detail_label": "Provider details"
           },
           {
             "rank": 23,
-            "provider": "Google (AI Studio)",
-            "model": "Gemini 2.5 Flash",
-            "value": 0.61869,
-            "detail_url": "https://artificialanalysis.ai/providers/google",
+            "provider": "Groq",
+            "model": "gpt-oss-120B (high)",
+            "value": 0.634844,
+            "detail_url": "https://artificialanalysis.ai/providers/groq",
             "detail_label": "Provider details"
           },
           {
@@ -1246,7 +1321,7 @@
             "rank": 25,
             "provider": "DeepInfra (Turbo, FP4)",
             "model": "Qwen3 Coder 480B",
-            "value": 0.641814,
+            "value": 0.657651,
             "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           }
