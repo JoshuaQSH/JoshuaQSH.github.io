@@ -19,6 +19,90 @@ PROVIDERS_URL = "https://artificialanalysis.ai/leaderboards/providers"
 TOGETHER_GLM_URL = "https://www.together.ai/models/glm-5"
 TOGETHER_LLAMA_URL = "https://www.together.ai/models/llama-4-maverick"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; home-page tracker refresh)"}
+FRONTIER_START_DATE = "2021-01-01"
+FRONTIER_SEED_ROWS = {
+    "model_size": [
+        {
+            "date": "2021-01-11",
+            "vendor": "Google Brain",
+            "model": "Switch Transformer",
+            "short_label": "Switch Transformer",
+            "value": 1600.0,
+            "source_url": "https://arxiv.org/abs/2101.03961",
+            "source_label": "Switch Transformer paper",
+            "detail_label": "Source",
+            "note": "Sparse MoE model; total parameter count.",
+        },
+        {
+            "date": "2021-06-01",
+            "vendor": "BAAI",
+            "model": "Wu Dao 2.0",
+            "short_label": "Wu Dao 2.0",
+            "value": 1750.0,
+            "source_url": "https://www.baai.ac.cn/en/research",
+            "source_label": "BAAI research page",
+            "detail_label": "Source",
+            "note": "Reported as the largest pre-trained model at launch; total parameter count.",
+        },
+        {
+            "date": "2025-04-05",
+            "vendor": "Meta",
+            "model": "Llama 4 Behemoth",
+            "short_label": "Llama 4 Behemoth",
+            "value": 2000.0,
+            "source_url": "https://ai.meta.com/blog/llama-4-multimodal-intelligence/",
+            "source_label": "Meta Llama 4 announcement",
+            "detail_label": "Source",
+            "note": "Previewed research model; about 2T total parameters and 288B active parameters.",
+        },
+    ],
+    "output_price": [
+        {
+            "date": "2021-01-01",
+            "vendor": "OpenAI",
+            "model": "davinci",
+            "short_label": "davinci",
+            "value": 60.0,
+            "source_url": "https://fewald.net/machine-learning/2022/08/22/openai-api-price-reduction.html",
+            "source_label": "OpenAI API price-reduction note",
+            "detail_label": "Source",
+            "note": "Legacy GPT-3 era price converted from $0.06 per 1K tokens.",
+        },
+        {
+            "date": "2023-03-14",
+            "vendor": "OpenAI",
+            "model": "gpt-4-32k",
+            "short_label": "GPT-4 32K",
+            "value": 120.0,
+            "source_url": "https://help.openai.com/en/articles/7127956-how-much-does-gpt-4-cost",
+            "source_label": "OpenAI GPT-4 pricing help",
+            "detail_label": "Source",
+            "note": "Output price for the 32K GPT-4 API tier.",
+        },
+        {
+            "date": "2025-02-27",
+            "vendor": "OpenAI",
+            "model": "gpt-4.5-preview",
+            "short_label": "GPT-4.5 Preview",
+            "value": 150.0,
+            "source_url": "https://platform.openai.com/docs/models/gpt-4.5-preview",
+            "source_label": "OpenAI GPT-4.5 model page",
+            "detail_label": "Source",
+            "note": "Deprecated research preview; output price at launch.",
+        },
+        {
+            "date": "2025-03-19",
+            "vendor": "OpenAI",
+            "model": "o1-pro",
+            "short_label": "o1-pro",
+            "value": 600.0,
+            "source_url": "https://platform.openai.com/docs/models/o1-pro",
+            "source_label": "OpenAI o1-pro model page",
+            "detail_label": "Source",
+            "note": "Highest public text-output token price found in the reviewed sources.",
+        },
+    ],
+}
 
 
 def fetch_text(url: str) -> str:
@@ -254,12 +338,15 @@ def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
         return f"https://artificialanalysis.ai{model['model_url']}"
 
     def build_milestones(
+        seed_key: str,
         value_key: str,
         minimum: float,
         digits: int,
     ) -> list[dict[str, Any]]:
-        rows: list[dict[str, Any]] = []
+        rows: list[dict[str, Any]] = copy.deepcopy(FRONTIER_SEED_ROWS[seed_key])
         seen: set[tuple[str, str, float]] = set()
+        for row in rows:
+            seen.add((row["date"], row["short_label"], float(row["value"])))
         for model in models:
             value = model.get(value_key)
             if value is None or not valid_model(model):
@@ -279,6 +366,8 @@ def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
                     "short_label": model["short_name"],
                     "value": round(numeric, digits),
                     "detail_url": model_url(model),
+                    "source_url": model_url(model),
+                    "source_label": "Artificial Analysis model details",
                     "detail_label": "Model details",
                 }
             )
@@ -293,27 +382,28 @@ def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
         return milestones
 
     return {
-        "note": "Milestone lines built from Artificial Analysis model metadata. Model size uses publicly listed total parameter counts when Artificial Analysis has one; price uses the highest listed output-token price in USD per 1M tokens. Closed models without disclosed parameter counts are omitted from the size line.",
+        "note": "Milestone lines start in 2021 and combine curated source-backed historical records with the latest Artificial Analysis model metadata. Model size uses total disclosed parameters, so sparse MoE and dense models are not quality-equivalent. Output-token price uses public USD text-token API prices and excludes tool-call, image, audio, video, and subscription pricing.",
         "source_url": MODELS_URL,
         "source_label": "Artificial Analysis models",
         "generated_at_pretty": pretty_date(now_utc()),
+        "start_date": FRONTIER_START_DATE,
         "default_metric": "model_size",
         "metrics": {
             "model_size": {
                 "label": "Largest disclosed LLM size",
-                "description": "Running record of the largest publicly listed model parameter count in the current Artificial Analysis model catalog.",
+                "description": "Running record of the largest publicly disclosed total parameter count since 2021.",
                 "y_label": "Parameters",
                 "unit": "B parameters",
                 "value_format": "parameters",
-                "rows": build_milestones("parameters", minimum=100, digits=3),
+                "rows": build_milestones("model_size", "parameters", minimum=100, digits=3),
             },
             "output_price": {
                 "label": "Most expensive output token",
-                "description": "Running record of the highest listed output-token price among current Artificial Analysis models.",
+                "description": "Running record of the highest reviewed public text-output token price since 2021.",
                 "y_label": "Output price",
                 "unit": "USD per 1M output tokens",
                 "value_format": "usd",
-                "rows": build_milestones("price_1m_output_tokens", minimum=0.0001, digits=4),
+                "rows": build_milestones("output_price", "price_1m_output_tokens", minimum=0.0001, digits=4),
             },
         },
     }

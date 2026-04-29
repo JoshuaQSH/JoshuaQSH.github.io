@@ -213,6 +213,10 @@
     .tracker-frontier-point {
       cursor: pointer;
     }
+    #llm-frontier-chart text {
+      font-family: "Comic Sans MS", "Bradley Hand", "Marker Felt", cursive;
+      letter-spacing: 0;
+    }
     .tracker-frontier-point:hover circle {
       stroke-width: 3;
     }
@@ -561,6 +565,11 @@
         return formatNumber(value, 2) + " " + (metricPayload.unit || "");
       }
 
+      function stableJitter(index, amplitude) {
+        const value = Math.sin((index + 1) * 12.9898) * 43758.5453;
+        return (value - Math.floor(value) - 0.5) * amplitude;
+      }
+
       function trackerTimestamp(payload) {
         return Date.parse(payload.generated_at_iso || payload.generated_at || "") || 0;
       }
@@ -812,12 +821,13 @@
 
         const width = 820;
         const height = 390;
-        const margin = { top: 34, right: 42, bottom: 66, left: 90 };
+        const margin = { top: 46, right: 46, bottom: 66, left: 94 };
         const innerWidth = width - margin.left - margin.right;
         const innerHeight = height - margin.top - margin.bottom;
         const parsedDates = rows.map(function (row) { return Date.parse(row.date); });
         const values = rows.map(function (row) { return Number(row.value); });
-        const minTime = Math.min.apply(null, parsedDates);
+        const startTime = Date.parse((payload.start_date || "2021-01-01") + "T00:00:00Z");
+        const minTime = Math.min(startTime, Math.min.apply(null, parsedDates));
         const maxTime = Math.max.apply(null, parsedDates);
         const minValue = Math.min.apply(null, values);
         const maxValue = Math.max.apply(null, values);
@@ -855,37 +865,68 @@
           });
         }
 
+        function roughLine(x1, y1, x2, y2, color, widthValue, extra) {
+          const midX = (x1 + x2) / 2 + stableJitter(x1 + y1 + x2, 5);
+          const midY = (y1 + y2) / 2 + stableJitter(y1 + x2 + y2, 5);
+          const attrs = extra || "";
+          return "<path d='M" + x1 + " " + y1 + " Q" + midX + " " + midY + " " + x2 + " " + y2 + "' fill='none' stroke='" + color + "' stroke-width='" + widthValue + "' stroke-linecap='round' " + attrs + " />" +
+            "<path d='M" + (x1 + stableJitter(x1, 2)) + " " + (y1 + stableJitter(y1, 2)) + " Q" + (midX + stableJitter(midX, 3)) + " " + (midY + stableJitter(midY, 3)) + " " + (x2 + stableJitter(x2, 2)) + " " + (y2 + stableJitter(y2, 2)) + "' fill='none' stroke='" + color + "' stroke-width='" + Math.max(widthValue - 1, 1) + "' stroke-linecap='round' opacity='0.75' " + attrs + " />";
+        }
+
+        function roughBox(xValue, yValue, boxWidth, boxHeight) {
+          return roughLine(xValue, yValue, xValue + boxWidth, yValue, "#111827", 1.8, "") +
+            roughLine(xValue + boxWidth, yValue, xValue + boxWidth, yValue + boxHeight, "#111827", 1.8, "") +
+            roughLine(xValue + boxWidth, yValue + boxHeight, xValue, yValue + boxHeight, "#111827", 1.8, "") +
+            roughLine(xValue, yValue + boxHeight, xValue, yValue, "#111827", 1.8, "");
+        }
+
+        function roughPolyline(points, color) {
+          return [0, 1].map(function (pass) {
+            const pathData = points.map(function (point, index) {
+              const xValue = point[0] + stableJitter(index + pass * 31, pass ? 4 : 2);
+              const yValue = point[1] + stableJitter(index + pass * 47, pass ? 4 : 2);
+              return (index === 0 ? "M" : "L") + xValue + " " + yValue;
+            }).join(" ");
+            return "<path d='" + pathData + "' fill='none' stroke='" + color + "' stroke-width='" + (pass ? 2.2 : 3.2) + "' stroke-linecap='round' stroke-linejoin='round' opacity='" + (pass ? 0.65 : 1) + "' />";
+          }).join("");
+        }
+
         const yTicks = [low, low + (high - low) / 2, high];
-        const path = rows.map(function (row, index) {
-          return (index === 0 ? "M" : "L") + x(parsedDates[index]) + " " + y(Number(row.value));
-        }).join(" ");
+        const linePoints = rows.map(function (row, index) {
+          return [x(parsedDates[index]), y(Number(row.value))];
+        });
 
         let svg = "";
         svg += "<rect x='" + margin.left + "' y='" + margin.top + "' width='" + innerWidth + "' height='" + innerHeight + "' fill='#ffffff' />";
-        svg += "<line x1='" + margin.left + "' y1='" + (margin.top + innerHeight) + "' x2='" + (margin.left + innerWidth) + "' y2='" + (margin.top + innerHeight) + "' stroke='#111827' stroke-width='2' />";
-        svg += "<line x1='" + margin.left + "' y1='" + margin.top + "' x2='" + margin.left + "' y2='" + (margin.top + innerHeight) + "' stroke='#111827' stroke-width='2' />";
+        svg += "<text x='" + (width / 2) + "' y='24' text-anchor='middle' fill='#111827' font-size='20' font-weight='700'>LLM Frontier History</text>";
+        svg += roughLine(margin.left, margin.top + innerHeight, margin.left + innerWidth, margin.top + innerHeight, "#111827", 2.4, "");
+        svg += roughLine(margin.left, margin.top, margin.left, margin.top + innerHeight, "#111827", 2.4, "");
 
         yearTicks().forEach(function (tick) {
           const xPos = x(tick);
           const year = new Date(tick).getUTCFullYear();
-          svg += "<line x1='" + xPos + "' y1='" + margin.top + "' x2='" + xPos + "' y2='" + (margin.top + innerHeight) + "' stroke='#e5e7eb' stroke-width='1' stroke-dasharray='4 6' />";
+          svg += roughLine(xPos, margin.top, xPos, margin.top + innerHeight, "#e5e7eb", 1, "stroke-dasharray='4 6'");
           svg += "<text x='" + xPos + "' y='" + (margin.top + innerHeight + 28) + "' text-anchor='middle' fill='#374151' font-size='13'>" + year + "</text>";
         });
 
         yTicks.forEach(function (tick) {
           const yPos = y(tick);
-          svg += "<line x1='" + margin.left + "' y1='" + yPos + "' x2='" + (margin.left + innerWidth) + "' y2='" + yPos + "' stroke='#e5e7eb' stroke-width='1' stroke-dasharray='4 6' />";
+          svg += roughLine(margin.left, yPos, margin.left + innerWidth, yPos, "#e5e7eb", 1, "stroke-dasharray='4 6'");
           svg += "<text x='" + (margin.left - 12) + "' y='" + (yPos + 4) + "' text-anchor='end' fill='#374151' font-size='13'>" + escapeHtml(formatFrontierValue(tick, metricPayload).replace(" / 1M output tokens", "").replace(" parameters", "")) + "</text>";
         });
 
-        svg += "<path d='" + path + "' fill='none' stroke='" + stroke + "' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round' />";
+        svg += "<rect x='" + (margin.left + 8) + "' y='" + (margin.top + 8) + "' width='258' height='38' fill='#ffffff' />";
+        svg += roughBox(margin.left + 10, margin.top + 10, 252, 34);
+        svg += "<circle cx='" + (margin.left + 25) + "' cy='" + (margin.top + 27) + "' r='4.5' fill='" + stroke + "' />";
+        svg += "<text x='" + (margin.left + 40) + "' y='" + (margin.top + 31) + "' fill='#111827' font-size='13'>" + escapeHtml(metricPayload.label || "Frontier") + "</text>";
+        svg += roughPolyline(linePoints, stroke);
         rows.forEach(function (row, index) {
           const xPos = x(parsedDates[index]);
           const yPos = y(Number(row.value));
           const labelAnchor = index === rows.length - 1 ? "end" : "start";
           const labelX = index === rows.length - 1 ? xPos - 8 : xPos + 8;
           const labelY = yPos - 10;
-          svg += "<a href='" + escapeHtml(row.detail_url || payload.source_url || "") + "' class='tracker-frontier-point' data-frontier-index='" + index + "'>";
+          svg += "<a href='" + escapeHtml(row.detail_url || row.source_url || payload.source_url || "") + "' class='tracker-frontier-point' data-frontier-index='" + index + "'>";
           svg += "<circle cx='" + xPos + "' cy='" + yPos + "' r='4.6' fill='" + stroke + "' stroke='#ffffff' stroke-width='1.5' />";
           svg += "</a>";
           svg += "<text class='tracker-chart-label' x='" + labelX + "' y='" + labelY + "' text-anchor='" + labelAnchor + "' fill='" + stroke + "' font-size='12'>" + escapeHtml(row.short_label || row.model) + "</text>";
@@ -900,7 +941,8 @@
             const row = rows[Number(point.getAttribute("data-frontier-index"))];
             frontierTooltip.innerHTML = "<strong>" + escapeHtml(row.short_label || row.model) + "</strong>" +
               escapeHtml(row.vendor || "") + " · " + escapeHtml(monthLabel(row.date)) + "<br />" +
-              escapeHtml(formatFrontierValue(row.value, metricPayload));
+              escapeHtml(formatFrontierValue(row.value, metricPayload)) +
+              (row.note ? "<br />" + escapeHtml(row.note) : "");
             frontierTooltip.style.display = "block";
             frontierTooltip.style.left = Math.min(event.clientX + 14, window.innerWidth - 280) + "px";
             frontierTooltip.style.top = Math.max(event.clientY - 24, 12) + "px";
