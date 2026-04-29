@@ -77,6 +77,11 @@ def now_utc() -> datetime:
     return datetime.now(timezone.utc)
 
 
+def fetch_models() -> list[dict[str, Any]]:
+    html = fetch_text(MODELS_URL)
+    return decode_embedded_array(html, '\\"models\\":[{\\"additional_text\\"')
+
+
 def upsert_api_rows(data: dict[str, Any]) -> None:
     glm_input, glm_output = parse_together_model_prices(TOGETHER_GLM_URL)
     llama_input, llama_output = parse_together_model_prices(TOGETHER_LLAMA_URL)
@@ -192,9 +197,7 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
     )
 
 
-def build_benchmark_snapshot() -> dict[str, Any]:
-    html = fetch_text(MODELS_URL)
-    models = decode_embedded_array(html, '\\"models\\":[{\\"additional_text\\"')
+def build_benchmark_snapshot(models: list[dict[str, Any]]) -> dict[str, Any]:
     ranked_models = sorted(
         [
             model
@@ -236,6 +239,83 @@ def build_benchmark_snapshot() -> dict[str, Any]:
             }
             for model in ranked_models
         ],
+    }
+
+
+def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
+    def valid_model(model: dict[str, Any]) -> bool:
+        return (
+            bool(model.get("release_date"))
+            and not model.get("deleted")
+            and not model.get("deprecated")
+        )
+
+    def model_url(model: dict[str, Any]) -> str:
+        return f"https://artificialanalysis.ai{model['model_url']}"
+
+    def build_milestones(
+        value_key: str,
+        minimum: float,
+        digits: int,
+    ) -> list[dict[str, Any]]:
+        rows: list[dict[str, Any]] = []
+        seen: set[tuple[str, str, float]] = set()
+        for model in models:
+            value = model.get(value_key)
+            if value is None or not valid_model(model):
+                continue
+            numeric = float(value)
+            if numeric < minimum:
+                continue
+            key = (model["release_date"], model["short_name"], numeric)
+            if key in seen:
+                continue
+            seen.add(key)
+            rows.append(
+                {
+                    "date": model["release_date"],
+                    "vendor": model["model_creators"]["name"],
+                    "model": model["name"],
+                    "short_label": model["short_name"],
+                    "value": round(numeric, digits),
+                    "detail_url": model_url(model),
+                    "detail_label": "Model details",
+                }
+            )
+
+        rows.sort(key=lambda item: (item["date"], item["value"], item["short_label"]))
+        best = float("-inf")
+        milestones: list[dict[str, Any]] = []
+        for row in rows:
+            if row["value"] > best:
+                best = row["value"]
+                milestones.append(row)
+        return milestones
+
+    return {
+        "note": "Milestone lines built from Artificial Analysis model metadata. Model size uses publicly listed total parameter counts when Artificial Analysis has one; price uses the highest listed output-token price in USD per 1M tokens. Closed models without disclosed parameter counts are omitted from the size line.",
+        "source_url": MODELS_URL,
+        "source_label": "Artificial Analysis models",
+        "generated_at_pretty": pretty_date(now_utc()),
+        "default_metric": "model_size",
+        "metrics": {
+            "model_size": {
+                "label": "Largest disclosed LLM size",
+                "description": "Running record of the largest publicly listed model parameter count in the current Artificial Analysis model catalog.",
+                "y_label": "Parameters",
+                "unit": "B parameters",
+                "value_format": "parameters",
+                "rows": build_milestones("parameters", minimum=100, digits=3),
+            },
+            "output_price": {
+                "label": "Most expensive output token",
+                "description": "Running record of the highest listed output-token price among current Artificial Analysis models.",
+                "y_label": "Output price",
+                "unit": "USD per 1M output tokens",
+                "value_format": "usd",
+                "rows": build_milestones("price_1m_output_tokens", minimum=0.0001, digits=4),
+            },
+        },
     }
 
 
@@ -341,6 +421,8 @@ def strip_generated_dates(payload: dict[str, Any]) -> dict[str, Any]:
         clone["benchmark_snapshot"].pop("generated_at_pretty", None)
     if isinstance(clone.get("provider_leaderboard"), dict):
         clone["provider_leaderboard"].pop("generated_at_pretty", None)
+    if isinstance(clone.get("scale_price_frontier"), dict):
+        clone["scale_price_frontier"].pop("generated_at_pretty", None)
     return clone
 
 
@@ -354,8 +436,11 @@ def main() -> None:
         "pages can still change between repo refreshes."
     )
 
+    models = fetch_models()
+
     upsert_api_rows(updated)
-    updated["benchmark_snapshot"] = build_benchmark_snapshot()
+    updated["benchmark_snapshot"] = build_benchmark_snapshot(models)
+    updated["scale_price_frontier"] = build_scale_price_frontier(models)
     updated["provider_leaderboard"] = build_provider_leaderboard()
 
     if strip_generated_dates(updated) != strip_generated_dates(current):
@@ -364,6 +449,7 @@ def main() -> None:
         updated["generated_at_pretty"] = pretty_date(stamp)
         updated["generated_at_iso"] = stamp.replace(microsecond=0).isoformat()
         updated["benchmark_snapshot"]["generated_at_pretty"] = pretty_date(stamp)
+        updated["scale_price_frontier"]["generated_at_pretty"] = pretty_date(stamp)
         updated["provider_leaderboard"]["generated_at_pretty"] = pretty_date(stamp)
     else:
         updated["generated_at"] = current.get("generated_at")
@@ -371,6 +457,9 @@ def main() -> None:
         updated["generated_at_iso"] = current.get("generated_at_iso")
         updated["benchmark_snapshot"]["generated_at_pretty"] = current.get(
             "benchmark_snapshot", {}
+        ).get("generated_at_pretty", current.get("generated_at_pretty"))
+        updated["scale_price_frontier"]["generated_at_pretty"] = current.get(
+            "scale_price_frontier", {}
         ).get("generated_at_pretty", current.get("generated_at_pretty"))
         updated["provider_leaderboard"]["generated_at_pretty"] = current.get(
             "provider_leaderboard", {}

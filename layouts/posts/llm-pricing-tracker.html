@@ -200,6 +200,40 @@
       text-align: right;
       white-space: nowrap;
     }
+    .tracker-frontier-header {
+      align-items: end;
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      margin: 12px 0 14px;
+    }
+    .tracker-frontier-header .tracker-control {
+      min-width: 240px;
+    }
+    .tracker-frontier-point {
+      cursor: pointer;
+    }
+    .tracker-frontier-point:hover circle {
+      stroke-width: 3;
+    }
+    .tracker-frontier-tooltip {
+      background: #111827;
+      border-radius: 6px;
+      color: #ffffff;
+      display: none;
+      font-size: 0.9rem;
+      line-height: 1.35;
+      max-width: 260px;
+      padding: 9px 10px;
+      pointer-events: none;
+      position: fixed;
+      z-index: 20;
+    }
+    .tracker-frontier-tooltip strong {
+      color: #ffffff;
+      display: block;
+      margin-bottom: 3px;
+    }
     @media (max-width: 720px) {
       .tracker-toolbar {
         align-items: flex-start;
@@ -213,6 +247,13 @@
       }
       .tracker-bar-value {
         text-align: left;
+      }
+      .tracker-frontier-header {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .tracker-frontier-header .tracker-control {
+        min-width: 0;
       }
     }
   </style>
@@ -392,6 +433,30 @@
             {{ end }}
           </div>
         </section>
+
+        <section class="tracker-section">
+          <h2>Scale and Price Frontier</h2>
+          <p class="tracker-section-intro">A Star History-style milestone line for the largest disclosed model sizes and the highest output-token prices in the current model catalog.</p>
+          <div class="tracker-frontier-header">
+            <p class="tracker-chart-meta" id="llm-frontier-meta">Loading scale and price frontier…</p>
+            <div class="tracker-control">
+              <label for="llm-frontier-select">Frontier metric</label>
+              <select id="llm-frontier-select">
+                <option value="model_size">Largest disclosed model size</option>
+                <option value="output_price">Most expensive output token</option>
+              </select>
+            </div>
+          </div>
+          <div class="tracker-chart-shell">
+            <svg class="tracker-chart-svg" id="llm-frontier-chart" viewBox="0 0 820 390" role="img" aria-label="LLM scale and price frontier chart"></svg>
+            <div class="tracker-frontier-tooltip" id="llm-frontier-tooltip"></div>
+            {{ with $tracker.scale_price_frontier }}
+              <p class="tracker-footnote" id="llm-frontier-note">{{ .note }} Source: <a class="tracker-source-link" href="{{ .source_url }}">{{ .source_label }}</a> (checked {{ .generated_at_pretty }}).</p>
+            {{ else }}
+              <p class="tracker-footnote" id="llm-frontier-note"></p>
+            {{ end }}
+          </div>
+        </section>
       </div>
     </div>
   </article>
@@ -421,6 +486,11 @@
       const providerLeaderboardMeta = document.getElementById("llm-provider-leaderboard-meta");
       const providerLeaderboardBars = document.getElementById("llm-provider-leaderboard-bars");
       const providerLeaderboardNote = document.getElementById("llm-provider-leaderboard-note");
+      const frontierSelect = document.getElementById("llm-frontier-select");
+      const frontierMeta = document.getElementById("llm-frontier-meta");
+      const frontierChart = document.getElementById("llm-frontier-chart");
+      const frontierNote = document.getElementById("llm-frontier-note");
+      const frontierTooltip = document.getElementById("llm-frontier-tooltip");
       const refreshUrl = "{{ "data/llm-pricing.json" | relURL }}";
       const repoSnapshotUrl = "https://raw.githubusercontent.com/JoshuaQSH/JoshuaQSH.github.io/master/static/data/llm-pricing.json";
       const dailyRefreshKey = "llm-pricing-repo-check-date";
@@ -474,6 +544,21 @@
           }) + "k";
         }
         return numeric.toLocaleString("en-US");
+      }
+
+      function formatFrontierValue(value, metricPayload) {
+        if (!metricPayload) return formatNumber(value, 2);
+        if (metricPayload.value_format === "usd") {
+          return formatPrice(value) + " / 1M output tokens";
+        }
+        if (metricPayload.value_format === "parameters") {
+          const numeric = Number(value);
+          if (numeric >= 1000) {
+            return formatNumber(numeric / 1000, 2) + "T parameters";
+          }
+          return formatNumber(numeric, 0) + "B parameters";
+        }
+        return formatNumber(value, 2) + " " + (metricPayload.unit || "");
       }
 
       function trackerTimestamp(payload) {
@@ -707,6 +792,131 @@
           "</a> (checked " + escapeHtml(tracker.provider_leaderboard.generated_at_pretty || tracker.generated_at_pretty || "") + ").";
       }
 
+      function renderScalePriceFrontier() {
+        if (!tracker || !tracker.scale_price_frontier) return;
+        const payload = tracker.scale_price_frontier;
+        const selectedMetric = frontierSelect.value || payload.default_metric || "model_size";
+        const metricPayload = (payload.metrics || {})[selectedMetric];
+        const rows = ((metricPayload && metricPayload.rows) || []).filter(function (row) {
+          return row.date && Number.isFinite(Number(row.value));
+        }).sort(function (a, b) {
+          return a.date.localeCompare(b.date);
+        });
+
+        if (!metricPayload || !rows.length) {
+          frontierMeta.textContent = "No scale or price frontier data available in this snapshot.";
+          frontierChart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">No frontier data available.</text>";
+          frontierNote.textContent = "";
+          return;
+        }
+
+        const width = 820;
+        const height = 390;
+        const margin = { top: 34, right: 42, bottom: 66, left: 90 };
+        const innerWidth = width - margin.left - margin.right;
+        const innerHeight = height - margin.top - margin.bottom;
+        const parsedDates = rows.map(function (row) { return Date.parse(row.date); });
+        const values = rows.map(function (row) { return Number(row.value); });
+        const minTime = Math.min.apply(null, parsedDates);
+        const maxTime = Math.max.apply(null, parsedDates);
+        const minValue = Math.min.apply(null, values);
+        const maxValue = Math.max.apply(null, values);
+        const span = maxValue - minValue || Math.max(maxValue * 0.25, 1);
+        const low = Math.max(0, minValue - span * 0.16);
+        const high = maxValue + span * 0.18;
+        const stroke = selectedMetric === "output_price" ? "#dc2626" : "#1d4ed8";
+
+        function x(time) {
+          if (maxTime === minTime) return margin.left + innerWidth / 2;
+          return margin.left + ((time - minTime) / (maxTime - minTime)) * innerWidth;
+        }
+
+        function y(value) {
+          return margin.top + innerHeight - ((value - low) / (high - low || 1)) * innerHeight;
+        }
+
+        function monthLabel(dateText) {
+          const date = new Date(dateText + "T00:00:00Z");
+          return date.toLocaleString("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
+        }
+
+        function yearTicks() {
+          const startYear = new Date(minTime).getUTCFullYear();
+          const endYear = new Date(maxTime).getUTCFullYear();
+          const ticks = [];
+          for (let year = startYear; year <= endYear; year += 1) {
+            ticks.push(Date.parse(year + "-01-01T00:00:00Z"));
+          }
+          if (!ticks.length || ticks[ticks.length - 1] < maxTime) {
+            ticks.push(maxTime);
+          }
+          return ticks.filter(function (tick) {
+            return tick >= minTime && tick <= maxTime;
+          });
+        }
+
+        const yTicks = [low, low + (high - low) / 2, high];
+        const path = rows.map(function (row, index) {
+          return (index === 0 ? "M" : "L") + x(parsedDates[index]) + " " + y(Number(row.value));
+        }).join(" ");
+
+        let svg = "";
+        svg += "<rect x='" + margin.left + "' y='" + margin.top + "' width='" + innerWidth + "' height='" + innerHeight + "' fill='#ffffff' />";
+        svg += "<line x1='" + margin.left + "' y1='" + (margin.top + innerHeight) + "' x2='" + (margin.left + innerWidth) + "' y2='" + (margin.top + innerHeight) + "' stroke='#111827' stroke-width='2' />";
+        svg += "<line x1='" + margin.left + "' y1='" + margin.top + "' x2='" + margin.left + "' y2='" + (margin.top + innerHeight) + "' stroke='#111827' stroke-width='2' />";
+
+        yearTicks().forEach(function (tick) {
+          const xPos = x(tick);
+          const year = new Date(tick).getUTCFullYear();
+          svg += "<line x1='" + xPos + "' y1='" + margin.top + "' x2='" + xPos + "' y2='" + (margin.top + innerHeight) + "' stroke='#e5e7eb' stroke-width='1' stroke-dasharray='4 6' />";
+          svg += "<text x='" + xPos + "' y='" + (margin.top + innerHeight + 28) + "' text-anchor='middle' fill='#374151' font-size='13'>" + year + "</text>";
+        });
+
+        yTicks.forEach(function (tick) {
+          const yPos = y(tick);
+          svg += "<line x1='" + margin.left + "' y1='" + yPos + "' x2='" + (margin.left + innerWidth) + "' y2='" + yPos + "' stroke='#e5e7eb' stroke-width='1' stroke-dasharray='4 6' />";
+          svg += "<text x='" + (margin.left - 12) + "' y='" + (yPos + 4) + "' text-anchor='end' fill='#374151' font-size='13'>" + escapeHtml(formatFrontierValue(tick, metricPayload).replace(" / 1M output tokens", "").replace(" parameters", "")) + "</text>";
+        });
+
+        svg += "<path d='" + path + "' fill='none' stroke='" + stroke + "' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round' />";
+        rows.forEach(function (row, index) {
+          const xPos = x(parsedDates[index]);
+          const yPos = y(Number(row.value));
+          const labelAnchor = index === rows.length - 1 ? "end" : "start";
+          const labelX = index === rows.length - 1 ? xPos - 8 : xPos + 8;
+          const labelY = yPos - 10;
+          svg += "<a href='" + escapeHtml(row.detail_url || payload.source_url || "") + "' class='tracker-frontier-point' data-frontier-index='" + index + "'>";
+          svg += "<circle cx='" + xPos + "' cy='" + yPos + "' r='4.6' fill='" + stroke + "' stroke='#ffffff' stroke-width='1.5' />";
+          svg += "</a>";
+          svg += "<text class='tracker-chart-label' x='" + labelX + "' y='" + labelY + "' text-anchor='" + labelAnchor + "' fill='" + stroke + "' font-size='12'>" + escapeHtml(row.short_label || row.model) + "</text>";
+        });
+
+        svg += "<text x='" + (margin.left + innerWidth / 2) + "' y='" + (height - 16) + "' text-anchor='middle' fill='#374151' font-size='13'>Date</text>";
+        svg += "<text x='28' y='" + (margin.top + innerHeight / 2) + "' text-anchor='middle' fill='#374151' font-size='13' transform='rotate(-90 28 " + (margin.top + innerHeight / 2) + ")'>" + escapeHtml(metricPayload.y_label || metricPayload.label) + "</text>";
+        frontierChart.innerHTML = svg;
+
+        frontierChart.querySelectorAll(".tracker-frontier-point").forEach(function (point) {
+          point.addEventListener("mousemove", function (event) {
+            const row = rows[Number(point.getAttribute("data-frontier-index"))];
+            frontierTooltip.innerHTML = "<strong>" + escapeHtml(row.short_label || row.model) + "</strong>" +
+              escapeHtml(row.vendor || "") + " · " + escapeHtml(monthLabel(row.date)) + "<br />" +
+              escapeHtml(formatFrontierValue(row.value, metricPayload));
+            frontierTooltip.style.display = "block";
+            frontierTooltip.style.left = Math.min(event.clientX + 14, window.innerWidth - 280) + "px";
+            frontierTooltip.style.top = Math.max(event.clientY - 24, 12) + "px";
+          });
+          point.addEventListener("mouseleave", function () {
+            frontierTooltip.style.display = "none";
+          });
+        });
+
+        frontierMeta.textContent = metricPayload.description || metricPayload.label || "";
+        frontierNote.innerHTML = escapeHtml(payload.note || "") +
+          " Source: <a class='tracker-source-link' href='" + escapeHtml(payload.source_url || "") + "'>" +
+          escapeHtml(payload.source_label || "Artificial Analysis models") +
+          "</a> (checked " + escapeHtml(payload.generated_at_pretty || tracker.generated_at_pretty || "") + ").";
+      }
+
       function buildProviderOptions() {
         if (!tracker) return;
         const entries = Object.entries(tracker.history_series).sort(function (a, b) {
@@ -830,6 +1040,10 @@
         renderChart();
         renderBenchmarkChart();
         renderProviderLeaderboard();
+        if (frontierSelect && tracker.scale_price_frontier) {
+          frontierSelect.value = tracker.scale_price_frontier.default_metric || "model_size";
+        }
+        renderScalePriceFrontier();
         syncRefreshButtonState();
       }
 
@@ -850,6 +1064,7 @@
       metricSelect.addEventListener("change", renderChart);
       grainSelect.addEventListener("change", renderChart);
       providerLeaderboardSelect.addEventListener("change", renderProviderLeaderboard);
+      frontierSelect.addEventListener("change", renderScalePriceFrontier);
 
       refreshButton.addEventListener("click", async function () {
         if (checkedToday()) {
@@ -891,6 +1106,8 @@
           benchmarkChart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">Unable to load the benchmark snapshot.</text>";
           providerLeaderboardMeta.textContent = "Unable to load provider leaderboard data right now.";
           providerLeaderboardBars.innerHTML = "<p class=\"tracker-chart-empty\">Unable to load the provider leaderboard snapshot.</p>";
+          frontierMeta.textContent = "Unable to load frontier data right now.";
+          frontierChart.innerHTML = "<text x=\"20\" y=\"40\" class=\"tracker-chart-empty\">Unable to load the scale and price frontier.</text>";
           syncRefreshButtonState();
         }
       })();
