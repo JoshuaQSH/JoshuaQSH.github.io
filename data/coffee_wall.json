@@ -116,7 +116,7 @@
     {
       "id": "quinn",
       "name": "Quinn Coffee",
-      "location": "",
+      "location": "Guangdong, China",
       "image": "/images/coffee-brand/Quinn_Coffee.jpg",
       "accent": "#60a5fa",
       "variants": [
@@ -133,6 +133,30 @@
           "consumedBags": 4
         }
       ]
+    },
+
+    {
+      "id": "ferraris",
+      "name": "Ferraris Coffee Roasters",
+      "location": "Bridgend, South Wales, UK",
+      "image": "/images/coffee-brand/Ferraris_Coffee_Roasters.webp",
+      "accent": "#DBD5C9",
+      "variants": [
+        {
+          "id": "siena",
+          "name": "Siena",
+          "farm": "Peru, Ethiopia",
+          "process": "Pulped Natural Process",
+          "producer": "",
+          "notes": "Chocolate Walnuts",
+          "roast": "Extra Dark",
+          "grind": "Beans",
+          "weightGrams": 1000,
+          "consumedBags": 1
+        }
+      ]
     }
+
+      
   ]
 }
