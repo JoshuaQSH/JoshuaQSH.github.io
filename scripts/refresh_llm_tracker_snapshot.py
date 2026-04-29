@@ -20,40 +20,74 @@ TOGETHER_GLM_URL = "https://www.together.ai/models/glm-5"
 TOGETHER_LLAMA_URL = "https://www.together.ai/models/llama-4-maverick"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; home-page tracker refresh)"}
 FRONTIER_START_DATE = "2021-01-01"
+FRONTIER_END_DATE = "2026-12-31"
 FRONTIER_SEED_ROWS = {
     "model_size": [
         {
-            "date": "2021-01-11",
-            "vendor": "Google Brain",
-            "model": "Switch Transformer",
-            "short_label": "Switch Transformer",
+            "date": "2021-06-09",
+            "vendor": "EleutherAI",
+            "model": "GPT-J-6B",
+            "short_label": "GPT-J-6B",
+            "value": 6.0,
+            "source_url": "https://huggingface.co/EleutherAI/gpt-j-6b",
+            "source_label": "EleutherAI GPT-J model card",
+            "detail_label": "Source",
+            "note": "Open-source Apache-2.0 weights; 6B parameters.",
+        },
+        {
+            "date": "2022-07-12",
+            "vendor": "BigScience",
+            "model": "BLOOM",
+            "short_label": "BLOOM",
+            "value": 176.0,
+            "source_url": "https://arxiv.org/abs/2211.05100",
+            "source_label": "BLOOM paper",
+            "detail_label": "Source",
+            "note": "Open-access multilingual model; 176B parameters.",
+        },
+        {
+            "date": "2023-09-06",
+            "vendor": "Technology Innovation Institute",
+            "model": "Falcon-180B",
+            "short_label": "Falcon-180B",
+            "value": 180.0,
+            "source_url": "https://arxiv.org/abs/2311.16867",
+            "source_label": "Falcon paper",
+            "detail_label": "Source",
+            "note": "Open model under Falcon license; 180B parameters.",
+        },
+        {
+            "date": "2024-12-26",
+            "vendor": "DeepSeek",
+            "model": "DeepSeek-V3",
+            "short_label": "DeepSeek-V3",
+            "value": 671.0,
+            "source_url": "https://arxiv.org/abs/2412.19437",
+            "source_label": "DeepSeek-V3 technical report",
+            "detail_label": "Source",
+            "note": "Open-weight MoE; 671B total parameters and 37B active parameters.",
+        },
+        {
+            "date": "2025-07-11",
+            "vendor": "Moonshot AI",
+            "model": "Kimi K2",
+            "short_label": "Kimi K2",
+            "value": 1000.0,
+            "source_url": "https://arxiv.org/abs/2507.20534",
+            "source_label": "Kimi K2 paper",
+            "detail_label": "Source",
+            "note": "Open-weight MoE; 1T total parameters and 32B active parameters.",
+        },
+        {
+            "date": "2026-04-24",
+            "vendor": "DeepSeek",
+            "model": "DeepSeek V4 Pro",
+            "short_label": "DeepSeek V4 Pro",
             "value": 1600.0,
-            "source_url": "https://arxiv.org/abs/2101.03961",
-            "source_label": "Switch Transformer paper",
+            "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/main/DeepSeek_V4.pdf",
+            "source_label": "DeepSeek V4 technical report",
             "detail_label": "Source",
-            "note": "Sparse MoE model; total parameter count.",
-        },
-        {
-            "date": "2021-06-01",
-            "vendor": "BAAI",
-            "model": "Wu Dao 2.0",
-            "short_label": "Wu Dao 2.0",
-            "value": 1750.0,
-            "source_url": "https://www.baai.ac.cn/en/research",
-            "source_label": "BAAI research page",
-            "detail_label": "Source",
-            "note": "Reported as the largest pre-trained model at launch; total parameter count.",
-        },
-        {
-            "date": "2025-04-05",
-            "vendor": "Meta",
-            "model": "Llama 4 Behemoth",
-            "short_label": "Llama 4 Behemoth",
-            "value": 2000.0,
-            "source_url": "https://ai.meta.com/blog/llama-4-multimodal-intelligence/",
-            "source_label": "Meta Llama 4 announcement",
-            "detail_label": "Source",
-            "note": "Previewed research model; about 2T total parameters and 288B active parameters.",
+            "note": "Open-weight MoE; 1.6T total parameters and 49B active parameters.",
         },
     ],
     "output_price": [
@@ -342,6 +376,8 @@ def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
         value_key: str,
         minimum: float,
         digits: int,
+        open_weights_only: bool = False,
+        annual: bool = False,
     ) -> list[dict[str, Any]]:
         rows: list[dict[str, Any]] = copy.deepcopy(FRONTIER_SEED_ROWS[seed_key])
         seen: set[tuple[str, str, float]] = set()
@@ -350,6 +386,8 @@ def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
         for model in models:
             value = model.get(value_key)
             if value is None or not valid_model(model):
+                continue
+            if open_weights_only and not model.get("is_open_weights"):
                 continue
             numeric = float(value)
             if numeric < minimum:
@@ -373,6 +411,28 @@ def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
             )
 
         rows.sort(key=lambda item: (item["date"], item["value"], item["short_label"]))
+        if annual:
+            yearly_rows: list[dict[str, Any]] = []
+            start_year = int(FRONTIER_START_DATE[:4])
+            end_year = int(FRONTIER_END_DATE[:4])
+            for year in range(start_year, end_year + 1):
+                year_end = f"{year}-12-31"
+                candidates = [row for row in rows if row["date"] <= year_end]
+                if not candidates:
+                    continue
+                best_value = max(row["value"] for row in candidates)
+                best = min(
+                    [row for row in candidates if row["value"] == best_value],
+                    key=lambda item: item["date"],
+                )
+                yearly = copy.deepcopy(best)
+                if best["date"][:4] != str(year):
+                    yearly["date"] = year_end
+                    yearly["carried_forward"] = True
+                yearly["year"] = year
+                yearly_rows.append(yearly)
+            return yearly_rows
+
         best = float("-inf")
         milestones: list[dict[str, Any]] = []
         for row in rows:
@@ -382,28 +442,42 @@ def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
         return milestones
 
     return {
-        "note": "Milestone lines start in 2021 and combine curated source-backed historical records with the latest Artificial Analysis model metadata. Model size uses total disclosed parameters, so sparse MoE and dense models are not quality-equivalent. Output-token price uses public USD text-token API prices and excludes tool-call, image, audio, video, and subscription pricing.",
+        "note": "Lines start in 2021 and combine curated source-backed historical records with the latest Artificial Analysis model metadata. Model size tracks the largest open-weight/open-access LLM by total disclosed parameters for each year, so sparse MoE and dense models are not quality-equivalent. Output-token price uses public USD text-token API prices and excludes tool-call, image, audio, video, and subscription pricing.",
         "source_url": MODELS_URL,
         "source_label": "Artificial Analysis models",
         "generated_at_pretty": pretty_date(now_utc()),
         "start_date": FRONTIER_START_DATE,
+        "end_date": FRONTIER_END_DATE,
         "default_metric": "model_size",
         "metrics": {
             "model_size": {
-                "label": "Largest disclosed LLM size",
-                "description": "Running record of the largest publicly disclosed total parameter count since 2021.",
+                "label": "Largest open-weight LLM size",
+                "description": "Largest reviewed open-weight/open-access LLM size by year, measured in total disclosed parameters.",
                 "y_label": "Parameters",
                 "unit": "B parameters",
                 "value_format": "parameters",
-                "rows": build_milestones("model_size", "parameters", minimum=100, digits=3),
+                "rows": build_milestones(
+                    "model_size",
+                    "parameters",
+                    minimum=100,
+                    digits=3,
+                    open_weights_only=True,
+                    annual=True,
+                ),
             },
             "output_price": {
                 "label": "Most expensive output token",
-                "description": "Running record of the highest reviewed public text-output token price since 2021.",
+                "description": "Highest reviewed public text-output token price by year since 2021.",
                 "y_label": "Output price",
                 "unit": "USD per 1M output tokens",
                 "value_format": "usd",
-                "rows": build_milestones("output_price", "price_1m_output_tokens", minimum=0.0001, digits=4),
+                "rows": build_milestones(
+                    "output_price",
+                    "price_1m_output_tokens",
+                    minimum=0.0001,
+                    digits=4,
+                    annual=True,
+                ),
             },
         },
     }

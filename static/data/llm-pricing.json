@@ -1,7 +1,7 @@
 {
   "generated_at": "2026-04-29",
   "generated_at_pretty": "April 29, 2026",
-  "generated_at_iso": "2026-04-29T17:26:59+00:00",
+  "generated_at_iso": "2026-04-29T18:00:03+00:00",
   "summary_note": "This tracker loads the latest repo snapshot. The button below checks GitHub for a newer snapshot at most once per day in this browser; official pricing pages can still change between repo refreshes.",
   "history_note": "History lines use official pricing snapshots that are stored in this repo. Some providers only have one official snapshot recorded so far, while others mix successive flagship or promo models.",
   "chart_defaults": {
@@ -1537,58 +1537,98 @@
     }
   },
   "scale_price_frontier": {
-    "note": "Milestone lines start in 2021 and combine curated source-backed historical records with the latest Artificial Analysis model metadata. Model size uses total disclosed parameters, so sparse MoE and dense models are not quality-equivalent. Output-token price uses public USD text-token API prices and excludes tool-call, image, audio, video, and subscription pricing.",
+    "note": "Lines start in 2021 and combine curated source-backed historical records with the latest Artificial Analysis model metadata. Model size tracks the largest open-weight/open-access LLM by total disclosed parameters for each year, so sparse MoE and dense models are not quality-equivalent. Output-token price uses public USD text-token API prices and excludes tool-call, image, audio, video, and subscription pricing.",
     "source_url": "https://artificialanalysis.ai/models",
     "source_label": "Artificial Analysis models",
     "generated_at_pretty": "April 29, 2026",
     "start_date": "2021-01-01",
+    "end_date": "2026-12-31",
     "default_metric": "model_size",
     "metrics": {
       "model_size": {
-        "label": "Largest disclosed LLM size",
-        "description": "Running record of the largest publicly disclosed total parameter count since 2021.",
+        "label": "Largest open-weight LLM size",
+        "description": "Largest reviewed open-weight/open-access LLM size by year, measured in total disclosed parameters.",
         "y_label": "Parameters",
         "unit": "B parameters",
         "value_format": "parameters",
         "rows": [
           {
-            "date": "2021-01-11",
-            "vendor": "Google Brain",
-            "model": "Switch Transformer",
-            "short_label": "Switch Transformer",
+            "date": "2021-06-09",
+            "vendor": "EleutherAI",
+            "model": "GPT-J-6B",
+            "short_label": "GPT-J-6B",
+            "value": 6.0,
+            "source_url": "https://huggingface.co/EleutherAI/gpt-j-6b",
+            "source_label": "EleutherAI GPT-J model card",
+            "detail_label": "Source",
+            "note": "Open-source Apache-2.0 weights; 6B parameters.",
+            "year": 2021
+          },
+          {
+            "date": "2022-07-12",
+            "vendor": "BigScience",
+            "model": "BLOOM",
+            "short_label": "BLOOM",
+            "value": 176.0,
+            "source_url": "https://arxiv.org/abs/2211.05100",
+            "source_label": "BLOOM paper",
+            "detail_label": "Source",
+            "note": "Open-access multilingual model; 176B parameters.",
+            "year": 2022
+          },
+          {
+            "date": "2023-09-06",
+            "vendor": "Technology Innovation Institute",
+            "model": "Falcon-180B",
+            "short_label": "Falcon-180B",
+            "value": 180.0,
+            "source_url": "https://arxiv.org/abs/2311.16867",
+            "source_label": "Falcon paper",
+            "detail_label": "Source",
+            "note": "Open model under Falcon license; 180B parameters.",
+            "year": 2023
+          },
+          {
+            "date": "2024-12-26",
+            "vendor": "DeepSeek",
+            "model": "DeepSeek-V3",
+            "short_label": "DeepSeek-V3",
+            "value": 671.0,
+            "source_url": "https://arxiv.org/abs/2412.19437",
+            "source_label": "DeepSeek-V3 technical report",
+            "detail_label": "Source",
+            "note": "Open-weight MoE; 671B total parameters and 37B active parameters.",
+            "year": 2024
+          },
+          {
+            "date": "2025-07-11",
+            "vendor": "Moonshot AI",
+            "model": "Kimi K2",
+            "short_label": "Kimi K2",
+            "value": 1000.0,
+            "source_url": "https://arxiv.org/abs/2507.20534",
+            "source_label": "Kimi K2 paper",
+            "detail_label": "Source",
+            "note": "Open-weight MoE; 1T total parameters and 32B active parameters.",
+            "year": 2025
+          },
+          {
+            "date": "2026-04-24",
+            "vendor": "DeepSeek",
+            "model": "DeepSeek V4 Pro",
+            "short_label": "DeepSeek V4 Pro",
             "value": 1600.0,
-            "source_url": "https://arxiv.org/abs/2101.03961",
-            "source_label": "Switch Transformer paper",
+            "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/main/DeepSeek_V4.pdf",
+            "source_label": "DeepSeek V4 technical report",
             "detail_label": "Source",
-            "note": "Sparse MoE model; total parameter count."
-          },
-          {
-            "date": "2021-06-01",
-            "vendor": "BAAI",
-            "model": "Wu Dao 2.0",
-            "short_label": "Wu Dao 2.0",
-            "value": 1750.0,
-            "source_url": "https://www.baai.ac.cn/en/research",
-            "source_label": "BAAI research page",
-            "detail_label": "Source",
-            "note": "Reported as the largest pre-trained model at launch; total parameter count."
-          },
-          {
-            "date": "2025-04-05",
-            "vendor": "Meta",
-            "model": "Llama 4 Behemoth",
-            "short_label": "Llama 4 Behemoth",
-            "value": 2000.0,
-            "source_url": "https://ai.meta.com/blog/llama-4-multimodal-intelligence/",
-            "source_label": "Meta Llama 4 announcement",
-            "detail_label": "Source",
-            "note": "Previewed research model; about 2T total parameters and 288B active parameters."
+            "note": "Open-weight MoE; 1.6T total parameters and 49B active parameters.",
+            "year": 2026
           }
         ]
       },
       "output_price": {
         "label": "Most expensive output token",
-        "description": "Running record of the highest reviewed public text-output token price since 2021.",
+        "description": "Highest reviewed public text-output token price by year since 2021.",
         "y_label": "Output price",
         "unit": "USD per 1M output tokens",
         "value_format": "usd",
@@ -1602,7 +1642,21 @@
             "source_url": "https://fewald.net/machine-learning/2022/08/22/openai-api-price-reduction.html",
             "source_label": "OpenAI API price-reduction note",
             "detail_label": "Source",
-            "note": "Legacy GPT-3 era price converted from $0.06 per 1K tokens."
+            "note": "Legacy GPT-3 era price converted from $0.06 per 1K tokens.",
+            "year": 2021
+          },
+          {
+            "date": "2022-12-31",
+            "vendor": "OpenAI",
+            "model": "davinci",
+            "short_label": "davinci",
+            "value": 60.0,
+            "source_url": "https://fewald.net/machine-learning/2022/08/22/openai-api-price-reduction.html",
+            "source_label": "OpenAI API price-reduction note",
+            "detail_label": "Source",
+            "note": "Legacy GPT-3 era price converted from $0.06 per 1K tokens.",
+            "carried_forward": true,
+            "year": 2022
           },
           {
             "date": "2023-03-14",
@@ -1613,18 +1667,21 @@
             "source_url": "https://help.openai.com/en/articles/7127956-how-much-does-gpt-4-cost",
             "source_label": "OpenAI GPT-4 pricing help",
             "detail_label": "Source",
-            "note": "Output price for the 32K GPT-4 API tier."
+            "note": "Output price for the 32K GPT-4 API tier.",
+            "year": 2023
           },
           {
-            "date": "2025-02-27",
+            "date": "2024-12-31",
             "vendor": "OpenAI",
-            "model": "gpt-4.5-preview",
-            "short_label": "GPT-4.5 Preview",
-            "value": 150.0,
-            "source_url": "https://platform.openai.com/docs/models/gpt-4.5-preview",
-            "source_label": "OpenAI GPT-4.5 model page",
+            "model": "gpt-4-32k",
+            "short_label": "GPT-4 32K",
+            "value": 120.0,
+            "source_url": "https://help.openai.com/en/articles/7127956-how-much-does-gpt-4-cost",
+            "source_label": "OpenAI GPT-4 pricing help",
             "detail_label": "Source",
-            "note": "Deprecated research preview; output price at launch."
+            "note": "Output price for the 32K GPT-4 API tier.",
+            "carried_forward": true,
+            "year": 2024
           },
           {
             "date": "2025-03-19",
@@ -1635,7 +1692,21 @@
             "source_url": "https://platform.openai.com/docs/models/o1-pro",
             "source_label": "OpenAI o1-pro model page",
             "detail_label": "Source",
-            "note": "Highest public text-output token price found in the reviewed sources."
+            "note": "Highest public text-output token price found in the reviewed sources.",
+            "year": 2025
+          },
+          {
+            "date": "2026-12-31",
+            "vendor": "OpenAI",
+            "model": "o1-pro",
+            "short_label": "o1-pro",
+            "value": 600.0,
+            "source_url": "https://platform.openai.com/docs/models/o1-pro",
+            "source_label": "OpenAI o1-pro model page",
+            "detail_label": "Source",
+            "note": "Highest public text-output token price found in the reviewed sources.",
+            "carried_forward": true,
+            "year": 2026
           }
         ]
       }

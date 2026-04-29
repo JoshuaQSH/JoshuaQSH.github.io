@@ -440,13 +440,13 @@
 
         <section class="tracker-section">
           <h2>Scale and Price Frontier</h2>
-          <p class="tracker-section-intro">A Star History-style milestone line for the largest disclosed model sizes and the highest output-token prices in the current model catalog.</p>
+          <p class="tracker-section-intro">A Star History-style yearly line for open-weight model sizes and the highest reviewed output-token prices since 2021.</p>
           <div class="tracker-frontier-header">
             <p class="tracker-chart-meta" id="llm-frontier-meta">Loading scale and price frontier…</p>
             <div class="tracker-control">
               <label for="llm-frontier-select">Frontier metric</label>
               <select id="llm-frontier-select">
-                <option value="model_size">Largest disclosed model size</option>
+                <option value="model_size">Largest open-weight model size</option>
                 <option value="output_price">Most expensive output token</option>
               </select>
             </div>
@@ -827,8 +827,9 @@
         const parsedDates = rows.map(function (row) { return Date.parse(row.date); });
         const values = rows.map(function (row) { return Number(row.value); });
         const startTime = Date.parse((payload.start_date || "2021-01-01") + "T00:00:00Z");
+        const endTime = Date.parse((payload.end_date || "2026-12-31") + "T00:00:00Z");
         const minTime = Math.min(startTime, Math.min.apply(null, parsedDates));
-        const maxTime = Math.max.apply(null, parsedDates);
+        const maxTime = Math.max(endTime, Math.max.apply(null, parsedDates));
         const minValue = Math.min.apply(null, values);
         const maxValue = Math.max.apply(null, values);
         const span = maxValue - minValue || Math.max(maxValue * 0.25, 1);
@@ -883,11 +884,11 @@
         function roughPolyline(points, color) {
           return [0, 1].map(function (pass) {
             const pathData = points.map(function (point, index) {
-              const xValue = point[0] + stableJitter(index + pass * 31, pass ? 4 : 2);
-              const yValue = point[1] + stableJitter(index + pass * 47, pass ? 4 : 2);
+              const xValue = point[0] + stableJitter(index + pass * 31, pass ? 2.4 : 1.2);
+              const yValue = point[1] + stableJitter(index + pass * 47, pass ? 2.4 : 1.2);
               return (index === 0 ? "M" : "L") + xValue + " " + yValue;
             }).join(" ");
-            return "<path d='" + pathData + "' fill='none' stroke='" + color + "' stroke-width='" + (pass ? 2.2 : 3.2) + "' stroke-linecap='round' stroke-linejoin='round' opacity='" + (pass ? 0.65 : 1) + "' />";
+            return "<path d='" + pathData + "' fill='none' stroke='" + color + "' stroke-width='" + (pass ? 1.1 : 2) + "' stroke-linecap='round' stroke-linejoin='round' opacity='" + (pass ? 0.55 : 1) + "' />";
           }).join("");
         }
 
@@ -905,13 +906,13 @@
         yearTicks().forEach(function (tick) {
           const xPos = x(tick);
           const year = new Date(tick).getUTCFullYear();
-          svg += roughLine(xPos, margin.top, xPos, margin.top + innerHeight, "#e5e7eb", 1, "stroke-dasharray='4 6'");
+          svg += roughLine(xPos, margin.top + innerHeight, xPos, margin.top + innerHeight + 7, "#111827", 1.4, "");
           svg += "<text x='" + xPos + "' y='" + (margin.top + innerHeight + 28) + "' text-anchor='middle' fill='#374151' font-size='13'>" + year + "</text>";
         });
 
         yTicks.forEach(function (tick) {
           const yPos = y(tick);
-          svg += roughLine(margin.left, yPos, margin.left + innerWidth, yPos, "#e5e7eb", 1, "stroke-dasharray='4 6'");
+          svg += roughLine(margin.left - 7, yPos, margin.left, yPos, "#111827", 1.4, "");
           svg += "<text x='" + (margin.left - 12) + "' y='" + (yPos + 4) + "' text-anchor='end' fill='#374151' font-size='13'>" + escapeHtml(formatFrontierValue(tick, metricPayload).replace(" / 1M output tokens", "").replace(" parameters", "")) + "</text>";
         });
 
