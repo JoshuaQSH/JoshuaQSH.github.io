@@ -47,15 +47,25 @@
       font: inherit;
     }
     .menu-gate {
+      --menu-ink: #21170f;
+      --menu-muted: #5f5a52;
+      --menu-paper: #f7f7f4;
+      --menu-soft: #e5e7e5;
+      --menu-green: #4d6a35;
+      --menu-rose: #a43227;
+      --menu-yellow: #d7a83d;
+      --menu-hover: #c7a55a;
+      --menu-shadow: rgba(33, 23, 15, 0.18);
       align-items: center;
       background:
-        linear-gradient(90deg, rgba(47, 97, 200, 0.08) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(35, 122, 87, 0.08) 1px, transparent 1px),
-        var(--menu-paper);
+        linear-gradient(90deg, rgba(33, 23, 15, 0.055) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(33, 23, 15, 0.055) 1px, transparent 1px),
+        #eef0ee;
       background-size: 28px 28px;
       border: 2px solid var(--menu-ink);
       border-radius: 8px;
       box-shadow: 7px 7px 0 rgba(23, 32, 51, 0.12);
+      color: var(--menu-ink);
       display: grid;
       gap: 18px;
       justify-items: start;

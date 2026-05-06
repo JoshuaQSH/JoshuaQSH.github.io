@@ -1,11 +1,11 @@
 ---
-title: "动态菜单"
+title: "Don't Starve Menu"
 date: 2026-05-06
 categories: ["Hodgepodge"]
 tags: ["menu", "calendar", "planner", "health", "personal"]
-image: "/images/avatar.png"
+image: "/images/hodgepodge/raccoon_chef_DST.png"
 imageAlt: "菜单守护员"
-summary: "一页手绘风的中文动态菜单，带分类菜牌、每日安排、身份识别、BMI 和热量计算。"
+summary: "A Chinese Menu and Calander Demo"
 layout: "partner-menu"
 ---
 
