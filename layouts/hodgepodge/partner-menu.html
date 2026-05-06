@@ -271,14 +271,22 @@
       z-index: 1;
     }
     .menu-board-head h2 {
-      font-size: 2rem;
+      font-size: 2.25rem;
     }
     .menu-category-tabs {
+      background: rgba(242, 223, 183, 0.88);
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
       display: flex;
       flex-wrap: wrap;
       gap: 9px;
-      position: relative;
+      padding: 9px;
+      position: sticky;
+      top: 8px;
       z-index: 1;
+    }
+    html[data-theme="dark"] .menu-category-tabs {
+      background: rgba(25, 18, 12, 0.9);
     }
     .menu-category-tab {
       align-items: center;
@@ -315,13 +323,43 @@
       width: 32px;
     }
     .menu-board-layout {
+      align-items: start;
       display: grid;
       gap: 18px;
-      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.62fr);
+      grid-template-columns: minmax(0, 1fr) minmax(250px, 0.38fr);
       position: relative;
       z-index: 1;
     }
     .menu-dish-grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: 1fr;
+    }
+    .menu-category-section {
+      display: grid;
+      gap: 12px;
+      scroll-margin-top: 92px;
+    }
+    .menu-category-heading {
+      align-items: baseline;
+      border-bottom: 2px solid var(--menu-ink);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      padding-bottom: 7px;
+    }
+    .menu-category-heading h3 {
+      color: var(--menu-ink);
+      font-size: 1.55rem;
+      margin: 0;
+    }
+    .menu-category-heading span {
+      color: var(--menu-muted);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+    .menu-category-card-grid {
       display: grid;
       gap: 12px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -402,6 +440,8 @@
       gap: 12px;
       min-height: 100%;
       padding: 16px;
+      position: sticky;
+      top: 92px;
       transform: rotate(0.5deg);
     }
     .menu-detail-board h3 {
@@ -437,9 +477,10 @@
       text-align: right;
     }
     .menu-grid {
+      align-items: start;
       display: grid;
       gap: 18px;
-      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+      grid-template-columns: minmax(220px, 0.5fr) minmax(0, 1fr);
     }
     .menu-panel {
       background: var(--menu-paper);
@@ -516,6 +557,34 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+    .menu-calendar-panel .menu-panel-head {
+      margin-bottom: 8px;
+    }
+    .menu-calendar-panel .menu-month-tools {
+      gap: 6px;
+    }
+    .menu-calendar-panel .menu-button {
+      padding: 5px 8px;
+    }
+    .menu-calendar-panel .menu-weekdays,
+    .menu-calendar-panel .menu-days {
+      gap: 4px;
+    }
+    .menu-calendar-panel .menu-weekday {
+      font-size: 0.72rem;
+    }
+    .menu-calendar-panel .menu-day {
+      border-width: 1px;
+      gap: 2px;
+      min-height: 46px;
+      padding: 4px;
+    }
+    .menu-calendar-panel .menu-day-number {
+      font-size: 0.86rem;
+    }
+    .menu-calendar-panel .menu-day-line {
+      font-size: 0.62rem;
     }
     .menu-editor {
       display: grid;
@@ -604,8 +673,12 @@
       .menu-calc-fields {
         grid-template-columns: 1fr;
       }
-      .menu-dish-grid {
+      .menu-category-card-grid {
         grid-template-columns: 1fr;
+      }
+      .menu-category-tabs,
+      .menu-detail-board {
+        position: static;
       }
     }
   </style>
@@ -649,10 +722,10 @@
       <section class="menu-board" aria-labelledby="menu-board-title">
         <div class="menu-board-head">
           <div>
-            <p class="menu-kicker">手绘菜牌</p>
-            <h2 id="menu-board-title">先挑菜，再安排</h2>
+            <p class="menu-kicker">手绘主菜单</p>
+            <h2 id="menu-board-title">先看菜单，再安排</h2>
           </div>
-          <p class="menu-copy" id="menu-category-note">鼠标移到菜名上，会看到口味、搭配和热量小纸条。</p>
+          <p class="menu-copy" id="menu-category-note">像餐厅菜单一样按分类浏览。鼠标移到菜名上，会看到口味、搭配和热量小纸条。</p>
         </div>
         <div class="menu-category-tabs" id="menu-category-tabs" aria-label="菜单分类"></div>
         <div class="menu-board-layout">
@@ -662,9 +735,9 @@
       </section>
 
       <div class="menu-grid">
-        <section class="menu-panel" aria-labelledby="menu-calendar-title">
+        <section class="menu-panel menu-calendar-panel" aria-labelledby="menu-calendar-title">
           <div class="menu-panel-head">
-            <h2 id="menu-calendar-title">安排到日历</h2>
+            <h2 id="menu-calendar-title">小日历</h2>
             <div class="menu-month-tools">
               <button class="menu-button" id="menu-prev-month" type="button">上个月</button>
               <button class="menu-button" id="menu-next-month" type="button">下个月</button>
@@ -926,8 +999,6 @@
           button.className = "menu-day" + (key === selectedDate ? " is-selected" : "");
           button.innerHTML = [
             "<span class='menu-day-number'>" + day + "</span>",
-            "<span class='menu-day-line'>早：" + escapeHtml(data.breakfast) + "</span>",
-            "<span class='menu-day-line'>午：" + escapeHtml(data.lunch) + "</span>",
             "<span class='menu-day-line'>晚：" + escapeHtml(data.dinner) + "</span>"
           ].join("");
           button.addEventListener("click", function () {
@@ -964,27 +1035,52 @@
             const next = menuCategories.find(function (item) { return item.key === nextCategory; }) || menuCategories[0];
             activeCategory = next.key;
             activeDishName = next.items && next.items[0] ? next.items[0].name : "";
-            renderMenuBoard();
+            updateCategoryTabs();
+            renderDishDetail(activeDishData(), activeCategoryData());
+            const target = document.getElementById("menu-section-" + activeCategory);
+            if (target) {
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
           });
         });
-        categoryNoteEl.textContent = category.note || "鼠标移到菜名上，会看到口味、搭配和热量小纸条。";
-        renderDishGrid(category);
+        categoryNoteEl.textContent = "像餐厅菜单一样按分类浏览。鼠标移到菜名上，会看到口味、搭配和热量小纸条。";
+        renderDishGrid();
         renderDishDetail(activeDishData(), category);
       }
 
-      function renderDishGrid(category) {
-        const items = category.items || [];
-        dishGridEl.innerHTML = items.map(function (item) {
-          const activeClass = item.name === activeDishName ? " is-active" : "";
-          const tags = (item.tags || []).slice(0, 3).map(function (tag) {
-            return "<span class='menu-dish-tag'>" + escapeHtml(tag) + "</span>";
+      function updateCategoryTabs() {
+        categoryTabsEl.querySelectorAll("[data-category]").forEach(function (button) {
+          button.classList.toggle("is-active", button.getAttribute("data-category") === activeCategory);
+        });
+        dishGridEl.querySelectorAll("[data-dish]").forEach(function (button) {
+          button.classList.toggle("is-active", button.getAttribute("data-dish") === activeDishName);
+        });
+      }
+
+      function renderDishGrid() {
+        dishGridEl.innerHTML = menuCategories.map(function (category) {
+          const items = category.items || [];
+          const cards = items.map(function (item) {
+            const activeClass = item.name === activeDishName ? " is-active" : "";
+            const tags = (item.tags || []).slice(0, 3).map(function (tag) {
+              return "<span class='menu-dish-tag'>" + escapeHtml(tag) + "</span>";
+            }).join("");
+            return "<button class='menu-dish" + activeClass + "' type='button' data-category='" + escapeHtml(category.key) + "' data-dish='" + escapeHtml(item.name) + "'><span class='menu-dish-title'><span class='menu-dish-mark'>" + escapeHtml(category.mark) + "</span>" + escapeHtml(item.name) + "</span><span class='menu-dish-tags'>" + tags + "</span><span class='menu-dish-detail'>" + escapeHtml(item.detail) + "</span></button>";
           }).join("");
-          return "<button class='menu-dish" + activeClass + "' type='button' data-dish='" + escapeHtml(item.name) + "'><span class='menu-dish-title'><span class='menu-dish-mark'>" + escapeHtml(category.mark) + "</span>" + escapeHtml(item.name) + "</span><span class='menu-dish-tags'>" + tags + "</span><span class='menu-dish-detail'>" + escapeHtml(item.detail) + "</span></button>";
+          return [
+            "<section class='menu-category-section' id='menu-section-" + escapeHtml(category.key) + "'>",
+            "<div class='menu-category-heading'><h3>" + escapeHtml(category.label) + "</h3><span>" + escapeHtml(category.note) + "</span></div>",
+            "<div class='menu-category-card-grid'>",
+            cards,
+            "</div>",
+            "</section>"
+          ].join("");
         }).join("");
         dishGridEl.querySelectorAll("[data-dish]").forEach(function (button) {
           const activate = function () {
+            activeCategory = button.getAttribute("data-category") || activeCategory;
             activeDishName = button.getAttribute("data-dish") || activeDishName;
-            renderDishGrid(activeCategoryData());
+            updateCategoryTabs();
             renderDishDetail(activeDishData(), activeCategoryData());
           };
           button.addEventListener("mouseenter", activate);
