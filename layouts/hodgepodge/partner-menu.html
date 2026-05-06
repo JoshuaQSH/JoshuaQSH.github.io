@@ -1,0 +1,1117 @@
+{{ define "extra_head" }}
+  <style>
+    @font-face {
+      font-family: "Belisa_plumilla";
+      font-style: normal;
+      font-weight: 400 900;
+      src: local("Belisa_plumilla"), local("Belisa Plumilla");
+    }
+    .menu-page,
+    .menu-page * {
+      box-sizing: border-box;
+    }
+    .menu-page {
+      --menu-ink: #21170f;
+      --menu-muted: #6b5439;
+      --menu-paper: #f2dfb7;
+      --menu-soft: #ead3a1;
+      --menu-green: #4d6a35;
+      --menu-rose: #a43227;
+      --menu-blue: #365564;
+      --menu-yellow: #d7a83d;
+      --menu-hover: #c7a55a;
+      --menu-hover-soft: rgba(199, 165, 90, 0.28);
+      --menu-shadow: rgba(33, 23, 15, 0.24);
+      color: var(--menu-ink);
+      display: grid;
+      font-family: "Belisa_plumilla", "Belisa Plumilla", "Kaiti SC", "KaiTi", "STKaiti", "PingFang SC", "Microsoft YaHei", sans-serif;
+      gap: 24px;
+    }
+    html[data-theme="dark"] .menu-page {
+      --menu-ink: #f2dfb7;
+      --menu-muted: #c7b18d;
+      --menu-paper: #19120c;
+      --menu-soft: #24180f;
+      --menu-green: #87a95d;
+      --menu-rose: #df6557;
+      --menu-blue: #9bb7bc;
+      --menu-yellow: #e3bd5f;
+      --menu-hover: #9d7e3b;
+      --menu-hover-soft: rgba(227, 189, 95, 0.2);
+      --menu-shadow: rgba(0, 0, 0, 0.36);
+    }
+    .menu-page input,
+    .menu-page select,
+    .menu-page textarea,
+    .menu-page button {
+      font: inherit;
+    }
+    .menu-gate {
+      align-items: center;
+      background:
+        linear-gradient(90deg, rgba(47, 97, 200, 0.08) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(35, 122, 87, 0.08) 1px, transparent 1px),
+        var(--menu-paper);
+      background-size: 28px 28px;
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      box-shadow: 7px 7px 0 rgba(23, 32, 51, 0.12);
+      display: grid;
+      gap: 18px;
+      justify-items: start;
+      min-height: 430px;
+      padding: 28px;
+      position: relative;
+    }
+    .menu-gate::after,
+    .menu-hero::after {
+      border: 2px solid var(--menu-ink);
+      border-left: 0;
+      border-top: 0;
+      content: "";
+      height: 46px;
+      opacity: 0.55;
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      transform: rotate(3deg);
+      width: 72px;
+    }
+    .menu-gate h2,
+    .menu-hero h2,
+    .menu-panel h2 {
+      color: var(--menu-ink);
+      margin: 0;
+    }
+    .menu-gate p,
+    .menu-hero p,
+    .menu-panel p {
+      margin: 0;
+    }
+    .menu-gate-form {
+      display: grid;
+      gap: 12px;
+      max-width: 420px;
+      width: 100%;
+    }
+    .menu-label {
+      color: var(--menu-muted);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .menu-input,
+    .menu-select,
+    .menu-textarea {
+      background: var(--menu-paper);
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      color: var(--menu-ink);
+      min-width: 0;
+      padding: 10px 12px;
+      width: 100%;
+    }
+    .menu-textarea {
+      min-height: 78px;
+      resize: vertical;
+    }
+    .menu-button {
+      background: var(--menu-paper);
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      box-shadow: 3px 3px 0 var(--menu-shadow);
+      color: var(--menu-ink);
+      cursor: pointer;
+      font-weight: 700;
+      padding: 9px 13px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+    .menu-button:hover,
+    .menu-button:focus-visible {
+      background: var(--menu-hover);
+      border-color: var(--menu-ink);
+      color: #21170f;
+      outline: none;
+      transform: translate(-1px, -1px) rotate(-0.5deg);
+      box-shadow: 5px 5px 0 var(--menu-shadow);
+    }
+    .menu-button-primary {
+      background: var(--menu-green);
+      color: #fff5da;
+    }
+    .menu-button-rose {
+      background: var(--menu-rose);
+      color: #fff5da;
+    }
+    .menu-button-primary:hover,
+    .menu-button-primary:focus-visible,
+    .menu-button-rose:hover,
+    .menu-button-rose:focus-visible {
+      background: var(--menu-yellow);
+      color: #21170f;
+    }
+    .menu-status {
+      color: var(--menu-rose);
+      min-height: 1.4rem;
+    }
+    .menu-app[hidden],
+    .menu-gate[hidden] {
+      display: none;
+    }
+    .menu-app {
+      display: grid;
+      gap: 24px;
+    }
+    .menu-hero {
+      background:
+        linear-gradient(90deg, rgba(47, 97, 200, 0.08) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(192, 47, 91, 0.07) 1px, transparent 1px),
+        var(--menu-paper);
+      background-size: 26px 26px;
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      box-shadow: 7px 7px 0 rgba(35, 122, 87, 0.14);
+      display: grid;
+      gap: 20px;
+      grid-template-columns: minmax(0, 1fr) 150px;
+      overflow: hidden;
+      padding: 26px;
+      position: relative;
+    }
+    .menu-kicker {
+      color: var(--menu-rose);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+    .menu-title {
+      font-size: 2.6rem;
+      line-height: 1.12;
+      margin: 0;
+      max-width: 12ch;
+    }
+    .menu-copy {
+      color: var(--menu-muted);
+      max-width: 56ch;
+    }
+    .menu-guardian {
+      align-self: center;
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      transform: rotate(2deg);
+    }
+    .menu-guardian img {
+      border: 2px solid var(--menu-ink);
+      border-radius: 999px;
+      box-shadow: 4px 4px 0 rgba(47, 97, 200, 0.18);
+      display: block;
+      height: 112px;
+      object-fit: cover;
+      width: 112px;
+    }
+    .menu-guardian span {
+      background: var(--menu-yellow);
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      color: #172033;
+      font-weight: 700;
+      padding: 3px 9px;
+    }
+    .menu-quick-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .menu-board {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(192, 47, 91, 0.08), transparent 22%),
+        radial-gradient(circle at 86% 22%, rgba(35, 122, 87, 0.1), transparent 24%),
+        linear-gradient(90deg, rgba(23, 32, 51, 0.08) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(23, 32, 51, 0.08) 1px, transparent 1px),
+        var(--menu-paper);
+      background-size: auto, auto, 30px 30px, 30px 30px;
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      box-shadow: 8px 8px 0 rgba(47, 97, 200, 0.12);
+      display: grid;
+      gap: 18px;
+      padding: 20px;
+      position: relative;
+    }
+    .menu-board::before {
+      border-bottom: 2px solid var(--menu-ink);
+      border-top: 2px solid var(--menu-ink);
+      content: "";
+      height: 10px;
+      left: 18px;
+      opacity: 0.42;
+      position: absolute;
+      right: 18px;
+      top: 12px;
+      transform: rotate(-0.4deg);
+    }
+    .menu-board-head {
+      align-items: end;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+    .menu-board-head h2 {
+      font-size: 2rem;
+    }
+    .menu-category-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      position: relative;
+      z-index: 1;
+    }
+    .menu-category-tab {
+      align-items: center;
+      background: var(--menu-paper);
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      box-shadow: 3px 3px 0 rgba(23, 32, 51, 0.12);
+      color: var(--menu-ink);
+      cursor: pointer;
+      display: inline-flex;
+      font-weight: 800;
+      gap: 7px;
+      padding: 7px 10px;
+      transition: transform 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
+    }
+    .menu-category-tab:hover,
+    .menu-category-tab:focus-visible,
+    .menu-category-tab.is-active {
+      background: var(--menu-hover-soft);
+      outline: none;
+      transform: translate(-1px, -1px) rotate(-1deg);
+      box-shadow: 5px 5px 0 var(--menu-shadow);
+    }
+    .menu-category-mark,
+    .menu-dish-mark {
+      align-items: center;
+      border: 2px solid var(--menu-ink);
+      border-radius: 999px;
+      display: inline-flex;
+      font-weight: 900;
+      height: 32px;
+      justify-content: center;
+      line-height: 1;
+      width: 32px;
+    }
+    .menu-board-layout {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.62fr);
+      position: relative;
+      z-index: 1;
+    }
+    .menu-dish-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .menu-dish {
+      align-items: start;
+      background: rgba(255, 255, 255, 0.58);
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      color: var(--menu-ink);
+      cursor: pointer;
+      display: grid;
+      gap: 8px;
+      min-height: 142px;
+      padding: 12px;
+      position: relative;
+      text-align: left;
+      transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    html[data-theme="dark"] .menu-dish {
+      background: rgba(21, 31, 43, 0.82);
+    }
+    .menu-dish::after {
+      border-bottom: 2px solid var(--menu-ink);
+      bottom: 10px;
+      content: "";
+      opacity: 0.22;
+      position: absolute;
+      right: 12px;
+      transform: rotate(-2deg);
+      width: 42px;
+    }
+    .menu-dish:hover,
+    .menu-dish:focus-visible,
+    .menu-dish.is-active {
+      background: var(--menu-hover-soft);
+      box-shadow: 5px 5px 0 var(--menu-shadow);
+      outline: none;
+      transform: translateY(-3px) rotate(-0.8deg);
+    }
+    .menu-dish-title {
+      align-items: center;
+      display: flex;
+      gap: 8px;
+      font-size: 1.08rem;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+    .menu-dish-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .menu-dish-tag {
+      border: 1px solid rgba(23, 32, 51, 0.34);
+      border-radius: 999px;
+      color: var(--menu-muted);
+      font-size: 0.76rem;
+      line-height: 1.1;
+      padding: 3px 7px;
+    }
+    html[data-theme="dark"] .menu-dish-tag {
+      border-color: rgba(238, 245, 255, 0.34);
+    }
+    .menu-dish-detail {
+      color: var(--menu-muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+      margin: 0;
+    }
+    .menu-detail-board {
+      align-content: start;
+      background: var(--menu-soft);
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 2px rgba(47, 97, 200, 0.06);
+      display: grid;
+      gap: 12px;
+      min-height: 100%;
+      padding: 16px;
+      transform: rotate(0.5deg);
+    }
+    .menu-detail-board h3 {
+      color: var(--menu-ink);
+      font-size: 1.55rem;
+      margin: 0;
+    }
+    .menu-detail-meta {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+    }
+    .menu-detail-row {
+      border-top: 1px dashed rgba(23, 32, 51, 0.28);
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      padding-top: 8px;
+    }
+    .menu-detail-row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+    .menu-detail-row dt {
+      color: var(--menu-muted);
+      font-weight: 800;
+      margin: 0;
+    }
+    .menu-detail-row dd {
+      color: var(--menu-ink);
+      font-weight: 800;
+      margin: 0;
+      text-align: right;
+    }
+    .menu-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+    }
+    .menu-panel {
+      background: var(--menu-paper);
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      box-shadow: 5px 5px 0 rgba(23, 32, 51, 0.1);
+      min-width: 0;
+      padding: 18px;
+    }
+    .menu-panel-head {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .menu-month-tools,
+    .menu-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .menu-weekdays,
+    .menu-days {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .menu-weekday {
+      color: var(--menu-muted);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .menu-day {
+      background: var(--menu-soft);
+      border: 2px solid rgba(23, 32, 51, 0.5);
+      border-radius: 8px;
+      color: var(--menu-ink);
+      cursor: pointer;
+      display: grid;
+      gap: 5px;
+      min-height: 112px;
+      padding: 7px;
+      text-align: left;
+      transition: transform 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+    }
+    html[data-theme="dark"] .menu-day {
+      border-color: rgba(238, 245, 255, 0.48);
+    }
+    .menu-day:hover,
+    .menu-day:focus-visible,
+    .menu-day.is-selected {
+      background: rgba(240, 196, 63, 0.22);
+      border-color: var(--menu-ink);
+      outline: none;
+      transform: rotate(-0.5deg) translateY(-1px);
+    }
+    .menu-day.is-empty {
+      opacity: 0.38;
+      pointer-events: none;
+    }
+    .menu-day-number {
+      color: var(--menu-blue);
+      font-size: 1.05rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .menu-day-line {
+      color: var(--menu-muted);
+      font-size: 0.76rem;
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .menu-editor {
+      display: grid;
+      gap: 12px;
+    }
+    .menu-editor-title {
+      color: var(--menu-blue);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    .menu-field {
+      display: grid;
+      gap: 5px;
+    }
+    .menu-idea-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .menu-idea {
+      background: rgba(47, 97, 200, 0.1);
+      border: 1px solid rgba(47, 97, 200, 0.34);
+      border-radius: 8px;
+      color: var(--menu-blue);
+      font-size: 0.86rem;
+      padding: 3px 8px;
+    }
+    .menu-calculator-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .menu-calc-fields {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .menu-result-box {
+      border: 2px solid var(--menu-ink);
+      border-radius: 8px;
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 12px;
+    }
+    .menu-result-number {
+      color: var(--menu-rose);
+      font-size: 1.7rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .menu-result-text {
+      color: var(--menu-muted);
+      margin: 0;
+    }
+    .menu-footnote {
+      color: var(--menu-muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+    @media (max-width: 760px) {
+      .menu-hero,
+      .menu-board-layout,
+      .menu-grid,
+      .menu-calculator-grid {
+        grid-template-columns: 1fr;
+      }
+      .menu-title {
+        font-size: 2.1rem;
+      }
+      .menu-guardian {
+        justify-self: start;
+      }
+      .menu-weekdays,
+      .menu-days {
+        gap: 5px;
+      }
+      .menu-day {
+        min-height: 84px;
+        padding: 5px;
+      }
+      .menu-day-line {
+        display: none;
+      }
+      .menu-calc-fields {
+        grid-template-columns: 1fr;
+      }
+      .menu-dish-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+{{ end }}
+
+{{ define "main" }}
+  {{ $menuData := site.Data.partner_menu }}
+  <article class="post menu-page">
+    <section class="menu-gate" id="menu-gate" aria-labelledby="menu-gate-title">
+      <div>
+        <p class="menu-kicker">身份确认</p>
+        <h2 id="menu-gate-title">先报上姓名</h2>
+      </div>
+      <p class="menu-copy">这张菜单只给对的人看。名字对上了，厨房小本本就会打开。</p>
+      <form class="menu-gate-form" id="menu-gate-form">
+        <label class="menu-label" for="menu-name-input">你的名字</label>
+        <input class="menu-input" id="menu-name-input" autocomplete="name" placeholder="例如：Yuhang Wu" />
+        <button class="menu-button menu-button-primary" type="submit">打开菜单</button>
+        <p class="menu-status" id="menu-gate-status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="menu-app" id="menu-app" hidden>
+      <header class="menu-hero">
+        <div>
+          <p class="menu-kicker">今日厨房作战板</p>
+          <h1 class="menu-title">{{ .Title }}</h1>
+          <p class="menu-copy">{{ .Summary }}</p>
+          <div class="menu-quick-row">
+            <button class="menu-button menu-button-primary" id="menu-fill-week" type="button">给本周填上默认菜单</button>
+            <button class="menu-button" id="menu-today" type="button">跳到今天</button>
+            <button class="menu-button menu-button-rose" id="menu-lock" type="button">锁上小本本</button>
+          </div>
+        </div>
+        <figure class="menu-guardian">
+          <img src="{{ "/images/avatar.png" | relURL }}" alt="菜单守护员" />
+          <figcaption>菜单守护员</figcaption>
+        </figure>
+      </header>
+
+      <section class="menu-board" aria-labelledby="menu-board-title">
+        <div class="menu-board-head">
+          <div>
+            <p class="menu-kicker">手绘菜牌</p>
+            <h2 id="menu-board-title">先挑菜，再安排</h2>
+          </div>
+          <p class="menu-copy" id="menu-category-note">鼠标移到菜名上，会看到口味、搭配和热量小纸条。</p>
+        </div>
+        <div class="menu-category-tabs" id="menu-category-tabs" aria-label="菜单分类"></div>
+        <div class="menu-board-layout">
+          <div class="menu-dish-grid" id="menu-dish-grid"></div>
+          <aside class="menu-detail-board" id="menu-dish-detail" aria-live="polite"></aside>
+        </div>
+      </section>
+
+      <div class="menu-grid">
+        <section class="menu-panel" aria-labelledby="menu-calendar-title">
+          <div class="menu-panel-head">
+            <h2 id="menu-calendar-title">安排到日历</h2>
+            <div class="menu-month-tools">
+              <button class="menu-button" id="menu-prev-month" type="button">上个月</button>
+              <button class="menu-button" id="menu-next-month" type="button">下个月</button>
+            </div>
+          </div>
+          <p class="menu-copy" id="menu-month-label"></p>
+          <div class="menu-weekdays" aria-hidden="true">
+            <div class="menu-weekday">日</div>
+            <div class="menu-weekday">一</div>
+            <div class="menu-weekday">二</div>
+            <div class="menu-weekday">三</div>
+            <div class="menu-weekday">四</div>
+            <div class="menu-weekday">五</div>
+            <div class="menu-weekday">六</div>
+          </div>
+          <div class="menu-days" id="menu-days"></div>
+        </section>
+
+        <aside class="menu-panel" aria-labelledby="menu-editor-title">
+          <div class="menu-editor">
+            <h2 id="menu-editor-title">今天吃什么</h2>
+            <p class="menu-editor-title" id="menu-selected-date"></p>
+            <div id="menu-editor-fields"></div>
+            <div class="menu-field">
+              <label class="menu-label" for="menu-note">小备注</label>
+              <textarea class="menu-textarea" id="menu-note" placeholder="比如：少油、想喝汤、晚饭早点吃。"></textarea>
+            </div>
+            <div class="menu-actions">
+              <button class="menu-button menu-button-primary" id="menu-save-day" type="button">保存这一天</button>
+              <button class="menu-button" id="menu-use-default" type="button">套用默认</button>
+              <button class="menu-button menu-button-rose" id="menu-clear-day" type="button">清空</button>
+            </div>
+            <div>
+              <p class="menu-label">灵感小纸条</p>
+              <div class="menu-idea-list" id="menu-ideas"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <section class="menu-calculator-grid">
+        <div class="menu-panel">
+          <h2>BMI 小算盘</h2>
+          <div class="menu-calc-fields">
+            <div class="menu-field">
+              <label class="menu-label" for="bmi-height">身高 cm</label>
+              <input class="menu-input" id="bmi-height" type="number" min="80" max="230" value="165" />
+            </div>
+            <div class="menu-field">
+              <label class="menu-label" for="bmi-weight">体重 kg</label>
+              <input class="menu-input" id="bmi-weight" type="number" min="25" max="220" value="55" />
+            </div>
+          </div>
+          <div class="menu-result-box">
+            <span class="menu-result-number" id="bmi-value">--</span>
+            <p class="menu-result-text" id="bmi-text">填好身高体重后自动计算。</p>
+          </div>
+        </div>
+
+        <div class="menu-panel">
+          <h2>每日热量估算</h2>
+          <div class="menu-calc-fields">
+            <div class="menu-field">
+              <label class="menu-label" for="cal-age">年龄</label>
+              <input class="menu-input" id="cal-age" type="number" min="10" max="100" value="25" />
+            </div>
+            <div class="menu-field">
+              <label class="menu-label" for="cal-sex">性别</label>
+              <select class="menu-select" id="cal-sex">
+                <option value="female">女性</option>
+                <option value="male">男性</option>
+              </select>
+            </div>
+            <div class="menu-field">
+              <label class="menu-label" for="cal-activity">活动量</label>
+              <select class="menu-select" id="cal-activity">
+                <option value="1.2">久坐为主</option>
+                <option value="1.375">每周轻量运动</option>
+                <option value="1.55">规律运动</option>
+                <option value="1.725">高强度运动</option>
+              </select>
+            </div>
+            <div class="menu-field">
+              <label class="menu-label" for="cal-goal">目标</label>
+              <select class="menu-select" id="cal-goal">
+                <option value="0">维持</option>
+                <option value="-300">温和减脂</option>
+                <option value="200">慢慢增肌</option>
+              </select>
+            </div>
+          </div>
+          <div class="menu-result-box">
+            <span class="menu-result-number" id="cal-value">--</span>
+            <p class="menu-result-text" id="cal-text">这是日常饮食记录用的粗略估算。</p>
+          </div>
+        </div>
+      </section>
+
+      <p class="menu-footnote">注：BMI 与热量结果只适合做日常记录参考，不替代医生或营养师建议。</p>
+      <p class="text-link"><a href="{{ "/hodgepodge/" | relURL }}">返回 Hodgepodge</a></p>
+    </section>
+  </article>
+
+  <script>
+    (function () {
+      const MENU_DATA = {{ $menuData | jsonify | safeJS }};
+      const keeper = String(MENU_DATA.keeper || "").trim().toLowerCase();
+      const storageKey = MENU_DATA.storage_key || "partner-menu-v1";
+      const authKey = storageKey + ":auth";
+      const planKey = storageKey + ":plan";
+      const slots = MENU_DATA.meal_slots || [];
+      const defaultDay = MENU_DATA.default_day || {};
+      const weekTemplates = MENU_DATA.week_templates || [];
+      const dishIdeas = MENU_DATA.dish_ideas || [];
+      const menuCategories = MENU_DATA.menu_categories || [];
+      const today = new Date();
+      let visibleDate = new Date(today.getFullYear(), today.getMonth(), 1);
+      let selectedDate = toKey(today);
+      let activeCategory = menuCategories[0] ? menuCategories[0].key : "";
+      let activeDishName = menuCategories[0] && menuCategories[0].items && menuCategories[0].items[0] ? menuCategories[0].items[0].name : "";
+      let plan = readJson(planKey, {});
+
+      const gate = document.getElementById("menu-gate");
+      const app = document.getElementById("menu-app");
+      const gateForm = document.getElementById("menu-gate-form");
+      const nameInput = document.getElementById("menu-name-input");
+      const gateStatus = document.getElementById("menu-gate-status");
+      const monthLabel = document.getElementById("menu-month-label");
+      const daysEl = document.getElementById("menu-days");
+      const selectedDateEl = document.getElementById("menu-selected-date");
+      const editorFields = document.getElementById("menu-editor-fields");
+      const noteInput = document.getElementById("menu-note");
+      const ideasEl = document.getElementById("menu-ideas");
+      const categoryTabsEl = document.getElementById("menu-category-tabs");
+      const categoryNoteEl = document.getElementById("menu-category-note");
+      const dishGridEl = document.getElementById("menu-dish-grid");
+      const dishDetailEl = document.getElementById("menu-dish-detail");
+
+      function readJson(key, fallback) {
+        try {
+          const raw = window.localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (error) {
+          return fallback;
+        }
+      }
+
+      function writeJson(key, value) {
+        window.localStorage.setItem(key, JSON.stringify(value));
+      }
+
+      function toKey(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return year + "-" + month + "-" + day;
+      }
+
+      function fromKey(key) {
+        const parts = key.split("-").map(Number);
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+      }
+
+      function escapeHtml(value) {
+        return String(value || "").replace(/[&<>"']/g, function (char) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+          }[char];
+        });
+      }
+
+      function currentDayData(key) {
+        const date = fromKey(key);
+        const template = weekTemplates.find(function (item) { return item.weekday === date.getDay(); }) || {};
+        return Object.assign({}, defaultDay, template, plan[key] || {});
+      }
+
+      function revealApp() {
+        gate.hidden = true;
+        app.hidden = false;
+        buildEditorFields();
+        renderMenuBoard();
+        renderIdeas();
+        renderCalendar();
+        loadSelectedDay();
+        updateCalculators();
+      }
+
+      function lockApp() {
+        window.localStorage.removeItem(authKey);
+        app.hidden = true;
+        gate.hidden = false;
+        nameInput.value = "";
+        nameInput.focus();
+      }
+
+      gateForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const name = nameInput.value.trim().toLowerCase();
+        if (name && name === keeper) {
+          window.localStorage.setItem(authKey, "yes");
+          gateStatus.textContent = "";
+          revealApp();
+          return;
+        }
+        gateStatus.textContent = "名字不对，小本本还不能打开。";
+      });
+
+      document.getElementById("menu-lock").addEventListener("click", lockApp);
+      document.getElementById("menu-today").addEventListener("click", function () {
+        visibleDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        selectedDate = toKey(today);
+        renderCalendar();
+        loadSelectedDay();
+      });
+      document.getElementById("menu-prev-month").addEventListener("click", function () {
+        visibleDate = new Date(visibleDate.getFullYear(), visibleDate.getMonth() - 1, 1);
+        renderCalendar();
+      });
+      document.getElementById("menu-next-month").addEventListener("click", function () {
+        visibleDate = new Date(visibleDate.getFullYear(), visibleDate.getMonth() + 1, 1);
+        renderCalendar();
+      });
+      document.getElementById("menu-save-day").addEventListener("click", saveSelectedDay);
+      document.getElementById("menu-use-default").addEventListener("click", function () {
+        const date = fromKey(selectedDate);
+        const template = weekTemplates.find(function (item) { return item.weekday === date.getDay(); }) || {};
+        fillEditor(Object.assign({}, defaultDay, template));
+      });
+      document.getElementById("menu-clear-day").addEventListener("click", function () {
+        delete plan[selectedDate];
+        writeJson(planKey, plan);
+        renderCalendar();
+        loadSelectedDay();
+      });
+      document.getElementById("menu-fill-week").addEventListener("click", fillVisibleWeek);
+
+      function renderCalendar() {
+        const year = visibleDate.getFullYear();
+        const month = visibleDate.getMonth();
+        monthLabel.textContent = year + " 年 " + (month + 1) + " 月";
+        daysEl.innerHTML = "";
+        const firstDay = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+        for (let i = 0; i < firstDay; i += 1) {
+          const blank = document.createElement("div");
+          blank.className = "menu-day is-empty";
+          daysEl.appendChild(blank);
+        }
+        for (let day = 1; day <= totalDays; day += 1) {
+          const key = toKey(new Date(year, month, day));
+          const data = currentDayData(key);
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "menu-day" + (key === selectedDate ? " is-selected" : "");
+          button.innerHTML = [
+            "<span class='menu-day-number'>" + day + "</span>",
+            "<span class='menu-day-line'>早：" + escapeHtml(data.breakfast) + "</span>",
+            "<span class='menu-day-line'>午：" + escapeHtml(data.lunch) + "</span>",
+            "<span class='menu-day-line'>晚：" + escapeHtml(data.dinner) + "</span>"
+          ].join("");
+          button.addEventListener("click", function () {
+            selectedDate = key;
+            renderCalendar();
+            loadSelectedDay();
+          });
+          daysEl.appendChild(button);
+        }
+      }
+
+      function activeCategoryData() {
+        return menuCategories.find(function (category) { return category.key === activeCategory; }) || menuCategories[0] || { items: [] };
+      }
+
+      function activeDishData() {
+        const category = activeCategoryData();
+        const items = category.items || [];
+        return items.find(function (item) { return item.name === activeDishName; }) || items[0] || null;
+      }
+
+      function renderMenuBoard() {
+        const category = activeCategoryData();
+        if (!category.key && menuCategories[0]) {
+          activeCategory = menuCategories[0].key;
+        }
+        categoryTabsEl.innerHTML = menuCategories.map(function (item) {
+          const activeClass = item.key === activeCategory ? " is-active" : "";
+          return "<button class='menu-category-tab" + activeClass + "' type='button' data-category='" + escapeHtml(item.key) + "'><span class='menu-category-mark'>" + escapeHtml(item.mark) + "</span>" + escapeHtml(item.label) + "</button>";
+        }).join("");
+        categoryTabsEl.querySelectorAll("[data-category]").forEach(function (button) {
+          button.addEventListener("click", function () {
+            const nextCategory = button.getAttribute("data-category");
+            const next = menuCategories.find(function (item) { return item.key === nextCategory; }) || menuCategories[0];
+            activeCategory = next.key;
+            activeDishName = next.items && next.items[0] ? next.items[0].name : "";
+            renderMenuBoard();
+          });
+        });
+        categoryNoteEl.textContent = category.note || "鼠标移到菜名上，会看到口味、搭配和热量小纸条。";
+        renderDishGrid(category);
+        renderDishDetail(activeDishData(), category);
+      }
+
+      function renderDishGrid(category) {
+        const items = category.items || [];
+        dishGridEl.innerHTML = items.map(function (item) {
+          const activeClass = item.name === activeDishName ? " is-active" : "";
+          const tags = (item.tags || []).slice(0, 3).map(function (tag) {
+            return "<span class='menu-dish-tag'>" + escapeHtml(tag) + "</span>";
+          }).join("");
+          return "<button class='menu-dish" + activeClass + "' type='button' data-dish='" + escapeHtml(item.name) + "'><span class='menu-dish-title'><span class='menu-dish-mark'>" + escapeHtml(category.mark) + "</span>" + escapeHtml(item.name) + "</span><span class='menu-dish-tags'>" + tags + "</span><span class='menu-dish-detail'>" + escapeHtml(item.detail) + "</span></button>";
+        }).join("");
+        dishGridEl.querySelectorAll("[data-dish]").forEach(function (button) {
+          const activate = function () {
+            activeDishName = button.getAttribute("data-dish") || activeDishName;
+            renderDishGrid(activeCategoryData());
+            renderDishDetail(activeDishData(), activeCategoryData());
+          };
+          button.addEventListener("mouseenter", activate);
+          button.addEventListener("focus", activate);
+          button.addEventListener("click", activate);
+        });
+      }
+
+      function renderDishDetail(item, category) {
+        if (!item) {
+          dishDetailEl.innerHTML = "<h3>还没有菜</h3><p class='menu-copy'>在 JSON 里加一个分类和菜名，这里就会长出来。</p>";
+          return;
+        }
+        const tags = (item.tags || []).map(function (tag) {
+          return "<span class='menu-dish-tag'>" + escapeHtml(tag) + "</span>";
+        }).join("");
+        dishDetailEl.innerHTML = [
+          "<span class='menu-dish-mark'>" + escapeHtml(category.mark || "菜") + "</span>",
+          "<h3>" + escapeHtml(item.name) + "</h3>",
+          "<p class='menu-copy'>" + escapeHtml(item.detail) + "</p>",
+          "<div class='menu-dish-tags'>" + tags + "</div>",
+          "<dl class='menu-detail-meta'>",
+          "<div class='menu-detail-row'><dt>估算热量</dt><dd>" + escapeHtml(item.calories || "--") + " kcal</dd></div>",
+          "<div class='menu-detail-row'><dt>推荐搭配</dt><dd>" + escapeHtml(item.pairing || "看心情") + "</dd></div>",
+          "</dl>",
+          "<button class='menu-button menu-button-primary' id='menu-add-dish' type='button'>安排到选中的日期</button>"
+        ].join("");
+        document.getElementById("menu-add-dish").addEventListener("click", function () {
+          addDishToSelectedDay(item, category);
+        });
+      }
+
+      function addDishToSelectedDay(item, category) {
+        const data = currentDayData(selectedDate);
+        const slotKey = category.key === "snacks" ? "snack" : (category.key === "eggs" || category.key === "staples" ? "breakfast" : "dinner");
+        data[slotKey] = item.name;
+        data.note = "从动态菜单加入：" + item.name + "。";
+        plan[selectedDate] = data;
+        writeJson(planKey, plan);
+        renderCalendar();
+        loadSelectedDay();
+      }
+
+      function buildEditorFields() {
+        editorFields.innerHTML = slots.map(function (slot) {
+          return "<div class='menu-field'><label class='menu-label' for='meal-" + slot.key + "'>" + slot.label + "</label><input class='menu-input' id='meal-" + slot.key + "' data-meal='" + slot.key + "' /></div>";
+        }).join("");
+      }
+
+      function loadSelectedDay() {
+        const data = currentDayData(selectedDate);
+        selectedDateEl.textContent = selectedDate;
+        fillEditor(data);
+      }
+
+      function fillEditor(data) {
+        slots.forEach(function (slot) {
+          const input = document.querySelector("[data-meal='" + slot.key + "']");
+          if (input) {
+            input.value = data[slot.key] || "";
+          }
+        });
+        noteInput.value = data.note || "";
+      }
+
+      function saveSelectedDay() {
+        const entry = {};
+        slots.forEach(function (slot) {
+          const input = document.querySelector("[data-meal='" + slot.key + "']");
+          entry[slot.key] = input ? input.value.trim() : "";
+        });
+        entry.note = noteInput.value.trim();
+        plan[selectedDate] = entry;
+        writeJson(planKey, plan);
+        renderCalendar();
+      }
+
+      function fillVisibleWeek() {
+        const selected = fromKey(selectedDate);
+        const start = new Date(selected);
+        start.setDate(selected.getDate() - selected.getDay());
+        for (let offset = 0; offset < 7; offset += 1) {
+          const date = new Date(start);
+          date.setDate(start.getDate() + offset);
+          const template = weekTemplates.find(function (item) { return item.weekday === date.getDay(); }) || {};
+          plan[toKey(date)] = Object.assign({}, defaultDay, template);
+        }
+        writeJson(planKey, plan);
+        renderCalendar();
+        loadSelectedDay();
+      }
+
+      function renderIdeas() {
+        ideasEl.innerHTML = dishIdeas.map(function (idea) {
+          return "<span class='menu-idea'>" + escapeHtml(idea) + "</span>";
+        }).join("");
+      }
+
+      function numberValue(id) {
+        return Number(document.getElementById(id).value);
+      }
+
+      function updateCalculators() {
+        const height = numberValue("bmi-height");
+        const weight = numberValue("bmi-weight");
+        const bmiValue = document.getElementById("bmi-value");
+        const bmiText = document.getElementById("bmi-text");
+        if (height > 0 && weight > 0) {
+          const bmi = weight / Math.pow(height / 100, 2);
+          bmiValue.textContent = bmi.toFixed(1);
+          bmiText.textContent = bmi < 18.5 ? "偏轻，记得好好吃饭。" : bmi < 24 ? "正常区间，继续稳稳照顾自己。" : bmi < 28 ? "略高，菜单可以清爽一点。" : "偏高，适合慢慢调整节奏。";
+        }
+        const age = numberValue("cal-age");
+        const sex = document.getElementById("cal-sex").value;
+        const activity = Number(document.getElementById("cal-activity").value);
+        const goal = Number(document.getElementById("cal-goal").value);
+        const calValue = document.getElementById("cal-value");
+        const calText = document.getElementById("cal-text");
+        if (height > 0 && weight > 0 && age > 0) {
+          const bmr = 10 * weight + 6.25 * height - 5 * age + (sex === "male" ? 5 : -161);
+          const target = Math.max(900, Math.round(bmr * activity + goal));
+          calValue.textContent = target + " kcal";
+          calText.textContent = "按当前活动量和目标估算，可作为今天菜单的粗略上限。";
+        }
+      }
+
+      ["bmi-height", "bmi-weight", "cal-age", "cal-sex", "cal-activity", "cal-goal"].forEach(function (id) {
+        document.getElementById(id).addEventListener("input", updateCalculators);
+        document.getElementById(id).addEventListener("change", updateCalculators);
+      });
+
+      if (window.localStorage.getItem(authKey) === "yes") {
+        revealApp();
+      } else {
+        gate.hidden = false;
+        app.hidden = true;
+      }
+    })();
+  </script>
+{{ end }}
