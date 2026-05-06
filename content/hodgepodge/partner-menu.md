@@ -5,7 +5,7 @@ categories: ["Hodgepodge"]
 tags: ["menu", "calendar", "planner", "health", "personal"]
 image: "/images/hodgepodge/raccoon_chef_DST.png"
 imageAlt: "菜单守护员"
-summary: "A Chinese Menu and Calander Demo"
+summary: "A Chinese Menu and Calendar Demo"
 layout: "partner-menu"
 ---
 
