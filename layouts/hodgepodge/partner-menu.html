@@ -31,7 +31,7 @@
       font: inherit;
     }
     .menu-gate {
-      align-content: end;
+      align-content: start;
       background:
         url("{{ $menuData.login_frame | relURL }}") center / contain no-repeat;
       border: 0;
@@ -41,7 +41,7 @@
       gap: 10px;
       justify-self: center;
       min-height: min(92vh, 760px);
-      padding: clamp(290px, 48vw, 430px) clamp(28px, 7vw, 74px) clamp(52px, 10vw, 94px);
+      padding: clamp(120px, 24vw, 170px) clamp(52px, 10vw, 86px) clamp(52px, 10vw, 94px);
       position: relative;
       width: min(100%, 560px);
     }
@@ -106,7 +106,7 @@
     .menu-button-primary {
       background:
         url("{{ $menuData.login_button | relURL }}") center / contain no-repeat;
-      aspect-ratio: 2172 / 724;
+      aspect-ratio: 3 / 2;
       border: 0;
       box-shadow: none;
       color: transparent;
