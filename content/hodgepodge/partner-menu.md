@@ -1,11 +1,11 @@
 ---
-title: "Don't Starve Menu"
+title: "营地小菜单"
 date: 2026-05-06
 categories: ["Hodgepodge"]
-tags: ["menu", "calendar", "planner", "health", "personal"]
+tags: ["menu", "food", "personal", "hodgepodge"]
 image: "/images/hodgepodge/raccoon_chef_DST.png"
 imageAlt: "菜单守护员"
-summary: "A Don't Starve-style Chinese food menu with category icons and editable JSON data."
+summary: "一张只显示菜名的中文小菜单，分类图标和菜名都可以在数据文件里修改。"
 layout: "partner-menu"
 ---
 

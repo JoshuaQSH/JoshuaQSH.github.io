@@ -458,21 +458,17 @@ The food menu is driven by a content file, a data file, and the food-menu image 
 - page content and cover: `content/hodgepodge/partner-menu.md`
 - menu data: `data/partner_menu.json`
 - page layout and identity gate: `layouts/hodgepodge/partner-menu.html`
-- banner, header, and category logos: `static/images/food_menu/`
+- banner, login frame/button, and category PNG logos: `static/images/food_menu/`
 
 To add a dish, open `data/partner_menu.json`, find the category inside `categories`, and add an item to its `items` array:
 
 ```json
 {
-  "name": "新菜名",
-  "subtitle": "English Subtitle",
-  "detail": "这道菜的简短说明。",
-  "tags": ["标签一", "标签二"],
-  "pairing": "推荐搭配"
+  "name": "新菜名"
 }
 ```
 
-The current categories are `Meat`, `Fish`, `Eggs`, `Vegetable`, `Drink`, `Dessert`, and `Snacks`. Each category has a `logo` path that should point to an image under `static/images/food_menu/`.
+The current categories are `肉类`, `鱼类`, `蛋类`, `蔬菜`, `汤类`, `主食`, `饮品`, `甜点`, and `零食`. Each category has a `logo` path that should point to a transparent PNG under `static/images/food_menu/`.
 
 ## Photo Album Guide
 
