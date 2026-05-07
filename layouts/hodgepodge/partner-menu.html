@@ -52,35 +52,14 @@
       margin: 0 0 8px;
       text-transform: uppercase;
     }
-    .menu-gate h2,
     .menu-category-title {
       color: var(--dst-black);
       margin: 0;
     }
-    .menu-gate h2 {
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      text-align: center;
-    }
-    .menu-gate > div,
     .menu-gate-form {
       margin-inline: auto;
       max-width: 330px;
       width: 100%;
-    }
-    .menu-gate > div {
-      background: transparent;
-      border: 0;
-      box-shadow: none;
-      padding: 10px 12px;
-    }
-    .menu-gate .menu-kicker,
-    .menu-gate .menu-copy {
-      text-align: center;
-    }
-    .menu-copy {
-      color: #6c5540;
-      margin: 0;
-      max-width: 62ch;
     }
     .menu-gate-form {
       background: transparent;
@@ -94,10 +73,11 @@
       color: #6c5540;
       font-size: 0.95rem;
       font-weight: 900;
+      text-align: center;
     }
     .menu-input {
-      background: #f7f7f4;
-      border: 2px solid var(--dst-black);
+      background: transparent;
+      border: 2px solid rgba(43, 27, 18, 0.34);
       border-radius: 8px;
       color: var(--dst-black);
       padding: 10px 12px;
@@ -129,10 +109,11 @@
         url("{{ $menuData.login_button | relURL }}") center / 100% 100% no-repeat;
       border: 0;
       box-shadow: none;
-      color: var(--dst-bone);
+      color: transparent;
       justify-self: stretch;
       min-height: 58px;
-      text-shadow: 1px 1px 0 var(--dst-black);
+      overflow: hidden;
+      text-shadow: none;
     }
     .menu-button-primary:hover,
     .menu-button-primary:focus-visible {
@@ -152,26 +133,25 @@
     }
     .menu-app {
       background:
-        radial-gradient(circle at 12% 8%, rgba(143, 34, 24, 0.18), transparent 20%),
-        radial-gradient(circle at 86% 18%, rgba(211, 162, 60, 0.2), transparent 22%),
-        var(--dst-paper);
-      border: 2px solid var(--dst-black);
+        linear-gradient(135deg, rgba(255, 241, 204, 0.82), rgba(248, 229, 185, 0.52)),
+        radial-gradient(circle at 14% 10%, rgba(143, 34, 24, 0.08), transparent 24%),
+        radial-gradient(circle at 88% 18%, rgba(211, 162, 60, 0.12), transparent 28%);
+      border: 2px solid rgba(43, 27, 18, 0.34);
       border-radius: 8px;
-      box-shadow: 8px 8px 0 var(--dst-shadow);
+      box-shadow: 5px 7px 0 rgba(23, 17, 13, 0.1);
       display: grid;
       gap: 22px;
       padding: clamp(16px, 3vw, 28px);
       position: relative;
     }
     .menu-app::before {
-      background: var(--dst-red-deep);
-      border: 2px solid var(--dst-black);
+      border: 2px solid rgba(43, 27, 18, 0.2);
+      border-radius: 8px;
       content: "";
-      height: 13px;
-      left: -2px;
+      inset: 6px -7px -6px 6px;
+      pointer-events: none;
       position: absolute;
-      right: -2px;
-      top: -2px;
+      transform: rotate(-0.35deg);
     }
     .menu-hero {
       display: grid;
@@ -180,33 +160,16 @@
       z-index: 1;
     }
     .menu-banner {
-      border: 2px solid var(--dst-black);
+      border: 2px solid rgba(43, 27, 18, 0.42);
       border-radius: 8px;
-      box-shadow: 5px 5px 0 var(--dst-shadow);
+      box-shadow: 3px 4px 0 rgba(23, 17, 13, 0.12);
       display: block;
       height: auto;
       width: 100%;
     }
-    .menu-hero-copy {
-      background: rgba(255, 241, 204, 0.82);
-      border: 2px solid var(--dst-black);
-      border-radius: 8px;
-      display: grid;
-      gap: 8px;
-      padding: 14px;
-    }
-    .menu-title {
-      color: var(--dst-black);
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      line-height: 1;
-      margin: 0;
-    }
-    .menu-topline {
-      align-items: center;
+    .menu-lock-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: space-between;
+      justify-content: flex-end;
     }
     .menu-category-nav {
       background: transparent;
@@ -267,8 +230,8 @@
     }
     .menu-category-head {
       align-items: center;
-      background: var(--dst-red);
-      border: 2px solid var(--dst-black);
+      background: rgba(143, 34, 24, 0.82);
+      border: 2px solid rgba(43, 27, 18, 0.44);
       border-radius: 8px;
       color: var(--dst-bone);
       display: grid;
@@ -294,10 +257,10 @@
     }
     .menu-dish {
       align-items: center;
-      background: var(--dst-bone);
-      border: 2px solid var(--dst-black);
+      background: rgba(255, 241, 204, 0.72);
+      border: 2px solid rgba(43, 27, 18, 0.42);
       border-radius: 8px;
-      box-shadow: 4px 4px 0 rgba(23, 17, 13, 0.14);
+      box-shadow: 3px 4px 0 rgba(23, 17, 13, 0.08);
       color: var(--dst-black);
       display: flex;
       gap: 12px;
@@ -307,8 +270,8 @@
     }
     .menu-dish:hover,
     .menu-dish:focus-within {
-      background: #ffe6aa;
-      box-shadow: 6px 6px 0 var(--dst-shadow);
+      background: rgba(255, 230, 170, 0.86);
+      box-shadow: 4px 5px 0 rgba(23, 17, 13, 0.16);
       transform: translateY(-2px) rotate(-0.45deg);
     }
     .menu-dish-title h3 {
@@ -343,16 +306,11 @@
 {{ define "main" }}
   {{ $menuData := site.Data.partner_menu }}
   <article class="post menu-page">
-    <section class="menu-gate" id="menu-gate" aria-labelledby="menu-gate-title">
-      <div>
-        <p class="menu-kicker">身份确认</p>
-        <h2 id="menu-gate-title">先报上姓名</h2>
-      </div>
-      <p class="menu-copy">这张菜单只给对的人看。名字对上了，厨房小本本就会打开。</p>
+    <section class="menu-gate" id="menu-gate" aria-label="登录菜单">
       <form class="menu-gate-form" id="menu-gate-form">
         <label class="menu-label" for="menu-name-input">你的名字</label>
         <input class="menu-input" id="menu-name-input" autocomplete="name" placeholder="例如：Yuhang Wu" />
-        <button class="menu-button menu-button-primary" type="submit">打开菜单</button>
+        <button class="menu-button menu-button-primary" type="submit" aria-label="登录菜单"></button>
         <p class="menu-status" id="menu-gate-status" aria-live="polite"></p>
       </form>
     </section>
@@ -360,15 +318,8 @@
     <section class="menu-app" id="menu-app" hidden>
       <header class="menu-hero">
         <img class="menu-banner" src="{{ $menuData.banner | relURL }}" alt="营地菜单横幅" />
-        <div class="menu-hero-copy">
-          <div class="menu-topline">
-            <div>
-              <p class="menu-kicker">营地厨房</p>
-              <h1 class="menu-title">{{ .Title }}</h1>
-            </div>
-            <button class="menu-button" id="menu-lock" type="button">锁上小本本</button>
-          </div>
-          <p class="menu-copy">{{ $menuData.menu_note | default .Summary }}</p>
+        <div class="menu-lock-row">
+          <button class="menu-button" id="menu-lock" type="button">锁上小本本</button>
         </div>
       </header>
 
