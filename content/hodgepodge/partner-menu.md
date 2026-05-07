@@ -1,5 +1,5 @@
 ---
-title: "营地小菜单"
+title: "Food Menu"
 date: 2026-05-06
 categories: ["Hodgepodge"]
 tags: ["menu", "food", "personal", "hodgepodge"]
