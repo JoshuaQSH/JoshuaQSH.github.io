@@ -11,707 +11,380 @@
       box-sizing: border-box;
     }
     .menu-page {
-      --menu-ink: #201713;
-      --menu-muted: #59443b;
-      --menu-paper: #fff3dc;
-      --menu-soft: #ffe2a6;
-      --menu-green: #006845;
-      --menu-rose: #c8102e;
-      --menu-blue: #201713;
-      --menu-yellow: #ffc928;
-      --menu-hover: #ffc928;
-      --menu-hover-soft: rgba(255, 201, 40, 0.24);
-      --menu-shadow: rgba(32, 23, 19, 0.22);
-      color: var(--menu-ink);
+      --dst-black: #17110d;
+      --dst-ink: #2b1b12;
+      --dst-paper: #ead3a2;
+      --dst-paper-light: #f8e5b9;
+      --dst-bone: #fff1cc;
+      --dst-red: #8f2218;
+      --dst-red-deep: #5a1712;
+      --dst-gold: #d3a23c;
+      --dst-shadow: rgba(23, 17, 13, 0.32);
+      color: var(--dst-ink);
       display: grid;
       font-family: "Belisa_plumilla", "Belisa Plumilla", "Kaiti SC", "KaiTi", "STKaiti", "PingFang SC", "Microsoft YaHei", sans-serif;
       gap: 24px;
     }
-    html[data-theme="dark"] .menu-page {
-      --menu-ink: #fff3dc;
-      --menu-muted: #d6c2a4;
-      --menu-paper: #201713;
-      --menu-soft: #3a241e;
-      --menu-green: #0f8c61;
-      --menu-rose: #e2403f;
-      --menu-blue: #fff3dc;
-      --menu-yellow: #ffd766;
-      --menu-hover: #ffd766;
-      --menu-hover-soft: rgba(255, 215, 102, 0.18);
-      --menu-shadow: rgba(0, 0, 0, 0.36);
-    }
     .menu-page input,
-    .menu-page select,
-    .menu-page textarea,
     .menu-page button {
       font: inherit;
     }
     .menu-gate {
-      --menu-ink: #21170f;
-      --menu-muted: #5f5a52;
-      --menu-paper: #f7f7f4;
-      --menu-soft: #e5e7e5;
-      --menu-green: #4d6a35;
-      --menu-rose: #a43227;
-      --menu-yellow: #d7a83d;
-      --menu-hover: #c7a55a;
-      --menu-shadow: rgba(33, 23, 15, 0.18);
-      align-items: center;
+      align-content: end;
       background:
-        linear-gradient(90deg, rgba(33, 23, 15, 0.055) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(33, 23, 15, 0.055) 1px, transparent 1px),
-        #eef0ee;
-      background-size: 28px 28px;
-      border: 2px solid var(--menu-ink);
-      border-radius: 8px;
-      box-shadow: 7px 7px 0 rgba(23, 32, 51, 0.12);
-      color: var(--menu-ink);
+        linear-gradient(180deg, rgba(255, 241, 204, 0.05), rgba(23, 17, 13, 0.18)),
+        url("/images/food_menu/login_block.png") center / contain no-repeat;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
       display: grid;
-      gap: 18px;
-      justify-items: start;
-      min-height: 430px;
-      padding: 28px;
+      gap: 10px;
+      justify-self: center;
+      min-height: min(92vh, 760px);
+      padding: clamp(290px, 48vw, 430px) clamp(28px, 7vw, 74px) clamp(52px, 10vw, 94px);
       position: relative;
+      width: min(100%, 560px);
     }
-    .menu-gate::after,
-    .menu-hero::after {
-      border: 2px solid var(--menu-ink);
-      border-left: 0;
-      border-top: 0;
-      content: "";
-      height: 46px;
-      opacity: 0.55;
-      position: absolute;
-      right: 18px;
-      top: 18px;
-      transform: rotate(3deg);
-      width: 72px;
+    .menu-kicker {
+      color: var(--dst-red);
+      font-size: 0.95rem;
+      font-weight: 900;
+      margin: 0 0 8px;
+      text-transform: uppercase;
     }
     .menu-gate h2,
-    .menu-hero h2,
-    .menu-panel h2 {
-      color: var(--menu-ink);
+    .menu-category-title,
+    .menu-detail-panel h3 {
+      color: var(--dst-black);
       margin: 0;
     }
-    .menu-gate p,
-    .menu-hero p,
-    .menu-panel p {
+    .menu-gate h2 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      text-align: center;
+    }
+    .menu-gate > div,
+    .menu-gate-form {
+      margin-inline: auto;
+      max-width: 330px;
+      width: 100%;
+    }
+    .menu-gate > div {
+      background: rgba(255, 241, 204, 0.72);
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      box-shadow: 3px 3px 0 rgba(23, 17, 13, 0.16);
+      padding: 10px 12px;
+    }
+    .menu-gate .menu-kicker,
+    .menu-gate .menu-copy {
+      text-align: center;
+    }
+    .menu-copy {
+      color: #6c5540;
       margin: 0;
+      max-width: 62ch;
     }
     .menu-gate-form {
+      background: rgba(255, 241, 204, 0.82);
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      box-shadow: 4px 4px 0 rgba(23, 17, 13, 0.2);
       display: grid;
       gap: 12px;
-      max-width: 420px;
-      width: 100%;
+      padding: 14px;
     }
     .menu-label {
-      color: var(--menu-muted);
+      color: #6c5540;
       font-size: 0.95rem;
-      font-weight: 700;
+      font-weight: 900;
     }
-    .menu-input,
-    .menu-select,
-    .menu-textarea {
-      background: var(--menu-paper);
-      border: 2px solid var(--menu-ink);
+    .menu-input {
+      background: #f7f7f4;
+      border: 2px solid var(--dst-black);
       border-radius: 8px;
-      color: var(--menu-ink);
-      min-width: 0;
+      color: var(--dst-black);
       padding: 10px 12px;
+      text-align: center;
       width: 100%;
     }
-    .menu-textarea {
-      min-height: 78px;
-      resize: vertical;
-    }
     .menu-button {
-      background: var(--menu-paper);
-      border: 2px solid var(--menu-ink);
-      border-radius: 6px;
-      box-shadow: 3px 3px 0 var(--menu-shadow);
-      color: var(--menu-ink);
+      background: var(--dst-paper-light);
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      box-shadow: 3px 3px 0 var(--dst-shadow);
+      color: var(--dst-black);
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 900;
+      justify-self: start;
       padding: 9px 13px;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+      transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
     }
     .menu-button:hover,
     .menu-button:focus-visible {
-      background: var(--menu-hover);
-      border-color: var(--menu-ink);
-      color: #21170f;
+      background: var(--dst-gold);
       outline: none;
-      transform: translate(-1px, -1px) rotate(-0.5deg);
-      box-shadow: 5px 5px 0 var(--menu-shadow);
+      transform: translate(-1px, -1px) rotate(-0.6deg);
+      box-shadow: 5px 5px 0 var(--dst-shadow);
     }
     .menu-button-primary {
-      background: var(--menu-rose);
-      color: #fff5da;
-    }
-    .menu-button-rose {
-      background: var(--menu-rose);
-      color: #fff5da;
-    }
-    .menu-button-primary:hover,
-    .menu-button-primary:focus-visible,
-    .menu-button-rose:hover,
-    .menu-button-rose:focus-visible {
-      background: var(--menu-yellow);
-      color: #21170f;
+      background: var(--dst-red);
+      color: var(--dst-bone);
     }
     .menu-status {
-      color: var(--menu-rose);
+      color: var(--dst-red);
       min-height: 1.4rem;
+      text-align: center;
     }
     .menu-app[hidden],
     .menu-gate[hidden] {
       display: none;
     }
     .menu-app {
-      display: grid;
-      gap: 24px;
-    }
-    .menu-hero {
       background:
-        linear-gradient(135deg, rgba(32, 23, 19, 0.18) 0 18%, transparent 18% 34%, rgba(32, 23, 19, 0.16) 34% 48%, transparent 48%),
-        var(--menu-rose);
-      background-size: 42px 42px, auto;
-      border: 2px solid var(--menu-ink);
-      border-radius: 6px;
-      box-shadow: 7px 7px 0 var(--menu-shadow);
-      display: grid;
-      gap: 20px;
-      grid-template-columns: minmax(0, 1fr) 150px;
-      overflow: hidden;
-      padding: 26px;
-      position: relative;
-    }
-    .menu-kicker {
-      color: var(--menu-rose);
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin: 0 0 8px;
-    }
-    .menu-title {
-      color: #fff3dc;
-      font-size: 2.6rem;
-      line-height: 1.12;
-      margin: 0;
-      max-width: 12ch;
-    }
-    .menu-copy {
-      color: var(--menu-muted);
-      max-width: 56ch;
-    }
-    .menu-hero .menu-kicker,
-    .menu-hero .menu-copy {
-      color: #fff3dc;
-    }
-    .menu-guardian {
-      align-self: center;
-      display: grid;
-      gap: 10px;
-      justify-items: center;
-      transform: rotate(2deg);
-    }
-    .menu-guardian img {
-      border: 2px solid var(--menu-ink);
-      border-radius: 999px;
-      box-shadow: 4px 4px 0 rgba(47, 97, 200, 0.18);
-      display: block;
-      height: 112px;
-      object-fit: cover;
-      width: 112px;
-    }
-    .menu-guardian span {
-      background: var(--menu-yellow);
-      border: 2px solid var(--menu-ink);
+        radial-gradient(circle at 12% 8%, rgba(143, 34, 24, 0.18), transparent 20%),
+        radial-gradient(circle at 86% 18%, rgba(211, 162, 60, 0.2), transparent 22%),
+        var(--dst-paper);
+      border: 2px solid var(--dst-black);
       border-radius: 8px;
-      color: #172033;
-      font-weight: 700;
-      padding: 3px 9px;
-    }
-    .menu-quick-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-    .menu-board {
-      background: var(--menu-paper);
-      border: 2px solid var(--menu-ink);
-      border-radius: 6px;
-      box-shadow: 8px 8px 0 var(--menu-shadow);
+      box-shadow: 8px 8px 0 var(--dst-shadow);
       display: grid;
-      gap: 18px;
-      padding: 20px;
+      gap: 22px;
+      padding: clamp(16px, 3vw, 28px);
       position: relative;
     }
-    .menu-board::before {
-      background: var(--menu-rose);
-      border: 2px solid var(--menu-ink);
+    .menu-app::before {
+      background: var(--dst-red-deep);
+      border: 2px solid var(--dst-black);
       content: "";
       height: 13px;
       left: -2px;
-      opacity: 1;
       position: absolute;
       right: -2px;
       top: -2px;
-      transform: none;
     }
-    .menu-board-head {
-      align-items: end;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: space-between;
+    .menu-hero {
+      display: grid;
+      gap: 14px;
       position: relative;
       z-index: 1;
     }
-    .menu-board-head h2 {
-      font-size: 2.25rem;
+    .menu-banner {
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      box-shadow: 5px 5px 0 var(--dst-shadow);
+      display: block;
+      height: auto;
+      width: 100%;
     }
-    .menu-category-tabs {
-      background: #201713;
-      border: 2px solid var(--menu-ink);
-      border-radius: 6px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      padding: 9px;
-      position: sticky;
-      top: 8px;
-      z-index: 1;
+    .menu-hero-copy {
+      background: rgba(255, 241, 204, 0.82);
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      display: grid;
+      gap: 8px;
+      padding: 14px;
     }
-    html[data-theme="dark"] .menu-category-tabs {
-      background: #120c09;
-    }
-    .menu-category-tab {
-      align-items: center;
-      background: var(--menu-rose);
-      border: 2px solid var(--menu-ink);
-      border-radius: 6px;
-      box-shadow: 3px 3px 0 rgba(23, 32, 51, 0.12);
-      color: #fff3dc;
-      cursor: pointer;
-      display: inline-flex;
-      font-weight: 800;
-      gap: 7px;
-      padding: 7px 10px;
-      transition: transform 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
-    }
-    .menu-category-tab:hover,
-    .menu-category-tab:focus-visible,
-    .menu-category-tab.is-active {
-      background: var(--menu-yellow);
-      color: #201713;
-      outline: none;
-      transform: translate(-1px, -1px) rotate(-1deg);
-      box-shadow: 5px 5px 0 var(--menu-shadow);
-    }
-    .menu-category-mark,
-    .menu-dish-mark {
-      align-items: center;
-      border: 2px solid var(--menu-ink);
-      border-radius: 999px;
-      display: inline-flex;
-      font-weight: 900;
-      height: 32px;
-      justify-content: center;
+    .menu-title {
+      color: var(--dst-black);
+      font-size: clamp(2rem, 5vw, 3.4rem);
       line-height: 1;
-      width: 32px;
+      margin: 0;
     }
-    .menu-board-layout {
-      align-items: start;
-      display: grid;
-      gap: 18px;
-      grid-template-columns: minmax(0, 1fr) minmax(250px, 0.38fr);
-      position: relative;
-      z-index: 1;
-    }
-    .menu-dish-grid {
-      display: grid;
-      gap: 22px;
-      grid-template-columns: 1fr;
-    }
-    .menu-category-section {
-      display: grid;
-      gap: 12px;
-      scroll-margin-top: 92px;
-    }
-    .menu-category-heading {
-      align-items: baseline;
-      background: var(--menu-rose);
-      border: 2px solid var(--menu-ink);
+    .menu-topline {
+      align-items: center;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       justify-content: space-between;
-      padding: 9px 12px;
     }
-    .menu-category-heading h3 {
-      color: #fff3dc;
-      font-size: 1.55rem;
-      margin: 0;
+    .menu-header-strip {
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      display: block;
+      height: auto;
+      max-height: 120px;
+      object-fit: cover;
+      width: 100%;
     }
-    .menu-category-heading span {
-      color: #fff3dc;
-      font-size: 0.88rem;
-      font-weight: 800;
+    .menu-category-nav {
+      background: var(--dst-black);
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(7, minmax(74px, 1fr));
+      padding: 9px;
+      position: sticky;
+      top: 8px;
+      z-index: 4;
     }
-    .menu-category-card-grid {
+    .menu-category-button {
+      align-items: center;
+      background: var(--dst-paper-light);
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      color: var(--dst-black);
+      cursor: pointer;
+      display: grid;
+      gap: 4px;
+      justify-items: center;
+      min-height: 82px;
+      padding: 6px;
+      transition: background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .menu-category-button:hover,
+    .menu-category-button:focus-visible,
+    .menu-category-button.is-active {
+      background: var(--dst-gold);
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.28);
+      outline: none;
+      transform: translateY(-2px) rotate(-0.8deg);
+    }
+    .menu-category-button img {
+      display: block;
+      height: 42px;
+      object-fit: contain;
+      width: 42px;
+    }
+    .menu-category-button span {
+      font-size: 0.82rem;
+      font-weight: 900;
+      line-height: 1.05;
+      text-align: center;
+    }
+    .menu-sections {
+      display: grid;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .menu-category {
+      display: grid;
+      gap: 14px;
+      scroll-margin-top: 126px;
+    }
+    .menu-category-head {
+      align-items: center;
+      background: var(--dst-red);
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      color: var(--dst-bone);
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 72px minmax(0, 1fr);
+      padding: 10px 14px;
+    }
+    .menu-category-head img {
+      background: var(--dst-paper-light);
+      border: 2px solid var(--dst-black);
+      border-radius: 999px;
+      display: block;
+      height: 72px;
+      object-fit: contain;
+      padding: 5px;
+      width: 72px;
+    }
+    .menu-category-title {
+      color: var(--dst-bone);
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+    .menu-category-subtitle {
+      color: rgba(255, 241, 204, 0.82);
+      font-weight: 900;
+      margin: 4px 0 0;
+    }
+    .menu-dishes {
       display: grid;
       gap: 12px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .menu-dish {
-      align-items: start;
-      background: #fffaf0;
-      border: 2px solid var(--menu-ink);
-      border-left: 8px solid var(--menu-rose);
-      border-radius: 6px;
-      color: #201713;
-      cursor: pointer;
+      background: var(--dst-bone);
+      border: 2px solid var(--dst-black);
+      border-radius: 8px;
+      box-shadow: 4px 4px 0 rgba(23, 17, 13, 0.14);
+      color: var(--dst-black);
       display: grid;
-      gap: 8px;
-      min-height: 142px;
-      padding: 13px 13px 13px 15px;
-      position: relative;
-      text-align: left;
-      transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
-    }
-    html[data-theme="dark"] .menu-dish {
-      background: #fffaf0;
-      color: #201713;
-    }
-    .menu-dish::after {
-      border-bottom: 2px solid var(--menu-ink);
-      bottom: 10px;
-      content: "";
-      opacity: 0.22;
-      position: absolute;
-      right: 12px;
-      transform: rotate(-2deg);
-      width: 42px;
+      gap: 9px;
+      min-height: 180px;
+      padding: 14px;
+      transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
     }
     .menu-dish:hover,
-    .menu-dish:focus-visible,
-    .menu-dish.is-active {
-      background: #fff0c2;
-      box-shadow: 5px 5px 0 var(--menu-shadow);
-      outline: none;
-      transform: translateY(-3px) rotate(-0.8deg);
+    .menu-dish:focus-within {
+      background: #ffe6aa;
+      box-shadow: 6px 6px 0 var(--dst-shadow);
+      transform: translateY(-2px) rotate(-0.45deg);
     }
     .menu-dish-title {
-      align-items: center;
+      align-items: start;
       display: flex;
-      gap: 8px;
-      font-size: 1.08rem;
+      gap: 10px;
+      justify-content: space-between;
+    }
+    .menu-dish-title h3 {
+      color: var(--dst-black);
+      font-size: 1.22rem;
+      line-height: 1.1;
+      margin: 0;
+    }
+    .menu-dish-title span {
+      color: #73533d;
+      display: block;
+      font-size: 0.85rem;
       font-weight: 900;
-      line-height: 1.25;
+      margin-top: 3px;
     }
-    .menu-dish .menu-dish-mark {
-      border-color: #201713;
-      color: #201713;
-    }
-    .menu-dish-kcal {
-      background: #201713;
+    .menu-dish-logo {
+      border: 2px solid var(--dst-black);
       border-radius: 999px;
-      color: #fff3dc;
-      display: inline-flex;
-      font-size: 0.78rem;
-      font-weight: 900;
-      justify-self: start;
-      line-height: 1;
-      padding: 5px 8px;
+      flex: 0 0 auto;
+      height: 38px;
+      object-fit: contain;
+      padding: 3px;
+      width: 38px;
+    }
+    .menu-dish-detail {
+      color: #59443b;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      margin: 0;
     }
     .menu-dish-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
-    }
-    .menu-dish-tag {
-      border: 1px solid rgba(32, 23, 19, 0.34);
-      border-radius: 999px;
-      color: #59443b;
-      font-size: 0.76rem;
-      line-height: 1.1;
-      padding: 3px 7px;
-    }
-    html[data-theme="dark"] .menu-dish-tag {
-      border-color: rgba(238, 245, 255, 0.34);
-    }
-    .menu-dish-detail {
-      color: #59443b;
-      font-size: 0.88rem;
-      line-height: 1.45;
-      margin: 0;
-    }
-    .menu-detail-board {
-      align-content: start;
-      background: #201713;
-      border: 2px solid var(--menu-ink);
-      border-radius: 6px;
-      box-shadow: 5px 5px 0 var(--menu-shadow);
-      color: #fff3dc;
-      display: grid;
-      gap: 12px;
-      min-height: 100%;
-      padding: 16px;
-      position: sticky;
-      top: 92px;
-      transform: rotate(0.5deg);
-    }
-    .menu-detail-board h3 {
-      color: #fff3dc;
-      font-size: 1.55rem;
-      margin: 0;
-    }
-    .menu-detail-board .menu-copy {
-      color: #ead7b5;
-    }
-    .menu-detail-board .menu-dish-tag {
-      border-color: rgba(255, 243, 220, 0.34);
-      color: #fff3dc;
-    }
-    .menu-detail-board .menu-button-primary {
-      background: var(--menu-yellow);
-      color: #201713;
-    }
-    .menu-detail-board .menu-dish-mark {
-      border-color: #fff3dc;
-      color: #fff3dc;
-    }
-    .menu-detail-meta {
-      display: grid;
-      gap: 8px;
-      margin: 0;
-    }
-    .menu-detail-row {
-      border-top: 1px solid rgba(255, 243, 220, 0.26);
-      display: flex;
-      gap: 12px;
-      justify-content: space-between;
-      padding-top: 8px;
-    }
-    .menu-detail-row:first-child {
-      border-top: 0;
-      padding-top: 0;
-    }
-    .menu-detail-row dt {
-      color: #ffc928;
-      font-weight: 800;
-      margin: 0;
-    }
-    .menu-detail-row dd {
-      color: #fff3dc;
-      font-weight: 800;
-      margin: 0;
-      text-align: right;
-    }
-    .menu-grid {
-      align-items: start;
-      display: grid;
-      gap: 18px;
-      grid-template-columns: minmax(220px, 0.5fr) minmax(0, 1fr);
-    }
-    .menu-panel {
-      background: var(--menu-paper);
-      border: 2px solid var(--menu-ink);
-      border-radius: 8px;
-      box-shadow: 5px 5px 0 rgba(23, 32, 51, 0.1);
-      min-width: 0;
-      padding: 18px;
-    }
-    .menu-panel-head {
-      align-items: center;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-    .menu-month-tools,
-    .menu-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .menu-weekdays,
-    .menu-days {
-      display: grid;
-      gap: 8px;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-    }
-    .menu-weekday {
-      color: var(--menu-muted);
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-align: center;
-    }
-    .menu-day {
-      background: var(--menu-soft);
-      border: 2px solid rgba(23, 32, 51, 0.5);
-      border-radius: 8px;
-      color: var(--menu-ink);
-      cursor: pointer;
-      display: grid;
-      gap: 5px;
-      min-height: 112px;
-      padding: 7px;
-      text-align: left;
-      transition: transform 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
-    }
-    html[data-theme="dark"] .menu-day {
-      border-color: rgba(238, 245, 255, 0.48);
-    }
-    .menu-day:hover,
-    .menu-day:focus-visible,
-    .menu-day.is-selected {
-      background: rgba(240, 196, 63, 0.22);
-      border-color: var(--menu-ink);
-      outline: none;
-      transform: rotate(-0.5deg) translateY(-1px);
-    }
-    .menu-day.is-empty {
-      opacity: 0.38;
-      pointer-events: none;
-    }
-    .menu-day-number {
-      color: var(--menu-blue);
-      font-size: 1.05rem;
-      font-weight: 800;
-      line-height: 1;
-    }
-    .menu-day-line {
-      color: var(--menu-muted);
-      font-size: 0.76rem;
-      line-height: 1.25;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .menu-calendar-panel .menu-panel-head {
-      margin-bottom: 8px;
-    }
-    .menu-calendar-panel .menu-month-tools {
       gap: 6px;
     }
-    .menu-calendar-panel .menu-button {
-      padding: 5px 8px;
-    }
-    .menu-calendar-panel .menu-weekdays,
-    .menu-calendar-panel .menu-days {
-      gap: 4px;
-    }
-    .menu-calendar-panel .menu-weekday {
-      font-size: 0.72rem;
-    }
-    .menu-calendar-panel .menu-day {
-      border-width: 1px;
-      gap: 2px;
-      min-height: 46px;
-      padding: 4px;
-    }
-    .menu-calendar-panel .menu-day-number {
-      font-size: 0.86rem;
-    }
-    .menu-calendar-panel .menu-day-line {
-      font-size: 0.62rem;
-    }
-    .menu-editor {
-      display: grid;
-      gap: 12px;
-    }
-    .menu-editor-title {
-      color: var(--menu-blue);
-      font-size: 1.25rem;
-      font-weight: 800;
-    }
-    .menu-field {
-      display: grid;
-      gap: 5px;
-    }
-    .menu-idea-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .menu-idea {
-      background: rgba(47, 97, 200, 0.1);
-      border: 1px solid rgba(47, 97, 200, 0.34);
-      border-radius: 8px;
-      color: var(--menu-blue);
-      font-size: 0.86rem;
-      padding: 3px 8px;
-    }
-    .menu-calculator-grid {
-      display: grid;
-      gap: 18px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .menu-calc-fields {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .menu-result-box {
-      border: 2px solid var(--menu-ink);
-      border-radius: 8px;
-      display: grid;
-      gap: 8px;
-      margin-top: 14px;
-      padding: 12px;
-    }
-    .menu-result-number {
-      color: var(--menu-rose);
-      font-size: 1.7rem;
-      font-weight: 800;
+    .menu-dish-tag {
+      border: 1px solid rgba(43, 27, 18, 0.32);
+      border-radius: 999px;
+      color: #59443b;
+      font-size: 0.78rem;
+      font-weight: 900;
       line-height: 1;
+      padding: 4px 8px;
     }
-    .menu-result-text {
-      color: var(--menu-muted);
-      margin: 0;
-    }
-    .menu-footnote {
-      color: var(--menu-muted);
-      font-size: 0.9rem;
-      margin: 0;
+    .menu-dish-pairing {
+      border-top: 1px dashed rgba(43, 27, 18, 0.35);
+      color: var(--dst-red-deep);
+      font-size: 0.88rem;
+      font-weight: 900;
+      margin: auto 0 0;
+      padding-top: 8px;
     }
     @media (max-width: 760px) {
-      .menu-hero,
-      .menu-board-layout,
-      .menu-grid,
-      .menu-calculator-grid {
-        grid-template-columns: 1fr;
-      }
-      .menu-title {
-        font-size: 2.1rem;
-      }
-      .menu-guardian {
-        justify-self: start;
-      }
-      .menu-weekdays,
-      .menu-days {
-        gap: 5px;
-      }
-      .menu-day {
-        min-height: 84px;
-        padding: 5px;
-      }
-      .menu-day-line {
-        display: none;
-      }
-      .menu-calc-fields {
-        grid-template-columns: 1fr;
-      }
-      .menu-category-card-grid {
-        grid-template-columns: 1fr;
-      }
-      .menu-category-tabs,
-      .menu-detail-board {
+      .menu-category-nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         position: static;
+      }
+      .menu-category-head,
+      .menu-dishes {
+        grid-template-columns: 1fr;
+      }
+      .menu-category-head img {
+        height: 58px;
+        width: 58px;
       }
     }
   </style>
@@ -736,140 +409,22 @@
 
     <section class="menu-app" id="menu-app" hidden>
       <header class="menu-hero">
-        <div>
-          <p class="menu-kicker">今日厨房作战板</p>
-          <h1 class="menu-title">{{ .Title }}</h1>
-          <p class="menu-copy">{{ .Summary }}</p>
-          <div class="menu-quick-row">
-            <button class="menu-button menu-button-primary" id="menu-fill-week" type="button">给本周填上默认菜单</button>
-            <button class="menu-button" id="menu-today" type="button">跳到今天</button>
-            <button class="menu-button menu-button-rose" id="menu-lock" type="button">锁上小本本</button>
+        <img class="menu-banner" src="{{ $menuData.banner | relURL }}" alt="Don't Starve style food menu banner" />
+        <div class="menu-hero-copy">
+          <div class="menu-topline">
+            <div>
+              <p class="menu-kicker">Camp Kitchen</p>
+              <h1 class="menu-title">{{ .Title }}</h1>
+            </div>
+            <button class="menu-button" id="menu-lock" type="button">锁上小本本</button>
           </div>
+          <p class="menu-copy">{{ $menuData.menu_note | default .Summary }}</p>
         </div>
-        <figure class="menu-guardian">
-          <img src="{{ "/images/avatar.png" | relURL }}" alt="菜单守护员" />
-          <figcaption>菜单守护员</figcaption>
-        </figure>
       </header>
 
-      <section class="menu-board" aria-labelledby="menu-board-title">
-        <div class="menu-board-head">
-          <div>
-            <p class="menu-kicker">手绘主菜单</p>
-            <h2 id="menu-board-title">先看菜单，再安排</h2>
-          </div>
-          <p class="menu-copy" id="menu-category-note">像餐厅菜单一样按分类浏览。鼠标移到菜名上，会看到口味、搭配和热量小纸条。</p>
-        </div>
-        <div class="menu-category-tabs" id="menu-category-tabs" aria-label="菜单分类"></div>
-        <div class="menu-board-layout">
-          <div class="menu-dish-grid" id="menu-dish-grid"></div>
-          <aside class="menu-detail-board" id="menu-dish-detail" aria-live="polite"></aside>
-        </div>
-      </section>
-
-      <div class="menu-grid">
-        <section class="menu-panel menu-calendar-panel" aria-labelledby="menu-calendar-title">
-          <div class="menu-panel-head">
-            <h2 id="menu-calendar-title">小日历</h2>
-            <div class="menu-month-tools">
-              <button class="menu-button" id="menu-prev-month" type="button">上个月</button>
-              <button class="menu-button" id="menu-next-month" type="button">下个月</button>
-            </div>
-          </div>
-          <p class="menu-copy" id="menu-month-label"></p>
-          <div class="menu-weekdays" aria-hidden="true">
-            <div class="menu-weekday">日</div>
-            <div class="menu-weekday">一</div>
-            <div class="menu-weekday">二</div>
-            <div class="menu-weekday">三</div>
-            <div class="menu-weekday">四</div>
-            <div class="menu-weekday">五</div>
-            <div class="menu-weekday">六</div>
-          </div>
-          <div class="menu-days" id="menu-days"></div>
-        </section>
-
-        <aside class="menu-panel" aria-labelledby="menu-editor-title">
-          <div class="menu-editor">
-            <h2 id="menu-editor-title">今天吃什么</h2>
-            <p class="menu-editor-title" id="menu-selected-date"></p>
-            <div id="menu-editor-fields"></div>
-            <div class="menu-field">
-              <label class="menu-label" for="menu-note">小备注</label>
-              <textarea class="menu-textarea" id="menu-note" placeholder="比如：少油、想喝汤、晚饭早点吃。"></textarea>
-            </div>
-            <div class="menu-actions">
-              <button class="menu-button menu-button-primary" id="menu-save-day" type="button">保存这一天</button>
-              <button class="menu-button" id="menu-use-default" type="button">套用默认</button>
-              <button class="menu-button menu-button-rose" id="menu-clear-day" type="button">清空</button>
-            </div>
-            <div>
-              <p class="menu-label">灵感小纸条</p>
-              <div class="menu-idea-list" id="menu-ideas"></div>
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <section class="menu-calculator-grid">
-        <div class="menu-panel">
-          <h2>BMI 小算盘</h2>
-          <div class="menu-calc-fields">
-            <div class="menu-field">
-              <label class="menu-label" for="bmi-height">身高 cm</label>
-              <input class="menu-input" id="bmi-height" type="number" min="80" max="230" value="165" />
-            </div>
-            <div class="menu-field">
-              <label class="menu-label" for="bmi-weight">体重 kg</label>
-              <input class="menu-input" id="bmi-weight" type="number" min="25" max="220" value="55" />
-            </div>
-          </div>
-          <div class="menu-result-box">
-            <span class="menu-result-number" id="bmi-value">--</span>
-            <p class="menu-result-text" id="bmi-text">填好身高体重后自动计算。</p>
-          </div>
-        </div>
-
-        <div class="menu-panel">
-          <h2>每日热量估算</h2>
-          <div class="menu-calc-fields">
-            <div class="menu-field">
-              <label class="menu-label" for="cal-age">年龄</label>
-              <input class="menu-input" id="cal-age" type="number" min="10" max="100" value="25" />
-            </div>
-            <div class="menu-field">
-              <label class="menu-label" for="cal-sex">性别</label>
-              <select class="menu-select" id="cal-sex">
-                <option value="female">女性</option>
-                <option value="male">男性</option>
-              </select>
-            </div>
-            <div class="menu-field">
-              <label class="menu-label" for="cal-activity">活动量</label>
-              <select class="menu-select" id="cal-activity">
-                <option value="1.2">久坐为主</option>
-                <option value="1.375">每周轻量运动</option>
-                <option value="1.55">规律运动</option>
-                <option value="1.725">高强度运动</option>
-              </select>
-            </div>
-            <div class="menu-field">
-              <label class="menu-label" for="cal-goal">目标</label>
-              <select class="menu-select" id="cal-goal">
-                <option value="0">维持</option>
-                <option value="-300">温和减脂</option>
-                <option value="200">慢慢增肌</option>
-              </select>
-            </div>
-          </div>
-          <div class="menu-result-box">
-            <span class="menu-result-number" id="cal-value">--</span>
-            <p class="menu-result-text" id="cal-text">这是日常饮食记录用的粗略估算。</p>
-          </div>
-        </div>
-      </section>
-
-      <p class="menu-footnote">注：BMI 与热量结果只适合做日常记录参考，不替代医生或营养师建议。</p>
+      <nav class="menu-category-nav" id="menu-category-nav" aria-label="Menu categories"></nav>
+      <img class="menu-header-strip" src="{{ $menuData.header | relURL }}" alt="" aria-hidden="true" />
+      <div class="menu-sections" id="menu-sections"></div>
       <p class="text-link"><a href="{{ "/hodgepodge/" | relURL }}">返回 Hodgepodge</a></p>
     </section>
   </article>
@@ -878,61 +433,17 @@
     (function () {
       const MENU_DATA = {{ $menuData | jsonify | safeJS }};
       const keeper = String(MENU_DATA.keeper || "").trim().toLowerCase();
-      const storageKey = MENU_DATA.storage_key || "partner-menu-v1";
+      const storageKey = MENU_DATA.storage_key || "partner-menu-v2";
       const authKey = storageKey + ":auth";
-      const planKey = storageKey + ":plan";
-      const slots = MENU_DATA.meal_slots || [];
-      const defaultDay = MENU_DATA.default_day || {};
-      const weekTemplates = MENU_DATA.week_templates || [];
-      const dishIdeas = MENU_DATA.dish_ideas || [];
-      const menuCategories = MENU_DATA.menu_categories || [];
-      const today = new Date();
-      let visibleDate = new Date(today.getFullYear(), today.getMonth(), 1);
-      let selectedDate = toKey(today);
-      let activeCategory = menuCategories[0] ? menuCategories[0].key : "";
-      let activeDishName = menuCategories[0] && menuCategories[0].items && menuCategories[0].items[0] ? menuCategories[0].items[0].name : "";
-      let plan = readJson(planKey, {});
+      const categories = MENU_DATA.categories || [];
 
       const gate = document.getElementById("menu-gate");
       const app = document.getElementById("menu-app");
       const gateForm = document.getElementById("menu-gate-form");
       const nameInput = document.getElementById("menu-name-input");
       const gateStatus = document.getElementById("menu-gate-status");
-      const monthLabel = document.getElementById("menu-month-label");
-      const daysEl = document.getElementById("menu-days");
-      const selectedDateEl = document.getElementById("menu-selected-date");
-      const editorFields = document.getElementById("menu-editor-fields");
-      const noteInput = document.getElementById("menu-note");
-      const ideasEl = document.getElementById("menu-ideas");
-      const categoryTabsEl = document.getElementById("menu-category-tabs");
-      const categoryNoteEl = document.getElementById("menu-category-note");
-      const dishGridEl = document.getElementById("menu-dish-grid");
-      const dishDetailEl = document.getElementById("menu-dish-detail");
-
-      function readJson(key, fallback) {
-        try {
-          const raw = window.localStorage.getItem(key);
-          return raw ? JSON.parse(raw) : fallback;
-        } catch (error) {
-          return fallback;
-        }
-      }
-
-      function writeJson(key, value) {
-        window.localStorage.setItem(key, JSON.stringify(value));
-      }
-
-      function toKey(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return year + "-" + month + "-" + day;
-      }
-
-      function fromKey(key) {
-        const parts = key.split("-").map(Number);
-        return new Date(parts[0], parts[1] - 1, parts[2]);
-      }
+      const navEl = document.getElementById("menu-category-nav");
+      const sectionsEl = document.getElementById("menu-sections");
 
       function escapeHtml(value) {
         return String(value || "").replace(/[&<>"']/g, function (char) {
@@ -946,21 +457,10 @@
         });
       }
 
-      function currentDayData(key) {
-        const date = fromKey(key);
-        const template = weekTemplates.find(function (item) { return item.weekday === date.getDay(); }) || {};
-        return Object.assign({}, defaultDay, template, plan[key] || {});
-      }
-
       function revealApp() {
         gate.hidden = true;
         app.hidden = false;
-        buildEditorFields();
-        renderMenuBoard();
-        renderIdeas();
-        renderCalendar();
-        loadSelectedDay();
-        updateCalculators();
+        renderMenu();
       }
 
       function lockApp() {
@@ -969,6 +469,55 @@
         gate.hidden = false;
         nameInput.value = "";
         nameInput.focus();
+      }
+
+      function renderMenu() {
+        navEl.innerHTML = categories.map(function (category, index) {
+          return "<button class='menu-category-button" + (index === 0 ? " is-active" : "") + "' type='button' data-category='" + escapeHtml(category.key) + "'><img src='" + escapeHtml(category.logo) + "' alt='' /><span>" + escapeHtml(category.label) + "<br />" + escapeHtml(category.cn_label) + "</span></button>";
+        }).join("");
+
+        sectionsEl.innerHTML = categories.map(function (category) {
+          const dishes = (category.items || []).map(function (item) {
+            const tags = (item.tags || []).map(function (tag) {
+              return "<span class='menu-dish-tag'>" + escapeHtml(tag) + "</span>";
+            }).join("");
+            return [
+              "<article class='menu-dish'>",
+              "<div class='menu-dish-title'>",
+              "<div><h3>" + escapeHtml(item.name) + "</h3><span>" + escapeHtml(item.subtitle) + "</span></div>",
+              "<img class='menu-dish-logo' src='" + escapeHtml(category.logo) + "' alt='' />",
+              "</div>",
+              "<p class='menu-dish-detail'>" + escapeHtml(item.detail) + "</p>",
+              "<div class='menu-dish-tags'>" + tags + "</div>",
+              "<p class='menu-dish-pairing'>搭配：" + escapeHtml(item.pairing || "看心情") + "</p>",
+              "</article>"
+            ].join("");
+          }).join("");
+          return [
+            "<section class='menu-category' id='menu-section-" + escapeHtml(category.key) + "'>",
+            "<header class='menu-category-head'>",
+            "<img src='" + escapeHtml(category.logo) + "' alt='' />",
+            "<div><h2 class='menu-category-title'>" + escapeHtml(category.label) + " / " + escapeHtml(category.cn_label) + "</h2><p class='menu-category-subtitle'>" + escapeHtml(category.note) + "</p></div>",
+            "</header>",
+            "<div class='menu-dishes'>",
+            dishes,
+            "</div>",
+            "</section>"
+          ].join("");
+        }).join("");
+
+        navEl.querySelectorAll("[data-category]").forEach(function (button) {
+          button.addEventListener("click", function () {
+            const key = button.getAttribute("data-category");
+            navEl.querySelectorAll("[data-category]").forEach(function (item) {
+              item.classList.toggle("is-active", item === button);
+            });
+            const target = document.getElementById("menu-section-" + key);
+            if (target) {
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          });
+        });
       }
 
       gateForm.addEventListener("submit", function (event) {
@@ -984,266 +533,6 @@
       });
 
       document.getElementById("menu-lock").addEventListener("click", lockApp);
-      document.getElementById("menu-today").addEventListener("click", function () {
-        visibleDate = new Date(today.getFullYear(), today.getMonth(), 1);
-        selectedDate = toKey(today);
-        renderCalendar();
-        loadSelectedDay();
-      });
-      document.getElementById("menu-prev-month").addEventListener("click", function () {
-        visibleDate = new Date(visibleDate.getFullYear(), visibleDate.getMonth() - 1, 1);
-        renderCalendar();
-      });
-      document.getElementById("menu-next-month").addEventListener("click", function () {
-        visibleDate = new Date(visibleDate.getFullYear(), visibleDate.getMonth() + 1, 1);
-        renderCalendar();
-      });
-      document.getElementById("menu-save-day").addEventListener("click", saveSelectedDay);
-      document.getElementById("menu-use-default").addEventListener("click", function () {
-        const date = fromKey(selectedDate);
-        const template = weekTemplates.find(function (item) { return item.weekday === date.getDay(); }) || {};
-        fillEditor(Object.assign({}, defaultDay, template));
-      });
-      document.getElementById("menu-clear-day").addEventListener("click", function () {
-        delete plan[selectedDate];
-        writeJson(planKey, plan);
-        renderCalendar();
-        loadSelectedDay();
-      });
-      document.getElementById("menu-fill-week").addEventListener("click", fillVisibleWeek);
-
-      function renderCalendar() {
-        const year = visibleDate.getFullYear();
-        const month = visibleDate.getMonth();
-        monthLabel.textContent = year + " 年 " + (month + 1) + " 月";
-        daysEl.innerHTML = "";
-        const firstDay = new Date(year, month, 1).getDay();
-        const totalDays = new Date(year, month + 1, 0).getDate();
-        for (let i = 0; i < firstDay; i += 1) {
-          const blank = document.createElement("div");
-          blank.className = "menu-day is-empty";
-          daysEl.appendChild(blank);
-        }
-        for (let day = 1; day <= totalDays; day += 1) {
-          const key = toKey(new Date(year, month, day));
-          const data = currentDayData(key);
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className = "menu-day" + (key === selectedDate ? " is-selected" : "");
-          button.innerHTML = [
-            "<span class='menu-day-number'>" + day + "</span>",
-            "<span class='menu-day-line'>晚：" + escapeHtml(data.dinner) + "</span>"
-          ].join("");
-          button.addEventListener("click", function () {
-            selectedDate = key;
-            renderCalendar();
-            loadSelectedDay();
-          });
-          daysEl.appendChild(button);
-        }
-      }
-
-      function activeCategoryData() {
-        return menuCategories.find(function (category) { return category.key === activeCategory; }) || menuCategories[0] || { items: [] };
-      }
-
-      function activeDishData() {
-        const category = activeCategoryData();
-        const items = category.items || [];
-        return items.find(function (item) { return item.name === activeDishName; }) || items[0] || null;
-      }
-
-      function renderMenuBoard() {
-        const category = activeCategoryData();
-        if (!category.key && menuCategories[0]) {
-          activeCategory = menuCategories[0].key;
-        }
-        categoryTabsEl.innerHTML = menuCategories.map(function (item) {
-          const activeClass = item.key === activeCategory ? " is-active" : "";
-          return "<button class='menu-category-tab" + activeClass + "' type='button' data-category='" + escapeHtml(item.key) + "'><span class='menu-category-mark'>" + escapeHtml(item.mark) + "</span>" + escapeHtml(item.label) + "</button>";
-        }).join("");
-        categoryTabsEl.querySelectorAll("[data-category]").forEach(function (button) {
-          button.addEventListener("click", function () {
-            const nextCategory = button.getAttribute("data-category");
-            const next = menuCategories.find(function (item) { return item.key === nextCategory; }) || menuCategories[0];
-            activeCategory = next.key;
-            activeDishName = next.items && next.items[0] ? next.items[0].name : "";
-            updateCategoryTabs();
-            renderDishDetail(activeDishData(), activeCategoryData());
-            const target = document.getElementById("menu-section-" + activeCategory);
-            if (target) {
-              target.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
-          });
-        });
-        categoryNoteEl.textContent = "像餐厅菜单一样按分类浏览。鼠标移到菜名上，会看到口味、搭配和热量小纸条。";
-        renderDishGrid();
-        renderDishDetail(activeDishData(), category);
-      }
-
-      function updateCategoryTabs() {
-        categoryTabsEl.querySelectorAll("[data-category]").forEach(function (button) {
-          button.classList.toggle("is-active", button.getAttribute("data-category") === activeCategory);
-        });
-        dishGridEl.querySelectorAll("[data-dish]").forEach(function (button) {
-          button.classList.toggle("is-active", button.getAttribute("data-dish") === activeDishName);
-        });
-      }
-
-      function renderDishGrid() {
-        dishGridEl.innerHTML = menuCategories.map(function (category) {
-          const items = category.items || [];
-          const cards = items.map(function (item) {
-            const activeClass = item.name === activeDishName ? " is-active" : "";
-            const tags = (item.tags || []).slice(0, 3).map(function (tag) {
-              return "<span class='menu-dish-tag'>" + escapeHtml(tag) + "</span>";
-            }).join("");
-            return "<button class='menu-dish" + activeClass + "' type='button' data-category='" + escapeHtml(category.key) + "' data-dish='" + escapeHtml(item.name) + "'><span class='menu-dish-title'><span class='menu-dish-mark'>" + escapeHtml(category.mark) + "</span>" + escapeHtml(item.name) + "</span><span class='menu-dish-kcal'>" + escapeHtml(item.calories || "--") + " kcal</span><span class='menu-dish-tags'>" + tags + "</span><span class='menu-dish-detail'>" + escapeHtml(item.detail) + "</span></button>";
-          }).join("");
-          return [
-            "<section class='menu-category-section' id='menu-section-" + escapeHtml(category.key) + "'>",
-            "<div class='menu-category-heading'><h3>" + escapeHtml(category.label) + "</h3><span>" + escapeHtml(category.note) + "</span></div>",
-            "<div class='menu-category-card-grid'>",
-            cards,
-            "</div>",
-            "</section>"
-          ].join("");
-        }).join("");
-        dishGridEl.querySelectorAll("[data-dish]").forEach(function (button) {
-          const activate = function () {
-            activeCategory = button.getAttribute("data-category") || activeCategory;
-            activeDishName = button.getAttribute("data-dish") || activeDishName;
-            updateCategoryTabs();
-            renderDishDetail(activeDishData(), activeCategoryData());
-          };
-          button.addEventListener("mouseenter", activate);
-          button.addEventListener("focus", activate);
-          button.addEventListener("click", activate);
-        });
-      }
-
-      function renderDishDetail(item, category) {
-        if (!item) {
-          dishDetailEl.innerHTML = "<h3>还没有菜</h3><p class='menu-copy'>在 JSON 里加一个分类和菜名，这里就会长出来。</p>";
-          return;
-        }
-        const tags = (item.tags || []).map(function (tag) {
-          return "<span class='menu-dish-tag'>" + escapeHtml(tag) + "</span>";
-        }).join("");
-        dishDetailEl.innerHTML = [
-          "<span class='menu-dish-mark'>" + escapeHtml(category.mark || "菜") + "</span>",
-          "<h3>" + escapeHtml(item.name) + "</h3>",
-          "<p class='menu-copy'>" + escapeHtml(item.detail) + "</p>",
-          "<div class='menu-dish-tags'>" + tags + "</div>",
-          "<dl class='menu-detail-meta'>",
-          "<div class='menu-detail-row'><dt>估算热量</dt><dd>" + escapeHtml(item.calories || "--") + " kcal</dd></div>",
-          "<div class='menu-detail-row'><dt>推荐搭配</dt><dd>" + escapeHtml(item.pairing || "看心情") + "</dd></div>",
-          "</dl>",
-          "<button class='menu-button menu-button-primary' id='menu-add-dish' type='button'>安排到选中的日期</button>"
-        ].join("");
-        document.getElementById("menu-add-dish").addEventListener("click", function () {
-          addDishToSelectedDay(item, category);
-        });
-      }
-
-      function addDishToSelectedDay(item, category) {
-        const data = currentDayData(selectedDate);
-        const slotKey = category.key === "snacks" ? "snack" : (category.key === "eggs" || category.key === "staples" ? "breakfast" : "dinner");
-        data[slotKey] = item.name;
-        data.note = "从动态菜单加入：" + item.name + "。";
-        plan[selectedDate] = data;
-        writeJson(planKey, plan);
-        renderCalendar();
-        loadSelectedDay();
-      }
-
-      function buildEditorFields() {
-        editorFields.innerHTML = slots.map(function (slot) {
-          return "<div class='menu-field'><label class='menu-label' for='meal-" + slot.key + "'>" + slot.label + "</label><input class='menu-input' id='meal-" + slot.key + "' data-meal='" + slot.key + "' /></div>";
-        }).join("");
-      }
-
-      function loadSelectedDay() {
-        const data = currentDayData(selectedDate);
-        selectedDateEl.textContent = selectedDate;
-        fillEditor(data);
-      }
-
-      function fillEditor(data) {
-        slots.forEach(function (slot) {
-          const input = document.querySelector("[data-meal='" + slot.key + "']");
-          if (input) {
-            input.value = data[slot.key] || "";
-          }
-        });
-        noteInput.value = data.note || "";
-      }
-
-      function saveSelectedDay() {
-        const entry = {};
-        slots.forEach(function (slot) {
-          const input = document.querySelector("[data-meal='" + slot.key + "']");
-          entry[slot.key] = input ? input.value.trim() : "";
-        });
-        entry.note = noteInput.value.trim();
-        plan[selectedDate] = entry;
-        writeJson(planKey, plan);
-        renderCalendar();
-      }
-
-      function fillVisibleWeek() {
-        const selected = fromKey(selectedDate);
-        const start = new Date(selected);
-        start.setDate(selected.getDate() - selected.getDay());
-        for (let offset = 0; offset < 7; offset += 1) {
-          const date = new Date(start);
-          date.setDate(start.getDate() + offset);
-          const template = weekTemplates.find(function (item) { return item.weekday === date.getDay(); }) || {};
-          plan[toKey(date)] = Object.assign({}, defaultDay, template);
-        }
-        writeJson(planKey, plan);
-        renderCalendar();
-        loadSelectedDay();
-      }
-
-      function renderIdeas() {
-        ideasEl.innerHTML = dishIdeas.map(function (idea) {
-          return "<span class='menu-idea'>" + escapeHtml(idea) + "</span>";
-        }).join("");
-      }
-
-      function numberValue(id) {
-        return Number(document.getElementById(id).value);
-      }
-
-      function updateCalculators() {
-        const height = numberValue("bmi-height");
-        const weight = numberValue("bmi-weight");
-        const bmiValue = document.getElementById("bmi-value");
-        const bmiText = document.getElementById("bmi-text");
-        if (height > 0 && weight > 0) {
-          const bmi = weight / Math.pow(height / 100, 2);
-          bmiValue.textContent = bmi.toFixed(1);
-          bmiText.textContent = bmi < 18.5 ? "偏轻，记得好好吃饭。" : bmi < 24 ? "正常区间，继续稳稳照顾自己。" : bmi < 28 ? "略高，菜单可以清爽一点。" : "偏高，适合慢慢调整节奏。";
-        }
-        const age = numberValue("cal-age");
-        const sex = document.getElementById("cal-sex").value;
-        const activity = Number(document.getElementById("cal-activity").value);
-        const goal = Number(document.getElementById("cal-goal").value);
-        const calValue = document.getElementById("cal-value");
-        const calText = document.getElementById("cal-text");
-        if (height > 0 && weight > 0 && age > 0) {
-          const bmr = 10 * weight + 6.25 * height - 5 * age + (sex === "male" ? 5 : -161);
-          const target = Math.max(900, Math.round(bmr * activity + goal));
-          calValue.textContent = target + " kcal";
-          calText.textContent = "按当前活动量和目标估算，可作为今天菜单的粗略上限。";
-        }
-      }
-
-      ["bmi-height", "bmi-weight", "cal-age", "cal-sex", "cal-activity", "cal-goal"].forEach(function (id) {
-        document.getElementById(id).addEventListener("input", updateCalculators);
-        document.getElementById(id).addEventListener("change", updateCalculators);
-      });
 
       if (window.localStorage.getItem(authKey) === "yes") {
         revealApp();

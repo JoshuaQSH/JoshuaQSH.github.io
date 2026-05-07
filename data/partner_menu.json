@@ -1,272 +1,217 @@
 {
   "keeper": "Yuhang Wu",
-  "storage_key": "partner-menu-v1",
-  "meal_slots": [
-    {
-      "key": "breakfast",
-      "label": "早餐"
-    },
-    {
-      "key": "lunch",
-      "label": "午餐"
-    },
-    {
-      "key": "dinner",
-      "label": "晚餐"
-    },
-    {
-      "key": "snack",
-      "label": "加餐"
-    }
-  ],
-  "default_day": {
-    "breakfast": "燕麦酸奶碗 + 蓝莓",
-    "lunch": "鸡胸肉藜麦饭 + 西兰花",
-    "dinner": "番茄牛肉汤 + 半碗米饭",
-    "snack": "无糖豆浆 / 坚果一小把",
-    "note": "多喝水，晚餐七分饱。"
-  },
-  "week_templates": [
-    {
-      "weekday": 1,
-      "breakfast": "鸡蛋三明治 + 黑咖啡",
-      "lunch": "照烧鸡腿饭 + 菠菜",
-      "dinner": "虾仁豆腐煲 + 紫菜汤",
-      "snack": "希腊酸奶"
-    },
-    {
-      "weekday": 2,
-      "breakfast": "燕麦酸奶碗 + 香蕉",
-      "lunch": "牛肉蔬菜卷 + 玉米",
-      "dinner": "清蒸鱼 + 青菜 + 红薯",
-      "snack": "苹果"
-    },
-    {
-      "weekday": 3,
-      "breakfast": "全麦吐司 + 煎蛋 + 牛奶",
-      "lunch": "番茄鸡蛋面 + 青菜",
-      "dinner": "鸡肉沙拉碗 + 南瓜",
-      "snack": "坚果一小把"
-    },
-    {
-      "weekday": 4,
-      "breakfast": "豆浆 + 茶叶蛋 + 小饭团",
-      "lunch": "咖喱鸡肉饭 + 黄瓜",
-      "dinner": "菌菇豆腐汤 + 半碗米饭",
-      "snack": "橙子"
-    },
-    {
-      "weekday": 5,
-      "breakfast": "牛油果鸡蛋吐司",
-      "lunch": "三文鱼饭团 + 味噌汤",
-      "dinner": "牛肉蔬菜锅 + 粉丝少量",
-      "snack": "酸奶"
-    },
-    {
-      "weekday": 6,
-      "breakfast": "蛋饼 + 无糖豆浆",
-      "lunch": "家常炒饭 + 番茄汤",
-      "dinner": "烤鸡翅 + 蔬菜拼盘",
-      "snack": "草莓"
-    },
-    {
-      "weekday": 0,
-      "breakfast": "慢悠悠早午餐",
-      "lunch": "清爽越南粉 / 日式便当",
-      "dinner": "热汤面 + 青菜 + 鸡蛋",
-      "snack": "热牛奶"
-    }
-  ],
-  "dish_ideas": [
-    "虾仁豆腐煲",
-    "番茄牛肉汤",
-    "鸡胸肉藜麦饭",
-    "清蒸鱼配红薯",
-    "鸡肉沙拉碗",
-    "菌菇豆腐汤",
-    "照烧鸡腿饭",
-    "牛肉蔬菜锅",
-    "燕麦酸奶碗",
-    "牛油果鸡蛋吐司"
-  ],
-  "menu_categories": [
+  "storage_key": "partner-menu-v2",
+  "banner": "/images/food_menu/DST_banner.png",
+  "header": "/images/food_menu/DST_header.png",
+  "menu_note": "Pick from the camp kitchen board. Add or edit dishes in this JSON file.",
+  "categories": [
     {
       "key": "meat",
-      "label": "肉类",
-      "mark": "肉",
-      "note": "负责饱足感和认真吃饭的快乐。",
+      "label": "Meat",
+      "cn_label": "肉类",
+      "logo": "/images/food_menu/meat_logo.png",
+      "note": "Warm, filling plates for serious hunger.",
       "items": [
         {
           "name": "番茄牛肉汤",
-          "tags": ["高蛋白", "热汤", "晚餐"],
+          "subtitle": "Tomato Beef Stew",
           "detail": "牛肉、番茄、洋葱慢慢煮，酸甜清爽，不靠重油也很有满足感。",
-          "calories": 430,
-          "pairing": "配半碗米饭或红薯。"
+          "tags": ["高蛋白", "热汤", "晚餐"],
+          "pairing": "半碗米饭或红薯"
         },
         {
           "name": "照烧鸡腿饭",
-          "tags": ["便当", "补能量", "午餐"],
+          "subtitle": "Teriyaki Chicken Rice",
           "detail": "鸡腿去多余油脂，酱汁收薄一点，旁边放一大格绿叶菜。",
-          "calories": 620,
-          "pairing": "配菠菜、黄瓜或西兰花。"
-        },
-        {
-          "name": "鸡胸肉藜麦饭",
-          "tags": ["清爽", "高蛋白", "训练日"],
-          "detail": "鸡胸肉切片煎香，藜麦和米饭混合，适合想吃得轻一点的时候。",
-          "calories": 520,
-          "pairing": "配西兰花和一小勺芝麻酱。"
+          "tags": ["便当", "补能量", "午餐"],
+          "pairing": "菠菜、黄瓜或西兰花"
         },
         {
           "name": "牛肉蔬菜锅",
-          "tags": ["暖和", "低负担", "晚餐"],
+          "subtitle": "Beef Vegetable Pot",
           "detail": "牛肉片、娃娃菜、菌菇一起煮，汤底保持清淡，吃完很舒服。",
-          "calories": 500,
-          "pairing": "配少量粉丝或半碗米饭。"
+          "tags": ["暖和", "低负担", "晚餐"],
+          "pairing": "少量粉丝或半碗米饭"
+        }
+      ]
+    },
+    {
+      "key": "fish",
+      "label": "Fish",
+      "cn_label": "鱼虾",
+      "logo": "/images/food_menu/fish_logo.png",
+      "note": "Clean protein from the sea side of the crock pot.",
+      "items": [
+        {
+          "name": "清蒸鱼配青菜",
+          "subtitle": "Steamed Fish",
+          "detail": "鱼肉清蒸，青菜快炒或水煮，味道干净。",
+          "tags": ["鲜", "高蛋白", "晚餐"],
+          "pairing": "红薯或玉米"
+        },
+        {
+          "name": "虾仁豆腐煲",
+          "subtitle": "Shrimp Tofu Pot",
+          "detail": "豆腐和虾仁一起煮，汤汁鲜但不厚重，适合想吃热乎饭的时候。",
+          "tags": ["嫩", "高蛋白", "热汤"],
+          "pairing": "紫菜汤或青菜"
+        },
+        {
+          "name": "三文鱼饭团",
+          "subtitle": "Salmon Rice Ball",
+          "detail": "米饭握小一点，里面放三文鱼碎和海苔，控制份量也好吃。",
+          "tags": ["便当", "午餐", "好拿"],
+          "pairing": "味噌汤"
         }
       ]
     },
     {
       "key": "eggs",
-      "label": "蛋奶豆",
-      "mark": "蛋",
-      "note": "早餐和加餐的稳定器。",
+      "label": "Eggs",
+      "cn_label": "蛋奶豆",
+      "logo": "/images/food_menu/eggs_logo.png",
+      "note": "Reliable breakfast and quick-protein choices.",
       "items": [
         {
           "name": "鸡蛋三明治",
-          "tags": ["早餐", "快手", "通勤"],
+          "subtitle": "Egg Sandwich",
           "detail": "全麦面包夹煎蛋、生菜和一点低脂酱，十分钟完成。",
-          "calories": 360,
-          "pairing": "配黑咖啡或牛奶。"
-        },
-        {
-          "name": "虾仁豆腐煲",
-          "tags": ["嫩", "高蛋白", "晚餐"],
-          "detail": "豆腐和虾仁一起煮，汤汁鲜但不厚重，适合想吃热乎饭的时候。",
-          "calories": 390,
-          "pairing": "配紫菜汤或青菜。"
+          "tags": ["早餐", "快手", "通勤"],
+          "pairing": "黑咖啡或牛奶"
         },
         {
           "name": "燕麦酸奶碗",
-          "tags": ["早餐", "轻甜", "纤维"],
+          "subtitle": "Oat Yogurt Bowl",
           "detail": "酸奶、燕麦、蓝莓和坚果粒，甜味来自水果就够了。",
-          "calories": 330,
-          "pairing": "配水煮蛋。"
+          "tags": ["早餐", "轻甜", "纤维"],
+          "pairing": "水煮蛋"
         },
         {
           "name": "豆浆茶叶蛋",
-          "tags": ["早餐", "稳", "少油"],
+          "subtitle": "Soy Milk and Tea Egg",
           "detail": "无糖豆浆加茶叶蛋，简单但很可靠。",
-          "calories": 280,
-          "pairing": "配小饭团或玉米。"
+          "tags": ["早餐", "稳", "少油"],
+          "pairing": "小饭团或玉米"
         }
       ]
     },
     {
-      "key": "vegetables",
-      "label": "蔬菜菌菇",
-      "mark": "菜",
-      "note": "让盘子看起来像认真生活。",
+      "key": "vegetable",
+      "label": "Vegetable",
+      "cn_label": "蔬菜",
+      "logo": "/images/food_menu/vegetable_logo.png",
+      "note": "Greens, mushrooms, and the sanity-saving side of the plate.",
       "items": [
         {
           "name": "菌菇豆腐汤",
-          "tags": ["热汤", "清淡", "晚餐"],
+          "subtitle": "Mushroom Tofu Soup",
           "detail": "香菇、白玉菇和豆腐一起煮，鲜味足，负担小。",
-          "calories": 260,
-          "pairing": "配半碗米饭。"
+          "tags": ["热汤", "清淡", "晚餐"],
+          "pairing": "半碗米饭"
         },
         {
           "name": "鸡肉沙拉碗",
-          "tags": ["清爽", "午餐", "低油"],
+          "subtitle": "Chicken Salad Bowl",
           "detail": "鸡肉、南瓜、生菜、番茄和一点坚果，酱汁单独放。",
-          "calories": 470,
-          "pairing": "配柠檬水。"
-        },
-        {
-          "name": "清蒸鱼配青菜",
-          "tags": ["鲜", "高蛋白", "晚餐"],
-          "detail": "鱼肉清蒸，青菜快炒或水煮，味道干净。",
-          "calories": 420,
-          "pairing": "配红薯或玉米。"
+          "tags": ["清爽", "午餐", "低油"],
+          "pairing": "柠檬水"
         },
         {
           "name": "番茄鸡蛋面",
-          "tags": ["安慰", "快手", "午餐"],
+          "subtitle": "Tomato Egg Noodles",
           "detail": "番茄炒出汁再加蛋和面，最后塞一把青菜。",
-          "calories": 540,
-          "pairing": "配黄瓜。"
+          "tags": ["安慰", "快手", "午餐"],
+          "pairing": "黄瓜"
         }
       ]
     },
     {
-      "key": "staples",
-      "label": "主食",
-      "mark": "饭",
-      "note": "不是敌人，是体力条。",
+      "key": "drink",
+      "label": "Drink",
+      "cn_label": "饮品",
+      "logo": "/images/food_menu/drink_logo.png",
+      "note": "Small drinks for warmth, calm, and no accidental sugar trap.",
       "items": [
         {
-          "name": "红薯玉米盘",
-          "tags": ["主食", "纤维", "轻"],
-          "detail": "红薯和玉米轮换，适合搭配鱼、牛肉汤或豆腐煲。",
-          "calories": 260,
-          "pairing": "配肉类或蛋奶豆。"
+          "name": "无糖豆浆",
+          "subtitle": "Unsweetened Soy Milk",
+          "detail": "比甜饮料更稳，适合早上或者晚饭后想喝点热的。",
+          "tags": ["暖", "早餐", "少糖"],
+          "pairing": "茶叶蛋"
         },
         {
-          "name": "三文鱼饭团",
-          "tags": ["便当", "午餐", "好拿"],
-          "detail": "米饭握小一点，里面放三文鱼碎和海苔，控制份量也好吃。",
-          "calories": 480,
-          "pairing": "配味噌汤。"
+          "name": "热牛奶",
+          "subtitle": "Warm Milk",
+          "detail": "晚上想喝点温柔的东西时，简单热一杯就好。",
+          "tags": ["睡前", "温柔", "简单"],
+          "pairing": "水果小碗"
         },
         {
-          "name": "南瓜藜麦碗",
-          "tags": ["温柔", "主食", "晚餐"],
-          "detail": "南瓜蒸软，藜麦混一点米饭，适合和鸡肉沙拉一起吃。",
-          "calories": 360,
-          "pairing": "配鸡肉或豆腐。"
+          "name": "柠檬气泡水",
+          "subtitle": "Lemon Sparkling Water",
+          "detail": "想喝点有仪式感但不想喝甜饮料的时候。",
+          "tags": ["清爽", "无糖", "午后"],
+          "pairing": "鸡肉沙拉碗"
+        }
+      ]
+    },
+    {
+      "key": "dessert",
+      "label": "Dessert",
+      "cn_label": "甜点",
+      "logo": "/images/food_menu/dessert_logo.png",
+      "note": "Sweet things, kept small enough for a calm camp.",
+      "items": [
+        {
+          "name": "水果酸奶杯",
+          "subtitle": "Fruit Yogurt Cup",
+          "detail": "无糖酸奶加草莓、蓝莓或苹果丁，甜味来自水果。",
+          "tags": ["轻甜", "加餐", "清爽"],
+          "pairing": "坚果几粒"
         },
         {
-          "name": "小饭团",
-          "tags": ["早餐", "补能", "小份"],
-          "detail": "饭团做小，里面放海苔和一点芝麻，早餐不空着肚子。",
-          "calories": 210,
-          "pairing": "配豆浆和鸡蛋。"
+          "name": "烤香蕉燕麦",
+          "subtitle": "Baked Banana Oats",
+          "detail": "香蕉压泥和燕麦一起烤，适合想吃甜但不想太重的时候。",
+          "tags": ["热甜点", "燕麦", "周末"],
+          "pairing": "热牛奶"
+        },
+        {
+          "name": "黑巧两小块",
+          "subtitle": "Dark Chocolate",
+          "detail": "只放两小块在盘子里，别让整板巧克力参与决策。",
+          "tags": ["小份", "嘴馋", "可可"],
+          "pairing": "热茶"
         }
       ]
     },
     {
       "key": "snacks",
-      "label": "加餐饮品",
-      "mark": "饮",
-      "note": "嘴馋时也有温柔选项。",
+      "label": "Snacks",
+      "cn_label": "零食",
+      "logo": "/images/food_menu/snacks_logo.png",
+      "note": "Nibble choices for small hunger between meals.",
       "items": [
         {
-          "name": "希腊酸奶",
-          "tags": ["加餐", "高蛋白", "简单"],
-          "detail": "选无糖，想吃甜就加一点蓝莓或草莓。",
-          "calories": 150,
-          "pairing": "配坚果几粒。"
-        },
-        {
           "name": "坚果一小把",
-          "tags": ["加餐", "脂肪", "控制量"],
+          "subtitle": "A Small Handful of Nuts",
           "detail": "只抓一小把，别让袋子决定今天的剧情。",
-          "calories": 170,
-          "pairing": "配热茶。"
-        },
-        {
-          "name": "无糖豆浆",
-          "tags": ["饮品", "早餐", "暖"],
-          "detail": "比甜饮料更稳，适合早上或者晚饭后想喝点热的。",
-          "calories": 110,
-          "pairing": "配茶叶蛋。"
+          "tags": ["加餐", "脂肪", "控制量"],
+          "pairing": "热茶"
         },
         {
           "name": "水果小碗",
-          "tags": ["加餐", "清爽", "维生素"],
+          "subtitle": "Fruit Bowl",
           "detail": "苹果、橙子、草莓轮换，不需要堆成水果山。",
-          "calories": 120,
-          "pairing": "配酸奶。"
+          "tags": ["清爽", "维生素", "小份"],
+          "pairing": "酸奶"
+        },
+        {
+          "name": "小饭团",
+          "subtitle": "Tiny Rice Ball",
+          "detail": "饭团做小，里面放海苔和一点芝麻，早餐不空着肚子。",
+          "tags": ["补能", "小份", "好拿"],
+          "pairing": "无糖豆浆"
         }
       ]
     }

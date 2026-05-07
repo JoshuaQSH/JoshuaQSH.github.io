@@ -451,6 +451,29 @@ Then open the page locally:
 /hodgepodge/coffee-wall/
 ```
 
+## Don't Starve Menu Guide
+
+The food menu is driven by a content file, a data file, and the food-menu image folder:
+
+- page content and cover: `content/hodgepodge/partner-menu.md`
+- menu data: `data/partner_menu.json`
+- page layout and identity gate: `layouts/hodgepodge/partner-menu.html`
+- banner, header, and category logos: `static/images/food_menu/`
+
+To add a dish, open `data/partner_menu.json`, find the category inside `categories`, and add an item to its `items` array:
+
+```json
+{
+  "name": "新菜名",
+  "subtitle": "English Subtitle",
+  "detail": "这道菜的简短说明。",
+  "tags": ["标签一", "标签二"],
+  "pairing": "推荐搭配"
+}
+```
+
+The current categories are `Meat`, `Fish`, `Eggs`, `Vegetable`, `Drink`, `Dessert`, and `Snacks`. Each category has a `logo` path that should point to an image under `static/images/food_menu/`.
+
 ## Photo Album Guide
 
 The photo album page is powered by three places:

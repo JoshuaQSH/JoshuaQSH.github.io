@@ -5,8 +5,8 @@ categories: ["Hodgepodge"]
 tags: ["menu", "calendar", "planner", "health", "personal"]
 image: "/images/hodgepodge/raccoon_chef_DST.png"
 imageAlt: "菜单守护员"
-summary: "A menu-first Chinese demo with a compact calendar planner."
+summary: "A Don't Starve-style Chinese food menu with category icons and editable JSON data."
 layout: "partner-menu"
 ---
 
-这是一张只给熟悉的人看的小菜单。先确认名字，然后就可以在手绘菜牌里挑今天想吃什么，再把它安排进日历。
+这是一张只给熟悉的人看的小菜单。先确认名字，然后就可以在手绘菜牌里挑今天想吃什么。
