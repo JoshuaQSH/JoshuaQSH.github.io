@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-05-19",
-  "generated_at_pretty": "May 19, 2026",
-  "generated_at_iso": "2026-05-19T10:08:04+00:00",
-  "summary_note": "This tracker loads the latest repo snapshot. The button below checks GitHub for a newer snapshot at most once per day in this browser; official pricing pages can still change between repo refreshes.",
+  "generated_at": "2026-05-20",
+  "generated_at_pretty": "May 20, 2026",
+  "generated_at_iso": "2026-05-20T15:03:07+00:00",
+  "summary_note": "Manual snapshot refreshed against official provider pricing pages on May 20, 2026. API prices are list prices per 1M tokens unless a row explicitly notes a current promotion or regional tier.",
   "history_note": "History lines use official pricing snapshots that are stored in this repo. Some providers only have one official snapshot recorded so far, while others mix successive flagship or promo models.",
   "chart_defaults": {
     "provider": "deepseek",
@@ -12,7 +12,7 @@
   "api_pricing": [
     {
       "vendor": "OpenAI",
-      "product": "GPT-5.5",
+      "product": "GPT-5.5 (<272K context)",
       "unit": "USD per 1M tokens",
       "input_display": "$5.00",
       "input_value": 5.0,
@@ -20,22 +20,22 @@
       "cached_input_value": 0.5,
       "output_display": "$30.00",
       "output_value": 30.0,
-      "notes": "OpenAI's pricing page now lists GPT-5.5 as the latest flagship model. The page labels it coming soon and notes higher long-context multipliers above 270K input tokens.",
-      "official_link": "https://openai.com/api/pricing/",
-      "source_label": "OpenAI API pricing"
+      "notes": "OpenAI developer pricing lists GPT-5.5 as a flagship model at the standard <272K-context tier; regional processing endpoints carry a 10% uplift.",
+      "official_link": "https://developers.openai.com/api/docs/pricing.md",
+      "source_label": "OpenAI developer pricing"
     },
     {
       "vendor": "Google",
-      "product": "Gemini 2.5 Pro",
+      "product": "Gemini 3.1 Pro Preview",
       "unit": "USD per 1M tokens",
-      "input_display": "$1.25 (<=200K prompts)",
-      "input_value": 1.25,
-      "cached_input_display": "$0.125 (<=200K prompts)",
-      "cached_input_value": 0.125,
-      "output_display": "$10.00 (<=200K prompts)",
-      "output_value": 10.0,
-      "notes": "Tiered pricing. For prompts above 200K tokens, Google lists $2.50 input, $0.25 cached input, and $15.00 output.",
-      "official_link": "https://ai.google.dev/gemini-api/docs/pricing",
+      "input_display": "$2.00 (<=200K prompts)",
+      "input_value": 2.0,
+      "cached_input_display": "$0.20 (<=200K prompts)",
+      "cached_input_value": 0.2,
+      "output_display": "$12.00 (<=200K prompts)",
+      "output_value": 12.0,
+      "notes": "Current Gemini API paid-tier standard pricing for Gemini 3.1 Pro Preview. Prompts above 200K tokens are listed at $4 input, $0.40 context cache, and $18 output per 1M tokens.",
+      "official_link": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.1-pro-preview",
       "source_label": "Gemini API pricing"
     },
     {
@@ -54,29 +54,29 @@
     },
     {
       "vendor": "Anthropic",
-      "product": "Claude Sonnet 4 / Claude Code backend",
+      "product": "Claude Opus 4.7",
       "unit": "USD per 1M tokens",
-      "input_display": "$3.00",
-      "input_value": 3.0,
-      "cached_input_display": "$0.30 (cache hits)",
-      "cached_input_value": 0.3,
-      "output_display": "$15.00",
-      "output_value": 15.0,
-      "notes": "Claude Code team/API usage is billed from Claude API token consumption. Anthropic also lists separate cache-write prices.",
-      "official_link": "https://docs.anthropic.com/en/docs/about-claude/models/all-models",
-      "source_label": "Anthropic model pricing"
+      "input_display": "$5.00",
+      "input_value": 5.0,
+      "cached_input_display": "Prompt caching priced separately",
+      "cached_input_value": null,
+      "output_display": "$25.00",
+      "output_value": 25.0,
+      "notes": "Anthropic pricing lists Opus 4.7 as its most intelligent model for agents and coding. Sonnet 4.6 remains $3 input / $15 output per 1M tokens.",
+      "official_link": "https://www.anthropic.com/pricing",
+      "source_label": "Anthropic pricing"
     },
     {
       "vendor": "DeepSeek",
       "product": "deepseek-v4-flash",
       "unit": "USD per 1M tokens",
-      "input_display": "$0.14 (<=128K cache miss)",
+      "input_display": "$0.14 (cache miss)",
       "input_value": 0.14,
-      "cached_input_display": "$0.028 (<=128K cache hit)",
-      "cached_input_value": 0.028,
-      "output_display": "$0.28 (<=128K)",
+      "cached_input_display": "$0.0028 (cache hit)",
+      "cached_input_value": 0.0028,
+      "output_display": "$0.28",
       "output_value": 0.28,
-      "notes": "Official DeepSeek V4 Flash overseas pricing. For prompts above 128K tokens, DeepSeek lists $0.28 input, $0.056 cached input, and $0.56 output per 1M tokens.",
+      "notes": "Official DeepSeek V4 Flash overseas pricing. DeepSeek reduced all model cache-hit input prices to one tenth of launch price effective 2026-04-26 12:15 UTC.",
       "official_link": "https://api-docs.deepseek.com/quick_start/pricing/",
       "source_label": "DeepSeek models & pricing"
     },
@@ -84,27 +84,27 @@
       "vendor": "DeepSeek",
       "product": "deepseek-v4-pro",
       "unit": "USD per 1M tokens",
-      "input_display": "$1.74 (<=128K cache miss)",
-      "input_value": 1.74,
-      "cached_input_display": "$0.145 (<=128K cache hit)",
-      "cached_input_value": 0.145,
-      "output_display": "$3.48 (<=128K)",
-      "output_value": 3.48,
-      "notes": "Official DeepSeek V4 Pro overseas pricing. For prompts above 128K tokens, DeepSeek lists $3.48 input, $0.29 cached input, and $6.96 output per 1M tokens.",
+      "input_display": "$0.435 (75% off cache miss)",
+      "input_value": 0.435,
+      "cached_input_display": "$0.003625 (75% off cache hit)",
+      "cached_input_value": 0.003625,
+      "output_display": "$0.87 (75% off)",
+      "output_value": 0.87,
+      "notes": "Current DeepSeek V4 Pro overseas promotional pricing. Official list prices are $1.74 cache-miss input, $0.0145 cache-hit input, and $3.48 output; the 75% discount is extended until 2026-05-31 15:59 UTC.",
       "official_link": "https://api-docs.deepseek.com/quick_start/pricing/",
       "source_label": "DeepSeek models & pricing"
     },
     {
       "vendor": "Qwen / Alibaba Cloud",
-      "product": "qwen-max-latest",
+      "product": "qwen3-max",
       "unit": "USD per 1M tokens",
-      "input_display": "$1.60",
-      "input_value": 1.6,
-      "cached_input_display": "-",
+      "input_display": "$1.20 (<=32K, International)",
+      "input_value": 1.2,
+      "cached_input_display": "Context Cache discount available",
       "cached_input_value": null,
-      "output_display": "$6.40",
-      "output_value": 6.4,
-      "notes": "Alibaba Cloud lists qwen-max-latest with non-thinking pricing and no tiered pricing on the current pricing page.",
+      "output_display": "$6.00 (<=32K, International)",
+      "output_value": 6.0,
+      "notes": "Alibaba Cloud Model Studio now lists qwen3-max above qwen-max. International tiered pricing is $1.20/$6.00 up to 32K tokens, $2.40/$12.00 from 32K to 128K, and $3.00/$15.00 from 128K to 252K.",
       "official_link": "https://www.alibabacloud.com/help/en/model-studio/model-pricing",
       "source_label": "Alibaba Cloud Model Studio pricing"
     },
@@ -138,17 +138,17 @@
     },
     {
       "vendor": "Moonshot AI / Kimi",
-      "product": "kimi-latest",
-      "unit": "CNY per 1M tokens",
-      "input_display": "¥2 / ¥5 / ¥10 (8k/32k/128k)",
-      "input_value": null,
-      "cached_input_display": "¥1.00 (auto cache hit)",
-      "cached_input_value": 1.0,
-      "output_display": "¥10 / ¥20 / ¥30 (8k/32k/128k)",
-      "output_value": null,
-      "notes": "Moonshot's official April 7, 2025 pricing notice shows kimi-latest auto-selects the 8K / 32K / 128K tier at ¥2 / ¥5 / ¥10 input and ¥10 / ¥20 / ¥30 output per 1M tokens. Automatic cache-hit billing remains ¥1 / 1M tokens.",
-      "official_link": "https://platform.moonshot.cn/blog/posts/discount",
-      "source_label": "Moonshot official pricing update"
+      "product": "kimi-k2.6",
+      "unit": "USD per 1M tokens",
+      "input_display": "$0.95 (cache miss)",
+      "input_value": 0.95,
+      "cached_input_display": "$0.16 (cache hit)",
+      "cached_input_value": 0.16,
+      "output_display": "$4.00",
+      "output_value": 4.0,
+      "notes": "Kimi K2.6 pricing from the Kimi API Platform. Context window is listed as 262,144 tokens with automatic context caching support.",
+      "official_link": "https://platform.kimi.ai/docs/pricing/chat-k26.md",
+      "source_label": "Kimi K2.6 pricing"
     },
     {
       "vendor": "Xiaomi / MiMo",
@@ -166,31 +166,31 @@
     },
     {
       "vendor": "MiniMax",
-      "product": "MiniMax-M2.5",
+      "product": "MiniMax-M2.7",
       "unit": "CNY per 1M tokens",
       "input_display": "¥2.10",
       "input_value": 2.1,
-      "cached_input_display": "¥0.21 (cache read)",
-      "cached_input_value": 0.21,
+      "cached_input_display": "¥0.42 (cache read)",
+      "cached_input_value": 0.42,
       "output_display": "¥8.40",
       "output_value": 8.4,
-      "notes": "Current MiniMax pay-as-you-go text pricing. Cache writes are listed separately at ¥2.625 / 1M tokens.",
+      "notes": "Current MiniMax pay-as-you-go text pricing. Cache writes are listed separately at ¥2.625 / 1M tokens; M2.7-highspeed is ¥1.20 input, ¥4.80 output, ¥0.24 cache read.",
       "official_link": "https://platform.minimaxi.com/docs/guides/pricing-paygo",
       "source_label": "MiniMax pay-as-you-go pricing"
     },
     {
       "vendor": "xAI",
-      "product": "grok-4.20-beta-0309-reasoning",
+      "product": "Grok 4.3",
       "unit": "USD per 1M tokens",
-      "input_display": "$2.00",
-      "input_value": 2.0,
-      "cached_input_display": "-",
-      "cached_input_value": null,
-      "output_display": "$6.00",
-      "output_value": 6.0,
-      "notes": "xAI lists Grok 4.20 reasoning and non-reasoning variants with the same token pricing on the public API page.",
-      "official_link": "https://x.ai/api",
-      "source_label": "xAI API pricing"
+      "input_display": "$1.25",
+      "input_value": 1.25,
+      "cached_input_display": "$0.20",
+      "cached_input_value": 0.2,
+      "output_display": "$2.50",
+      "output_value": 2.5,
+      "notes": "xAI docs list Grok 4.3 at $1.25 input, $0.20 cached input, and $2.50 output per 1M tokens.",
+      "official_link": "https://docs.x.ai/docs/models/grok-4.3",
+      "source_label": "xAI Grok 4.3 pricing"
     },
     {
       "vendor": "GitHub Copilot",
@@ -365,7 +365,7 @@
     "openai": {
       "label": "OpenAI",
       "currency": "USD per 1M tokens",
-      "note": "Flagship OpenAI checkpoints stored in this repo. The latest snapshot reflects GPT-5.5 pricing from OpenAI's current pricing page.",
+      "note": "Flagship OpenAI checkpoints stored in this repo. The latest snapshot reflects GPT-5.5 pricing from OpenAI's developer pricing page.",
       "points": [
         {
           "date": "2026-03-19",
@@ -376,19 +376,19 @@
           "source": "https://openai.com/api/pricing/"
         },
         {
-          "date": "2026-04-24",
+          "date": "2026-05-20",
           "model": "GPT-5.5",
           "input_miss": 5.0,
           "input_hit": 0.5,
           "output": 30.0,
-          "source": "https://openai.com/api/pricing/"
+          "source": "https://developers.openai.com/api/docs/pricing.md"
         }
       ]
     },
     "google": {
       "label": "Google",
       "currency": "USD per 1M tokens",
-      "note": "Gemini 2.5 Pro values here use the <=200K-token tier from the public Gemini API pricing page.",
+      "note": "Gemini values here use the <=200K-token paid standard tier from the public Gemini API pricing page.",
       "points": [
         {
           "date": "2026-03-19",
@@ -397,13 +397,21 @@
           "input_hit": 0.125,
           "output": 10.0,
           "source": "https://ai.google.dev/gemini-api/docs/pricing"
+        },
+        {
+          "date": "2026-05-20",
+          "model": "Gemini 3.1 Pro Preview",
+          "input_miss": 2.0,
+          "input_hit": 0.2,
+          "output": 12.0,
+          "source": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.1-pro-preview"
         }
       ]
     },
     "anthropic": {
       "label": "Anthropic",
       "currency": "USD per 1M tokens",
-      "note": "Claude Sonnet 4 is shown as the current mainstream Anthropic coding/reasoning workhorse.",
+      "note": "Claude Opus 4.7 is Anthropic’s current most intelligent agent/coding model on the public pricing page; Sonnet 4.6 remains the lower-cost workhorse.",
       "points": [
         {
           "date": "2026-03-19",
@@ -412,13 +420,21 @@
           "input_hit": 0.3,
           "output": 15.0,
           "source": "https://docs.anthropic.com/en/docs/about-claude/models/all-models"
+        },
+        {
+          "date": "2026-05-20",
+          "model": "Claude Opus 4.7",
+          "input_miss": 5.0,
+          "input_hit": null,
+          "output": 25.0,
+          "source": "https://www.anthropic.com/pricing"
         }
       ]
     },
     "deepseek": {
       "label": "DeepSeek",
       "currency": "CNY per 1M tokens",
-      "note": "This line compares official DeepSeek API price checkpoints. The 2024 point is the DeepSeek-V3 intro promo, followed by the older chat endpoint and the latest V4 Flash pricing from DeepSeek's current docs.",
+      "note": "This line compares official DeepSeek API price checkpoints in CNY per 1M tokens. The latest point reflects V4 Flash after the 2026-04-26 cache-hit reduction.",
       "points": [
         {
           "date": "2024-12-26",
@@ -437,10 +453,10 @@
           "source": "https://api-docs.deepseek.com/quick_start/pricing-details-cny/"
         },
         {
-          "date": "2026-04-24",
+          "date": "2026-05-20",
           "model": "deepseek-v4-flash",
           "input_miss": 1.0,
-          "input_hit": 0.2,
+          "input_hit": 0.02,
           "output": 2.0,
           "source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/"
         }
@@ -449,7 +465,7 @@
     "qwen": {
       "label": "Qwen / Alibaba Cloud",
       "currency": "USD per 1M tokens",
-      "note": "qwen-max-latest current snapshot from Alibaba Cloud Model Studio.",
+      "note": "qwen3-max current International snapshot from Alibaba Cloud Model Studio, using the <=32K-token tier.",
       "points": [
         {
           "date": "2026-03-19",
@@ -458,13 +474,21 @@
           "input_hit": null,
           "output": 6.4,
           "source": "https://www.alibabacloud.com/help/en/model-studio/model-pricing"
+        },
+        {
+          "date": "2026-05-20",
+          "model": "qwen3-max",
+          "input_miss": 1.2,
+          "input_hit": null,
+          "output": 6.0,
+          "source": "https://www.alibabacloud.com/help/en/model-studio/model-pricing"
         }
       ]
     },
     "kimi": {
       "label": "Moonshot / Kimi",
       "currency": "CNY per 1M tokens",
-      "note": "Moonshot’s official snapshots mix different public API products, so treat this as a provider-level price timeline rather than a like-for-like model revision history.",
+      "note": "Moonshot/Kimi official snapshots mix different public API products, so treat this as a provider-level price timeline rather than a like-for-like model revision history.",
       "points": [
         {
           "date": "2024-07-01",
@@ -481,19 +505,35 @@
           "input_hit": 2.0,
           "output": 32.0,
           "source": "https://platform.moonshot.cn/blog/posts/k2-turbo-enhance"
+        },
+        {
+          "date": "2026-05-20",
+          "model": "kimi-k2.6",
+          "input_miss": 0.95,
+          "input_hit": 0.16,
+          "output": 4.0,
+          "source": "https://platform.kimi.ai/docs/pricing/chat-k26.md"
         }
       ]
     },
     "minimax": {
       "label": "MiniMax",
       "currency": "CNY per 1M tokens",
-      "note": "MiniMax current pay-as-you-go snapshot.",
+      "note": "MiniMax current pay-as-you-go text snapshot in CNY per 1M tokens.",
       "points": [
         {
           "date": "2026-03-19",
           "model": "MiniMax-M2.5",
           "input_miss": 2.1,
           "input_hit": 0.21,
+          "output": 8.4,
+          "source": "https://platform.minimaxi.com/docs/guides/pricing-paygo"
+        },
+        {
+          "date": "2026-05-20",
+          "model": "MiniMax-M2.7",
+          "input_miss": 2.1,
+          "input_hit": 0.42,
           "output": 8.4,
           "source": "https://platform.minimaxi.com/docs/guides/pricing-paygo"
         }
@@ -511,6 +551,14 @@
           "input_hit": null,
           "output": 6.0,
           "source": "https://x.ai/api"
+        },
+        {
+          "date": "2026-05-20",
+          "model": "Grok 4.3",
+          "input_miss": 1.25,
+          "input_hit": 0.2,
+          "output": 2.5,
+          "source": "https://docs.x.ai/docs/models/grok-4.3"
         }
       ]
     },
