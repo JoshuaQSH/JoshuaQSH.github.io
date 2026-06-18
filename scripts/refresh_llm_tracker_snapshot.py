@@ -197,7 +197,15 @@ def now_utc() -> datetime:
 
 def fetch_models() -> list[dict[str, Any]]:
     html = fetch_text(MODELS_URL)
-    return decode_embedded_array(html, '\\"models\\":[{\\"additional_text\\"')
+    for marker in (
+        '\\"models\\":[{\\"additional_text\\"',
+        '\\"defaultData\\":[{\\"additional_text\\"',
+    ):
+        try:
+            return decode_embedded_array(html, marker)
+        except ValueError:
+            continue
+    raise ValueError("Could not find embedded Artificial Analysis model data")
 
 
 def upsert_api_rows(data: dict[str, Any]) -> None:
@@ -250,7 +258,10 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
         except StopIteration:
             rows.append(new_row)
 
-    replace_or_insert(("Qwen / Alibaba Cloud", "qwen-max-latest"), glm_row)
+    qwen_anchor = ("Qwen / Alibaba Cloud", "qwen3-max")
+    if not any((row.get("vendor"), row.get("product")) == qwen_anchor for row in rows):
+        qwen_anchor = ("Qwen / Alibaba Cloud", "qwen-max-latest")
+    replace_or_insert(qwen_anchor, glm_row)
     replace_or_insert(("Together AI / Z AI", "GLM-5"), llama_row)
     data["api_pricing"] = rows
 

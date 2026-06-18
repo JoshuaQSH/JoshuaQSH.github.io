@@ -1,7 +1,7 @@
 ---
 title: "LLM Pricing Tracker: API and Subscription Costs"
 date: 2026-03-19
-lastmod: 2026-05-20
+lastmod: 2026-06-18
 summary: "A tracker for leading LLM API token prices and consumer subscriptions, with official links, repo snapshot refreshes, price-history charts, and live benchmark/provider snapshots."
 tags: ["llm", "pricing", "api", "openai", "anthropic", "gemini", "copilot", "market-tracker"]
 categories: ["AI", "Pricing"]
