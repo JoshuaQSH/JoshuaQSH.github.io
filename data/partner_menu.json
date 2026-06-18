@@ -232,5 +232,247 @@
       "logo": "/images/food_menu/snacks_logo.png",
       "items": []
     }
-  ]
+  ],
+  "nutrition": {
+    "title": "每 100g 估算营养表",
+    "subtitle": "按英国常用食物成分表口径整理；实际数值会随品牌、部位、烹饪和含水量变化。",
+    "sources": [
+      "Nearest UK CoFID 2021 entries are used where a direct food match exists; cooked state is written in the assumption column.",
+      "Wagyu beef rolls and whey protein are practical label-style estimates because brand, cut and fat content vary a lot."
+    ],
+    "goal_review": {
+      "title": "目标复核",
+      "body": "当前 78kg / 173cm，BMI 约 26.1；目标 68kg 时 BMI 约 22.7，落在常用健康范围内。每天约 2,180 kcal 对每周 3 次力量训练加 1-2 次抱石的人，大概率是温和热量缺口，但年龄、性别、步数和训练强度会影响很大。蛋白质 173g 约等于 2.2g/kg 当前体重，属于偏激进的保肌上限；如果没有肾脏相关问题可以短期观察，但更稳的日常范围可以先试 140-156g。纤维 35g 高于英国成人 30g/天建议，方向很好；慢慢加，并配足饮水。",
+      "target": {
+        "kcal": "~2,180 kcal",
+        "protein": "~173 g",
+        "carbs": "~257 g",
+        "fat": "~54 g",
+        "fibre": "~35 g"
+      }
+    },
+    "macros": [
+      {
+        "food": "Chicken breast",
+        "assumption": "CoFID: grilled, skinless, meat only",
+        "kcal": 148,
+        "protein": "32.0 g",
+        "carbs": "0.0 g",
+        "fat": "2.2 g",
+        "df": "0.0 g"
+      },
+      {
+        "food": "Chicken thigh",
+        "assumption": "CoFID: casseroled, skinless thigh meat",
+        "kcal": 180,
+        "protein": "25.6 g",
+        "carbs": "0.0 g",
+        "fat": "8.6 g",
+        "df": "0.0 g"
+      },
+      {
+        "food": "Egg",
+        "assumption": "CoFID: whole chicken egg, boiled",
+        "kcal": 143,
+        "protein": "14.1 g",
+        "carbs": "Tr",
+        "fat": "9.6 g",
+        "df": "0.0 g"
+      },
+      {
+        "food": "Pork shoulder",
+        "assumption": "CoFID: roasted shoulder joint, lean and fat",
+        "kcal": 259,
+        "protein": "27.5 g",
+        "carbs": "0.0 g",
+        "fat": "16.5 g",
+        "df": "0.0 g"
+      },
+      {
+        "food": "Shrimp",
+        "assumption": "CoFID: shrimps canned in brine, drained",
+        "kcal": 94,
+        "protein": "20.8 g",
+        "carbs": "Tr",
+        "fat": "1.2 g",
+        "df": "0.0 g"
+      },
+      {
+        "food": "Salmon",
+        "assumption": "CoFID: wild salmon, steamed",
+        "kcal": 206,
+        "protein": "25.3 g",
+        "carbs": "0.0 g",
+        "fat": "11.6 g",
+        "df": "0.0 g"
+      },
+      {
+        "food": "Wagyu beef rolls",
+        "assumption": "highly variable label-style estimate",
+        "kcal": "~400",
+        "protein": "18 g",
+        "carbs": "0 g",
+        "fat": "36 g",
+        "df": "0 g"
+      },
+      {
+        "food": "Cooked rice",
+        "assumption": "CoFID: white long-grain rice, boiled unsalted",
+        "kcal": 131,
+        "protein": "2.8 g",
+        "carbs": "31.1 g",
+        "fat": "0.4 g",
+        "df": "0.5 g"
+      },
+      {
+        "food": "Steamed potato",
+        "assumption": "CoFID: old potato, boiled unsalted, flesh only",
+        "kcal": 74,
+        "protein": "1.8 g",
+        "carbs": "17.5 g",
+        "fat": "0.1 g",
+        "df": "1.6 g"
+      },
+      {
+        "food": "Wholemeal bread",
+        "assumption": "CoFID: wholemeal bread, average",
+        "kcal": 217,
+        "protein": "9.4 g",
+        "carbs": "42.0 g",
+        "fat": "2.5 g",
+        "df": "7.0 g"
+      },
+      {
+        "food": "Broccoli",
+        "assumption": "CoFID: green broccoli, steamed",
+        "kcal": 34,
+        "protein": "4.1 g",
+        "carbs": "3.5 g",
+        "fat": "0.5 g",
+        "df": "3.8 g"
+      },
+      {
+        "food": "Tomato",
+        "assumption": "CoFID: standard tomato, raw",
+        "kcal": 14,
+        "protein": "0.5 g",
+        "carbs": "3.0 g",
+        "fat": "0.1 g",
+        "df": "1.0 g"
+      },
+      {
+        "food": "Lettuce",
+        "assumption": "CoFID: average lettuce, raw",
+        "kcal": 11,
+        "protein": "1.2 g",
+        "carbs": "1.4 g",
+        "fat": "0.1 g",
+        "df": "1.5 g"
+      },
+      {
+        "food": "Whey protein",
+        "assumption": "standard whey powder label-style estimate",
+        "kcal": 400,
+        "protein": "80 g",
+        "carbs": "8 g",
+        "fat": "6 g",
+        "df": "0 g"
+      }
+    ],
+    "diet_title": "7 天可编辑饮食模板",
+    "diet_subtitle": "目标：增肌保肌 + 减脂。训练日略高碳水，休息日略低碳水；每天可以按饥饿感和体重趋势微调。",
+    "diet_template": [
+      {
+        "day": "周一",
+        "focus": "力量训练",
+        "breakfast": "燕麦 + 乳清 + 鸡蛋 + 番茄",
+        "lunch": "鸡胸 / 鸡腿 + 米饭 + 西兰花",
+        "dinner": "三文鱼或虾 + 土豆 + 生菜",
+        "snack": "酸奶或乳清 + 全麦面包",
+        "kcal": 2250,
+        "protein": "175 g",
+        "carbs": "275 g",
+        "fat": "52 g",
+        "df": "36 g"
+      },
+      {
+        "day": "周二",
+        "focus": "休息 / 步行",
+        "breakfast": "鸡蛋 + 全麦面包 + 咖啡",
+        "lunch": "回锅肉少油版 + 米饭 + 拍黄瓜",
+        "dinner": "鸡汤 + 菜心 + 土豆",
+        "snack": "乳清 + 番茄 / 生菜",
+        "kcal": 2100,
+        "protein": "172 g",
+        "carbs": "240 g",
+        "fat": "56 g",
+        "df": "35 g"
+      },
+      {
+        "day": "周三",
+        "focus": "抱石",
+        "breakfast": "燕麦 + 乳清 + 鸡蛋",
+        "lunch": "葱油鸡 + 米饭 + 西兰花",
+        "dinner": "虾仁炒蛋 + 土豆 + 生菜",
+        "snack": "全麦面包 + 咖啡",
+        "kcal": 2220,
+        "protein": "174 g",
+        "carbs": "265 g",
+        "fat": "54 g",
+        "df": "36 g"
+      },
+      {
+        "day": "周四",
+        "focus": "力量训练",
+        "breakfast": "乳清 + 全麦面包 + 番茄",
+        "lunch": "鸡胸 + 米饭 + 菜心",
+        "dinner": "牛肉卷少量 + 土豆 + 西兰花",
+        "snack": "鸡蛋 / 酸奶",
+        "kcal": 2250,
+        "protein": "175 g",
+        "carbs": "275 g",
+        "fat": "52 g",
+        "df": "35 g"
+      },
+      {
+        "day": "周五",
+        "focus": "休息",
+        "breakfast": "鸡蛋 + 生菜三明治",
+        "lunch": "土豆烧鸡 + 米饭 + 拍黄瓜",
+        "dinner": "紫菜蛋花汤 + 虾 + 西兰花",
+        "snack": "乳清",
+        "kcal": 2100,
+        "protein": "170 g",
+        "carbs": "240 g",
+        "fat": "56 g",
+        "df": "34 g"
+      },
+      {
+        "day": "周六",
+        "focus": "力量 + 抱石可选",
+        "breakfast": "燕麦 + 乳清 + 鸡蛋",
+        "lunch": "三文鱼 + 米饭 + 西兰花",
+        "dinner": "鸡腿去皮 + 土豆 + 生菜",
+        "snack": "全麦面包 + 咖啡",
+        "kcal": 2260,
+        "protein": "175 g",
+        "carbs": "280 g",
+        "fat": "52 g",
+        "df": "36 g"
+      },
+      {
+        "day": "周日",
+        "focus": "休息 / 备餐",
+        "breakfast": "鸡蛋 + 番茄 + 全麦面包",
+        "lunch": "白切鸡 + 米饭 + 菜心",
+        "dinner": "冬瓜排骨汤少油 + 土豆 + 生菜",
+        "snack": "乳清",
+        "kcal": 2080,
+        "protein": "170 g",
+        "carbs": "224 g",
+        "fat": "56 g",
+        "df": "33 g"
+      }
+    ]
+  }
 }

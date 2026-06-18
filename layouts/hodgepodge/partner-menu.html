@@ -277,6 +277,115 @@
       line-height: 1.1;
       margin: 0;
     }
+    .menu-info-panels {
+      display: grid;
+      gap: 18px;
+      position: relative;
+      z-index: 1;
+    }
+    .menu-nutrition-card {
+      background: rgba(255, 255, 255, 0.76);
+      border: 2px solid rgba(43, 27, 18, 0.24);
+      border-radius: 8px;
+      box-shadow: 3px 4px 0 rgba(23, 17, 13, 0.06);
+      padding: clamp(14px, 2.5vw, 22px);
+    }
+    .menu-nutrition-card h2,
+    .menu-nutrition-card h3 {
+      color: var(--dst-black);
+      line-height: 1;
+      margin: 0;
+    }
+    .menu-nutrition-card h2 {
+      font-size: 1.75rem;
+    }
+    .menu-nutrition-card h3 {
+      font-size: 1.3rem;
+      margin-top: 4px;
+    }
+    .menu-nutrition-note,
+    .menu-goal-copy,
+    .menu-source-list {
+      color: #5e4b39;
+      line-height: 1.6;
+    }
+    .menu-nutrition-note {
+      margin: 8px 0 0;
+    }
+    .menu-goal-copy {
+      margin: 12px 0 0;
+    }
+    .menu-target-grid {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      margin-top: 14px;
+    }
+    .menu-target-chip {
+      background: rgba(235, 235, 231, 0.86);
+      border: 2px solid rgba(43, 27, 18, 0.18);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .menu-target-chip strong,
+    .menu-target-chip span {
+      display: block;
+    }
+    .menu-target-chip strong {
+      color: var(--dst-red-deep);
+      font-size: 0.82rem;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+    .menu-target-chip span {
+      color: var(--dst-black);
+      font-size: 1.05rem;
+      font-weight: 900;
+      margin-top: 3px;
+    }
+    .menu-table-wrap {
+      margin-top: 14px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .menu-macro-table {
+      border-collapse: separate;
+      border-spacing: 0 8px;
+      min-width: 760px;
+      width: 100%;
+    }
+    .menu-diet-table {
+      min-width: 1120px;
+    }
+    .menu-macro-table th {
+      color: var(--dst-red-deep);
+      font-size: 0.84rem;
+      line-height: 1.1;
+      padding: 0 8px 2px;
+      text-align: left;
+    }
+    .menu-macro-table td {
+      background: rgba(246, 246, 244, 0.88);
+      border-bottom: 2px solid rgba(43, 27, 18, 0.16);
+      border-top: 2px solid rgba(43, 27, 18, 0.16);
+      color: var(--dst-black);
+      line-height: 1.25;
+      padding: 9px 8px;
+      vertical-align: top;
+    }
+    .menu-macro-table td:first-child {
+      border-left: 2px solid rgba(43, 27, 18, 0.16);
+      border-radius: 8px 0 0 8px;
+      font-weight: 900;
+    }
+    .menu-macro-table td:last-child {
+      border-radius: 0 8px 8px 0;
+      border-right: 2px solid rgba(43, 27, 18, 0.16);
+    }
+    .menu-source-list {
+      margin: 12px 0 0;
+      padding-left: 20px;
+    }
     @media (max-width: 760px) {
       .menu-category-nav {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -289,6 +398,9 @@
       .menu-category-head img {
         height: 58px;
         width: 58px;
+      }
+      .menu-nutrition-card h2 {
+        font-size: 1.45rem;
       }
     }
   </style>
@@ -316,6 +428,7 @@
 
       <nav class="menu-category-nav" id="menu-category-nav" aria-label="菜单分类"></nav>
       <div class="menu-sections" id="menu-sections"></div>
+      <div class="menu-info-panels" id="menu-info-panels"></div>
       <p class="text-link"><a href="{{ "/hodgepodge/" | relURL }}">返回杂物间</a></p>
     </section>
   </article>
@@ -329,6 +442,7 @@
       const categories = (MENU_DATA.categories || []).filter(function (category) {
         return (category.items || []).length > 0;
       });
+      const nutrition = MENU_DATA.nutrition || {};
 
       const gate = document.getElementById("menu-gate");
       const app = document.getElementById("menu-app");
@@ -337,6 +451,7 @@
       const gateStatus = document.getElementById("menu-gate-status");
       const navEl = document.getElementById("menu-category-nav");
       const sectionsEl = document.getElementById("menu-sections");
+      const infoEl = document.getElementById("menu-info-panels");
 
       function escapeHtml(value) {
         return String(value || "").replace(/[&<>"']/g, function (char) {
@@ -402,6 +517,109 @@
             }
           });
         });
+
+        renderNutrition();
+      }
+
+      function renderTargetChips(target) {
+        const labels = {
+          kcal: "热量",
+          protein: "蛋白质",
+          carbs: "碳水",
+          fat: "脂肪",
+          fibre: "膳食纤维"
+        };
+        return Object.keys(labels).map(function (key) {
+          return [
+            "<div class='menu-target-chip'>",
+            "<strong>" + escapeHtml(labels[key]) + "</strong>",
+            "<span>" + escapeHtml((target || {})[key] || "待定") + "</span>",
+            "</div>"
+          ].join("");
+        }).join("");
+      }
+
+      function renderMacroRows(rows) {
+        return (rows || []).map(function (row) {
+          return [
+            "<tr>",
+            "<td>" + escapeHtml(row.food) + "</td>",
+            "<td>" + escapeHtml(row.assumption) + "</td>",
+            "<td>" + escapeHtml(row.kcal) + "</td>",
+            "<td>" + escapeHtml(row.protein) + "</td>",
+            "<td>" + escapeHtml(row.carbs) + "</td>",
+            "<td>" + escapeHtml(row.fat) + "</td>",
+            "<td>" + escapeHtml(row.df) + "</td>",
+            "</tr>"
+          ].join("");
+        }).join("");
+      }
+
+      function renderDietRows(rows) {
+        return (rows || []).map(function (row) {
+          return [
+            "<tr>",
+            "<td>" + escapeHtml(row.day) + "</td>",
+            "<td>" + escapeHtml(row.focus) + "</td>",
+            "<td>" + escapeHtml(row.breakfast) + "</td>",
+            "<td>" + escapeHtml(row.lunch) + "</td>",
+            "<td>" + escapeHtml(row.dinner) + "</td>",
+            "<td>" + escapeHtml(row.snack) + "</td>",
+            "<td>" + escapeHtml(row.kcal) + "</td>",
+            "<td>" + escapeHtml(row.protein) + "</td>",
+            "<td>" + escapeHtml(row.carbs) + "</td>",
+            "<td>" + escapeHtml(row.fat) + "</td>",
+            "<td>" + escapeHtml(row.df) + "</td>",
+            "</tr>"
+          ].join("");
+        }).join("");
+      }
+
+      function renderNutrition() {
+        if (!nutrition.macros || !nutrition.macros.length) {
+          infoEl.innerHTML = "";
+          return;
+        }
+
+        const goal = nutrition.goal_review || {};
+        const sources = (nutrition.sources || []).map(function (source) {
+          return "<li>" + escapeHtml(source) + "</li>";
+        }).join("");
+
+        infoEl.innerHTML = [
+          "<section class='menu-nutrition-card' aria-label='营养目标复核'>",
+          "<h2>" + escapeHtml(goal.title || "目标复核") + "</h2>",
+          "<p class='menu-goal-copy'>" + escapeHtml(goal.body) + "</p>",
+          "<div class='menu-target-grid'>",
+          renderTargetChips(goal.target || {}),
+          "</div>",
+          "</section>",
+          "<section class='menu-nutrition-card' aria-label='每 100g 估算营养表'>",
+          "<h2>" + escapeHtml(nutrition.title || "每 100g 估算营养表") + "</h2>",
+          "<p class='menu-nutrition-note'>" + escapeHtml(nutrition.subtitle) + "</p>",
+          "<div class='menu-table-wrap'>",
+          "<table class='menu-macro-table'>",
+          "<thead><tr><th>Food</th><th>Assumption</th><th>kcal / 100g</th><th>Protein</th><th>Carbs</th><th>Fat</th><th>DF</th></tr></thead>",
+          "<tbody>",
+          renderMacroRows(nutrition.macros),
+          "</tbody>",
+          "</table>",
+          "</div>",
+          sources ? "<ul class='menu-source-list'>" + sources + "</ul>" : "",
+          "</section>",
+          "<section class='menu-nutrition-card' aria-label='7 天可编辑饮食模板'>",
+          "<h2>" + escapeHtml(nutrition.diet_title || "7 天可编辑饮食模板") + "</h2>",
+          "<p class='menu-nutrition-note'>" + escapeHtml(nutrition.diet_subtitle) + "</p>",
+          "<div class='menu-table-wrap'>",
+          "<table class='menu-macro-table menu-diet-table'>",
+          "<thead><tr><th>日期</th><th>训练</th><th>早餐</th><th>午餐</th><th>晚餐</th><th>加餐</th><th>kcal</th><th>Protein</th><th>Carbs</th><th>Fat</th><th>DF</th></tr></thead>",
+          "<tbody>",
+          renderDietRows(nutrition.diet_template || []),
+          "</tbody>",
+          "</table>",
+          "</div>",
+          "</section>"
+        ].join("");
       }
 
       gateForm.addEventListener("submit", function (event) {
