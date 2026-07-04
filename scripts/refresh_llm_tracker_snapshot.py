@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / "data" / "llm_pricing.json"
 MODELS_URL = "https://artificialanalysis.ai/models"
 PROVIDERS_URL = "https://artificialanalysis.ai/leaderboards/providers"
-TOGETHER_GLM_URL = "https://www.together.ai/models/glm-5"
+TOGETHER_GLM_URL = "https://www.together.ai/models/glm-52"
 TOGETHER_LLAMA_URL = "https://www.together.ai/models/llama-4-maverick"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; home-page tracker refresh)"}
 FRONTIER_START_DATE = "2021-01-01"
@@ -159,7 +159,7 @@ def decode_embedded_array(html: str, marker: str) -> list[dict[str, Any]]:
     return payload
 
 
-def parse_together_model_prices(url: str) -> tuple[float, float]:
+def parse_together_model_prices(url: str) -> tuple[float, float | None, float]:
     text = fetch_text(url)
 
     def extract(label: str) -> float:
@@ -172,7 +172,16 @@ def parse_together_model_prices(url: str) -> tuple[float, float]:
             raise ValueError(f"Could not parse {label!r} from {url}")
         return float(match.group(1))
 
-    return extract("Input price"), extract("Output price")
+    input_price = extract("Input price")
+    output_price = extract("Output price")
+    cached_match = re.search(
+        r"Input price</div></div>.*?<span>\$.*?</span>.*?"
+        r"<span>\$(.*?)</span><span[^>]*>.*?\(cached\)",
+        text,
+        re.DOTALL,
+    )
+    cached_price = float(cached_match.group(1)) if cached_match else None
+    return input_price, cached_price, output_price
 
 
 def round_or_none(value: Any, digits: int = 2) -> float | None:
@@ -209,24 +218,26 @@ def fetch_models() -> list[dict[str, Any]]:
 
 
 def upsert_api_rows(data: dict[str, Any]) -> None:
-    glm_input, glm_output = parse_together_model_prices(TOGETHER_GLM_URL)
-    llama_input, llama_output = parse_together_model_prices(TOGETHER_LLAMA_URL)
+    glm_input, glm_cached, glm_output = parse_together_model_prices(TOGETHER_GLM_URL)
+    llama_input, llama_cached, llama_output = parse_together_model_prices(
+        TOGETHER_LLAMA_URL
+    )
 
     rows = list(data.get("api_pricing", []))
 
     glm_row = {
         "vendor": "Together AI / Z AI",
-        "product": "GLM-5",
+        "product": "GLM-5.2",
         "unit": "USD per 1M tokens",
         "input_display": format_usd(glm_input),
         "input_value": glm_input,
-        "cached_input_display": "-",
-        "cached_input_value": None,
+        "cached_input_display": format_usd(glm_cached),
+        "cached_input_value": glm_cached,
         "output_display": format_usd(glm_output),
         "output_value": glm_output,
-        "notes": "Together AI's public serverless price for Z AI's GLM-5. The public model page does not list a separate cached-input rate.",
+        "notes": "Together AI's public serverless price for Z AI's GLM-5.2, released June 16, 2026 with a 256K context window.",
         "official_link": TOGETHER_GLM_URL,
-        "source_label": "Together AI GLM-5 pricing",
+        "source_label": "Together AI GLM-5.2 pricing",
     }
     llama_row = {
         "vendor": "Meta / Llama via Together AI",
@@ -234,8 +245,8 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
         "unit": "USD per 1M tokens",
         "input_display": format_usd(llama_input),
         "input_value": llama_input,
-        "cached_input_display": "-",
-        "cached_input_value": None,
+        "cached_input_display": format_usd(llama_cached),
+        "cached_input_value": llama_cached,
         "output_display": format_usd(llama_output),
         "output_value": llama_output,
         "notes": "Meta's Llama 4 Maverick served through Together AI's public serverless API. Meta's public developer docs describe the model family, while Together AI exposes a comparable public token price.",
@@ -258,11 +269,18 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
         except StopIteration:
             rows.append(new_row)
 
-    qwen_anchor = ("Qwen / Alibaba Cloud", "qwen3-max")
+    rows[:] = [
+        row
+        for row in rows
+        if (row.get("vendor"), row.get("product"))
+        != ("Together AI / Z AI", "GLM-5")
+    ]
+
+    qwen_anchor = ("Qwen / Alibaba Cloud", "qwen3.7-max")
     if not any((row.get("vendor"), row.get("product")) == qwen_anchor for row in rows):
-        qwen_anchor = ("Qwen / Alibaba Cloud", "qwen-max-latest")
+        qwen_anchor = ("Qwen / Alibaba Cloud", "qwen3-max")
     replace_or_insert(qwen_anchor, glm_row)
-    replace_or_insert(("Together AI / Z AI", "GLM-5"), llama_row)
+    replace_or_insert(("Together AI / Z AI", "GLM-5.2"), llama_row)
     data["api_pricing"] = rows
 
     history = data.setdefault("history_series", {})
@@ -306,12 +324,12 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
 
     maybe_append_point(
         key="together_glm",
-        label="Together AI / GLM-5",
+        label="Together AI / GLM-5.2",
         source=TOGETHER_GLM_URL,
-        note="Together AI's public GLM-5 model page. This history line grows only when Together AI's public GLM-5 price changes.",
-        model="GLM-5",
+        note="Together AI's public GLM-5.2 model page. This history line grows when the public model or price changes.",
+        model="GLM-5.2",
         input_miss=glm_input,
-        input_hit=None,
+        input_hit=glm_cached,
         output=glm_output,
     )
     maybe_append_point(
@@ -359,7 +377,12 @@ def build_benchmark_snapshot(models: list[dict[str, Any]]) -> dict[str, Any]:
                 "speed_tps": round_or_none(
                     (model.get("timescaleData") or {}).get("median_output_speed")
                 ),
-                "blended_price": round_or_none(model.get("price_1m_blended_3_to_1"), 4),
+                "blended_price": round_or_none(
+                    model.get("price_1m_blended_3_to_1")
+                    if model.get("price_1m_blended_3_to_1") is not None
+                    else model.get("price_1m_blended_0_3_1"),
+                    4,
+                ),
                 "input_price": round_or_none(model.get("price_1m_input_tokens"), 4),
                 "output_price": round_or_none(model.get("price_1m_output_tokens"), 4),
                 "detail_url": f"https://artificialanalysis.ai{model['model_url']}",
@@ -519,7 +542,11 @@ def build_provider_leaderboard() -> dict[str, Any]:
             "label": "Blended price",
             "description": "Lower is better. Ranked by the provider's lowest currently benchmarked blended USD price (3:1 input/output mix).",
             "higher_is_better": False,
-            "extractor": lambda row: row.get("price_1m_blended_3_to_1"),
+            "extractor": lambda row: (
+                row.get("price_1m_blended_3_to_1")
+                if row.get("price_1m_blended_3_to_1") is not None
+                else row.get("price_1m_blended_0_3_1")
+            ),
         },
         "latency": {
             "label": "Latency",
