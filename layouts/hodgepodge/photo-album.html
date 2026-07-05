@@ -10,7 +10,10 @@
       {{ end }}
     </header>
 
-    {{ $entries := sort .Site.Data.photo_album.entries "taken_at" "desc" }}
+    {{ $entries := slice }}
+    {{ with .Site.Data.photo_album.entries }}
+      {{ $entries = sort . "taken_at" "desc" }}
+    {{ end }}
     {{ if gt (len $entries) 0 }}
       <div class="photo-album-timeline">
         {{ range $entries }}
