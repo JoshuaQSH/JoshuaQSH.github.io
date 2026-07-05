@@ -157,6 +157,28 @@
       ]
     }
 
+    {
+      "id": "thesource",
+      "name": "The Source Coffee Roasters",
+      "location": "Edinburgh, UK",
+      "image": "/images/coffee-brand/The_Source.png",
+      "accent": "#D8AD9A",
+      "variants": [
+        {
+          "id": " gesha",
+          "name": "gesha",
+          "farm": "El Curce",
+          "process": "Anoxic naturall Process",
+          "producer": "Joel Marin",
+          "region": "La Palma, Chirinos, Peru",
+          "notes": "yogurt, red apple, passion fruit",
+          "roast": "Extra Dark",
+          "grind": "Beans",
+          "weightGrams": 250,
+          "consumedBags": 1
+        }
+      ]
+    }
       
   ]
 }
