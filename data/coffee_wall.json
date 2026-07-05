@@ -155,7 +155,7 @@
           "consumedBags": 1
         }
       ]
-    }
+    },
 
     {
       "id": "thesource",
@@ -165,7 +165,7 @@
       "accent": "#D8AD9A",
       "variants": [
         {
-          "id": " gesha",
+          "id": "gesha",
           "name": "gesha",
           "farm": "El Curce",
           "process": "Anoxic naturall Process",
