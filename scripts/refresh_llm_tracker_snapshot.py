@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import html as html_lib
 import json
 import re
 from datetime import datetime, timezone
@@ -21,6 +22,12 @@ TOGETHER_LLAMA_URL = "https://www.together.ai/models/llama-4-maverick"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; home-page tracker refresh)"}
 FRONTIER_START_DATE = "2021-01-01"
 FRONTIER_END_DATE = "2026-12-31"
+MODEL_PRICE_FALLBACKS = {
+    "/models/claude-fable-5": (10.0, 50.0),
+    "/models/claude-opus-4-8": (5.0, 25.0),
+    "/models/gpt-5-5": (5.0, 30.0),
+    "/models/gpt-5-6-sol": (5.0, 30.0),
+}
 FRONTIER_SEED_ROWS = {
     "model_size": [
         {
@@ -204,17 +211,125 @@ def now_utc() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def fetch_models() -> list[dict[str, Any]]:
+def artificial_analysis_vendor(label: str) -> tuple[str, str]:
+    rules = (
+        ("claude", "Anthropic", "#d97757"),
+        ("gpt", "OpenAI", "#10a37f"),
+        ("grok", "xAI", "#111827"),
+        ("gemini", "Google", "#4285f4"),
+        ("glm", "Z AI", "#2563eb"),
+        ("muse", "Muse", "#7c3aed"),
+        ("deepseek", "DeepSeek", "#4d6bfe"),
+        ("minimax", "MiniMax", "#e11d48"),
+        ("kimi", "Moonshot AI", "#111827"),
+        ("qwen", "Alibaba", "#615ced"),
+        ("mimo", "Xiaomi", "#ff6900"),
+        ("nemotron", "NVIDIA", "#76b900"),
+    )
+    normalized = label.lower()
+    for needle, vendor, color in rules:
+        if needle in normalized:
+            return vendor, color
+    return "Other", "#1d4ed8"
+
+
+def fetch_models_from_json_ld(html: str) -> list[dict[str, Any]]:
+    datasets: dict[str, list[dict[str, Any]]] = {}
+    for raw in re.findall(
+        r'<script[^>]+type="application/ld\+json"[^>]*>(.*?)</script>',
+        html,
+        re.DOTALL,
+    ):
+        try:
+            payload = json.loads(html_lib.unescape(raw))
+        except (json.JSONDecodeError, TypeError):
+            continue
+        if payload.get("@type") == "Dataset" and isinstance(payload.get("data"), list):
+            datasets[payload.get("name", "")] = payload["data"]
+
+    intelligence = datasets.get("Artificial Analysis Intelligence Index", [])
+    if not intelligence:
+        raise ValueError("Could not find Artificial Analysis JSON-LD model data")
+
+    merged: dict[str, dict[str, Any]] = {}
+    for item in intelligence:
+        if item.get("detailsUrl"):
+            merged[item["detailsUrl"]] = {
+                "name": item.get("label"),
+                "short_name": item.get("label"),
+                "model_url": item["detailsUrl"],
+                "intelligence_index": item.get("intelligenceIndex"),
+            }
+
+    dataset_fields = {
+        "Speed": ("medianOutputSpeed", "median_output_speed"),
+        "Output Speed": ("outputSpeed", "median_output_speed"),
+        "Context Window": ("contextWindowTokens", "context_window_tokens"),
+    }
+    for dataset_name, (source_key, target_key) in dataset_fields.items():
+        for item in datasets.get(dataset_name, []):
+            row = merged.get(item.get("detailsUrl"))
+            if row is not None:
+                row[target_key] = item.get(source_key)
+
+    for item in datasets.get("Pricing: Cache Hit, Input, and Output", []):
+        row = merged.get(item.get("detailsUrl"))
+        if row is None:
+            continue
+        pricing = {
+            value.get("name"): value.get("value")
+            for value in item.get("pricing", [])
+            if isinstance(value, dict)
+        }
+        input_price = pricing.get("inputPrice")
+        output_price = pricing.get("outputPrice")
+        row["price_1m_input_tokens"] = input_price
+        row["price_1m_output_tokens"] = output_price
+        if input_price is not None and output_price is not None:
+            row["price_1m_blended_3_to_1"] = (
+                3 * float(input_price) + float(output_price)
+            ) / 4
+
+    for item in datasets.get("Model Size: Total and Active Parameters", []):
+        row = merged.get(item.get("detailsUrl"))
+        if row is None:
+            continue
+        passive = item.get("passiveParams") or 0
+        active = item.get("activeParams") or 0
+        row["parameters"] = float(passive) + float(active)
+
+    for row in merged.values():
+        if row.get("price_1m_input_tokens") is None:
+            fallback = MODEL_PRICE_FALLBACKS.get(row["model_url"])
+            if fallback:
+                input_price, output_price = fallback
+                row["price_1m_input_tokens"] = input_price
+                row["price_1m_output_tokens"] = output_price
+                row["price_1m_blended_3_to_1"] = (
+                    3 * input_price + output_price
+                ) / 4
+        vendor, color = artificial_analysis_vendor(row.get("name") or "")
+        row["model_creators"] = {"name": vendor, "color": color}
+        row["timescaleData"] = {
+            "median_output_speed": row.pop("median_output_speed", None)
+        }
+        row["deleted"] = False
+        row["deprecated"] = False
+        row["_snapshot_only"] = True
+    return list(merged.values())
+
+
+def fetch_models() -> tuple[list[dict[str, Any]], bool]:
     html = fetch_text(MODELS_URL)
     for marker in (
         '\\"models\\":[{\\"additional_text\\"',
         '\\"defaultData\\":[{\\"additional_text\\"',
     ):
         try:
-            return decode_embedded_array(html, marker)
+            return decode_embedded_array(html, marker), True
         except ValueError:
             continue
-    raise ValueError("Could not find embedded Artificial Analysis model data")
+    return fetch_models_from_json_ld(html), False
 
 
 def upsert_api_rows(data: dict[str, Any]) -> None:
@@ -362,7 +477,7 @@ def build_benchmark_snapshot(models: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
     return {
-        "note": "Top 10 current models by Artificial Analysis Intelligence Index. Prices and speeds below come from Artificial Analysis' benchmark snapshot, so they may differ from the manual API rows above when multiple deployments or reasoning modes exist.",
+        "note": "Top 10 current models by Artificial Analysis Intelligence Index. Speeds and available prices come from the benchmark snapshot; missing model-level prices are filled from the official provider prices reviewed above. Values can differ when multiple deployments or reasoning modes exist.",
         "source_url": MODELS_URL,
         "source_label": "Artificial Analysis models leaderboard",
         "generated_at_pretty": pretty_date(now_utc()),
@@ -517,9 +632,56 @@ def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def build_provider_leaderboard() -> dict[str, Any]:
+def fetch_provider_rows() -> tuple[list[dict[str, Any]], bool]:
     html = fetch_text(PROVIDERS_URL)
-    host_models = decode_embedded_array(html, '\\"hostsModels\\":[{\\"id\\"')
+    try:
+        return decode_embedded_array(html, '\\"hostsModels\\":[{\\"id\\"'), False
+    except ValueError:
+        return decode_embedded_array(html, '\\"rows\\":[{\\"label\\"'), True
+
+
+def fill_missing_model_speeds(
+    models: list[dict[str, Any]],
+    host_models: list[dict[str, Any]],
+    modern_schema: bool,
+) -> None:
+    if not modern_schema:
+        return
+    for model in models:
+        timescale = model.get("timescaleData") or {}
+        if timescale.get("median_output_speed") is not None:
+            continue
+        slug = str(model.get("model_url") or "").removeprefix("/models/")
+        candidates = [
+            row
+            for row in host_models
+            if row.get("model", {}).get("slug") == slug
+            and not row.get("model", {}).get("deprecated")
+            and (row.get("performance") or {}).get("medianOutputTokensPerSecond")
+            is not None
+        ]
+        if not candidates:
+            continue
+        vendor = str(model.get("model_creators", {}).get("name") or "").lower()
+        first_party = [
+            row
+            for row in candidates
+            if vendor
+            and (
+                vendor in str(row.get("host", {}).get("name") or "").lower()
+                or str(row.get("host", {}).get("name") or "").lower() in vendor
+            )
+        ]
+        selected = (first_party or candidates)[0]
+        timescale["median_output_speed"] = selected["performance"][
+            "medianOutputTokensPerSecond"
+        ]
+        model["timescaleData"] = timescale
+
+
+def build_provider_leaderboard(
+    host_models: list[dict[str, Any]], modern_schema: bool
+) -> dict[str, Any]:
     valid_rows = [
         row
         for row in host_models
@@ -529,38 +691,74 @@ def build_provider_leaderboard() -> dict[str, Any]:
         and not row.get("deleted")
         and not row["host"].get("deleted")
         and not row["model"].get("deleted")
+        and not row["model"].get("deprecated")
     ]
+
+    def intelligence(row: dict[str, Any]) -> Any:
+        return row["model"].get(
+            "intelligenceIndex" if modern_schema else "intelligence_index"
+        )
+
+    def blended_price(row: dict[str, Any]) -> Any:
+        if modern_schema:
+            pricing = row.get("pricing") or {}
+            input_price = pricing.get("price1mInputTokens")
+            output_price = pricing.get("price1mOutputTokens")
+            if input_price is None or output_price is None:
+                return None
+            return (3 * float(input_price) + float(output_price)) / 4
+        return (
+            row.get("price_1m_blended_3_to_1")
+            if row.get("price_1m_blended_3_to_1") is not None
+            else row.get("price_1m_blended_0_3_1")
+        )
+
+    def latency(row: dict[str, Any]) -> Any:
+        if modern_schema:
+            return (row.get("performance") or {}).get(
+                "medianTimeToFirstAnswerTokenSeconds"
+            )
+        return (row.get("timescaleData") or {}).get("median_time_to_first_chunk")
+
+    def context_window(row: dict[str, Any]) -> Any:
+        if modern_schema:
+            return (row.get("features") or {}).get("contextWindowTokens")
+        return row.get("context_window_tokens")
+
+    def model_label(row: dict[str, Any]) -> str:
+        if modern_schema:
+            return row.get("label") or row["model"].get("slug", "Unknown")
+        return row["model"]["short_name"]
+
+    def detail_url(row: dict[str, Any]) -> str:
+        if modern_schema:
+            return f"https://artificialanalysis.ai/providers/{row['host']['slug']}"
+        return f"https://artificialanalysis.ai{row['hosts_url']}"
 
     metrics = {
         "intelligence": {
             "label": "Intelligence Index",
             "description": "Higher is better. Ranked by each provider's strongest currently benchmarked endpoint.",
             "higher_is_better": True,
-            "extractor": lambda row: row["model"].get("intelligence_index"),
+            "extractor": intelligence,
         },
         "price": {
             "label": "Blended price",
             "description": "Lower is better. Ranked by the provider's lowest currently benchmarked blended USD price (3:1 input/output mix).",
             "higher_is_better": False,
-            "extractor": lambda row: (
-                row.get("price_1m_blended_3_to_1")
-                if row.get("price_1m_blended_3_to_1") is not None
-                else row.get("price_1m_blended_0_3_1")
-            ),
+            "extractor": blended_price,
         },
         "latency": {
             "label": "Latency",
-            "description": "Lower is better. Ranked by median time to first token for the provider's fastest currently benchmarked endpoint.",
+            "description": "Lower is better. Ranked by median time to first answer token for the provider's fastest currently benchmarked endpoint.",
             "higher_is_better": False,
-            "extractor": lambda row: (row.get("timescaleData") or {}).get(
-                "median_time_to_first_chunk"
-            ),
+            "extractor": latency,
         },
         "context_window": {
             "label": "Context window",
             "description": "Higher is better. Ranked by the provider's largest currently benchmarked context window.",
             "higher_is_better": True,
-            "extractor": lambda row: row.get("context_window_tokens"),
+            "extractor": context_window,
         },
     }
 
@@ -596,9 +794,9 @@ def build_provider_leaderboard() -> dict[str, Any]:
                 {
                     "rank": rank,
                     "provider": row["host"]["name"],
-                    "model": row["model"]["short_name"],
+                    "model": model_label(row),
                     "value": round_or_none(value, 6),
-                    "detail_url": f"https://artificialanalysis.ai{row['hosts_url']}",
+                    "detail_url": detail_url(row),
                     "detail_label": "Provider details",
                 }
                 for rank, (value, row) in enumerate(ranked, start=1)
@@ -638,12 +836,17 @@ def main() -> None:
         "pages can still change between repo refreshes."
     )
 
-    models = fetch_models()
+    models, has_full_model_metadata = fetch_models()
+    host_models, modern_provider_schema = fetch_provider_rows()
+    fill_missing_model_speeds(models, host_models, modern_provider_schema)
 
     upsert_api_rows(updated)
     updated["benchmark_snapshot"] = build_benchmark_snapshot(models)
-    updated["scale_price_frontier"] = build_scale_price_frontier(models)
-    updated["provider_leaderboard"] = build_provider_leaderboard()
+    if has_full_model_metadata:
+        updated["scale_price_frontier"] = build_scale_price_frontier(models)
+    updated["provider_leaderboard"] = build_provider_leaderboard(
+        host_models, modern_provider_schema
+    )
 
     if strip_generated_dates(updated) != strip_generated_dates(current):
         stamp = now_utc()
