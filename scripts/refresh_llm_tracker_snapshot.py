@@ -18,12 +18,12 @@ DATA_PATH = ROOT / "data" / "llm_pricing.json"
 MODELS_URL = "https://artificialanalysis.ai/models"
 PROVIDERS_URL = "https://artificialanalysis.ai/leaderboards/providers"
 TOGETHER_GLM_URL = "https://www.together.ai/models/glm-52"
-TOGETHER_LLAMA_URL = "https://www.together.ai/models/llama-4-maverick"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; home-page tracker refresh)"}
 FRONTIER_START_DATE = "2021-01-01"
 FRONTIER_END_DATE = "2026-12-31"
 MODEL_PRICE_FALLBACKS = {
     "/models/claude-fable-5": (10.0, 50.0),
+    "/models/claude-opus-5": (5.0, 25.0),
     "/models/claude-opus-4-8": (5.0, 25.0),
     "/models/gpt-5-5": (5.0, 30.0),
     "/models/gpt-5-6-sol": (5.0, 30.0),
@@ -95,6 +95,17 @@ FRONTIER_SEED_ROWS = {
             "source_label": "DeepSeek V4 technical report",
             "detail_label": "Source",
             "note": "Open-weight MoE; 1.6T total parameters and 49B active parameters.",
+        },
+        {
+            "date": "2026-07-27",
+            "vendor": "Moonshot AI",
+            "model": "Kimi K3",
+            "short_label": "Kimi K3",
+            "value": 2800.0,
+            "source_url": "https://github.com/MoonshotAI/Kimi-K3",
+            "source_label": "Moonshot AI Kimi K3 model card",
+            "detail_label": "Source",
+            "note": "Open-weight native multimodal MoE; 2.8T total parameters and 104B active parameters.",
         },
     ],
     "output_price": [
@@ -334,11 +345,12 @@ def fetch_models() -> tuple[list[dict[str, Any]], bool]:
 
 def upsert_api_rows(data: dict[str, Any]) -> None:
     glm_input, glm_cached, glm_output = parse_together_model_prices(TOGETHER_GLM_URL)
-    llama_input, llama_cached, llama_output = parse_together_model_prices(
-        TOGETHER_LLAMA_URL
-    )
 
-    rows = list(data.get("api_pricing", []))
+    rows = [
+        row
+        for row in data.get("api_pricing", [])
+        if row.get("vendor") != "Meta / Llama via Together AI"
+    ]
 
     glm_row = {
         "vendor": "Together AI / Z AI",
@@ -354,21 +366,6 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
         "official_link": TOGETHER_GLM_URL,
         "source_label": "Together AI GLM-5.2 pricing",
     }
-    llama_row = {
-        "vendor": "Meta / Llama via Together AI",
-        "product": "Llama 4 Maverick",
-        "unit": "USD per 1M tokens",
-        "input_display": format_usd(llama_input),
-        "input_value": llama_input,
-        "cached_input_display": format_usd(llama_cached),
-        "cached_input_value": llama_cached,
-        "output_display": format_usd(llama_output),
-        "output_value": llama_output,
-        "notes": "Meta's Llama 4 Maverick served through Together AI's public serverless API. Meta's public developer docs describe the model family, while Together AI exposes a comparable public token price.",
-        "official_link": TOGETHER_LLAMA_URL,
-        "source_label": "Together AI Llama 4 Maverick pricing",
-    }
-
     def replace_or_insert(after_key: tuple[str, str], new_row: dict[str, Any]) -> None:
         key = (new_row["vendor"], new_row["product"])
         rows[:] = [
@@ -395,10 +392,10 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
     if not any((row.get("vendor"), row.get("product")) == qwen_anchor for row in rows):
         qwen_anchor = ("Qwen / Alibaba Cloud", "qwen3-max")
     replace_or_insert(qwen_anchor, glm_row)
-    replace_or_insert(("Together AI / Z AI", "GLM-5.2"), llama_row)
     data["api_pricing"] = rows
 
     history = data.setdefault("history_series", {})
+    history.pop("meta_llama_together", None)
 
     def maybe_append_point(
         key: str,
@@ -446,16 +443,6 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
         input_miss=glm_input,
         input_hit=glm_cached,
         output=glm_output,
-    )
-    maybe_append_point(
-        key="meta_llama_together",
-        label="Meta / Llama 4 Maverick (Together AI)",
-        source=TOGETHER_LLAMA_URL,
-        note="Public Together AI pricing for Meta's Llama 4 Maverick endpoint. This history line is a public comparable endpoint rather than Meta's first-party internal pricing.",
-        model="Llama 4 Maverick",
-        input_miss=llama_input,
-        input_hit=None,
-        output=llama_output,
     )
 
 
@@ -637,7 +624,15 @@ def fetch_provider_rows() -> tuple[list[dict[str, Any]], bool]:
     try:
         return decode_embedded_array(html, '\\"hostsModels\\":[{\\"id\\"'), False
     except ValueError:
-        return decode_embedded_array(html, '\\"rows\\":[{\\"label\\"'), True
+        for marker in (
+            '\\"rows\\":[{\\"id\\"',
+            '\\"rows\\":[{\\"label\\"',
+        ):
+            try:
+                return decode_embedded_array(html, marker), True
+            except ValueError:
+                continue
+    raise ValueError("Could not find embedded Artificial Analysis provider data")
 
 
 def fill_missing_model_speeds(
@@ -655,9 +650,11 @@ def fill_missing_model_speeds(
         candidates = [
             row
             for row in host_models
-            if row.get("model", {}).get("slug") == slug
-            and not row.get("model", {}).get("deprecated")
-            and (row.get("performance") or {}).get("medianOutputTokensPerSecond")
+            if isinstance(row.get("model"), dict)
+            and isinstance(row.get("performance"), dict)
+            and row["model"].get("slug") == slug
+            and not row["model"].get("deprecated")
+            and row["performance"].get("medianOutputTokensPerSecond")
             is not None
         ]
         if not candidates:
@@ -667,9 +664,10 @@ def fill_missing_model_speeds(
             row
             for row in candidates
             if vendor
+            and isinstance(row.get("host"), dict)
             and (
-                vendor in str(row.get("host", {}).get("name") or "").lower()
-                or str(row.get("host", {}).get("name") or "").lower() in vendor
+                vendor in str(row["host"].get("name") or "").lower()
+                or str(row["host"].get("name") or "").lower() in vendor
             )
         ]
         selected = (first_party or candidates)[0]
@@ -686,8 +684,8 @@ def build_provider_leaderboard(
         row
         for row in host_models
         if isinstance(row, dict)
-        and row.get("host")
-        and row.get("model")
+        and isinstance(row.get("host"), dict)
+        and isinstance(row.get("model"), dict)
         and not row.get("deleted")
         and not row["host"].get("deleted")
         and not row["model"].get("deleted")
@@ -701,7 +699,9 @@ def build_provider_leaderboard(
 
     def blended_price(row: dict[str, Any]) -> Any:
         if modern_schema:
-            pricing = row.get("pricing") or {}
+            pricing = row.get("pricing")
+            if not isinstance(pricing, dict):
+                return None
             input_price = pricing.get("price1mInputTokens")
             output_price = pricing.get("price1mOutputTokens")
             if input_price is None or output_price is None:
@@ -715,14 +715,20 @@ def build_provider_leaderboard(
 
     def latency(row: dict[str, Any]) -> Any:
         if modern_schema:
-            return (row.get("performance") or {}).get(
+            performance = row.get("performance")
+            if not isinstance(performance, dict):
+                return None
+            return performance.get(
                 "medianTimeToFirstAnswerTokenSeconds"
             )
         return (row.get("timescaleData") or {}).get("median_time_to_first_chunk")
 
     def context_window(row: dict[str, Any]) -> Any:
         if modern_schema:
-            return (row.get("features") or {}).get("contextWindowTokens")
+            features = row.get("features")
+            if not isinstance(features, dict):
+                return None
+            return features.get("contextWindowTokens")
         return row.get("context_window_tokens")
 
     def model_label(row: dict[str, Any]) -> str:
@@ -836,14 +842,13 @@ def main() -> None:
         "pages can still change between repo refreshes."
     )
 
-    models, has_full_model_metadata = fetch_models()
+    models, _has_full_model_metadata = fetch_models()
     host_models, modern_provider_schema = fetch_provider_rows()
     fill_missing_model_speeds(models, host_models, modern_provider_schema)
 
     upsert_api_rows(updated)
     updated["benchmark_snapshot"] = build_benchmark_snapshot(models)
-    if has_full_model_metadata:
-        updated["scale_price_frontier"] = build_scale_price_frontier(models)
+    updated["scale_price_frontier"] = build_scale_price_frontier(models)
     updated["provider_leaderboard"] = build_provider_leaderboard(
         host_models, modern_provider_schema
     )
