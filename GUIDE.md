@@ -662,6 +662,190 @@ The home page publishes RSS using Hugo's `outputs` setting in `config.toml` and 
 
 After running `hugo`, the RSS feed is generated as `public/index.xml` and will be available at `<baseURL>/index.xml`.
 
+## Git Review, Rebase, and Push Guide
+
+Use this workflow when publishing changes to `master`, especially when Git rejects a push with:
+
+```text
+! [rejected] master -> master (non-fast-forward)
+```
+
+That rejection normally means GitHub received one or more commits after your last fetch. In this repository, the scheduled LLM tracker workflow can create those remote commits even while you are editing another page.
+
+### 1. Review your local work before staging
+
+From the repository root:
+
+```sh
+cd ~/home-page
+git status --short --branch
+git diff
+```
+
+Check the output carefully:
+
+- `M` means a tracked file was modified
+- `??` means an untracked file exists
+- `ahead N` means you have local commits that are not on GitHub
+- `behind N` means GitHub has commits that are not in your local branch
+
+Stage only the files that belong to the change. For example:
+
+```sh
+git add content/about.md
+git diff --cached
+git diff --cached --check
+```
+
+Avoid `git add -A` when the working tree contains unrelated files. Untracked files are not included in a commit unless you explicitly stage them.
+
+### 2. Run the site checks and commit
+
+```sh
+./scripts/check_posts_have_tags.sh
+hugo --minify --cleanDestinationDir
+./scripts/check_internal_links.sh public
+```
+
+If all checks pass:
+
+```sh
+git commit -m "Update about me"
+```
+
+Use a short commit message that describes the actual change.
+
+### 3. Fetch and review GitHub before rebasing
+
+Fetch updates without changing your working branch:
+
+```sh
+git fetch origin master
+git status --short --branch
+```
+
+Review how local and remote history differ:
+
+```sh
+git log --oneline --decorate --graph --left-right HEAD...origin/master
+git diff --name-status HEAD...origin/master
+git diff --name-status origin/master...HEAD
+```
+
+Useful interpretation:
+
+- Lines beginning with `<` exist only in your local branch
+- Lines beginning with `>` exist only on GitHub
+- `git diff --name-status HEAD...origin/master` shows files changed by remote-only commits
+- `git diff --name-status origin/master...HEAD` shows files changed by local-only commits
+
+If the remote commits only refresh `data/llm_pricing.json` and `static/data/llm-pricing.json`, they were probably created by the scheduled LLM refresh workflow. Still review the commit summaries before continuing:
+
+```sh
+git log --oneline HEAD..origin/master
+git show --stat origin/master
+```
+
+### 4. Rebase your commit onto the latest remote branch
+
+After confirming the remote changes are expected:
+
+```sh
+git rebase origin/master
+```
+
+If Git reports success, your local commits now sit above the latest GitHub commits and the history remains linear.
+
+You can use this shorter command in routine cases:
+
+```sh
+git pull --rebase origin master
+```
+
+The explicit `fetch`, review, and `rebase` sequence is recommended because it lets you inspect remote changes before integrating them.
+
+### 5. Resolve rebase conflicts safely
+
+If Git stops on a conflict:
+
+```sh
+git status
+rg -n '^(<<<<<<<|=======|>>>>>>>)' .
+```
+
+Open each conflicted file, remove the conflict markers, and combine the intended local and remote content. Then stage the resolved files and continue:
+
+```sh
+git add path/to/resolved-file
+git rebase --continue
+```
+
+Repeat until the rebase finishes. To abandon the rebase and return to the exact pre-rebase state:
+
+```sh
+git rebase --abort
+```
+
+Do not blindly run `git checkout --ours` or `git checkout --theirs`. During a rebase, their meaning is easy to misread: `ours` refers to the branch you are rebasing onto, while `theirs` refers to the local commit currently being replayed.
+
+For conflicts involving the LLM tracker, resolve the curated source data first, then regenerate and synchronize the published copy:
+
+```sh
+python3 scripts/refresh_llm_tracker_snapshot.py
+python3 scripts/sync_llm_pricing_data.py
+cmp -s data/llm_pricing.json static/data/llm-pricing.json && echo "LLM pricing data is synchronized"
+git add data/llm_pricing.json static/data/llm-pricing.json
+git rebase --continue
+```
+
+Review the regenerated diff before committing or continuing:
+
+```sh
+git diff
+git diff --check
+```
+
+### 6. Validate the rebased tree
+
+Run the full checks again because the final tree now includes both your work and the remote commits:
+
+```sh
+./scripts/check_posts_have_tags.sh
+hugo --minify --cleanDestinationDir
+./scripts/check_internal_links.sh public
+git diff --check
+```
+
+Confirm the branch is ready to push:
+
+```sh
+git status --short --branch
+git log --oneline --decorate --graph -5
+```
+
+The expected status is `ahead 1` or another positive number, with no unintended staged or modified files.
+
+### 7. Push and verify
+
+```sh
+git push origin master
+git status --short --branch
+git log -1 --oneline --decorate
+```
+
+After a successful push, `master` and `origin/master` should point to the same commit. If another automated commit lands before your push and Git rejects it again, repeat the fetch, review, and rebase steps.
+
+### Commands to avoid on `master`
+
+Do not use these as shortcuts for a rejected push:
+
+```sh
+git push --force origin master
+git reset --hard origin/master
+```
+
+A force push can delete remote history, and a hard reset can discard your local work. A normal fetch and rebase preserves both histories.
+
 ## Deploy to GitHub Pages
 
 1. Build the site:
