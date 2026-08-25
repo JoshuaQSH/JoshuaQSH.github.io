@@ -14,6 +14,7 @@ I also served as the PC/reviewer (sub reviewers) for a couple of computer confer
 
 + KDD 2026, 2027 AI4Science - PC member
 + ERAS 2026 - subreviewer
++ AgenticDev 2026 (ASE 2026 Workshop) - subreviewer
 + IEEE COINS 2026 - PC member (Track 5: Cloud, Infrastructure, and Data-Centric Intelligence)
 + WWW2026 - PC member (Systems and Infrastructure for Web, Mobile, and Web of Things)
 + FSE 2026 - subreviewer / external reviewer
