@@ -21,7 +21,10 @@ jobs:
           python-version: "3.11"
 
       - name: Install Python dependencies
-        run: python3 -m pip install requests
+        run: python3 -m pip install requests cryptography
+
+      - name: Test tracker refresh
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
 
       - name: Setup Hugo (Extended)
         uses: peaceiris/actions-hugo@v3

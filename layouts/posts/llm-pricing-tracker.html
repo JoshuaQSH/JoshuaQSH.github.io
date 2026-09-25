@@ -3,6 +3,8 @@
     .tracker-post {
       display: grid;
       gap: 26px;
+      grid-template-columns: minmax(0, 1fr);
+      min-width: 0;
     }
     .tracker-post h1 {
       margin-bottom: 8px;
@@ -49,6 +51,7 @@
     .tracker-grid {
       display: grid;
       gap: 28px;
+      grid-template-columns: minmax(0, 1fr);
     }
     .tracker-section {
       border-top: 1px solid #d0d7de;
@@ -634,11 +637,13 @@
 
       function renderBenchmarkChart() {
         if (!tracker || !tracker.benchmark_snapshot) return;
+        function hasNumber(value) {
+          return value !== null && value !== undefined && Number.isFinite(Number(value));
+        }
         const rows = (tracker.benchmark_snapshot.models || []).filter(function (row) {
-          return Number.isFinite(Number(row.blended_price)) &&
+          return hasNumber(row.blended_price) &&
             Number(row.blended_price) >= 0 &&
-            Number.isFinite(Number(row.intelligence)) &&
-            Number.isFinite(Number(row.speed_tps));
+            hasNumber(row.intelligence);
         });
 
         if (!rows.length) {
@@ -654,7 +659,8 @@
         const innerHeight = height - margin.top - margin.bottom;
         const prices = rows.map(function (row) { return Number(row.blended_price); });
         const intelligenceValues = rows.map(function (row) { return Number(row.intelligence); });
-        const speedValues = rows.map(function (row) { return Number(row.speed_tps); });
+        const speedValues = rows.filter(function (row) { return hasNumber(row.speed_tps); })
+          .map(function (row) { return Number(row.speed_tps); });
         const positivePrices = prices.filter(function (value) { return value > 0; });
         const hasZeroPrice = prices.some(function (value) { return value === 0; });
         const minPrice = Math.min.apply(null, prices);
@@ -718,21 +724,42 @@
         svg += "<text x='" + (margin.left + innerWidth / 2) + "' y='" + (height - 14) + "' text-anchor='middle' fill='#6b7280' font-size='13'>Blended price (USD per 1M tokens)</text>";
         svg += "<text x='24' y='" + (margin.top + innerHeight / 2) + "' text-anchor='middle' fill='#6b7280' font-size='13' transform='rotate(-90 24 " + (margin.top + innerHeight / 2) + ")'>Artificial Analysis Intelligence Index</text>";
 
-        rows.forEach(function (row, index) {
+        const labels = rows.map(function (row) {
           const xPos = clamp(x(Number(row.blended_price)), margin.left, margin.left + innerWidth);
           const yPos = clamp(y(Number(row.intelligence)), margin.top, margin.top + innerHeight);
-          const bubble = radius(Number(row.speed_tps));
+          const measuredSpeed = hasNumber(row.speed_tps);
+          const bubble = measuredSpeed ? radius(Number(row.speed_tps)) : 8;
           const anchor = xPos > margin.left + innerWidth * 0.72 ? "end" : "start";
           const labelX = anchor === "end" ? xPos - bubble - 6 : xPos + bubble + 6;
-          const labelY = clamp(yPos - (index % 2 === 0 ? bubble + 2 : -bubble - 12), margin.top + 12, margin.top + innerHeight - 8);
-          svg += "<circle cx='" + xPos + "' cy='" + yPos + "' r='" + bubble + "' fill='" + escapeHtml(row.color || "#1d4ed8") + "' fill-opacity='0.78' stroke='#ffffff' stroke-width='1.5' />";
-          svg += "<text class='tracker-chart-label' x='" + labelX + "' y='" + labelY + "' text-anchor='" + anchor + "' fill='" + escapeHtml(row.color || "#111827") + "' font-size='12'>" + escapeHtml(row.short_label || row.model) + "</text>";
+          const color = escapeHtml(row.color || "#1d4ed8");
+          const title = escapeHtml(row.model + ": index " + formatNumber(row.intelligence, 2) +
+            ", " + formatPrice(row.blended_price) + " / 1M tokens, speed " + formatNumber(row.speed_tps, 2) + " t/s");
+          svg += "<circle cx='" + xPos + "' cy='" + yPos + "' r='" + bubble + "' fill='" + (measuredSpeed ? color : "none") + "' fill-opacity='0.78' stroke='" + (measuredSpeed ? "#ffffff" : color) + "' stroke-width='1.5'><title>" + title + "</title></circle>";
+          return { row: row, x: labelX, y: yPos + 4, pointY: yPos, anchor: anchor, title: title };
+        });
+        // Reasoning variants often share a price; separate labels without moving data points.
+        ["start", "end"].forEach(function (anchor) {
+          const column = labels.filter(function (label) { return label.anchor === anchor; })
+            .sort(function (a, b) { return a.y - b.y; });
+          column.forEach(function (label, index) {
+            label.y = Math.max(label.y, index ? column[index - 1].y + 18 : margin.top + 12);
+          });
+          const overflow = column.length ? Math.max(0, column[column.length - 1].y - (margin.top + innerHeight - 8)) : 0;
+          column.forEach(function (label) { label.y -= overflow; });
+        });
+        labels.forEach(function (label) {
+          if (Math.abs(label.y - 4 - label.pointY) > 4) {
+            const lineEnd = label.x + (label.anchor === "end" ? -8 : 8);
+            svg += "<line x1='" + label.x + "' y1='" + label.pointY + "' x2='" + lineEnd + "' y2='" + (label.y - 4) + "' stroke='#9ca3af' stroke-width='0.75' />";
+          }
+          const name = (label.row.short_label || label.row.model).replace(/^Claude /, "").replace(" with fallback", "");
+          svg += "<text class='tracker-chart-label' x='" + label.x + "' y='" + label.y + "' text-anchor='" + label.anchor + "' fill='" + escapeHtml(label.row.color || "#111827") + "' font-size='12'><title>" + label.title + "</title>" + escapeHtml(name) + "</text>";
         });
 
         benchmarkChart.innerHTML = svg;
         benchmarkMeta.textContent = "Price = Artificial Analysis blended 3:1 USD per 1M tokens, log-scaled" +
           (hasZeroPrice ? " with $0 entries pinned to the left" : "") +
-          " · Bubble size = output speed (tokens/s)";
+          " · Bubble size = output speed (tokens/s); hollow markers = speed unavailable";
         benchmarkNote.innerHTML = escapeHtml(tracker.benchmark_snapshot.note || "") +
           " Source: <a class='tracker-source-link' href='" + escapeHtml(tracker.benchmark_snapshot.source_url || "") + "'>" +
           escapeHtml(tracker.benchmark_snapshot.source_label || "Artificial Analysis") +
@@ -857,9 +884,6 @@
           const ticks = [];
           for (let year = startYear; year <= endYear; year += 1) {
             ticks.push(Date.parse(year + "-01-01T00:00:00Z"));
-          }
-          if (!ticks.length || ticks[ticks.length - 1] < maxTime) {
-            ticks.push(maxTime);
           }
           return ticks.filter(function (tick) {
             return tick >= minTime && tick <= maxTime;

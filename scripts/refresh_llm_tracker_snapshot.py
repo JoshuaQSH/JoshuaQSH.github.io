@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import copy
+import gzip
+import hashlib
 import html as html_lib
 import json
 import re
@@ -11,23 +13,17 @@ from pathlib import Path
 from typing import Any
 
 import requests
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / "data" / "llm_pricing.json"
 MODELS_URL = "https://artificialanalysis.ai/models"
 PROVIDERS_URL = "https://artificialanalysis.ai/leaderboards/providers"
-TOGETHER_GLM_URL = "https://www.together.ai/models/glm-52"
+TOGETHER_GLM_URL = "https://www.together.ai/models/glm-5-3"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; home-page tracker refresh)"}
 FRONTIER_START_DATE = "2021-01-01"
 FRONTIER_END_DATE = "2026-12-31"
-MODEL_PRICE_FALLBACKS = {
-    "/models/claude-fable-5": (10.0, 50.0),
-    "/models/claude-opus-5": (5.0, 25.0),
-    "/models/claude-opus-4-8": (5.0, 25.0),
-    "/models/gpt-5-5": (5.0, 30.0),
-    "/models/gpt-5-6-sol": (5.0, 30.0),
-}
 FRONTIER_SEED_ROWS = {
     "model_size": [
         {
@@ -310,15 +306,6 @@ def fetch_models_from_json_ld(html: str) -> list[dict[str, Any]]:
         row["parameters"] = float(passive) + float(active)
 
     for row in merged.values():
-        if row.get("price_1m_input_tokens") is None:
-            fallback = MODEL_PRICE_FALLBACKS.get(row["model_url"])
-            if fallback:
-                input_price, output_price = fallback
-                row["price_1m_input_tokens"] = input_price
-                row["price_1m_output_tokens"] = output_price
-                row["price_1m_blended_3_to_1"] = (
-                    3 * input_price + output_price
-                ) / 4
         vendor, color = artificial_analysis_vendor(row.get("name") or "")
         row["model_creators"] = {"name": vendor, "color": color}
         row["timescaleData"] = {
@@ -330,8 +317,71 @@ def fetch_models_from_json_ld(html: str) -> list[dict[str, Any]]:
     return list(merged.values())
 
 
+def fetch_models_from_manifest(html: str) -> list[dict[str, Any]] | None:
+    decoder = json.JSONDecoder()
+    flight_parts = []
+    for match in re.finditer(r"self\.__next_f\.push\(", html):
+        payload, _ = decoder.raw_decode(html[match.end():])
+        if len(payload) == 2 and payload[0] == 1 and isinstance(payload[1], str):
+            flight_parts.append(payload[1])
+    flight = "".join(flight_parts)
+    for match in re.finditer(r'"manifest"\s*:\s*', flight):
+        manifest, _ = decoder.raw_decode(flight[match.end():])
+        path = manifest["path"]
+        if not path.startswith("/data/") or ".." in path:
+            raise ValueError("Unexpected Artificial Analysis data path")
+        response = requests.get(
+            f"https://artificialanalysis.ai{path}", headers=HEADERS, timeout=30
+        )
+        response.raise_for_status()
+        if manifest.get("key"):
+            # Match the public page's browser loader: AES-GCM, then gzip, then JSON.
+            key = bytes.fromhex(manifest["key"])
+            nonce = hashlib.sha256(key).digest()[:12]
+            decoded = AESGCM(key).decrypt(nonce, response.content, None)
+            payload = json.loads(gzip.decompress(decoded))
+        else:
+            payload = response.json()
+        # A separate manifest contains provider endpoints, not model rankings.
+        if not isinstance(payload, dict) or "models" not in payload:
+            continue
+        if not isinstance(payload["models"], list) or not payload["models"]:
+            raise ValueError("Artificial Analysis model dataset is empty or invalid")
+        rows = []
+        for model in payload["models"]:
+            input_price = model.get("price1mInputTokens")
+            output_price = model.get("price1mOutputTokens")
+            rows.append({
+                "name": model["name"],
+                "short_name": model.get("shortName") or model["name"],
+                "model_url": f"/models/{model['slug']}",
+                "model_creators": model["creator"],
+                "intelligence_index": model.get("intelligenceIndex"),
+                "timescaleData": {
+                    "median_output_speed": (model.get("timescaleData") or {}).get("medianOutputSpeed")
+                },
+                "price_1m_input_tokens": input_price,
+                "price_1m_output_tokens": output_price,
+                "price_1m_blended_3_to_1": (
+                    (3 * input_price + output_price) / 4
+                    if input_price is not None and output_price is not None else None
+                ),
+                "release_date": model.get("releaseDate"),
+                "release_name": (model.get("release") or {}).get("name"),
+                "parameters": model.get("parameters"),
+                "is_open_weights": model.get("isOpenWeights", False),
+                "deleted": model.get("deleted", False),
+                "deprecated": model.get("deprecated", False),
+            })
+        return rows
+    return None
+
+
 def fetch_models() -> tuple[list[dict[str, Any]], bool]:
     html = fetch_text(MODELS_URL)
+    manifest_models = fetch_models_from_manifest(html)
+    if manifest_models is not None:
+        return manifest_models, True
     for marker in (
         '\\"models\\":[{\\"additional_text\\"',
         '\\"defaultData\\":[{\\"additional_text\\"',
@@ -354,7 +404,7 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
 
     glm_row = {
         "vendor": "Together AI / Z AI",
-        "product": "GLM-5.2",
+        "product": "GLM-5.3",
         "unit": "USD per 1M tokens",
         "input_display": format_usd(glm_input),
         "input_value": glm_input,
@@ -362,9 +412,9 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
         "cached_input_value": glm_cached,
         "output_display": format_usd(glm_output),
         "output_value": glm_output,
-        "notes": "Together AI's public serverless price for Z AI's GLM-5.2, released June 16, 2026 with a 256K context window.",
+        "notes": "Together AI's public serverless price for Z AI's GLM-5.3, released August 13, 2026 with a 1M-token context window. These are Together's rates, not Z AI's direct API rates.",
         "official_link": TOGETHER_GLM_URL,
-        "source_label": "Together AI GLM-5.2 pricing",
+        "source_label": "Together AI GLM-5.3 pricing",
     }
     def replace_or_insert(after_key: tuple[str, str], new_row: dict[str, Any]) -> None:
         key = (new_row["vendor"], new_row["product"])
@@ -384,11 +434,11 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
     rows[:] = [
         row
         for row in rows
-        if (row.get("vendor"), row.get("product"))
-        != ("Together AI / Z AI", "GLM-5")
+        if not (row.get("vendor") == "Together AI / Z AI"
+                and row.get("product") in ("GLM-5", "GLM-5.2"))
     ]
 
-    qwen_anchor = ("Qwen / Alibaba Cloud", "qwen3.7-max")
+    qwen_anchor = ("Qwen / Alibaba Cloud", "qwen3.8-max")
     if not any((row.get("vendor"), row.get("product")) == qwen_anchor for row in rows):
         qwen_anchor = ("Qwen / Alibaba Cloud", "qwen3-max")
     replace_or_insert(qwen_anchor, glm_row)
@@ -436,10 +486,10 @@ def upsert_api_rows(data: dict[str, Any]) -> None:
 
     maybe_append_point(
         key="together_glm",
-        label="Together AI / GLM-5.2",
+        label="Together AI / GLM-5.3",
         source=TOGETHER_GLM_URL,
-        note="Together AI's public GLM-5.2 model page. This history line grows when the public model or price changes.",
-        model="GLM-5.2",
+        note="Together AI's public GLM model prices. This history line grows when the tracked model or price changes.",
+        model="GLM-5.3",
         input_miss=glm_input,
         input_hit=glm_cached,
         output=glm_output,
@@ -464,7 +514,7 @@ def build_benchmark_snapshot(models: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
     return {
-        "note": "Top 10 current models by Artificial Analysis Intelligence Index. Speeds and available prices come from the benchmark snapshot; missing model-level prices are filled from the official provider prices reviewed above. Values can differ when multiple deployments or reasoning modes exist.",
+        "note": "Top 10 non-deprecated model/reasoning configurations by Artificial Analysis Intelligence Index. Scores, speeds and prices are from the same dated snapshot; benchmark versions can change, so scores are not necessarily comparable with older snapshots. Missing values remain unavailable. Blended prices use uncached input/output tokens in a 3:1 ratio, not AA's cache-weighted mix.",
         "source_url": MODELS_URL,
         "source_label": "Artificial Analysis models leaderboard",
         "generated_at_pretty": pretty_date(now_utc()),
@@ -527,6 +577,13 @@ def build_scale_price_frontier(models: list[dict[str, Any]]) -> dict[str, Any]:
                 continue
             numeric = float(value)
             if numeric < minimum:
+                continue
+            # API launch dates can precede weight availability; prefer verified releases.
+            if open_weights_only and any(
+                (model.get("release_name") or model["short_name"]) == seed["model"]
+                and numeric == seed["value"]
+                for seed in FRONTIER_SEED_ROWS[seed_key]
+            ):
                 continue
             key = (model["release_date"], model["short_name"], numeric)
             if key in seen:

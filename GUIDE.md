@@ -790,6 +790,8 @@ Do not blindly run `git checkout --ours` or `git checkout --theirs`. During a re
 
 For conflicts involving the LLM tracker, resolve the curated source data first, then regenerate and synchronize the published copy:
 
+The refresh script requires `requests` and `cryptography` in your active Python environment (install them with `python3 -m pip install requests cryptography` inside a virtual environment).
+
 ```sh
 python3 scripts/refresh_llm_tracker_snapshot.py
 python3 scripts/sync_llm_pricing_data.py

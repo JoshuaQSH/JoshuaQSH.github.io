@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-24",
-  "generated_at_pretty": "September 24, 2026",
-  "generated_at_iso": "2026-09-24T11:47:39+00:00",
+  "generated_at": "2026-09-25",
+  "generated_at_pretty": "September 25, 2026",
+  "generated_at_iso": "2026-09-25T07:05:48+00:00",
   "summary_note": "This tracker loads the latest repo snapshot. The button below checks GitHub for a newer snapshot at most once per day in this browser; official pricing pages can still change between repo refreshes.",
   "history_note": "History lines use official pricing snapshots that are stored in this repo. Some providers only have one official snapshot recorded so far, while others mix successive flagship or promo models.",
   "chart_defaults": {
@@ -12,49 +12,49 @@
   "api_pricing": [
     {
       "vendor": "OpenAI",
-      "product": "GPT-5.6 Sol (<272K context)",
+      "product": "GPT-6 Astra (<=272K input)",
       "unit": "USD per 1M tokens",
-      "input_display": "$5.00",
-      "input_value": 5.0,
-      "cached_input_display": "$0.50",
-      "cached_input_value": 0.5,
-      "output_display": "$30.00",
-      "output_value": 30.0,
-      "notes": "OpenAI's highest-capability GPT-5.6 model. Requests above 272K input tokens are billed at 2x input and 1.5x output rates; regional processing adds 10%.",
+      "input_display": "$10.00",
+      "input_value": 10.0,
+      "cached_input_display": "$1.00",
+      "cached_input_value": 1.0,
+      "output_display": "$50.00",
+      "output_value": 50.0,
+      "notes": "Standard service. Cache writes cost $12.50 per 1M tokens. Above 272K input tokens, the full request costs 2x input/cache rates and 1.5x output rates. Regional processing adds 10%; Batch/Flex and Fast have separate rates.",
       "official_link": "https://developers.openai.com/api/docs/pricing",
       "source_label": "OpenAI API pricing"
     },
     {
       "vendor": "OpenAI",
-      "product": "GPT-5.6 Terra (<272K context)",
+      "product": "GPT-6 Sol (<=272K input)",
       "unit": "USD per 1M tokens",
       "input_display": "$2.00",
       "input_value": 2.0,
       "cached_input_display": "$0.20",
       "cached_input_value": 0.2,
-      "output_display": "$12.00",
-      "output_value": 12.0,
-      "notes": "OpenAI's balanced GPT-5.6 model at its current reduced standard rate. Requests above 272K input tokens are billed at 2x input and 1.5x output rates; regional processing adds 10%.",
+      "output_display": "$10.00",
+      "output_value": 10.0,
+      "notes": "Standard service. Cache writes cost $2.50 per 1M tokens. Above 272K input tokens, the full request costs 2x input/cache rates and 1.5x output rates. Regional processing adds 10%.",
       "official_link": "https://developers.openai.com/api/docs/pricing",
       "source_label": "OpenAI API pricing"
     },
     {
       "vendor": "OpenAI",
-      "product": "GPT-5.6 Luna (<272K context)",
+      "product": "GPT-6 Luna (<=272K input)",
       "unit": "USD per 1M tokens",
-      "input_display": "$0.20",
-      "input_value": 0.2,
-      "cached_input_display": "$0.02",
-      "cached_input_value": 0.02,
-      "output_display": "$1.20",
-      "output_value": 1.2,
-      "notes": "OpenAI's fastest and lowest-cost GPT-5.6 model at its current reduced standard rate. Requests above 272K input tokens are billed at 2x input and 1.5x output rates; regional processing adds 10%.",
+      "input_display": "$0.10",
+      "input_value": 0.1,
+      "cached_input_display": "$0.01",
+      "cached_input_value": 0.01,
+      "output_display": "$0.50",
+      "output_value": 0.5,
+      "notes": "Standard service. Cache writes cost $0.125 per 1M tokens. Above 272K input tokens, the full request costs 2x input/cache rates and 1.5x output rates. Regional processing adds 10%.",
       "official_link": "https://developers.openai.com/api/docs/pricing",
       "source_label": "OpenAI API pricing"
     },
     {
       "vendor": "Google",
-      "product": "Gemini 3.7 Flash",
+      "product": "Gemini 3.8 Flash",
       "unit": "USD per 1M tokens",
       "input_display": "$0.75 (through 2026-12-31)",
       "input_value": 0.75,
@@ -63,7 +63,7 @@
       "output_display": "$3.75 (through 2026-12-31)",
       "output_value": 3.75,
       "notes": "Current promotional standard-tier pricing for Google's most capable Flash model. On January 1, 2027, prices become $1.50 input, $0.15 cached input, and $7.50 output; cache storage also rises from $0.50 to $1.00 per 1M tokens per hour.",
-      "official_link": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.7-flash",
+      "official_link": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.8-flash",
       "source_label": "Gemini API pricing"
     },
     {
@@ -82,71 +82,71 @@
     },
     {
       "vendor": "Anthropic",
-      "product": "Claude Fable 5",
+      "product": "Claude Fable 5.1",
       "unit": "USD per 1M tokens",
       "input_display": "$10.00",
       "input_value": 10.0,
-      "cached_input_display": "$1.00 (cache read)",
-      "cached_input_value": 1.0,
+      "cached_input_display": "$0.25 (cache read)",
+      "cached_input_value": 0.25,
       "output_display": "$50.00",
       "output_value": 50.0,
-      "notes": "Generally available since June 9, 2026. Five-minute prompt-cache writes are $12.50 per 1M tokens; US-only inference is 1.1x standard pricing.",
-      "official_link": "https://claude.com/pricing",
+      "notes": "Public API model. Cache reads cost 2.5% of base input, not the older 10% rate. Cache writes cost $12.50 (5 minutes) or $20 (1 hour) per 1M tokens. US-only inference is 1.1x standard pricing.",
+      "official_link": "https://platform.claude.com/docs/en/about-claude/pricing",
       "source_label": "Claude API pricing"
     },
     {
       "vendor": "Anthropic",
-      "product": "Claude Mythos 5 (limited access)",
+      "product": "Claude Mythos 5.1 (limited access)",
       "unit": "USD per 1M tokens",
       "input_display": "$10.00",
       "input_value": 10.0,
-      "cached_input_display": "$1.00 (cache read)",
-      "cached_input_value": 1.0,
+      "cached_input_display": "$0.25 (cache read)",
+      "cached_input_value": 0.25,
       "output_display": "$50.00",
       "output_value": 50.0,
-      "notes": "Invitation-only Project Glasswing model with the same underlying specifications and pricing as Claude Fable 5. It is not a self-serve API model and requires 30-day data retention.",
-      "official_link": "https://www.anthropic.com/news/claude-fable-5-mythos-5",
-      "source_label": "Anthropic Claude Fable 5 and Mythos 5 announcement"
+      "notes": "Invitation-only Project Glasswing model; not a self-serve offering. Shares Fable 5.1 specifications and pricing. Cache writes cost $12.50 (5 minutes) or $20 (1 hour) per 1M tokens.",
+      "official_link": "https://platform.claude.com/docs/en/models/mythos-5-1/overview",
+      "source_label": "Anthropic Mythos 5.1 availability and pricing"
     },
     {
       "vendor": "Anthropic",
-      "product": "Claude Opus 5",
+      "product": "Claude Opus 5.5",
       "unit": "USD per 1M tokens",
-      "input_display": "$5.00",
-      "input_value": 5.0,
-      "cached_input_display": "$0.50 (cache read)",
-      "cached_input_value": 0.5,
-      "output_display": "$25.00",
-      "output_value": 25.0,
-      "notes": "Anthropic's current generally available flagship model with a 1M-token context window. Five-minute prompt-cache writes are $6.25 per 1M tokens; US-only inference is 1.1x standard pricing.",
-      "official_link": "https://platform.claude.com/docs/en/about-claude/models/overview",
-      "source_label": "Anthropic model overview and pricing"
+      "input_display": "$4.00",
+      "input_value": 4.0,
+      "cached_input_display": "$0.20 (cache read)",
+      "cached_input_value": 0.2,
+      "output_display": "$20.00",
+      "output_value": 20.0,
+      "notes": "Public API model. Cache reads cost 5% of base input. Cache writes cost $5 (5 minutes) or $8 (1 hour) per 1M tokens. US-only inference is 1.1x standard pricing.",
+      "official_link": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "source_label": "Claude API pricing"
     },
     {
       "vendor": "Anthropic",
       "product": "Claude Sonnet 5",
       "unit": "USD per 1M tokens",
-      "input_display": "$2.00 (introductory)",
+      "input_display": "$2.00",
       "input_value": 2.0,
       "cached_input_display": "$0.20 (cache read)",
       "cached_input_value": 0.2,
-      "output_display": "$10.00 (introductory)",
+      "output_display": "$10.00",
       "output_value": 10.0,
-      "notes": "Introductory pricing through August 31, 2026; standard pricing becomes $3 input, $0.30 cache read, and $15 output per 1M tokens. Prompt-cache writes are $2.50 during the introductory period.",
-      "official_link": "https://claude.com/pricing",
+      "notes": "Published rates rechecked September 25, 2026. Cache writes cost $2.50 (5 minutes) or $4 (1 hour) per 1M tokens.",
+      "official_link": "https://platform.claude.com/docs/en/about-claude/pricing",
       "source_label": "Claude API pricing"
     },
     {
       "vendor": "DeepSeek",
-      "product": "DeepSeek V4 Flash 0731",
+      "product": "DeepSeek V4.1 Flash (deepseek-flash)",
       "unit": "USD per 1M tokens",
-      "input_display": "$0.44 peak / $0.22 off-peak",
-      "input_value": 0.44,
-      "cached_input_display": "$0.014 peak / $0.007 off-peak",
-      "cached_input_value": 0.014,
-      "output_display": "$1.32 peak / $0.66 off-peak",
-      "output_value": 1.32,
-      "notes": "Current V4 Flash version. Peak pricing applies 01:00-04:00 and 06:00-10:00 UTC; all other hours receive DeepSeek's 50% off-peak discount. Numeric chart values use the conservative peak rate.",
+      "input_display": "$0.30 peak / $0.15 off-peak",
+      "input_value": 0.3,
+      "cached_input_display": "$0.006 peak / $0.003 off-peak",
+      "cached_input_value": 0.006,
+      "output_display": "$1.20 peak / $0.60 off-peak",
+      "output_value": 1.2,
+      "notes": "Use API ID deepseek-flash; retired V4 Flash aliases now route here. Supports vision, 1M context and up to 384K output. Peak hours: 01:00-04:00 and 06:00-10:00 UTC, Monday-Friday excluding Chinese public holidays. All other times are half-price; charts use peak rates.",
       "official_link": "https://api-docs.deepseek.com/quick_start/pricing/",
       "source_label": "DeepSeek models & pricing"
     },
@@ -160,27 +160,27 @@
       "cached_input_value": 0.044,
       "output_display": "$3.96 peak / $1.98 off-peak",
       "output_value": 3.96,
-      "notes": "Current V4 Pro version. Peak pricing applies 01:00-04:00 and 06:00-10:00 UTC; all other hours receive DeepSeek's 50% off-peak discount. Numeric chart values use the conservative peak rate.",
+      "notes": "API ID deepseek-v4-pro; V4-Pro-0813, 1M context and up to 384K output; no vision support. Peak hours: 01:00-04:00 and 06:00-10:00 UTC, Monday-Friday excluding Chinese public holidays. All other times are half-price; charts use peak rates.",
       "official_link": "https://api-docs.deepseek.com/quick_start/pricing/",
       "source_label": "DeepSeek models & pricing"
     },
     {
       "vendor": "Qwen / Alibaba Cloud",
-      "product": "qwen3.7-max",
+      "product": "qwen3.8-max",
       "unit": "USD per 1M tokens",
-      "input_display": "$1.25 (50% promotional rate)",
-      "input_value": 1.25,
-      "cached_input_display": "$0.125 (explicit cache hit)",
-      "cached_input_value": 0.125,
-      "output_display": "$3.75 (50% promotional rate)",
-      "output_value": 3.75,
-      "notes": "Current international qwen3.7-max effective price after Alibaba Cloud's ongoing 50% discount; list prices are $2.50 input and $7.50 output. Explicit cache hits cost 10% of input and implicit cache hits 20%. Qwen3.8-Max-Preview is currently offered through the Token Plan rather than normal pay-as-you-go billing.",
+      "input_display": "$2.00 (Singapore / International)",
+      "input_value": 2.0,
+      "cached_input_display": "See Model Studio console",
+      "cached_input_value": null,
+      "output_display": "$6.00 (Singapore / International)",
+      "output_value": 6.0,
+      "notes": "Pay-as-you-go for up to 1M input tokens, both thinking and non-thinking. Other deployment regions have different rates. The cache documentation explicitly excludes Qwen3.8 Max from the generic 10% explicit / 20% implicit cache-hit rules and directs users to the console; no cache price is assumed here.",
       "official_link": "https://www.alibabacloud.com/help/en/model-studio/model-pricing",
       "source_label": "Alibaba Cloud Model Studio pricing"
     },
     {
       "vendor": "Together AI / Z AI",
-      "product": "GLM-5.2",
+      "product": "GLM-5.3",
       "unit": "USD per 1M tokens",
       "input_display": "$1.40",
       "input_value": 1.4,
@@ -188,9 +188,9 @@
       "cached_input_value": 0.26,
       "output_display": "$4.40",
       "output_value": 4.4,
-      "notes": "Together AI's public serverless price for Z AI's GLM-5.2, released June 16, 2026 with a 256K context window.",
-      "official_link": "https://www.together.ai/models/glm-52",
-      "source_label": "Together AI GLM-5.2 pricing"
+      "notes": "Together AI's public serverless price for Z AI's GLM-5.3, released August 13, 2026 with a 1M-token context window. These are Together's rates, not Z AI's direct API rates.",
+      "official_link": "https://www.together.ai/models/glm-5-3",
+      "source_label": "Together AI GLM-5.3 pricing"
     },
     {
       "vendor": "Moonshot AI / Kimi",
@@ -202,8 +202,8 @@
       "cached_input_value": 0.3,
       "output_display": "$15.00",
       "output_value": 15.0,
-      "notes": "Moonshot AI's current open-weight flagship, with a 1M-token context window and native multimodal support.",
-      "official_link": "https://platform.kimi.ai/",
+      "notes": "Open-weight native multimodal model with a 1,048,576-token context window. Cache writes cost $3 (5-minute TTL) or $6 (1-hour TTL) per 1M tokens, separate from $0.30 cache reads.",
+      "official_link": "https://platform.kimi.ai/docs/pricing/chat.md",
       "source_label": "Kimi API Platform pricing"
     },
     {
@@ -216,13 +216,13 @@
       "cached_input_value": 0.19,
       "output_display": "$4.00",
       "output_value": 4.0,
-      "notes": "Kimi K2.7 Code is Kimi’s current most capable coding model. The high-speed variant is $1.90 cache-miss input, $0.38 cache-hit input, and $8.00 output per 1M tokens.",
-      "official_link": "https://platform.kimi.ai/docs/pricing/chat-k27-code.md",
+      "notes": "Dedicated coding model with a 262,144-token context window. The high-speed variant is $1.90 cache-miss input, $0.38 cache-hit input, and $8.00 output per 1M tokens.",
+      "official_link": "https://platform.kimi.ai/docs/pricing/chat.md",
       "source_label": "Kimi K2.7 Code pricing"
     },
     {
       "vendor": "Xiaomi / MiMo",
-      "product": "mimo-v2.5-pro",
+      "product": "mimo-v2.6-pro",
       "unit": "USD per 1M tokens",
       "input_display": "$0.435 (overseas cache miss)",
       "input_value": 0.435,
@@ -230,8 +230,22 @@
       "cached_input_value": 0.0036,
       "output_display": "$0.87 (overseas)",
       "output_value": 0.87,
-      "notes": "Current overseas pay-as-you-go price for Xiaomi MiMo V2.5 Pro. The V2 compatibility models were fully deprecated on June 30, 2026; V2.5 Pro supports a 1M context window and up to 128K output.",
-      "official_link": "https://platform.xiaomimimo.com/static/docs/price/pay-as-you-go.md",
+      "notes": "Overseas real-time API pricing; cache writes are temporarily free. Batch is half-price. The separate UltraSpeed variant costs $4.35 input, $0.036 cached input and $8.70 output. MiMo V2.5 Pro and V2.5 retire October 21, 2026 at 10:00 Beijing time.",
+      "official_link": "https://mimo.mi.com/static/docs/price/pay-as-you-go.md",
+      "source_label": "Xiaomi MiMo pay-as-you-go pricing"
+    },
+    {
+      "vendor": "Xiaomi / MiMo",
+      "product": "mimo-v2.6-flash",
+      "unit": "USD per 1M tokens",
+      "input_display": "$0.14 (overseas cache miss)",
+      "input_value": 0.14,
+      "cached_input_display": "$0.0028 (overseas cache hit)",
+      "cached_input_value": 0.0028,
+      "output_display": "$0.28 (overseas)",
+      "output_value": 0.28,
+      "notes": "Overseas real-time API pricing. Batch costs $0.07 input, $0.0014 cached input and $0.14 output per 1M tokens. Cache writes are temporarily free; web search is billed separately.",
+      "official_link": "https://mimo.mi.com/static/docs/price/pay-as-you-go.md",
       "source_label": "Xiaomi MiMo pay-as-you-go pricing"
     },
     {
@@ -244,13 +258,13 @@
       "cached_input_value": 0.06,
       "output_display": "$1.20 (<=512K)",
       "output_value": 1.2,
-      "notes": "Current global pay-as-you-go standard-service price. Requests from 512K to 1M tokens cost $0.60 input, $0.12 cache read, and $2.40 output; priority service is priced separately.",
-      "official_link": "https://platform.minimax.io/subscribe/token-plan?tab=api-enterprise",
+      "notes": "Global standard-service rates after the published permanent 50% reduction. Above 512K input tokens: $0.60 input, $0.12 cache read and $2.40 output. Priority service costs 1.5x standard rates.",
+      "official_link": "https://platform.minimax.io/docs/guides/pricing-paygo",
       "source_label": "MiniMax global API pricing"
     },
     {
       "vendor": "xAI",
-      "product": "Grok 4.6 (<=500K context)",
+      "product": "Grok 4.7 (<200K input)",
       "unit": "USD per 1M tokens",
       "input_display": "$2.00",
       "input_value": 2.0,
@@ -258,9 +272,9 @@
       "cached_input_value": 0.5,
       "output_display": "$6.00",
       "output_value": 6.0,
-      "notes": "Current xAI flagship standard rate for requests up to 500K input tokens. Requests above 500K cost $4 input, $1 cached input, and $12 output per 1M tokens.",
-      "official_link": "https://docs.x.ai/developers/grok-4-6",
-      "source_label": "xAI Grok 4.6 model documentation"
+      "notes": "500K context window, but the long-context billing threshold is 200K input tokens. At or above 200K, all tokens in the request cost $4 input, $1 cached input and $12 output per 1M tokens. US regional inference adds 10%.",
+      "official_link": "https://docs.x.ai/developers/pricing",
+      "source_label": "xAI API pricing"
     },
     {
       "vendor": "GitHub Copilot",
@@ -272,7 +286,7 @@
       "cached_input_value": null,
       "output_display": "N/A",
       "output_value": null,
-      "notes": "GitHub Copilot is sold as a subscription product. GitHub does not publicly publish a Copilot per-token API price comparable to the other vendors here.",
+      "notes": "Copilot combines seat subscriptions with model-dependent GitHub AI Credit usage. There is no single Copilot-model input/output token rate; compare plan allowances below, not N/A values as zero-cost inference.",
       "official_link": "https://github.com/features/copilot/plans",
       "source_label": "GitHub Copilot plans"
     }
@@ -298,16 +312,24 @@
       "vendor": "OpenAI",
       "plan": "ChatGPT Pro 20x",
       "price_display": "$200 / month",
-      "notes": "Highest individual ChatGPT tier, with 20x the Plus usage allowance. No annual billing.",
+      "notes": "20x the Plus usage allowance. New sign-ups and upgrades paused since September 10, 2026; existing subscriptions continue, with a limited one-time return option for eligible former subscribers. No annual billing.",
       "official_link": "https://help.openai.com/en/articles/9793128-about-chatgpt-pro-tiers",
       "source_label": "OpenAI ChatGPT Pro tiers"
     },
     {
       "vendor": "OpenAI",
-      "plan": "ChatGPT Business",
+      "plan": "ChatGPT Business Standard",
       "price_display": "$20 / user / month annually or $25 monthly",
-      "notes": "Standard ChatGPT seat for teams of two or more; pricing was reduced in April 2026. Flexible credits can extend included usage.",
-      "official_link": "https://help.openai.com/en/articles/8792828-what-is-chatgpt-business",
+      "notes": "Standard seat includes ChatGPT, ChatGPT Work and Codex. At least two Standard/Premium seats combined are required. API usage is separate; workspace credits can extend usage.",
+      "official_link": "https://help.openai.com/en/articles/8792828-chatgpt-business-overview",
+      "source_label": "OpenAI ChatGPT Business help"
+    },
+    {
+      "vendor": "OpenAI",
+      "plan": "ChatGPT Business Premium",
+      "price_display": "$100 / user / month annually or $125 monthly",
+      "notes": "5x Standard-seat usage and no 5-hour usage limit. Standard and Premium seats can be mixed; at least two seats combined are required. API usage is separate.",
+      "official_link": "https://help.openai.com/en/articles/8792828-chatgpt-business-overview",
       "source_label": "OpenAI ChatGPT Business help"
     },
     {
@@ -322,7 +344,7 @@
       "vendor": "Anthropic",
       "plan": "Claude Max 5x",
       "price_display": "$100 / month",
-      "notes": "Five times the Pro usage allowance. Includes Claude Code and Claude Cowork.",
+      "notes": "Five times the Pro usage allowance. Includes Claude Code; model-specific limits apply.",
       "official_link": "https://claude.com/pricing",
       "source_label": "Claude plans and pricing"
     },
@@ -330,7 +352,7 @@
       "vendor": "Anthropic",
       "plan": "Claude Max 20x",
       "price_display": "$200 / month",
-      "notes": "Twenty times the Pro usage allowance. Includes Claude Code and Claude Cowork.",
+      "notes": "Twenty times the Pro usage allowance. Includes Claude Code; model-specific limits apply.",
       "official_link": "https://claude.com/pricing",
       "source_label": "Claude plans and pricing"
     },
@@ -338,7 +360,7 @@
       "vendor": "Anthropic",
       "plan": "Claude Team Standard",
       "price_display": "$20 / seat / month annually or $25 monthly",
-      "notes": "For teams of 5 to 150. Anthropic also lists Premium seats at $100 annually or $125 monthly per seat.",
+      "notes": "For teams of 2 to 150. Premium seats cost $100 per seat per month billed annually, or $125 per seat per month billed monthly; seat types can be mixed.",
       "official_link": "https://claude.com/pricing",
       "source_label": "Claude plans and pricing"
     },
@@ -347,7 +369,7 @@
       "plan": "Google AI Plus",
       "price_display": "$4.99 / month (US)",
       "notes": "Individual plan with 2x Gemini usage limits and 400 GB of storage. Regional prices and storage bundles vary.",
-      "official_link": "https://one.google.com/about/google-ai-plans/",
+      "official_link": "https://one.google.com/intl/en_us/about/google-ai-plans/",
       "source_label": "Google AI plans"
     },
     {
@@ -355,7 +377,7 @@
       "plan": "Google AI Pro",
       "price_display": "$19.99 / month (US)",
       "notes": "Individual plan with 4x Gemini usage limits and 5 TB of storage. Regional prices vary.",
-      "official_link": "https://one.google.com/about/google-ai-plans/",
+      "official_link": "https://one.google.com/intl/en_us/about/google-ai-plans/",
       "source_label": "Google AI plans"
     },
     {
@@ -363,7 +385,7 @@
       "plan": "Google AI Ultra 5x",
       "price_display": "$99.99 / month (US)",
       "notes": "Higher-access Ultra tier with 5x the Pro usage limits and 20 TB of storage.",
-      "official_link": "https://one.google.com/about/google-ai-plans/",
+      "official_link": "https://one.google.com/intl/en_us/about/google-ai-plans/",
       "source_label": "Google AI plans"
     },
     {
@@ -371,7 +393,7 @@
       "plan": "Google AI Ultra 20x",
       "price_display": "$199.99 / month (US)",
       "notes": "Highest-access Ultra tier with 20x the Pro usage limits and 30 TB of storage.",
-      "official_link": "https://one.google.com/about/google-ai-plans/",
+      "official_link": "https://one.google.com/intl/en_us/about/google-ai-plans/",
       "source_label": "Google AI plans"
     },
     {
@@ -385,8 +407,8 @@
     {
       "vendor": "Qwen / Alibaba Cloud",
       "plan": "Model Studio Token Plan (Individual)",
-      "price_display": "$6 / $18 / $68 per month",
-      "notes": "Lite, Standard, and Pro individual tiers. The plan includes access to Qwen3.8-Max-Preview and uses rolling token-window quotas rather than pay-as-you-go token billing.",
+      "price_display": "$8 / $25 / $80 per month (list)",
+      "notes": "Lite, Standard and Pro list prices. The launch announcement advertises limited-time $6 / $18 / $68 rates; confirm eligibility and current discounts at checkout. Credits have 5-hour and 7-day windows, separate from pay-as-you-go API billing.",
       "official_link": "https://modelstudio.alibabacloud.com/intl/blog/model-studio-token-plan-individual/",
       "source_label": "Alibaba Cloud Model Studio Token Plan"
     },
@@ -394,41 +416,73 @@
       "vendor": "Xiaomi / MiMo",
       "plan": "Token Plan (monthly)",
       "price_display": "$6 / $16 / $50 / $100 per month",
-      "notes": "Lite, Standard, Pro, and Max tiers covering the MiMo V2.5 model family.",
-      "official_link": "https://platform.xiaomimimo.com/static/docs/price/tokenplan/subscription.md",
+      "notes": "Individual Lite, Standard, Pro and Max developer tiers; includes MiMo V2.6 Pro/Flash. Separate coding-tool quota, not general-purpose API balance or a MiMo Desktop membership price.",
+      "official_link": "https://mimo.mi.com/static/docs/tokenplan/Token%20Plan/subscription.md",
       "source_label": "Xiaomi MiMo Token Plan"
     },
     {
       "vendor": "Xiaomi / MiMo",
       "plan": "Token Plan (annual)",
       "price_display": "$63.36 / $168.96 / $528 / $1,056 per year",
-      "notes": "Annual Lite, Standard, Pro, and Max tiers.",
-      "official_link": "https://platform.xiaomimimo.com/static/docs/price/tokenplan/subscription.md",
+      "notes": "Individual Lite, Standard, Pro and Max annual developer plans, billed upfront. Rates reflect the documented annual discount; separate from Desktop membership pricing.",
+      "official_link": "https://mimo.mi.com/static/docs/tokenplan/Token%20Plan/subscription.md",
       "source_label": "Xiaomi MiMo Token Plan"
     },
     {
       "vendor": "MiniMax",
       "plan": "Token Plan Plus",
-      "price_display": "$20 / month or $200 / year",
-      "notes": "Personal Token Plan for light development and daily use.",
-      "official_link": "https://platform.minimax.io/subscribe",
+      "price_display": "$22 / month",
+      "notes": "Personal Token Plan with rolling 5-hour and weekly quota windows. Optional prepaid Credits cover overflow and are billed separately.",
+      "official_link": "https://platform.minimax.io/docs/guides/pricing-token-plan",
       "source_label": "MiniMax global Token Plan"
     },
     {
       "vendor": "MiniMax",
       "plan": "Token Plan Max",
-      "price_display": "$50 / month or $500 / year",
-      "notes": "Personal Token Plan for frequent coding agents and multimodal calls.",
-      "official_link": "https://platform.minimax.io/subscribe",
+      "price_display": "$55 / month",
+      "notes": "Personal Token Plan with rolling 5-hour and weekly quota windows. Text, eligible image and speech resources share the quota.",
+      "official_link": "https://platform.minimax.io/docs/guides/pricing-token-plan",
       "source_label": "MiniMax global Token Plan"
     },
     {
       "vendor": "MiniMax",
       "plan": "Token Plan Ultra",
-      "price_display": "$120 / month or $1,200 / year",
-      "notes": "Highest personal Token Plan for intensive agent workflows.",
-      "official_link": "https://platform.minimax.io/subscribe",
+      "price_display": "$132 / month",
+      "notes": "Personal Token Plan for intensive use, with rolling 5-hour and weekly quota windows. Not an unlimited API subscription.",
+      "official_link": "https://platform.minimax.io/docs/guides/pricing-token-plan",
       "source_label": "MiniMax global Token Plan"
+    },
+    {
+      "vendor": "Moonshot AI / Kimi",
+      "plan": "Kimi Plus",
+      "price_display": "$19 / month or $180 / year",
+      "notes": "USD prices on the Kimi Code plan page; annual equivalent $15/month. Includes Kimi membership and coding access. New plans have monthly quotas and a rolling 5-hour limit; legacy plans have different rules.",
+      "official_link": "https://www.kimi.ai/code/",
+      "source_label": "Kimi Code membership plans"
+    },
+    {
+      "vendor": "Moonshot AI / Kimi",
+      "plan": "Kimi Pro",
+      "price_display": "$39 / month or $372 / year",
+      "notes": "USD prices; annual equivalent $31/month. Kimi Code with K3 up to 1M context and HighSpeed access. API Open Platform billing is separate.",
+      "official_link": "https://www.kimi.ai/code/",
+      "source_label": "Kimi Code membership plans"
+    },
+    {
+      "vendor": "Moonshot AI / Kimi",
+      "plan": "Kimi Max",
+      "price_display": "$99 / month or $948 / year",
+      "notes": "USD prices; annual equivalent $79/month. Higher membership quota, shared with Kimi Code; API Open Platform billing is separate.",
+      "official_link": "https://www.kimi.ai/code/",
+      "source_label": "Kimi Code membership plans"
+    },
+    {
+      "vendor": "Moonshot AI / Kimi",
+      "plan": "Kimi Ultra",
+      "price_display": "$199 / month or $1,908 / year",
+      "notes": "USD prices; annual equivalent $159/month. Highest coding-plan quota shown on the public page; API Open Platform billing is separate.",
+      "official_link": "https://www.kimi.ai/code/",
+      "source_label": "Kimi Code membership plans"
     },
     {
       "vendor": "xAI / Grok",
@@ -442,7 +496,7 @@
       "vendor": "GitHub Copilot",
       "plan": "Copilot Pro",
       "price_display": "$10 / user / month",
-      "notes": "Individual plan with $15 in monthly GitHub AI Credits.",
+      "notes": "Currently $15 monthly AI Credit value: $10 base plus $5 variable Flex allotment. Flex allowances can change.",
       "official_link": "https://github.com/features/copilot/plans",
       "source_label": "GitHub Copilot plans"
     },
@@ -450,7 +504,7 @@
       "vendor": "GitHub Copilot",
       "plan": "Copilot Pro+",
       "price_display": "$39 / user / month",
-      "notes": "Individual plan with $70 in monthly GitHub AI Credits.",
+      "notes": "Currently $70 monthly AI Credit value: $39 base plus $31 variable Flex allotment. Flex allowances can change.",
       "official_link": "https://github.com/features/copilot/plans",
       "source_label": "GitHub Copilot plans"
     },
@@ -458,7 +512,7 @@
       "vendor": "GitHub Copilot",
       "plan": "Copilot Max",
       "price_display": "$100 / user / month",
-      "notes": "Highest individual tier with $200 in monthly GitHub AI Credits.",
+      "notes": "Currently $200 monthly AI Credit value: $100 base plus $100 variable Flex allotment. Flex allowances can change.",
       "official_link": "https://github.com/features/copilot/plans",
       "source_label": "GitHub Copilot plans"
     },
@@ -466,7 +520,7 @@
       "vendor": "GitHub Copilot",
       "plan": "Copilot Business",
       "price_display": "$19 / seat / month",
-      "notes": "Organization-managed plan. New self-serve Copilot Business sign-ups for GitHub Free and Team organizations are temporarily paused.",
+      "notes": "Organization-managed plan; 1,900 AI Credits ($19 value) per granted seat per month contribute to a shared pool. Additional usage is billed separately.",
       "official_link": "https://docs.github.com/en/copilot/get-started/plans",
       "source_label": "GitHub Copilot plan documentation"
     },
@@ -474,7 +528,7 @@
       "vendor": "GitHub Copilot",
       "plan": "Copilot Enterprise",
       "price_display": "$39 / seat / month",
-      "notes": "Enterprise-managed plan with organization-wide features and controls.",
+      "notes": "For GitHub Enterprise Cloud; 3,900 AI Credits ($39 value) per granted seat per month contribute to a shared pool. Additional usage is billed separately.",
       "official_link": "https://docs.github.com/en/copilot/get-started/plans",
       "source_label": "GitHub Copilot plan documentation"
     }
@@ -483,7 +537,7 @@
     "openai": {
       "label": "OpenAI",
       "currency": "USD per 1M tokens",
-      "note": "Flagship OpenAI checkpoints stored in this repo. The latest snapshot reflects GPT-5.6 Sol pricing from OpenAI's developer pricing page.",
+      "note": "Flagship OpenAI standard-service checkpoints stored in this repo, using the short-context tier. Dates are observations, not necessarily model launch dates.",
       "points": [
         {
           "date": "2026-03-19",
@@ -507,6 +561,14 @@
           "input_miss": 5.0,
           "input_hit": 0.5,
           "output": 30.0,
+          "source": "https://developers.openai.com/api/docs/pricing"
+        },
+        {
+          "date": "2026-09-25",
+          "model": "GPT-6 Astra (<=272K input)",
+          "input_miss": 10.0,
+          "input_hit": 1.0,
+          "output": 50.0,
           "source": "https://developers.openai.com/api/docs/pricing"
         }
       ]
@@ -547,13 +609,21 @@
           "input_hit": 0.075,
           "output": 3.75,
           "source": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.7-flash"
+        },
+        {
+          "date": "2026-09-25",
+          "model": "Gemini 3.8 Flash (2026 promotion)",
+          "input_miss": 0.75,
+          "input_hit": 0.075,
+          "output": 3.75,
+          "source": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.8-flash"
         }
       ]
     },
     "anthropic": {
       "label": "Anthropic",
       "currency": "USD per 1M tokens",
-      "note": "Anthropic public API list prices; the active line follows the newest highest-tier Claude model in this tracker.",
+      "note": "Anthropic public API snapshots across selected flagship models. The latest point follows Opus 5.5; Fable 5.1 is priced separately in the API table.",
       "points": [
         {
           "date": "2026-03-19",
@@ -594,6 +664,14 @@
           "input_hit": 0.5,
           "output": 25.0,
           "source": "https://platform.claude.com/docs/en/about-claude/models/overview"
+        },
+        {
+          "date": "2026-09-25",
+          "model": "Claude Opus 5.5",
+          "input_miss": 4.0,
+          "input_hit": 0.2,
+          "output": 20.0,
+          "source": "https://platform.claude.com/docs/en/about-claude/pricing"
         }
       ]
     },
@@ -617,13 +695,21 @@
           "input_hit": 0.014,
           "output": 1.32,
           "source": "https://api-docs.deepseek.com/quick_start/pricing/"
+        },
+        {
+          "date": "2026-09-25",
+          "model": "DeepSeek V4.1 Flash (peak)",
+          "input_miss": 0.3,
+          "input_hit": 0.006,
+          "output": 1.2,
+          "source": "https://api-docs.deepseek.com/quick_start/pricing/"
         }
       ]
     },
     "qwen": {
       "label": "Qwen / Alibaba Cloud",
       "currency": "USD per 1M tokens",
-      "note": "Alibaba Cloud Model Studio international list pricing. Cache-hit history uses the explicit-cache rate when available.",
+      "note": "Alibaba Cloud Singapore / International pricing; earlier points include promotions. Qwen3.8 Max cache-hit pricing is console-only, so its cached-input value is unavailable.",
       "points": [
         {
           "date": "2026-03-19",
@@ -655,6 +741,14 @@
           "input_miss": 1.25,
           "input_hit": 0.125,
           "output": 3.75,
+          "source": "https://www.alibabacloud.com/help/en/model-studio/model-pricing"
+        },
+        {
+          "date": "2026-09-25",
+          "model": "qwen3.8-max (Singapore / International)",
+          "input_miss": 2.0,
+          "input_hit": null,
+          "output": 6.0,
           "source": "https://www.alibabacloud.com/help/en/model-studio/model-pricing"
         }
       ]
@@ -708,7 +802,7 @@
     "xai": {
       "label": "xAI",
       "currency": "USD per 1M tokens",
-      "note": "Current public xAI API pricing snapshot.",
+      "note": "Public xAI API pricing snapshots. The latest point uses Grok 4.7's short-context tier, below 200K input tokens.",
       "points": [
         {
           "date": "2026-03-19",
@@ -741,13 +835,21 @@
           "input_hit": 0.5,
           "output": 6.0,
           "source": "https://docs.x.ai/developers/grok-4-6"
+        },
+        {
+          "date": "2026-09-25",
+          "model": "Grok 4.7 (<200K input)",
+          "input_miss": 2.0,
+          "input_hit": 0.5,
+          "output": 6.0,
+          "source": "https://docs.x.ai/developers/pricing"
         }
       ]
     },
     "together_glm": {
-      "label": "Together AI / GLM-5.2",
+      "label": "Together AI / GLM-5.3",
       "currency": "USD per 1M tokens",
-      "note": "Together AI's public GLM-5.2 model page. This history line grows when the public model or price changes.",
+      "note": "Together AI's public GLM model prices. This history line grows when the tracked model or price changes.",
       "points": [
         {
           "date": "2026-04-01",
@@ -764,6 +866,14 @@
           "input_hit": 0.26,
           "output": 4.4,
           "source": "https://www.together.ai/models/glm-52"
+        },
+        {
+          "date": "2026-09-25",
+          "model": "GLM-5.3",
+          "input_miss": 1.4,
+          "input_hit": 0.26,
+          "output": 4.4,
+          "source": "https://www.together.ai/models/glm-5-3"
         }
       ]
     },
@@ -787,152 +897,160 @@
           "input_hit": 0.0036,
           "output": 0.87,
           "source": "https://platform.xiaomimimo.com/static/docs/price/pay-as-you-go.md"
+        },
+        {
+          "date": "2026-09-25",
+          "model": "mimo-v2.6-pro",
+          "input_miss": 0.435,
+          "input_hit": 0.0036,
+          "output": 0.87,
+          "source": "https://mimo.mi.com/static/docs/price/pay-as-you-go.md"
         }
       ]
     }
   },
-  "subscription_missing_note": "DeepSeek and Moonshot AI / Kimi are omitted here because I could not find a public official consumer or coding subscription with a directly listed price in the sources checked for this snapshot.",
+  "subscription_missing_note": "DeepSeek has no comparable paid subscription price verified in this review. Subscription amounts are USD unless labeled otherwise; regional taxes, checkout offers and legacy-plan eligibility can differ. API billing is separate from consumer and coding subscriptions.",
   "benchmark_snapshot": {
-    "note": "Top 10 current models by Artificial Analysis Intelligence Index. Speeds and available prices come from the benchmark snapshot; missing model-level prices are filled from the official provider prices reviewed above. Values can differ when multiple deployments or reasoning modes exist.",
+    "note": "Top 10 non-deprecated model/reasoning configurations by Artificial Analysis Intelligence Index. Scores, speeds and prices are from the same dated snapshot; benchmark versions can change, so scores are not necessarily comparable with older snapshots. Missing values remain unavailable. Blended prices use uncached input/output tokens in a 3:1 ratio, not AA's cache-weighted mix.",
     "source_url": "https://artificialanalysis.ai/models",
     "source_label": "Artificial Analysis models leaderboard",
-    "generated_at_pretty": "September 24, 2026",
+    "generated_at_pretty": "September 25, 2026",
     "models": [
       {
         "vendor": "Anthropic",
-        "model": "Claude Opus 5.5 (max with fallback)",
+        "model": "Claude Opus 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)",
         "short_label": "Claude Opus 5.5 (max with fallback)",
         "intelligence": 57.62,
         "speed_tps": null,
-        "blended_price": null,
-        "input_price": null,
-        "output_price": null,
+        "blended_price": 8.0,
+        "input_price": 4.0,
+        "output_price": 20.0,
         "detail_url": "https://artificialanalysis.ai/models/claude-opus-5-5",
         "detail_label": "Model details",
-        "color": "#d97757"
+        "color": "#cc785c"
       },
       {
         "vendor": "Anthropic",
-        "model": "Claude Fable 5.1 (max with fallback)",
+        "model": "Claude Opus 5.5 (Adaptive Reasoning, Xhigh Effort, Default Fallback)",
+        "short_label": "Claude Opus 5.5 (xhigh with fallback)",
+        "intelligence": 55.99,
+        "speed_tps": 91.46,
+        "blended_price": 8.0,
+        "input_price": 4.0,
+        "output_price": 20.0,
+        "detail_url": "https://artificialanalysis.ai/models/claude-opus-5-5-xhigh",
+        "detail_label": "Model details",
+        "color": "#cc785c"
+      },
+      {
+        "vendor": "Anthropic",
+        "model": "Claude Opus 5.5 (Adaptive Reasoning, High Effort, Default Fallback)",
+        "short_label": "Claude Opus 5.5 (high with fallback)",
+        "intelligence": 53.58,
+        "speed_tps": 87.63,
+        "blended_price": 8.0,
+        "input_price": 4.0,
+        "output_price": 20.0,
+        "detail_url": "https://artificialanalysis.ai/models/claude-opus-5-5-high",
+        "detail_label": "Model details",
+        "color": "#cc785c"
+      },
+      {
+        "vendor": "Anthropic",
+        "model": "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)",
         "short_label": "Claude Fable 5.1 (max with fallback)",
         "intelligence": 53.35,
-        "speed_tps": 65.82,
-        "blended_price": null,
-        "input_price": null,
-        "output_price": null,
+        "speed_tps": 69.07,
+        "blended_price": 20.0,
+        "input_price": 10.0,
+        "output_price": 50.0,
         "detail_url": "https://artificialanalysis.ai/models/claude-fable-5-1",
         "detail_label": "Model details",
-        "color": "#d97757"
+        "color": "#cc785c"
+      },
+      {
+        "vendor": "Anthropic",
+        "model": "Claude Fable 5.1 (Adaptive Reasoning, Xhigh Effort, Default Fallback)",
+        "short_label": "Claude Fable 5.1 (xhigh with fallback)",
+        "intelligence": 53.2,
+        "speed_tps": 60.39,
+        "blended_price": 20.0,
+        "input_price": 10.0,
+        "output_price": 50.0,
+        "detail_url": "https://artificialanalysis.ai/models/claude-fable-5-1-xhigh",
+        "detail_label": "Model details",
+        "color": "#cc785c"
       },
       {
         "vendor": "OpenAI",
         "model": "GPT-6 Astra (max)",
         "short_label": "GPT-6 Astra (max)",
         "intelligence": 52.67,
-        "speed_tps": 52.5,
-        "blended_price": null,
-        "input_price": null,
-        "output_price": null,
+        "speed_tps": 53.72,
+        "blended_price": 20.0,
+        "input_price": 10.0,
+        "output_price": 50.0,
         "detail_url": "https://artificialanalysis.ai/models/gpt-6-astra",
         "detail_label": "Model details",
-        "color": "#10a37f"
-      },
-      {
-        "vendor": "Muse",
-        "model": "Muse Spark 1.3 (max)",
-        "short_label": "Muse Spark 1.3 (max)",
-        "intelligence": 48.09,
-        "speed_tps": 218.61,
-        "blended_price": 2.0,
-        "input_price": 1.25,
-        "output_price": 4.25,
-        "detail_url": "https://artificialanalysis.ai/models/muse-spark-1-3",
-        "detail_label": "Model details",
-        "color": "#7c3aed"
+        "color": "#1f1f1f"
       },
       {
         "vendor": "OpenAI",
-        "model": "GPT-6 Sol (max)",
-        "short_label": "GPT-6 Sol (max)",
-        "intelligence": 47.53,
-        "speed_tps": 115.87,
-        "blended_price": 4.0,
-        "input_price": 2.0,
-        "output_price": 10.0,
-        "detail_url": "https://artificialanalysis.ai/models/gpt-6-sol",
+        "model": "GPT-6 Astra (xhigh)",
+        "short_label": "GPT-6 Astra (xhigh)",
+        "intelligence": 52.39,
+        "speed_tps": 52.66,
+        "blended_price": 20.0,
+        "input_price": 10.0,
+        "output_price": 50.0,
+        "detail_url": "https://artificialanalysis.ai/models/gpt-6-astra-xhigh",
         "detail_label": "Model details",
-        "color": "#10a37f"
+        "color": "#1f1f1f"
       },
       {
-        "vendor": "xAI",
-        "model": "Grok 4.7 (xhigh)",
-        "short_label": "Grok 4.7 (xhigh)",
-        "intelligence": 46.45,
-        "speed_tps": 40.09,
-        "blended_price": 3.0,
-        "input_price": 2.0,
-        "output_price": 6.0,
-        "detail_url": "https://artificialanalysis.ai/models/grok-4-7",
+        "vendor": "Anthropic",
+        "model": "Claude Opus 5.5 (Adaptive Reasoning, Medium Effort, Default Fallback)",
+        "short_label": "Claude Opus 5.5 (medium with fallback)",
+        "intelligence": 51.24,
+        "speed_tps": 79.13,
+        "blended_price": 8.0,
+        "input_price": 4.0,
+        "output_price": 20.0,
+        "detail_url": "https://artificialanalysis.ai/models/claude-opus-5-5-medium",
         "detail_label": "Model details",
-        "color": "#111827"
+        "color": "#cc785c"
       },
       {
-        "vendor": "Xiaomi",
-        "model": "MiMo-V2.6-Pro",
-        "short_label": "MiMo-V2.6-Pro",
-        "intelligence": 46.32,
-        "speed_tps": 51.32,
-        "blended_price": 0.5437,
-        "input_price": 0.435,
-        "output_price": 0.87,
-        "detail_url": "https://artificialanalysis.ai/models/mimo-v2-6-pro",
+        "vendor": "Anthropic",
+        "model": "Claude Fable 5.1 (Adaptive Reasoning, High Effort, Default Fallback)",
+        "short_label": "Claude Fable 5.1 (high with fallback)",
+        "intelligence": 51.15,
+        "speed_tps": 56.91,
+        "blended_price": 20.0,
+        "input_price": 10.0,
+        "output_price": 50.0,
+        "detail_url": "https://artificialanalysis.ai/models/claude-fable-5-1-high",
         "detail_label": "Model details",
-        "color": "#ff6900"
+        "color": "#cc785c"
       },
       {
-        "vendor": "Qwen / Alibaba",
-        "model": "Qwen3.8 Max (0902)",
-        "short_label": "Qwen3.8 Max (0902)",
-        "intelligence": 45.42,
-        "speed_tps": 39.18,
-        "blended_price": 3.0,
-        "input_price": 2.0,
-        "output_price": 6.0,
-        "detail_url": "https://artificialanalysis.ai/models/qwen3-8-max",
+        "vendor": "OpenAI",
+        "model": "GPT-6 Astra (high)",
+        "short_label": "GPT-6 Astra (high)",
+        "intelligence": 50.92,
+        "speed_tps": 53.07,
+        "blended_price": 20.0,
+        "input_price": 10.0,
+        "output_price": 50.0,
+        "detail_url": "https://artificialanalysis.ai/models/gpt-6-astra-high",
         "detail_label": "Model details",
-        "color": "#615ced"
-      },
-      {
-        "vendor": "Z AI",
-        "model": "GLM-5.3 (max)",
-        "short_label": "GLM-5.3 (max)",
-        "intelligence": 44.78,
-        "speed_tps": 58.83,
-        "blended_price": 2.15,
-        "input_price": 1.4,
-        "output_price": 4.4,
-        "detail_url": "https://artificialanalysis.ai/models/glm-5-3",
-        "detail_label": "Model details",
-        "color": "#2563eb"
-      },
-      {
-        "vendor": "xAI",
-        "model": "Grok 4.6 (high)",
-        "short_label": "Grok 4.6 (high)",
-        "intelligence": 44.31,
-        "speed_tps": 60.87,
-        "blended_price": 3.0,
-        "input_price": 2.0,
-        "output_price": 6.0,
-        "detail_url": "https://artificialanalysis.ai/models/grok-4-6",
-        "detail_label": "Model details",
-        "color": "#111827"
+        "color": "#1f1f1f"
       }
     ]
   },
   "provider_leaderboard": {
     "default_metric": "intelligence",
-    "generated_at_pretty": "September 24, 2026",
+    "generated_at_pretty": "September 25, 2026",
     "source_url": "https://artificialanalysis.ai/leaderboards/providers",
     "source_label": "Artificial Analysis provider leaderboard",
     "note": "Each provider rank uses that provider's best currently benchmarked endpoint for the selected metric, so the representative model can change across metrics.",
@@ -1360,7 +1478,7 @@
             "rank": 1,
             "provider": "Crusoe",
             "model": "Nemotron 3 Nano (Non-reasoning) (FP8)",
-            "value": 0.388397,
+            "value": 0.410727,
             "detail_url": "https://artificialanalysis.ai/providers/crusoe",
             "detail_label": "Provider details"
           },
@@ -1368,7 +1486,7 @@
             "rank": 2,
             "provider": "DeepInfra",
             "model": "Llama 4 Maverick (FP8)",
-            "value": 0.465774,
+            "value": 0.440816,
             "detail_url": "https://artificialanalysis.ai/providers/deepinfra",
             "detail_label": "Provider details"
           },
@@ -1376,7 +1494,7 @@
             "rank": 3,
             "provider": "Modular",
             "model": "Gemma 4 31B (Non-reasoning) (NVFP4)",
-            "value": 0.468565,
+            "value": 0.44866,
             "detail_url": "https://artificialanalysis.ai/providers/modular",
             "detail_label": "Provider details"
           },
@@ -1384,7 +1502,7 @@
             "rank": 4,
             "provider": "Celeris",
             "model": "Celeris-1",
-            "value": 0.559324,
+            "value": 0.577157,
             "detail_url": "https://artificialanalysis.ai/providers/celeris",
             "detail_label": "Provider details"
           },
@@ -1392,31 +1510,31 @@
             "rank": 5,
             "provider": "Google",
             "model": "Qwen3 Next 80B A3B Vertex",
-            "value": 0.628367,
+            "value": 0.628012,
             "detail_url": "https://artificialanalysis.ai/providers/google",
             "detail_label": "Provider details"
           },
           {
             "rank": 6,
-            "provider": "Anthropic",
-            "model": "Claude 4.5 Haiku (Non-reasoning)",
-            "value": 0.632662,
-            "detail_url": "https://artificialanalysis.ai/providers/anthropic",
+            "provider": "CoreWeave",
+            "model": "Gemma 4 26B A4B (Non-reasoning)",
+            "value": 0.645397,
+            "detail_url": "https://artificialanalysis.ai/providers/coreweave",
             "detail_label": "Provider details"
           },
           {
             "rank": 7,
-            "provider": "CoreWeave",
-            "model": "Gemma 4 26B A4B (Non-reasoning)",
-            "value": 0.659201,
-            "detail_url": "https://artificialanalysis.ai/providers/coreweave",
+            "provider": "Anthropic",
+            "model": "Claude 4.5 Haiku (Non-reasoning)",
+            "value": 0.657634,
+            "detail_url": "https://artificialanalysis.ai/providers/anthropic",
             "detail_label": "Provider details"
           },
           {
             "rank": 8,
             "provider": "Mistral",
             "model": "Ministral 3 3B",
-            "value": 0.690347,
+            "value": 0.688843,
             "detail_url": "https://artificialanalysis.ai/providers/mistral",
             "detail_label": "Provider details"
           },
@@ -1424,20 +1542,12 @@
             "rank": 9,
             "provider": "Together AI",
             "model": "Qwen3.5 9B (Non-reasoning) (FP8)",
-            "value": 0.760879,
+            "value": 0.747877,
             "detail_url": "https://artificialanalysis.ai/providers/togetherai",
             "detail_label": "Provider details"
           },
           {
             "rank": 10,
-            "provider": "Amazon Bedrock",
-            "model": "Llama 4 Maverick",
-            "value": 0.803976,
-            "detail_url": "https://artificialanalysis.ai/providers/amazon_bedrock",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 11,
             "provider": "Zyphra",
             "model": "MiMo-V2.5-Pro (Non-reasoning)",
             "value": 0.807433,
@@ -1445,47 +1555,63 @@
             "detail_label": "Provider details"
           },
           {
+            "rank": 11,
+            "provider": "Amazon Bedrock",
+            "model": "Llama 4 Maverick",
+            "value": 0.816818,
+            "detail_url": "https://artificialanalysis.ai/providers/amazon_bedrock",
+            "detail_label": "Provider details"
+          },
+          {
             "rank": 12,
-            "provider": "Microsoft Azure",
-            "model": "Phi-4 Multimodal",
-            "value": 0.842508,
-            "detail_url": "https://artificialanalysis.ai/providers/azure",
+            "provider": "LithosAI",
+            "model": "DeepSeek V4.1 Flash (Non-reasoning) (ULTRA CHAT)",
+            "value": 0.828515,
+            "detail_url": "https://artificialanalysis.ai/providers/lithos-ai",
             "detail_label": "Provider details"
           },
           {
             "rank": 13,
-            "provider": "SpaceXAI",
-            "model": "Grok 4.7 (high)",
-            "value": 0.853796,
-            "detail_url": "https://artificialanalysis.ai/providers/xai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 14,
-            "provider": "Novita",
-            "model": "Llama 4 Maverick (FP8)",
-            "value": 0.856301,
-            "detail_url": "https://artificialanalysis.ai/providers/novita",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 15,
-            "provider": "Groq",
-            "model": "Llama 3.3 70B",
-            "value": 0.858893,
-            "detail_url": "https://artificialanalysis.ai/providers/groq",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 16,
             "provider": "OpenAI",
             "model": "GPT-6 Luna (Non-reasoning)",
-            "value": 0.874128,
+            "value": 0.840678,
             "detail_url": "https://artificialanalysis.ai/providers/openai",
             "detail_label": "Provider details"
           },
           {
+            "rank": 14,
+            "provider": "Microsoft Azure",
+            "model": "Phi-4 Multimodal",
+            "value": 0.840998,
+            "detail_url": "https://artificialanalysis.ai/providers/azure",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 15,
+            "provider": "Novita",
+            "model": "Llama 4 Maverick (FP8)",
+            "value": 0.848874,
+            "detail_url": "https://artificialanalysis.ai/providers/novita",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 16,
+            "provider": "Groq",
+            "model": "Llama 3.3 70B",
+            "value": 0.853083,
+            "detail_url": "https://artificialanalysis.ai/providers/groq",
+            "detail_label": "Provider details"
+          },
+          {
             "rank": 17,
+            "provider": "SpaceXAI",
+            "model": "Grok 4.7 (high)",
+            "value": 0.85499,
+            "detail_url": "https://artificialanalysis.ai/providers/xai",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 18,
             "provider": "Databricks",
             "model": "Qwen3 Next 80B A3B",
             "value": 0.885806,
@@ -1493,67 +1619,59 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 18,
+            "rank": 19,
             "provider": "Parasail",
             "model": "Qwen3 Next 80B A3B",
-            "value": 0.892342,
+            "value": 0.915009,
             "detail_url": "https://artificialanalysis.ai/providers/parasail",
             "detail_label": "Provider details"
           },
           {
-            "rank": 19,
+            "rank": 20,
             "provider": "Scaleway",
             "model": "Gemma 4 26B A4B (Non-reasoning)",
-            "value": 0.913353,
+            "value": 0.925566,
             "detail_url": "https://artificialanalysis.ai/providers/scaleway",
             "detail_label": "Provider details"
           },
           {
-            "rank": 20,
-            "provider": "Multiverse Computing",
-            "model": "Qwen3.8 27B",
-            "value": 1.031207,
-            "detail_url": "https://artificialanalysis.ai/providers/multiverse-computing",
-            "detail_label": "Provider details"
-          },
-          {
             "rank": 21,
-            "provider": "Wafer",
-            "model": "Qwen3.8 27B",
-            "value": 1.197081,
-            "detail_url": "https://artificialanalysis.ai/providers/wafer",
+            "provider": "Systalyze",
+            "model": "Gemma 4 26B A4B (Non-reasoning)",
+            "value": 0.998849,
+            "detail_url": "https://artificialanalysis.ai/providers/systalyze",
             "detail_label": "Provider details"
           },
           {
             "rank": 22,
-            "provider": "Makora",
-            "model": "Gemma 4 26B A4B (Non-reasoning)",
-            "value": 1.440892,
-            "detail_url": "https://artificialanalysis.ai/providers/makora",
+            "provider": "Multiverse Computing",
+            "model": "Qwen3.8 27B",
+            "value": 1.036896,
+            "detail_url": "https://artificialanalysis.ai/providers/multiverse-computing",
             "detail_label": "Provider details"
           },
           {
             "rank": 23,
-            "provider": "Cerebras",
-            "model": "gpt-oss-120b (high)",
-            "value": 1.633854,
-            "detail_url": "https://artificialanalysis.ai/providers/cerebras",
+            "provider": "DeepSeek",
+            "model": "DeepSeek V4.1 Flash (Non-reasoning)",
+            "value": 1.160079,
+            "detail_url": "https://artificialanalysis.ai/providers/deepseek",
             "detail_label": "Provider details"
           },
           {
             "rank": 24,
-            "provider": "FriendliAI",
-            "model": "Gemma 4 31B (Non-reasoning)",
-            "value": 1.701432,
-            "detail_url": "https://artificialanalysis.ai/providers/friendli-ai",
+            "provider": "Wafer",
+            "model": "Qwen3.8 27B",
+            "value": 1.20666,
+            "detail_url": "https://artificialanalysis.ai/providers/wafer",
             "detail_label": "Provider details"
           },
           {
             "rank": 25,
-            "provider": "Cohere",
-            "model": "Command A",
-            "value": 1.722443,
-            "detail_url": "https://artificialanalysis.ai/providers/cohere",
+            "provider": "FriendliAI",
+            "model": "Gemma 4 31B (Non-reasoning)",
+            "value": 1.605142,
+            "detail_url": "https://artificialanalysis.ai/providers/friendli-ai",
             "detail_label": "Provider details"
           }
         ]
@@ -1717,6 +1835,14 @@
           },
           {
             "rank": 20,
+            "provider": "Systalyze",
+            "model": "DeepSeek V4 Pro 0813 (max)",
+            "value": 1048576.0,
+            "detail_url": "https://artificialanalysis.ai/providers/systalyze",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 21,
             "provider": "Makora",
             "model": "GLM-5.3 (max)",
             "value": 1048576.0,
@@ -1724,7 +1850,7 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 21,
+            "rank": 22,
             "provider": "DeepSeek",
             "model": "DeepSeek V4 Pro 0813 (max)",
             "value": 1048576.0,
@@ -1732,7 +1858,15 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 22,
+            "rank": 23,
+            "provider": "LithosAI",
+            "model": "DeepSeek V4.1 Flash (Non-reasoning) (FAST)",
+            "value": 1048576.0,
+            "detail_url": "https://artificialanalysis.ai/providers/lithos-ai",
+            "detail_label": "Provider details"
+          },
+          {
+            "rank": 24,
             "provider": "Meta",
             "model": "Muse Spark 1.3 (max)",
             "value": 1048576.0,
@@ -1740,27 +1874,11 @@
             "detail_label": "Provider details"
           },
           {
-            "rank": 23,
-            "provider": "LithosAI",
-            "model": "DeepSeek V4.1 Flash (max) (FAST)",
-            "value": 1048576.0,
-            "detail_url": "https://artificialanalysis.ai/providers/lithos-ai",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 24,
+            "rank": 25,
             "provider": "Xiaomi",
             "model": "MiMo-V2.5-Pro",
             "value": 1000000.0,
             "detail_url": "https://artificialanalysis.ai/providers/xiaomi",
-            "detail_label": "Provider details"
-          },
-          {
-            "rank": 25,
-            "provider": "OpenAI",
-            "model": "GPT-6 Luna (xhigh)",
-            "value": 1000000.0,
-            "detail_url": "https://artificialanalysis.ai/providers/openai",
             "detail_label": "Provider details"
           }
         ]
@@ -1771,7 +1889,7 @@
     "note": "Lines start in 2021 and combine curated source-backed historical records with the latest Artificial Analysis model metadata. Model size tracks the largest open-weight/open-access LLM by total disclosed parameters for each year, so sparse MoE and dense models are not quality-equivalent. Output-token price uses public USD text-token API prices and excludes tool-call, image, audio, video, and subscription pricing.",
     "source_url": "https://artificialanalysis.ai/models",
     "source_label": "Artificial Analysis models",
-    "generated_at_pretty": "September 24, 2026",
+    "generated_at_pretty": "September 25, 2026",
     "start_date": "2021-01-01",
     "end_date": "2026-12-31",
     "default_metric": "model_size",
