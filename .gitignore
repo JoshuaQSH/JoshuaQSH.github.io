@@ -1,5 +1,7 @@
 public/
 .hugo_build.lock
+scripts/__pycache__/
+.cache/ai-research-observatory/
 photo_album_raw/*
 !photo_album_raw/.gitkeep
 !photo_album_raw/README.md

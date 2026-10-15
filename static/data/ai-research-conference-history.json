@@ -1,0 +1,31 @@
+{
+  "reviewed_at": "2026-10-15",
+  "method": "Official organizer counts. Null means no comparable verified count, never zero.",
+  "conferences": [
+    {"id": "neurips", "name": "NeurIPS", "color": "#c33e42"},
+    {"id": "icml", "name": "ICML", "color": "#367580"},
+    {"id": "cvpr", "name": "CVPR", "color": "#be7b26"}
+  ],
+  "counts": [
+    {"venue": "neurips", "year": 2020, "submitted": 9467, "accepted": 1898, "scope": "main conference", "source": "https://neurips.cc/media/Press/NeurIPS_2020-Fact_Sheet.pdf"},
+    {"venue": "neurips", "year": 2021, "submitted": 9122, "accepted": 2334, "scope": "main conference", "source": "https://neurips.cc/media/Press/NeurIPS_2021-Fact_Sheet.pdf"},
+    {"venue": "neurips", "year": 2023, "submitted": 12343, "accepted": 3218, "scope": "main conference track", "source": "https://media.neurips.cc/Conferences/NeurIPS2023/NeurIPS2023-Fact_Sheet.pdf"},
+    {"venue": "neurips", "year": 2024, "submitted": 15671, "accepted": 4037, "scope": "main conference track", "source": "https://media.neurips.cc/Conferences/NeurIPS2024/NeurIPS2024-Fact_Sheet.pdf"},
+    {"venue": "neurips", "year": 2025, "submitted": 21575, "accepted": 5290, "scope": "main track", "source": "https://media.neurips.cc/Conferences/NeurIPS2025/press/NeurIPS2025-Fact_Sheet.pdf"},
+    {"venue": "icml", "year": 2025, "submitted": null, "accepted": 3260, "scope": "main track; submission total unpublished in cited fact sheet", "source": "https://media.icml.cc/Conferences/ICML2025/ICML2025_Fact_Sheet.pdf"},
+    {"venue": "cvpr", "year": 2023, "submitted": 9155, "accepted": 2359, "scope": "main technical program", "source": "https://cvpr.thecvf.com/Conferences/2023/AcceptedPapers"},
+    {"venue": "cvpr", "year": 2024, "submitted": 11532, "accepted": 2719, "scope": "main technical program", "source": "https://cvpr.thecvf.com/Conferences/2024/News/Oral_Papers"},
+    {"venue": "cvpr", "year": 2025, "submitted": 13008, "accepted": 2872, "scope": "main technical program; organizer technical-program release (later wrap-up says 12,008 in apparent error)", "source": "https://cvpr.thecvf.com/Conferences/2025/News/Technical_Program"},
+    {"venue": "cvpr", "year": 2026, "submitted": 16092, "accepted": 4089, "scope": "main technical program", "source": "https://cvpr.thecvf.com/Conferences/2026/News/Technical_Program"}
+  ],
+  "awards": [
+    {"venue": "CVPR", "year": 2026, "award": "Best Paper", "title": "Efficiently Reconstructing Dynamic Scenes One D4RT at a Time", "field": "Computer vision", "topics": ["4D reconstruction", "video", "transformers"], "source": "https://cvpr.thecvf.com/Conferences/2026/News/Best_Papers"},
+    {"venue": "CVPR", "year": 2026, "award": "Best Student Paper", "title": "Native and Compact Structured Latents for 3D Generation", "field": "3D generation", "topics": ["3D generation", "structured latents"], "source": "https://cvpr.thecvf.com/Conferences/2026/News/Best_Papers"},
+    {"venue": "CVPR", "year": 2025, "award": "Best Paper", "title": "VGGT: Visual Geometry Grounded Transformer", "field": "Computer vision", "topics": ["3D reconstruction", "transformers"], "source": "https://cvpr.thecvf.com/Conferences/2025/News/Wrap"},
+    {"venue": "CVPR", "year": 2024, "award": "Best Paper", "title": "Generative Image Dynamics", "field": "Generative vision", "topics": ["image generation", "video"], "source": "https://cvpr.thecvf.com/Conferences/2024/News/Wrap_Release"},
+    {"venue": "NeurIPS", "year": 2025, "award": "Best Paper", "title": "Gated Attention for Large Language Models: Non-linearity, Sparsity, and Attention-Sink-Free", "field": "Language models", "topics": ["attention", "LLMs", "transformers"], "source": "https://blog.neurips.cc/2025/11/26/announcing-the-neurips-2025-best-paper-awards/"},
+    {"venue": "NeurIPS", "year": 2025, "award": "Best Paper", "title": "1000 Layer Networks for Self-Supervised RL: Scaling Depth Can Enable New Goal-Reaching Capabilities", "field": "Reinforcement learning", "topics": ["reinforcement learning", "self-supervision"], "source": "https://blog.neurips.cc/2025/11/26/announcing-the-neurips-2025-best-paper-awards/"},
+    {"venue": "NeurIPS", "year": 2024, "award": "Best Paper", "title": "Visual Autoregressive Modeling: Scalable Image Generation via Next-Scale Prediction", "field": "Generative vision", "topics": ["image generation", "autoregression"], "source": "https://blog.neurips.cc/2024/12/10/announcing-the-neurips-2024-best-paper-awards/"},
+    {"venue": "NeurIPS", "year": 2024, "award": "Best Paper", "title": "Stochastic Taylor Derivative Estimator: Efficient amortization for arbitrary differential operators", "field": "Scientific machine learning", "topics": ["scientific ML", "neural networks"], "source": "https://blog.neurips.cc/2024/12/10/announcing-the-neurips-2024-best-paper-awards/"}
+  ]
+}

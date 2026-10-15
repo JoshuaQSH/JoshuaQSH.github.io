@@ -1,0 +1,56 @@
+{{ define "extra_head" }}
+  <link rel="stylesheet" href="{{ "css/ai-research-tracker.css" | relURL }}" />
+{{ end }}
+
+{{ define "main" }}
+<article class="research-tracker" data-history-url="{{ "data/ai-research-conference-history.json" | relURL }}" data-observatory-url="{{ "data/ai-research-observatory.json" | relURL }}">
+  <header class="research-tracker-head">
+    <p class="research-eyebrow">Research notebook / 2020–present</p>
+    <h1>{{ .Title }}</h1>
+    <p class="meta">Reviewed {{ .Lastmod.Format "Jan 2, 2006" }}</p>
+    <div class="research-intro">{{ .Content }}</div>
+  </header>
+  <p class="research-status" id="research-status" role="status">Loading verified records…</p>
+
+  <section class="research-section" aria-labelledby="conference-title">
+    <div class="research-section-head">
+      <div><p class="research-eyebrow">01 / Conference scale</p><h2 id="conference-title">Submissions & acceptances</h2></div>
+      <label class="research-select">Count to plot
+        <select id="research-count-mode"><option value="both">Both</option><option value="submitted">Submissions</option><option value="accepted">Acceptances</option></select>
+      </label>
+    </div>
+    <p class="research-note">Official main-program figures where available. Lines stop at missing years; dots are individual verified observations. Click a point or use the source table for its scope and organizer citation.</p>
+    <div id="research-count-legend" class="research-legend" aria-label="Conference legend"></div>
+    <div class="research-chart-scroll"><svg id="research-count-chart" class="research-chart" viewBox="0 0 760 310" role="img" aria-label="Conference submissions and acceptances by year from 2020"></svg></div>
+    <p class="research-chart-detail" id="research-count-detail" aria-live="polite">Select a point for its source.</p>
+    <details class="research-sources"><summary>Conference source ledger</summary><div class="research-table-scroll"><table><thead><tr><th>Conference</th><th>Year</th><th>Submitted</th><th>Accepted</th><th>Scope / source</th></tr></thead><tbody id="research-count-rows"></tbody></table></div></details>
+  </section>
+
+  <section class="research-section" aria-labelledby="awards-title">
+    <p class="research-eyebrow">02 / Recognized work</p>
+    <h2 id="awards-title">Best & outstanding paper themes</h2>
+    <p class="research-note">Editorial topic labels for selected organizer-confirmed awards, not a complete award census. Cloud size counts mentions in the selected papers only.</p>
+    <div id="research-cloud" class="research-cloud" aria-label="Keyword cloud of selected award papers"></div>
+    <div id="research-awards" class="research-awards"></div>
+  </section>
+
+  <section class="research-section" aria-labelledby="topic-title">
+    <div class="research-section-head">
+      <div><p class="research-eyebrow">03 / Research directions</p><h2 id="topic-title">Industry & academia</h2></div>
+      <label class="research-select">Title keyword
+        <select id="research-topic"><option value="language">Language models</option><option value="vision">Vision & image</option><option value="systems">Systems & accelerators</option><option value="learning">Learning & optimization</option></select>
+      </label>
+    </div>
+    <p class="research-note">Share of tracked papers with this term in the title, within each sector and year. Industry and University are first-author affiliation labels. The OpenAlex sample is capped and uneven across venues, so these lines describe the sample, not the field.</p>
+    <div class="research-legend"><span><i class="research-key research-industry"></i>Industry</span><span><i class="research-key research-academia"></i>University</span></div>
+    <div class="research-chart-scroll"><svg id="research-topic-chart" class="research-chart" viewBox="0 0 760 280" role="img" aria-label="Topic keyword share among tracked industry and university papers"></svg></div>
+    <p class="research-chart-detail" id="research-topic-detail"></p>
+  </section>
+
+  <footer class="research-next">
+    <div><p class="research-eyebrow">Continue the investigation</p><h2>AI Research Observatory</h2><p>Explore the underlying papers, affiliations, impact scores, coverage gaps and review evidence.</p><a href="{{ "hodgepodge/ai-research-observatory/" | relURL }}">Open the Observatory →</a></div>
+    <a class="research-map-link" href="{{ "hodgepodge/ai-research-observatory/" | relURL }}" aria-label="Open AI Research Observatory"><img src="{{ "images/ai-research-observatory/world.svg" | relURL }}" alt="World map used by the AI Research Observatory" loading="lazy" /></a>
+  </footer>
+</article>
+<script defer src="{{ "js/ai-research-tracker.js" | relURL }}"></script>
+{{ end }}

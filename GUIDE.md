@@ -451,6 +451,10 @@ Then open the page locally:
 /hodgepodge/coffee-wall/
 ```
 
+## AI Research Tracker
+
+The pinned [research tracker](content/posts/ai-research-tracker.md) uses organizer-verified conference counts and awards from `static/data/ai-research-conference-history.json`. Add or correct a record there only after checking the linked organizer source and track scope; use `null` for unverified counts. Its industry/academia keyword trend comes from `static/data/ai-research-observatory.json`, refreshed by `python3 scripts/refresh_ai_research_observatory.py`. For evidence-backed paper exclusions/additions and the full update checklist, read [the Observatory guide](docs/AI_RESEARCH_OBSERVATORY.md).
+
 ## Don't Starve Menu Guide
 
 The food menu is driven by a content file, a data file, and the food-menu image folder:

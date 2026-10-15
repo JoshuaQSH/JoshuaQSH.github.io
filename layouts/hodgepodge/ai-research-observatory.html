@@ -1,0 +1,85 @@
+{{ define "extra_head" }}
+  <link rel="stylesheet" href="{{ "/css/ai-research-observatory.css" | relURL }}" />
+{{ end }}
+
+{{ define "main" }}
+<div class="aro" id="observatory" data-snapshot="{{ "/data/ai-research-observatory.json" | relURL }}">
+  <header class="aro-intro">
+    <div class="aro-eyebrow">HODGEPODGE / RESEARCH NOTES / 2020–PRESENT</div>
+    <h1>AI Research<br><em>Observatory</em></h1>
+    <p class="aro-deck">Industry vs Academia. Who publishes, who collaborates, and whose work is cited?</p>
+    <div class="aro-status" id="aro-status" role="status">Loading the publication snapshot…</div>
+  </header>
+
+  <section class="aro-caveat" aria-label="Coverage notice">
+    <strong>Read this first: a tracked sample, not all accepted papers.</strong>
+    <span>OpenAlex source matches, affiliation metadata, and a per-venue-year collection cap limit what we can infer. The observed shares below cannot establish whether industry dominates AI research overall. <a href="#aro-method">Method and coverage</a></span>
+  </section>
+
+  <div class="aro-controls" aria-label="Shared paper filters">
+    <label>Year <select id="aro-year"><option value="">All years</option></select></label>
+    <label>Area <select id="aro-area"><option value="">All areas</option></select></label>
+    <label>Venue <select id="aro-venue"><option value="">All venues</option></select></label>
+    <label>Sector <select id="aro-sector"><option value="">All sectors</option><option>Industry</option><option>University</option><option>Research Institute</option><option>Joint</option><option>Mixed</option><option>Unknown</option></select></label>
+    <label>Country <select id="aro-country"><option value="">All countries</option></select></label>
+    <button type="button" class="aro-reset" id="aro-reset">Reset filters</button>
+  </div>
+
+  <section class="aro-stats" aria-label="Observed sample statistics">
+    <div><span class="aro-stat-value" id="aro-paper-count">—</span><span>tracked papers</span></div>
+    <div><span class="aro-stat-value" id="aro-institution-count">—</span><span>named institutions</span></div>
+    <div><span class="aro-stat-value" id="aro-industry-share">—</span><span>industry first authors*</span></div>
+    <div><span class="aro-stat-value" id="aro-university-share">—</span><span>university first authors*</span></div>
+    <div><span class="aro-stat-value" id="aro-impact-share">—</span><span>industry scored impact*</span></div>
+    <div><span class="aro-stat-value" id="aro-year-change">—</span><span>latest yearly count change*</span></div>
+  </section>
+  <p class="aro-footnote">* Among classified/scorable records in the filtered sample. Yearly counts and citations depend on collection and citation lag.</p>
+  <p class="aro-footnote" id="aro-leadership-note"></p>
+
+  <section class="aro-workbench" aria-labelledby="aro-workbench-title">
+    <div class="aro-section-heading"><div><div class="aro-eyebrow">01 / INFLUENCE</div><h2 id="aro-workbench-title">Research influence</h2></div><p>Mean paper score, 0–6. Team sector reflects observed affiliations, not project leadership.</p></div>
+    <div class="aro-chart-row">
+      <div class="aro-chart-area"><h3>Sector comparison</h3><div class="aro-chart" id="aro-sector-chart" role="img" aria-label="Mean paper scores by team sector"></div><div class="aro-chart-note" id="aro-sector-note"></div></div>
+      <div class="aro-chart-area"><h3>Publication trajectory</h3><label class="aro-inline-label">Measure <select id="aro-trend-mode"><option value="count">Tracked papers</option><option value="share">Share of classified papers</option><option value="impact">Scored impact contribution</option></select></label><div class="aro-chart" id="aro-trend-chart" role="img" aria-label="Yearly papers by first-author sector"></div><div class="aro-legend"><span class="industry">Industry</span><span class="university">University</span><span class="research">Research institute</span></div></div>
+    </div>
+    <details class="aro-weights"><summary>Adjust score weights and evidence threshold</summary><div class="aro-weight-grid">
+      <label>Citation percentile <input id="aro-w-citation" type="range" min="0" max="100" value="55"><output for="aro-w-citation">55%</output></label>
+      <label>Verified venue rank <input id="aro-w-venue" type="range" min="0" max="100" value="25"><output for="aro-w-venue">25%</output></label>
+      <label>Reviewed paper award <input id="aro-w-award" type="range" min="0" max="100" value="15"><output for="aro-w-award">15%</output></label>
+      <label>Reviewed public code <input id="aro-w-code" type="range" min="0" max="100" value="5"><output for="aro-w-code">5%</output></label>
+    </div><p>Available verified components are renormalized. A score appears only if at least two components cover at least 55% of the selected weight. An unreviewed award or repository is unknown, not zero.</p></details>
+  </section>
+
+  <section class="aro-geography" aria-labelledby="aro-map-title">
+    <div class="aro-section-heading"><div><div class="aro-eyebrow">02 / GEOGRAPHY</div><h2 id="aro-map-title">Where first authors work</h2></div><p>Paper-affiliation countries, not nationality. Multiple countries divide one paper equally.</p></div>
+    <div class="aro-map-layout"><div class="aro-map" id="aro-map" role="group" aria-label="World map of observed first-author affiliation countries"></div><div class="aro-map-list" id="aro-map-list"></div></div>
+    <div class="aro-legend aro-map-legend"><span class="industry">Industry</span><span class="university">University</span><span class="research">Research institute</span><span class="neutral">Unknown / tied</span><small>Marker color = most frequent classified first-author sector in the filtered sample.</small></div>
+    <div class="aro-institutions"><h3>Institutions in this selection</h3><div id="aro-institution-list"></div></div>
+  </section>
+
+  <section class="aro-milestones" aria-labelledby="aro-milestones-title">
+    <div class="aro-section-heading"><div><div class="aro-eyebrow">03 / CONTEXT</div><h2 id="aro-milestones-title">Milestones, not causes</h2></div><p>Selected model releases and this paper sample share a timeline. No causal relationship is implied.</p></div>
+    <div class="aro-milestone-list" id="aro-milestone-list"></div>
+  </section>
+
+  <section class="aro-papers" aria-labelledby="aro-papers-title">
+    <div class="aro-section-heading"><div><div class="aro-eyebrow">04 / SOURCE RECORDS</div><h2 id="aro-papers-title">Paper ledger</h2></div><p>Open a record for its classification, score components, citations, and provenance.</p></div>
+    <div class="aro-table-actions"><label class="aro-search">Search papers or institutions <input id="aro-search" type="search" placeholder="Title, author, institution…"></label><label>Sort <select id="aro-sort"><option value="score">Score, high to low</option><option value="citations">Citations, high to low</option><option value="newest">Newest first</option><option value="title">Title A–Z</option></select></label><button id="aro-export-csv" type="button">CSV ↓</button><button id="aro-export-json" type="button">JSON ↓</button></div>
+    <div class="aro-table-wrap"><table><thead><tr><th>Paper</th><th>Venue · year</th><th>First-author sector</th><th>Country</th><th>Team</th><th>Leadership</th><th>Compute evidence</th><th>Citations</th><th>Score</th></tr></thead><tbody id="aro-table-body"></tbody></table></div>
+    <div class="aro-pagination"><span id="aro-page-status"></span><button id="aro-prev" type="button">Previous</button><button id="aro-next" type="button">Next</button></div>
+  </section>
+
+  <section class="aro-method" id="aro-method" aria-labelledby="aro-method-title">
+    <div class="aro-eyebrow">05 / METHOD</div><h2 id="aro-method-title">What this can, and cannot, tell us</h2>
+    <p>The snapshot uses <a href="https://openalex.org/">OpenAlex</a> metadata for six source-identified conference series, with venue inclusion checked against <a href="https://portal.core.edu.au/conf-ranks/">CORE</a> or <a href="https://www.ccf.org.cn/Academic_Evaluation/By_category/">CCF</a>. It samples up to 25 earliest-dated OpenAlex conference-paper records per venue-year. Source mapping, paper type, regular-track status, topic relevance, and affiliations can be wrong or incomplete. Broad-venue papers pass a disclosed AI-keyword rule; AI-native venues are included by source match. Counts are <strong>not</strong> conference acceptance totals.</p>
+    <p>First-author sector comes from paper-specific affiliation types. A cross-sector team is not automatically jointly <em>led</em>. Leadership, funding, compute, awards, and code remain unknown until a sourced review is committed. Technical reports outside proceedings are excluded, including many frontier-model releases. Citation percentile is OpenAlex's field/year-normalized signal; citation counts can change and recent papers have less time to accrue them. Review the <a href="https://github.com/JoshuaQSH/JoshuaQSH.github.io/blob/master/docs/AI_RESEARCH_OBSERVATORY.md">reproducibility notes</a> and <a href="https://github.com/JoshuaQSH/JoshuaQSH.github.io/blob/master/data/ai_research_observatory/reviews.json">review file</a>.</p>
+    <details><summary>Venue-year coverage</summary><div id="aro-coverage"></div></details>
+  </section>
+  <dialog id="aro-detail" aria-labelledby="aro-detail-title"><button type="button" id="aro-detail-close" class="aro-detail-close" aria-label="Close paper detail">×</button><div id="aro-detail-content"></div></dialog>
+</div>
+{{ end }}
+
+{{ define "extra_scripts" }}
+  <script defer src="{{ "/js/ai-research-observatory-core.js" | relURL }}"></script>
+  <script defer src="{{ "/js/ai-research-observatory.js" | relURL }}"></script>
+{{ end }}
