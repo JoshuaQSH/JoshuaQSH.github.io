@@ -89,6 +89,30 @@ class RelevanceTests(unittest.TestCase):
         abstract = "We train and evaluate large language models."
         self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], "matched")
 
+    def test_previous_studies_after_and_do_not_confirm_generic_gpu_title(self):
+        paper = row("GPU Scheduling in Datacenters")
+        abstract = "We use a GPU scheduler and previous studies use large language models."
+        self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], "unresolved")
+
+    def test_explicit_alternate_subject_near_misses(self):
+        paper = row("GPU Scheduling in Datacenters")
+        cases = (
+            ("We use a GPU scheduler and prior studies use large language models.", "unresolved"),
+            ("We use a GPU scheduler and other work uses large language models.", "unresolved"),
+            ("We use a GPU scheduler and related research uses large language models.", "unresolved"),
+            ("We use a GPU scheduler and previous papers use large language models.", "unresolved"),
+            ("We use a GPU scheduler and the previous studies use large language models.", "unresolved"),
+            ("We use a GPU scheduler and other researchers use large language models.", "unresolved"),
+            ("We train and evaluate large language models.", "matched"),
+            ("We train and use large language models.", "matched"),
+            ("We train GPUs and our system evaluates large language models.", "matched"),
+            ("We train large language models and previous studies use GPUs.", "matched"),
+            ("We train large language models and do not evaluate them.", "matched"),
+        )
+        for abstract, expected in cases:
+            with self.subTest(abstract=abstract):
+                self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], expected)
+
     def test_abstract_clause_boundary_near_misses(self):
         paper = row("GPU Scheduling in Datacenters")
         cases = (

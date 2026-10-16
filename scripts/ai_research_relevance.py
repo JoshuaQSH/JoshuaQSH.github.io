@@ -37,7 +37,9 @@ _SCOPE_EXCLUSION = re.compile(r"\b(?:outside (?:the )?scope|out of scope|beyond 
 _SHORT_AI_REFERENCE = re.compile(r"\b(?:ai|ml)\b", re.I)
 _CLAUSE_BREAK = re.compile(r"[.!?;,:()\[\]{}]+|[\u2013\u2014]+|"
                            r"\b(?:but|while|whereas|although|however)\b|"
-                           r"\band\s+(?=(?:we\s+)?(?:do\s+not|never|avoid\w*))|"
+                           r"\band\s+(?=(?:we\s+)?(?:do\s+not|never|avoid\w*)|"
+                           r"(?:the\s+)?(?:previous|prior|related|other)\s+"
+                           r"(?:studies|study|work|research|papers?|researchers?)\b)|"
                            r"\b(?:related|prior) work\b", re.I)
 
 
