@@ -619,19 +619,26 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
             paper["review"] = {"evidence_url": review["evidence_url"], "reviewer": review.get("reviewer"), "date": review.get("date"), "note": review.get("review_note")}
         if previous_paper and paper.get("repository_url") == previous_paper.get("repository_url") and not paper.get("github"):
             paper["github"] = previous_paper.get("github")
+        if (previous_paper and paper.get("repository_url")
+                and paper["repository_url"] == previous_paper.get("repository_url")
+                and previous_paper.get("repository_access_status") == "unavailable"):
+            paper["repository_access_status"] = "unavailable"
+            paper["repository_checked_at"] = previous_paper.get("repository_checked_at")
         result.append(paper)
     token = os.getenv("GITHUB_TOKEN", "").strip()
     checked = {}
-    failed_slugs = set()
+    failed_slugs = {}
     verified_slugs = set()
     fetched = 0
     for paper in sorted(result, key=lambda p: (not bool(p.get("review") and p.get("repository_url")), p.get("github") is not None, -(p.get("year") or 0))):
-        paper["repository_access_status"] = "unknown"
+        if paper.get("repository_access_status") != "unavailable":
+            paper["repository_access_status"] = "unknown"
         slug = repo_slug(paper.get("repository_url"))
         if not slug:
             continue
         if slug in failed_slugs:
             paper["github"] = None
+            paper["repository_access_status"], paper["repository_checked_at"] = failed_slugs[slug]
             continue
         if slug in checked:
             paper["github"] = checked[slug]
@@ -643,6 +650,9 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
             age = (datetime.now(timezone.utc) - datetime.fromisoformat(prior_info["checked_at"])).days if prior_info else 9999
         except (KeyError, ValueError, TypeError):
             age = 9999
+        if age < 14 and type(prior_info.get("stars")) is int and prior_info["stars"] >= 0:
+            paper["repository_access_status"] = "accessible"
+            verified_slugs.add(slug)
         if age >= 14 and fetched < github_cap:
             try:
                 paper["github"] = fetch_github_metadata(paper["repository_url"], token)
@@ -652,11 +662,18 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
             except Exception as exc:
                 print(f"WARNING: GitHub {slug}: {exc}", file=sys.stderr)
                 paper["github"] = None
-                paper["repository_checked_at"] = datetime.now(timezone.utc).isoformat()
-                failed_slugs.add(slug)
+                checked_at = datetime.now(timezone.utc).isoformat()
+                paper["repository_checked_at"] = checked_at
+                paper["repository_access_status"] = "unavailable" if isinstance(exc, HTTPError) and exc.code == 404 else "unknown"
+                failed_slugs[slug] = (paper["repository_access_status"], checked_at)
                 fetched += 1
         if paper.get("github"):
             checked[slug] = paper["github"]
+    for paper in result:
+        if paper.get("repository_access_status") == "accessible" and paper.get("code_available") is not False and (paper.get("code_url") or paper.get("repository_url")):
+            paper["code_available"] = True
+        elif paper.get("repository_access_status") == "unavailable" and paper.get("code_available") is True:
+            paper["code_available"] = None
     result.sort(key=lambda p: (p.get("year") or 0, p.get("citations") or 0), reverse=True)
     for row in coverage.values():
         if row["venue_id"] in cross_area_rules:

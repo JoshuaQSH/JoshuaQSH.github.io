@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from datetime import datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 from urllib.error import HTTPError
@@ -102,6 +103,26 @@ class ObservatoryTests(unittest.TestCase):
                 "bibliography_total": 4, "scanned_count": 4, "status": status,
                 "track_scope": "OSDI main research papers", "source_urls": ["https://dblp.org/streams/conf/osdi"],
                 "checked_at": "2026-10-16T00:00:00+00:00", "gap_reason": None if status == "verified" else "not reconciled"}
+
+    @contextmanager
+    def github_fixture(self, papers):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            venues, reviews, output = (root / name for name in ("venues.json", "reviews.json", "snapshot.json"))
+            venues.write_text(json.dumps([{**VENUE, "id": "icml", "name": "ICML", "ai_native": True}]))
+            reviews.write_text("{}")
+            output.write_text(json.dumps({"papers": papers, "coverage": []}))
+            with patch.multiple(pipeline, VENUES=venues, REVIEWS=reviews, OUTPUT=output), \
+                 patch.object(pipeline, "fetch_official_index", side_effect=TimeoutError("timeout")):
+                yield output
+
+    @staticmethod
+    def linked_paper(suffix, **changes):
+        url = f"https://proceedings.mlr.press/v267/{suffix}.html"
+        return {"id": url, "title": f"LLM Inference {suffix}", "year": 2025, "venue_id": "icml",
+                "source": "PMLR", "url": url, "repository_url": "https://github.com/org/repo",
+                "repository_association_status": "paper-source", "repository_evidence_url": url,
+                "code_url": "https://github.com/org/repo", "code_available": True, **changes}
 
     def test_cross_area_scans_all_rows_before_sampling_and_ignores_abstract_claim(self):
         rows = [self.bibliography_row("GPU Scheduling in Datacenters", "one", "10.1145/1"),
@@ -433,28 +454,108 @@ class ObservatoryTests(unittest.TestCase):
             self.assertEqual(json.loads(output.read_text())["coverage"], [])
             self.assertEqual(pipeline.OUTPUT.read_bytes(), committed)
 
-    def test_github_404_keeps_paper_but_clears_live_metrics(self):
+    def test_github_404_marks_all_linked_papers_unavailable_without_erasing_links(self):
         repo = "https://github.com/org/repo"
-        paper_url = "https://proceedings.mlr.press/v267/paper.html"
-        venue = {**VENUE, "id": "icml", "name": "ICML", "ai_native": True}
-        old_paper = {"id": paper_url, "title": "LLM Inference", "year": 2025, "venue_id": "icml",
-                     "source": "PMLR", "url": paper_url, "repository_url": repo,
-                     "github": {"stars": 42, "pushed_at": "2026-01-01T00:00:00Z",
-                                "checked_at": "2026-01-01T00:00:00+00:00"}}
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            venues, reviews, output = (root / name for name in ("venues.json", "reviews.json", "snapshot.json"))
-            venues.write_text(json.dumps([venue])); reviews.write_text("{}")
-            output.write_text(json.dumps({"papers": [old_paper], "coverage": []}))
-            with patch.multiple(pipeline, VENUES=venues, REVIEWS=reviews, OUTPUT=output), \
-                 patch.object(pipeline, "fetch_official_index", side_effect=TimeoutError("timeout")), \
-                 patch.object(pipeline, "fetch_github_metadata", side_effect=HTTPError(repo, 404, "Not found", None, None)):
+        prior = {"stars": 42, "pushed_at": "2026-01-01T00:00:00Z",
+                 "checked_at": "2026-01-01T00:00:00+00:00"}
+        originals = [self.linked_paper("one", github=prior), self.linked_paper("two")]
+        with self.github_fixture(originals) as output, \
+             patch.object(pipeline, "fetch_github_metadata", side_effect=HTTPError(repo, 404, "Not found", None, None)) as fetch:
+            pipeline.refresh(2025, 2025, 2, official_cap=1, github_cap=1, skip_openalex=True)
+            papers = json.loads(output.read_text())["papers"]
+        self.assertEqual(fetch.call_count, 1)
+        self.assertEqual({paper["id"] for paper in papers}, {paper["id"] for paper in originals})
+        for paper in papers:
+            self.assertEqual(paper["repository_access_status"], "unavailable")
+            self.assertIsNone(paper["github"])
+            self.assertIsNone(paper["code_available"])
+            self.assertEqual(paper["code_url"], repo)
+            self.assertEqual(paper["repository_url"], repo)
+            self.assertEqual(paper["repository_association_status"], "paper-source")
+            self.assertTrue(paper["repository_checked_at"])
+
+    def test_github_rate_limit_and_timeout_do_not_claim_unavailable(self):
+        repo = "https://github.com/org/repo"
+        failures = [HTTPError(repo, 429, "Rate limited", None, None), TimeoutError("timeout")]
+        for failure in failures:
+            with self.subTest(failure=type(failure).__name__), self.github_fixture([self.linked_paper("one")]) as output, \
+                 patch.object(pipeline, "fetch_github_metadata", side_effect=failure):
                 pipeline.refresh(2025, 2025, 1, official_cap=1, github_cap=1, skip_openalex=True)
+                paper = json.loads(output.read_text())["papers"][0]
+            self.assertEqual(paper["repository_access_status"], "unknown")
+            self.assertIsNone(paper["github"])
+
+    def test_interleaved_github_failures_keep_each_slugs_check_time(self):
+        first_repo, second_repo = "https://github.com/org/repo", "https://github.com/org/other"
+        originals = [self.linked_paper("one"),
+                     self.linked_paper("two", repository_url=second_repo, code_url=second_repo),
+                     self.linked_paper("three")]
+        class DistinctCheckTimes(datetime):
+            ticks = 0
+
+            @classmethod
+            def now(cls, tz=None):
+                cls.ticks += 1
+                return datetime.now(tz) + timedelta(seconds=cls.ticks)
+
+        def fail_by_repo(url, token):
+            code = 404 if url == first_repo else 429
+            raise HTTPError(url, code, "failed", None, None)
+
+        with self.github_fixture(originals) as output, \
+             patch.object(pipeline, "datetime", DistinctCheckTimes), \
+             patch.object(pipeline, "fetch_github_metadata", side_effect=fail_by_repo) as fetch:
+            pipeline.refresh(2025, 2025, 3, official_cap=1, github_cap=2, skip_openalex=True)
+            refreshed = {paper["id"]: paper for paper in json.loads(output.read_text())["papers"]}
+        self.assertEqual(fetch.call_count, 2)
+        first, second, duplicate = (refreshed[paper["id"]] for paper in originals)
+        self.assertEqual((first["repository_access_status"], second["repository_access_status"],
+                          duplicate["repository_access_status"]), ("unavailable", "unknown", "unavailable"))
+        self.assertEqual(first["repository_checked_at"], duplicate["repository_checked_at"])
+        self.assertNotEqual(first["repository_checked_at"], second["repository_checked_at"])
+
+    def test_prior_github_404_survives_fresh_paper_link_without_recheck(self):
+        prior = self.linked_paper("one", code_available=None, repository_access_status="unavailable",
+                                  repository_checked_at="2026-10-15T00:00:00+00:00")
+        raw = [{"title": prior["title"], "url": prior["url"], "first_author": "Ada",
+                "code_url": prior["code_url"]}]
+        with self.github_fixture([prior]) as output, \
+             patch.object(pipeline, "fetch_official_index", return_value=(raw, "2026-10-16T00:00:00+00:00")), \
+             patch.object(pipeline, "fetch_github_metadata") as fetch:
+            pipeline.refresh(2025, 2025, 1, official_cap=1, github_cap=0, skip_openalex=True)
             paper = json.loads(output.read_text())["papers"][0]
-        self.assertEqual(paper["repository_access_status"], "unknown")
-        self.assertIsNone(paper["github"])
-        self.assertEqual(paper["id"], paper_url)
-        self.assertTrue(paper["repository_checked_at"])
+        fetch.assert_not_called()
+        self.assertEqual(paper["repository_access_status"], "unavailable")
+        self.assertIsNone(paper["code_available"])
+        self.assertEqual(paper["repository_checked_at"], prior["repository_checked_at"])
+        self.assertEqual(paper["code_url"], prior["code_url"])
+
+    def test_recent_github_snapshot_retains_accessible_status_without_refetch(self):
+        recent = {"url": "https://github.com/org/repo", "stars": 23, "pushed_at": "2026-10-01T00:00:00Z",
+                  "checked_at": pipeline.datetime.now(pipeline.timezone.utc).isoformat(), "archived": False, "fork": False}
+        with self.github_fixture([self.linked_paper("one", github=recent, code_available=None)]) as output, \
+             patch.object(pipeline, "fetch_github_metadata") as fetch:
+            pipeline.refresh(2025, 2025, 1, official_cap=1, github_cap=1, skip_openalex=True)
+            paper = json.loads(output.read_text())["papers"][0]
+        fetch.assert_not_called()
+        self.assertEqual(paper["repository_access_status"], "accessible")
+        self.assertEqual(paper["github"], recent)
+        self.assertIs(paper["code_available"], True)
+
+    def test_github_recovery_restores_linked_code_but_not_reviewed_false(self):
+        repo = "https://github.com/org/repo"
+        prior = {"repository_access_status": "unavailable", "code_available": None}
+        papers = [self.linked_paper("one", **prior), self.linked_paper("two", code_available=False)]
+        current = {"url": repo, "stars": 23, "pushed_at": "2026-10-01T00:00:00Z",
+                   "checked_at": "2026-10-16T00:00:00+00:00", "archived": False, "fork": False}
+        with self.github_fixture(papers) as output, \
+             patch.object(pipeline, "fetch_github_metadata", return_value=current) as fetch:
+            pipeline.refresh(2025, 2025, 2, official_cap=1, github_cap=1, skip_openalex=True)
+            refreshed = {paper["id"]: paper for paper in json.loads(output.read_text())["papers"]}
+        self.assertEqual(fetch.call_count, 1)
+        self.assertEqual({paper["repository_access_status"] for paper in refreshed.values()}, {"accessible"})
+        self.assertIs(refreshed[papers[0]["id"]]["code_available"], True)
+        self.assertIs(refreshed[papers[1]["id"]]["code_available"], False)
 
     def test_missing_index_source_is_explicit_not_zero(self):
         with tempfile.TemporaryDirectory() as directory:

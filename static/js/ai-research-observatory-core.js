@@ -21,6 +21,8 @@
     if (name === "adoption") return paper.adoption_evidence_url
       ? ({ integration: .6, pilot: .35, production: 1 }[paper.adoption_status] ?? null) : null;
     const raw = paper[COMPONENTS[name]];
+    if (name === "code" && raw === true && /^https:\/\/github\.com\//i.test(paper.repository_url || "")
+      && paper.repository_access_status !== "accessible") return null;
     return (name === "award" || name === "code") && typeof raw === "boolean" ? Number(raw) : raw;
   }
   function omissionReason(paper, name, now) {
@@ -41,6 +43,10 @@
     }
     if (name === "adoption") return paper.adoption_evidence_url
       ? "Adoption status unknown" : "Adoption evidence not reviewed";
+    if (name === "code" && /^https:\/\/github\.com\//i.test(paper.repository_url || "")) {
+      if (paper.repository_access_status === "unavailable") return "GitHub repository unavailable at last check";
+      if (paper.repository_access_status !== "accessible") return "GitHub repository access not verified";
+    }
     return ({ citation: "Citation percentile unavailable", venue: "Venue prestige unavailable",
       award: "Award status not reviewed", code: "Code availability not reviewed" })[name] || "Component unavailable";
   }

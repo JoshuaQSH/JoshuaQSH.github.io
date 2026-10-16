@@ -386,7 +386,8 @@ class RepositoryEvidenceTests(unittest.TestCase):
             paper = json.loads(output.read_text())["papers"][0]
             self.assertEqual(paper["repository_url"], repo_url)
             self.assertEqual(paper["repository_association_status"], "reviewed")
-            self.assertEqual(paper["repository_access_status"], "unknown")
+            self.assertEqual(paper["repository_access_status"], "unavailable")
+            self.assertIsNone(paper["code_available"])
             self.assertIsNone(paper["github"])
 
     def test_failed_shared_repository_check_clears_stale_metrics_for_each_paper(self):

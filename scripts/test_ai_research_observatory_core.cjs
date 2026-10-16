@@ -23,6 +23,17 @@ assert.equal(unknown.breakdown.find(row => row.name === 'code').value, null);
 assert.equal(unknown.breakdown.find(row => row.name === 'code').contribution, null);
 assert.match(unknown.breakdown.find(row => row.name === 'code').reason, /not reviewed|unknown/i);
 assert.equal(Object.hasOwn(unknown.components, 'code'), false);
+const linkedCode = { citation_percentile: .8, prestige: 1, code_available: true,
+  code_url: 'https://github.com/org/repo', repository_url: 'https://github.com/org/repo' };
+for (const status of ['unknown', 'unavailable']) {
+  const result = core.score({ ...linkedCode, repository_access_status: status }, weights);
+  assert.equal(result.components.code, undefined);
+  assert.equal(result.breakdown.find(row => row.name === 'code').included, false);
+  assert.match(result.breakdown.find(row => row.name === 'code').reason, /GitHub repository/i);
+}
+assert.equal(core.score({ ...linkedCode, repository_access_status: 'accessible' }, weights).components.code, 1);
+assert.equal(core.score({ ...linkedCode, code_available: false, repository_access_status: 'unknown' }, weights).components.code, 0);
+assert.equal(core.score({ ...linkedCode, repository_url: null }, weights).components.code, 1);
 assert.equal(core.score({ prestige: 1 }, weights).value, null);
 const zeroWeights = core.score(reviewed, Object.fromEntries(Object.keys(weights).map(key => [key, 0])));
 assert.deepEqual(zeroWeights, { value: null, coverage: 0, components: {}, breakdown: [] });

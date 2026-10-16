@@ -324,7 +324,12 @@
     detailRow(dl, "Citations", paper.citations == null ? null : number(paper.citations)); detailRow(dl, "Citation percentile", paper.citation_percentile == null ? null : paper.citation_percentile.toFixed(3));
     detailRow(dl, "Venue ranking", `${paper.ranking.ranking_scheme} ${paper.ranking.edition} ${paper.ranking.rank}`);
     detailRow(dl, "Award", paper.award === null ? null : paper.award ? "Verified award" : "Reviewed: no award");
-    detailRow(dl, "Public code", paper.code_available == null ? null : paper.code_available ? "Linked in proceedings or reviewed" : "Reviewed: unavailable");
+    const codeStatus = paper.code_available === false ? "Reviewed: unavailable"
+      : paper.repository_access_status === "unavailable" && paper.repository_url ? "Paper-linked repository unavailable at last check"
+      : paper.repository_access_status !== "accessible" && paper.repository_url ? "Paper-linked repository; current access unverified"
+      : paper.code_available === true && paper.repository_url ? "Repository accessible at last check"
+      : paper.code_available === true ? "Linked in proceedings or reviewed" : null;
+    detailRow(dl, "Public code", codeStatus);
     detailRow(dl, "GitHub repository", paper.repository_url ? paper.repository_url.replace("https://github.com/", "") : null);
     detailRow(dl, "GitHub stars", paper.github?.stars == null ? null : `${number(paper.github.stars)} · checked ${paper.github.checked_at.slice(0, 10)}`);
     detailRow(dl, "Latest repo push", paper.github?.pushed_at ? `${paper.github.pushed_at.slice(0, 10)}${paper.github.archived ? " · archived" : ""}` : null);
