@@ -73,6 +73,7 @@ assert.equal(publicationShare.find(row => row.year === 2025).University, 0);
 assert.equal(publicationShare.find(row => row.year === 2026).Industry, null);
 assert.equal(publicationShare.find(row => row.year === 2026).University, null);
 assert.equal(publicationShare.find(row => row.year === 2026).classifiedCount, 0);
+assert.equal(core.trend(publicationPapers, weights, 'growth', 2026).find(row => row.year === 2026).Industry, null);
 
 const publicationGrowth = core.trend(publicationPapers, weights, 'growth', 2026);
 assert.equal(publicationGrowth.find(row => row.year === 2025).Industry, 50);

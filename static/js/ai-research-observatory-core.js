@@ -82,7 +82,7 @@
           ? row[sector] / row.classifiedCount * 100 : null;
         if (mode === "growth") {
           const previous = counts[index - 1]?.[sector];
-          result[sector] = row[sector] !== null && previous > 0
+          result[sector] = row[sector] !== null && row.classifiedCount > 0 && previous > 0
             ? (row[sector] - previous) / previous * 100 : null;
         }
       }
