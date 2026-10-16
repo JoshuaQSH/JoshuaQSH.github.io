@@ -61,22 +61,31 @@
         mean: scored.length ? scored.reduce((a, b) => a + b, 0) / scored.length : null };
     });
   }
-  function trend(papers, weights, mode, lastCoveredYear) {
+  function trend(papers, weights, mode, lastCoveredYear, usableYears) {
     const endYear = lastCoveredYear || Math.max(2020, ...papers.map(p => p.year || 2020));
     const years = Array.from({ length: endYear - 2019 }, (_, i) => 2020 + i);
     const sectors = ["Industry", "University", "Research Institute"];
-    return years.map(year => {
+    const counts = years.map(year => {
       const yearPapers = papers.filter(p => p.year === year);
-      const result = { year };
       const classified = yearPapers.filter(p => sectors.includes(p.first_author_sector));
-      const impactTotal = classified.reduce((sum, p) => sum + (score(p, weights).value || 0), 0);
+      const result = { year, count: yearPapers.length, classifiedCount: classified.length };
       for (const sector of sectors) {
-        const members = classified.filter(p => p.first_author_sector === sector);
-        result[sector] = mode === "share" ? (classified.length ? members.length / classified.length * 100 : 0)
-          : mode === "impact" ? (impactTotal ? members.reduce((sum, p) => sum + (score(p, weights).value || 0), 0) / impactTotal * 100 : 0)
-          : members.length;
+        result[sector] = usableYears && !usableYears.has(year) ? null
+          : classified.filter(p => p.first_author_sector === sector).length;
       }
-      result.count = yearPapers.length;
+      return result;
+    });
+    return counts.map((row, index) => {
+      const result = { ...row };
+      for (const sector of sectors) {
+        if (mode === "share") result[sector] = row[sector] !== null && row.classifiedCount
+          ? row[sector] / row.classifiedCount * 100 : null;
+        if (mode === "growth") {
+          const previous = counts[index - 1]?.[sector];
+          result[sector] = row[sector] !== null && previous > 0
+            ? (row[sector] - previous) / previous * 100 : null;
+        }
+      }
       return result;
     });
   }

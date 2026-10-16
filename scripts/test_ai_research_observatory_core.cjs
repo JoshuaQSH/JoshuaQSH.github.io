@@ -45,4 +45,53 @@ assert.equal(core.geography(papers).find(x => x.code === 'GB').count, 1.5);
 assert.equal(core.trend(papers, weights, 'count').find(x => x.year === 2025).Industry, 1);
 assert.equal(core.trend(papers, weights, 'count').at(-1).year, 2025);
 
+const publicationPapers = [
+  { year: 2024, first_author_sector: 'Industry' },
+  { year: 2024, first_author_sector: 'Industry' },
+  { year: 2024, first_author_sector: 'University' },
+  { year: 2024, first_author_sector: 'Unknown' },
+  { year: 2025, first_author_sector: 'Industry' },
+  { year: 2025, first_author_sector: 'Industry' },
+  { year: 2025, first_author_sector: 'Industry' },
+  { year: 2025, first_author_sector: null },
+  { year: 2026, first_author_sector: 'Unknown' }
+];
+assert.equal(core.trend(publicationPapers, weights, 'growth', 2026).find(row => row.year === 2024).Industry, null);
+const publicationCount = core.trend(publicationPapers, weights, 'count', 2026);
+assert.deepEqual(publicationCount.find(row => row.year === 2024), {
+  year: 2024, Industry: 2, University: 1, 'Research Institute': 0, count: 4, classifiedCount: 3
+});
+assert.deepEqual(publicationCount.find(row => row.year === 2025), {
+  year: 2025, Industry: 3, University: 0, 'Research Institute': 0, count: 4, classifiedCount: 3
+});
+
+const publicationShare = core.trend(publicationPapers, weights, 'share', 2026);
+assert.equal(Math.round(publicationShare.find(row => row.year === 2024).Industry * 10) / 10, 66.7);
+assert.equal(Math.round(publicationShare.find(row => row.year === 2024).University * 10) / 10, 33.3);
+assert.equal(publicationShare.find(row => row.year === 2025).Industry, 100);
+assert.equal(publicationShare.find(row => row.year === 2025).University, 0);
+assert.equal(publicationShare.find(row => row.year === 2026).Industry, null);
+assert.equal(publicationShare.find(row => row.year === 2026).University, null);
+assert.equal(publicationShare.find(row => row.year === 2026).classifiedCount, 0);
+
+const publicationGrowth = core.trend(publicationPapers, weights, 'growth', 2026);
+assert.equal(publicationGrowth.find(row => row.year === 2025).Industry, 50);
+assert.equal(publicationGrowth.find(row => row.year === 2025).University, -100);
+assert.equal(publicationGrowth.find(row => row.year === 2025)['Research Institute'], null);
+
+const zeroBaseline = core.trend([
+  { year: 2024, first_author_sector: 'University' },
+  { year: 2025, first_author_sector: 'Industry' }
+], weights, 'growth', 2025);
+assert.equal(zeroBaseline.find(row => row.year === 2025).Industry, null);
+
+const coveredYears = new Set([2025]);
+const coveredCount = core.trend(publicationPapers, weights, 'count', 2026, coveredYears);
+assert.equal(coveredCount.find(row => row.year === 2024).Industry, null);
+assert.equal(coveredCount.find(row => row.year === 2025).Industry, 3);
+assert.equal(coveredCount.find(row => row.year === 2026).Industry, null);
+const coveredGrowth = core.trend(publicationPapers, weights, 'growth', 2026, coveredYears);
+assert.equal(coveredGrowth.find(row => row.year === 2025).Industry, null);
+assert.equal(coveredGrowth.find(row => row.year === 2026).Industry, null);
+
 console.log('Observatory scoring and aggregation checks passed.');
