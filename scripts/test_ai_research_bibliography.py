@@ -170,6 +170,67 @@ class BibliographyTests(unittest.TestCase):
         self.assertEqual(papers, [])
         self.assertIsNone(coverage["bibliography_total"])
 
+    def test_root_industrial_proceedings_exclusion_uses_book_and_toc(self):
+        source = rule("https://dblp.org/streams/conf/middleware", "acm-proceedings", {},
+                      excluded_material=["industrial-track proceedings"])
+        source["years"]["2024"] = source["years"].pop("2025")
+        rows = sparql_result(
+            sparql_row(pub="https://dblp.org/rec/conf/middleware/Main24", title="Main systems paper",
+                       eventYear="2024", publicationYear="2024", book="Middleware",
+                       toc="https://dblp.org/db/conf/middleware/middleware2024",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/middleware/Industry24", title="Industry systems paper",
+                       eventYear="2024", publicationYear="2024", book="Middleware Industry",
+                       toc="https://dblp.org/db/conf/middleware/middleware2024i",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/middleware/IndustryNoBook24", title="Industry TOC paper",
+                       eventYear="2024", publicationYear="2024",
+                       toc="https://dblp.org/db/conf/middleware/middleware2024i",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"))
+        with patch("scripts.ai_research_bibliography.urlopen", return_value=rows):
+            papers, coverage = collect_venue_year({"id": "middleware"}, 2024, source, self.cache)
+        self.assertEqual([paper["title"] for paper in papers], ["Main systems paper"])
+        self.assertEqual(coverage["bibliography_total"], 1)
+
+    def test_edition_exclusions_apply_to_labelled_containers(self):
+        source = rule("https://dblp.org/streams/conf/cloud", "acm-proceedings",
+                      {"excluded_material": ["Industry Papers", "Short Research Papers", "Vision Papers"]})
+        rows = sparql_result(
+            sparql_row(pub="https://dblp.org/rec/conf/cloud/Main25", title="A full paper",
+                       eventYear="2025", publicationYear="2025", book="SoCC Full Research Papers",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/cloud/Industry25", title="An industry paper",
+                       eventYear="2025", publicationYear="2025", book="SoCC Industry Papers",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/cloud/Short25", title="A short paper",
+                       eventYear="2025", publicationYear="2025", book="SoCC Short Research Papers",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/cloud/Vision25", title="A vision paper",
+                       eventYear="2025", publicationYear="2025", book="SoCC Vision Papers",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"))
+        with patch("scripts.ai_research_bibliography.urlopen", return_value=rows):
+            papers, coverage = collect_venue_year({"id": "socc"}, 2025, source, self.cache)
+        self.assertEqual([paper["title"] for paper in papers], ["A full paper"])
+        self.assertEqual(coverage["bibliography_total"], 1)
+
+    def test_socc_generic_mixed_track_is_unresolved_not_eligible(self):
+        manifest = json.loads((Path(__file__).resolve().parents[1] /
+                               "data/ai_research_observatory/cross_area_sources.json").read_text())
+        source = manifest["socc"]
+        generic = sparql_result(sparql_row(pub="https://dblp.org/rec/conf/cloud/Unknown25",
+                                           title="Unlabelled category", eventYear="2025",
+                                           publicationYear="2025", book="SoCC",
+                                           toc="https://dblp.org/db/conf/cloud/socc2025",
+                                           type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"))
+        with patch("scripts.ai_research_bibliography.urlopen", return_value=generic) as fetch:
+            papers, coverage = collect_venue_year({"id": "socc"}, 2025, source, self.cache)
+        fetch.assert_not_called()
+        self.assertEqual(papers, [])
+        self.assertEqual(coverage["status"], "unresolved")
+        self.assertIsNone(coverage["main_track_total"])
+        self.assertIsNone(coverage["bibliography_total"])
+        self.assertIn("mixed", coverage["gap_reason"].lower())
+
     def test_doi_precedes_normalized_title_and_retains_source_links(self):
         source = rule("https://dblp.org/streams/conf/osdi", "usenix-proceedings", {})
         rows = sparql_result(
@@ -187,6 +248,61 @@ class BibliographyTests(unittest.TestCase):
         self.assertEqual(coverage["bibliography_total"], 1)
         self.assertEqual(papers[0]["doi"], "10.1145/abc")
         self.assertEqual(len(papers[0]["source_urls"]), 3)
+
+    def test_same_title_with_different_dois_remains_distinct(self):
+        source = rule("https://dblp.org/streams/conf/osdi", "usenix-proceedings", {})
+        rows = sparql_result(
+            sparql_row(pub="https://dblp.org/rec/conf/osdi/A25", title="One System",
+                       eventYear="2025", publicationYear="2025", book="OSDI",
+                       doi="https://doi.org/10.1234/one",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/osdi/B25", title="One: System",
+                       eventYear="2025", publicationYear="2025", book="OSDI",
+                       doi="https://doi.org/10.1234/two",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"))
+        with patch("scripts.ai_research_bibliography.urlopen", return_value=rows):
+            papers, coverage = collect_venue_year({"id": "osdi"}, 2025, source, self.cache)
+        self.assertEqual({paper["doi"] for paper in papers}, {"10.1234/one", "10.1234/two"})
+        self.assertEqual(coverage["bibliography_total"], 2)
+
+    def test_doi_less_title_does_not_bridge_conflicting_dois(self):
+        source = rule("https://dblp.org/streams/conf/osdi", "usenix-proceedings", {})
+        rows = sparql_result(
+            sparql_row(pub="https://dblp.org/rec/conf/osdi/A25", title="One System",
+                       eventYear="2025", publicationYear="2025", book="OSDI",
+                       doi="https://doi.org/10.1234/one",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/osdi/B25", title="One: System",
+                       eventYear="2025", publicationYear="2025", book="OSDI",
+                       doi="https://doi.org/10.1234/two",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/osdi/C25", title="One System",
+                       eventYear="2025", publicationYear="2025", book="OSDI",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"))
+        with patch("scripts.ai_research_bibliography.urlopen", return_value=rows):
+            papers, coverage = collect_venue_year({"id": "osdi"}, 2025, source, self.cache)
+        self.assertEqual([paper["doi"] for paper in papers], ["10.1234/one", "10.1234/two", None])
+        self.assertEqual(coverage["bibliography_total"], 3)
+
+    def test_doi_less_title_before_conflicting_dois_stays_separate(self):
+        source = rule("https://dblp.org/streams/conf/osdi", "usenix-proceedings", {})
+        rows = sparql_result(
+            sparql_row(pub="https://dblp.org/rec/conf/osdi/C25", title="One System",
+                       eventYear="2025", publicationYear="2025", book="OSDI",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/osdi/A25", title="One: System",
+                       eventYear="2025", publicationYear="2025", book="OSDI",
+                       doi="https://doi.org/10.1234/one",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/osdi/B25", title="One System",
+                       eventYear="2025", publicationYear="2025", book="OSDI",
+                       doi="https://doi.org/10.1234/two",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"))
+        with patch("scripts.ai_research_bibliography.urlopen", return_value=rows):
+            papers, coverage = collect_venue_year({"id": "osdi"}, 2025, source, self.cache)
+        self.assertEqual([paper["doi"] for paper in papers], [None, "10.1234/one", "10.1234/two"])
+        self.assertEqual([len(paper["source_urls"]) for paper in papers], [1, 1, 1])
+        self.assertEqual(coverage["bibliography_total"], 3)
 
     def test_not_held_skips_network_and_is_not_zero(self):
         source = rule("https://dblp.org/streams/conf/sosp", "acm-proceedings", {})

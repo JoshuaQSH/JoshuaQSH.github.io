@@ -2742,14 +2742,16 @@
         "official_url": null,
         "track_scope": "SoCC full research papers",
         "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "gap_reason": "DBLP's SoCC 2025 book and TOC labels mix full, short, industry, and vision papers without a per-paper track marker.",
+        "match_rule": "Mixed SoCC 2025 tracks require a track-labelled official paper index; DBLP book/TOC metadata cannot isolate full research papers.",
         "provenance_urls": [
           "https://dblp.org/streams/conf/cloud",
           "https://acmsocc.org/2025/papers.html"
         ],
         "excluded_material": [
           "Short Research Papers",
-          "Industry Papers"
+          "Industry Papers",
+          "Vision Papers"
         ]
       },
       "2026": {

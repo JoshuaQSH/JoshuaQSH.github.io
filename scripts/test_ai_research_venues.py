@@ -119,7 +119,7 @@ class SourceManifestTests(unittest.TestCase):
 
     def test_nonobvious_dblp_stream_keys(self):
         self.assertEqual(self.rules["pact"]["dblp_stream"], "https://dblp.org/streams/conf/IEEEpact")
-        self.assertEqual(self.rules["hpca"]["dblp_stream"], "https://dblp.org/streams/conf/cnhpca")
+        self.assertEqual(self.rules["hpca"]["dblp_stream"], "https://dblp.org/streams/conf/hpca")
         self.assertEqual(self.rules["ipdps"]["dblp_stream"], "https://dblp.org/streams/conf/ipps")
         self.assertEqual(self.rules["usenix-atc"]["dblp_stream"], "https://dblp.org/streams/conf/usenix")
         self.assertEqual(self.rules["mlsys"]["source_family"], "mlsys-proceedings")
@@ -129,7 +129,7 @@ class SourceManifestTests(unittest.TestCase):
             "micro": "conf/micro", "hpdc": "conf/hpdc", "ics": "conf/ics",
             "socc": "conf/cloud", "cluster": "conf/cluster",
             "middleware": "conf/middleware", "sigmetrics": "journals/pomacs",
-            "saner": "conf/wcre", "msr": "conf/msr", "icst": "conf/icst",
+            "saner": "conf/saner", "msr": "conf/msr", "icst": "conf/icst",
             "seams": "conf/seams", "icpp": "conf/icpp",
         }
         for venue_id, path in streams.items():

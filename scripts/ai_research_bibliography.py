@@ -53,6 +53,35 @@ def _title_key(title: str) -> str:
     return re.sub(r"[^\w]+", "", unicodedata.normalize("NFKC", title).casefold())
 
 
+def _excluded_material(rule: dict, edition: dict) -> tuple[str, ...]:
+    terms = []
+    for configured in (rule.get("excluded_material", []), edition.get("excluded_material", [])):
+        if not isinstance(configured, list) or any(
+                not isinstance(term, str) or not term.strip() for term in configured):
+            raise ValueError("Excluded material must be a list of nonempty labels")
+        terms.extend(configured)
+    return tuple(dict.fromkeys(terms))
+
+
+def _container_excluded(book: str | None, toc: str | None, terms: tuple[str, ...]) -> bool:
+    container = " ".join((book or "", toc or ""))
+    if _EXCLUDED_CONTAINER.search(container) or (toc and _WORKSHOP_TOC.search(toc)):
+        return True
+    normalized = f" {re.sub(r'[^a-z0-9]+', ' ', container.casefold()).strip()} "
+    for term in terms:
+        label = re.sub(r"[^a-z0-9]+", " ", term.casefold()).strip()
+        if f" {label} " in normalized:
+            return True
+        if label == "industrial track proceedings":
+            # DBLP labels Middleware's industrial volume "Industry" and its TOC with an i suffix.
+            if re.search(r"\bindustri(?:al|y)(?:[- ]track)?\b", book or "", re.I) or (
+                    toc and re.search(r"/[^/]*20\d{2}i(?:\.html)?$", toc, re.I)):
+                return True
+        elif label == "short demo" and re.search(r"\b(?:short|demos?|demonstrations?)\b", book or "", re.I):
+            return True
+    return False
+
+
 def _edition(rule: dict, year: int) -> dict:
     try:
         edition = rule["years"][str(year)]
@@ -132,7 +161,8 @@ def _fetch(url: str, cache_dir: Path, *, query: str | None = None) -> bytes:
 
 
 def _dblp_rows(raw: bytes, venue_id: str, year: int, stream: str,
-               issues: tuple[str, ...], journal: bool) -> tuple[list[dict], bool]:
+               issues: tuple[str, ...], journal: bool,
+               excluded_material: tuple[str, ...]) -> tuple[list[dict], bool]:
     try:
         payload = json.loads(raw)
         bindings = payload["results"]["bindings"]
@@ -169,8 +199,7 @@ def _dblp_rows(raw: bytes, venue_id: str, year: int, stream: str,
         if not journal:
             if not book and not toc:
                 raise SourceFormatError("Proceedings row lacks a track container")
-            if _EXCLUDED_CONTAINER.search(" ".join((book or "", toc or ""))) or (
-                    toc and _WORKSHOP_TOC.search(toc)):
+            if _container_excluded(book, toc, excluded_material):
                 continue
         evidence = {"source": "DBLP", "stream": stream, "issue": issue if journal else None,
                     "book": book if not journal else None, "toc": toc, "event_year_basis":
@@ -260,11 +289,24 @@ def _merge(left: dict, right: dict) -> dict:
 
 
 def _deduplicate(rows: list[dict]) -> list[dict]:
+    dois_by_title: dict[str, set[str]] = {}
+    for row in rows:
+        if row["doi"]:
+            dois_by_title.setdefault(_title_key(row["title"]), set()).add(row["doi"])
     result = []
     for row in rows:
-        matches = [index for index, existing in enumerate(result)
-                   if (row["doi"] and existing["doi"] == row["doi"]) or
-                   _title_key(existing["title"]) == _title_key(row["title"])]
+        title = _title_key(row["title"])
+        title_matches = [index for index, existing in enumerate(result)
+                         if _title_key(existing["title"]) == title]
+        doi_matches = [index for index, existing in enumerate(result)
+                       if row["doi"] and existing["doi"] == row["doi"]]
+        if len(dois_by_title.get(title, ())) > 1:
+            # An unlabelled row cannot resolve two distinct DOI identities.
+            if row["doi"]:
+                title_matches = []
+            else:
+                title_matches = [index for index in title_matches if not result[index]["doi"]]
+        matches = sorted(set(doi_matches + title_matches))
         if not matches:
             result.append(row)
             continue
@@ -298,13 +340,15 @@ def collect_venue_year(venue: dict, year: int, rule: dict,
         coverage.update(status="unresolved", gap_reason=edition["match_rule"])
         return [], coverage
     stream, issues, journal = _stream_and_issues(rule, edition)
+    excluded_material = _excluded_material(rule, edition)
     dblp_rows, official_rows = [], []
     errors = []
     truncated = False
     try:
         dblp_rows, truncated = _dblp_rows(_fetch(SPARQL_URL, cache_dir,
                                                  query=_sparql_query(stream, issues, year)),
-                                          venue["id"], year, stream, issues, journal)
+                                          venue["id"], year, stream, issues, journal,
+                                          excluded_material)
     except (HTTPError, URLError, TimeoutError, OSError, SourceFormatError) as exc:
         errors.append(f"DBLP: {exc}")
     if edition.get("official_index_verified"):
