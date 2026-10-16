@@ -276,7 +276,9 @@ def normalize_official(raw, venue, year, provider):
             "award": None, "code_available": True if raw.get("code_url") else None,
             "code_url": raw.get("code_url"), "code_evidence_url": raw["url"] if raw.get("code_url") else None,
             "repository_url": f"https://github.com/{repo}" if repo else None,
-            "repository_evidence_url": raw["url"] if repo else None, "github": None,
+            "repository_evidence_url": raw["url"] if repo else None,
+            "repository_association_status": "paper-source" if repo else "unknown",
+            "repository_access_status": "unknown", "github": None,
             "adoption_status": "Unknown", "adoption_evidence_url": None,
             "maintenance_status": "Unknown", "maintenance_evidence_url": None,
             "resources": None, "funding": None, "compute": {"gpu_type": None, "gpu_count": None,
@@ -308,6 +310,7 @@ def merge_official(papers, official):
         existing["sources"] = list({entry["url"]: entry for entry in
             existing.get("sources", [{"provider": existing["source"], "url": existing["id"]}]) + paper["sources"]}.values())
         if paper.get("code_url"):
-            existing.update({key: paper[key] for key in ("code_available", "code_url", "code_evidence_url", "repository_url", "repository_evidence_url")})
+            existing.update({key: paper[key] for key in ("code_available", "code_url", "code_evidence_url",
+                "repository_url", "repository_evidence_url", "repository_association_status", "repository_access_status")})
         result[index] = existing
     return result

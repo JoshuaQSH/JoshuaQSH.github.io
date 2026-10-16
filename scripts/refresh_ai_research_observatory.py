@@ -114,7 +114,8 @@ def normalize_work(work, venue):
             "senior_author": (last.get("author") or {}).get("display_name") if last else None,
             "senior_author_affiliations": [i.get("display_name") for i in last.get("institutions", [])] if last else [],
             "leadership": "Unknown", "award": None, "code_available": None, "code_url": None, "code_evidence_url": None,
-            "repository_url": None, "repository_evidence_url": None, "github": None,
+            "repository_url": None, "repository_evidence_url": None,
+            "repository_association_status": "unknown", "repository_access_status": "unknown", "github": None,
             "adoption_status": "Unknown", "adoption_evidence_url": None,
             "maintenance_status": "Unknown", "maintenance_evidence_url": None,
             "resources": None, "funding": None,
@@ -160,6 +161,12 @@ def validate_review(review):
         raise ValueError("countries must be a list of uppercase two-letter codes")
     if "exclude" in review and type(review["exclude"]) is not bool:
         raise ValueError("exclude must be a boolean")
+    if "include" in review and type(review["include"]) is not bool:
+        raise ValueError("include must be a boolean")
+    if review.get("include") and review.get("exclude"):
+        raise ValueError("A review cannot include and exclude the same work")
+    if review.get("include") and not review.get("review_note"):
+        raise ValueError("An inclusion needs a reason in review_note")
     if review.get("exclude") and not review.get("review_note"):
         raise ValueError("An exclusion needs a reason in review_note")
     if "repository_url" in review:
@@ -421,19 +428,28 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
                 paper["code_available"] = True
                 paper["code_url"] = review["repository_url"]
                 paper["code_evidence_url"] = review["repository_evidence_url"]
+                paper["repository_association_status"] = "reviewed"
             paper["review"] = {"evidence_url": review["evidence_url"], "reviewer": review.get("reviewer"), "date": review.get("date"), "note": review.get("review_note")}
         if previous_paper and paper.get("repository_url") == previous_paper.get("repository_url") and not paper.get("github"):
             paper["github"] = previous_paper.get("github")
         result.append(paper)
     token = os.getenv("GITHUB_TOKEN", "").strip()
     checked = {}
+    failed_slugs = set()
+    verified_slugs = set()
     fetched = 0
     for paper in sorted(result, key=lambda p: (not bool(p.get("review") and p.get("repository_url")), p.get("github") is not None, -(p.get("year") or 0))):
+        paper["repository_access_status"] = "unknown"
         slug = repo_slug(paper.get("repository_url"))
         if not slug:
             continue
+        if slug in failed_slugs:
+            paper["github"] = None
+            continue
         if slug in checked:
             paper["github"] = checked[slug]
+            if slug in verified_slugs:
+                paper["repository_access_status"] = "accessible"
             continue
         prior_info = paper.get("github")
         try:
@@ -443,9 +459,13 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
         if age >= 14 and fetched < github_cap:
             try:
                 paper["github"] = fetch_github_metadata(paper["repository_url"], token)
+                paper["repository_access_status"] = "accessible"
+                verified_slugs.add(slug)
                 fetched += 1
             except Exception as exc:
                 print(f"WARNING: GitHub {slug}: {exc}", file=sys.stderr)
+                paper["github"] = None
+                failed_slugs.add(slug)
                 fetched += 1
         if paper.get("github"):
             checked[slug] = paper["github"]
