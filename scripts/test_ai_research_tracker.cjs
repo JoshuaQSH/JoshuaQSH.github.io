@@ -150,6 +150,27 @@ async function main() {
     assert.match(legacyTracker.elements['research-index-rows'].textContent, /OpenAlex source matches: 300.*publisher index entries: 500/s,
       'the source table retains both legacy totals for one year');
 
+    const zeroIndexSnapshot = { ...snapshot, coverage: [
+      { venue_id: 'neurips', venue: 'NeurIPS', year: 2020, source_total: 0,
+        status: 'no-index-records', partial: true },
+      { venue_id: 'neurips', venue: 'NeurIPS', year: 2026, source_total: 0,
+        official_total: 4042, status: 'no-index-records', partial: true }
+    ] };
+    const zeroIndexTracker = pageFixture(trackerHtml, zeroIndexSnapshot, history);
+    await run('static/js/ai-research-tracker.js', zeroIndexTracker);
+    zeroIndexTracker.elements['research-catalog-year'].value = '2020';
+    zeroIndexTracker.elements['research-catalog-year'].dispatch('change');
+    assert.match(zeroIndexTracker.elements['research-catalog-rows'].textContent, /NeurIPS.*no-index-records/s,
+      'zero OpenAlex source matches are a gap, not zero venue publications');
+    zeroIndexTracker.elements['research-catalog-year'].value = '2026';
+    zeroIndexTracker.elements['research-catalog-year'].dispatch('change');
+    assert.match(zeroIndexTracker.elements['research-catalog-rows'].textContent,
+      /NeurIPS.*publisher index: 4,042 entries; not verified main-track/s,
+      'a publisher index is not hidden behind zero OpenAlex source matches');
+    const zeroIndexChart = zeroIndexTracker.elements['research-index-chart'];
+    assert.equal(descendants(zeroIndexChart, el => el.tagName === 'circle' && el.attributes.class?.includes('legacy-openalex')).length, 0,
+      'zero OpenAlex matches do not become chart points');
+
     const observatory = pageFixture(observatoryHtml, snapshot, history);
     await run('static/js/ai-research-observatory.js', observatory, true);
     assert.equal(observatory.elements['aro-coverage-venue'].children.filter(option => catalog.some(venue => venue.source_rule_id && venue.id === option.value)).length, 35,

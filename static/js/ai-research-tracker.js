@@ -191,7 +191,10 @@
       const fallback = rows.filter(row => mainCount(row) === null && bibliographyCount(row) !== null).length;
       const legacy = rows.filter(legacyCount).length;
       const td = document.createElement("td"); td.textContent = year
-        ? legacy ? `legacy index: ${fmt(rows[0].source_total ?? rows[0].official_total)} matches; not verified main-track` : availability(rows[0])
+        ? legacy ? rows[0].official_total > 0
+          ? `publisher index: ${fmt(rows[0].official_total)} entries; not verified main-track`
+          : `OpenAlex source: ${fmt(rows[0].source_total)} matches; not verified main-track`
+          : availability(rows[0])
         : `${verified} verified · ${fallback} bibliography · ${legacy} legacy index · ${rows.length - verified - fallback - legacy} gaps`;
       td.title = "Verified main-track, bibliography-only, and unresolved calendar years; not organizer acceptances";
       tr.append(td); tbody.append(tr);

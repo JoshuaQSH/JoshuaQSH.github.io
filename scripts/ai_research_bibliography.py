@@ -162,7 +162,8 @@ def _fetch(url: str, cache_dir: Path, *, query: str | None = None) -> bytes:
 
 def _dblp_rows(raw: bytes, venue_id: str, year: int, stream: str,
                issues: tuple[str, ...], journal: bool,
-               excluded_material: tuple[str, ...]) -> tuple[list[dict], bool]:
+               excluded_material: tuple[str, ...], book_labels: tuple[str, ...],
+               record_prefix: str | None) -> tuple[list[dict], bool]:
     try:
         payload = json.loads(raw)
         bindings = payload["results"]["bindings"]
@@ -193,6 +194,10 @@ def _dblp_rows(raw: bytes, venue_id: str, year: int, stream: str,
             if issue not in issues or kind != "Article":
                 continue
         elif kind != "Inproceedings":
+            continue
+        if record_prefix and not pub.startswith(record_prefix):
+            continue
+        if not journal and book_labels and book not in book_labels:
             continue
         if _EXCLUDED_TITLE.search(title.strip()):
             continue
@@ -341,6 +346,15 @@ def collect_venue_year(venue: dict, year: int, rule: dict,
         return [], coverage
     stream, issues, journal = _stream_and_issues(rule, edition)
     excluded_material = _excluded_material(rule, edition)
+    configured_labels = edition.get("dblp_book_labels", rule.get("dblp_book_labels", []))
+    if not isinstance(configured_labels, list) or any(
+            not isinstance(label, str) or not label.strip() for label in configured_labels):
+        raise ValueError("DBLP book labels must be a list of nonempty strings")
+    book_labels = tuple(configured_labels)
+    record_prefix = edition.get("dblp_record_prefix", rule.get("dblp_record_prefix"))
+    if record_prefix is not None and (not isinstance(record_prefix, str) or
+            not record_prefix.startswith("https://dblp.org/rec/")):
+        raise ValueError("DBLP record prefix must be a DBLP record URL prefix")
     dblp_rows, official_rows = [], []
     errors = []
     truncated = False
@@ -348,7 +362,7 @@ def collect_venue_year(venue: dict, year: int, rule: dict,
         dblp_rows, truncated = _dblp_rows(_fetch(SPARQL_URL, cache_dir,
                                                  query=_sparql_query(stream, issues, year)),
                                           venue["id"], year, stream, issues, journal,
-                                          excluded_material)
+                                          excluded_material, book_labels, record_prefix)
     except (HTTPError, URLError, TimeoutError, OSError, SourceFormatError) as exc:
         errors.append(f"DBLP: {exc}")
     if edition.get("official_index_verified"):

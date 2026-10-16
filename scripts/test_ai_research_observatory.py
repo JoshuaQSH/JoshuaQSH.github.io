@@ -52,14 +52,18 @@ class ObservatoryTests(unittest.TestCase):
         snapshot = json.loads(pipeline.OUTPUT.read_text())
         venues = {venue["id"] for venue in snapshot["venues"]}
         catalog = {venue["id"] for venue in json.loads(pipeline.VENUES.read_text())}
-        self.assertTrue(venues < catalog)  # Staged publication is not the final backfill.
+        self.assertEqual(venues, catalog)
         self.assertIn("osdi", catalog)
-        self.assertGreaterEqual(len(catalog), 76)
+        self.assertGreaterEqual(len(catalog), 88)
         self.assertEqual({(row["venue_id"], row["year"]) for row in snapshot["coverage"]},
                          {(venue, year) for venue in venues for year in range(2020, 2027)})
         self.assertEqual(len(snapshot["coverage"]), len(venues) * 7)
         self.assertTrue(all(paper["venue_id"] in venues for paper in snapshot["papers"]))
         self.assertTrue(all(row.get("source_total") is None for row in snapshot["coverage"] if row["status"] == "unmapped"))
+        self.assertTrue(all(row.get("main_track_total") is None and row.get("bibliography_total") is None
+                            for row in snapshot["coverage"] if row["status"] == "no-index-records"))
+        self.assertTrue(all(row.get("main_track_total") is None for row in snapshot["coverage"]
+                            if row["status"] != "verified"))
         highlights = json.loads((pipeline.ROOT / "data/ai_research_observatory/arxiv_highlights.json").read_text())
         self.assertTrue(all(item["url"].startswith("https://arxiv.org/abs/") for item in highlights))
         self.assertTrue(all(item["url"] not in {paper["url"] for paper in snapshot["papers"]} for item in highlights))

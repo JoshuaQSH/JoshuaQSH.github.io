@@ -213,6 +213,67 @@ class BibliographyTests(unittest.TestCase):
         self.assertEqual([paper["title"] for paper in papers], ["A full paper"])
         self.assertEqual(coverage["bibliography_total"], 1)
 
+    def test_configured_main_volume_excludes_side_tracks(self):
+        source = rule("https://dblp.org/streams/conf/icse", "acm-proceedings", {},
+                      dblp_book_labels=["ICSE"])
+        rows = sparql_result(
+            sparql_row(pub="https://dblp.org/rec/conf/icse/Main25", title="Main research",
+                       eventYear="2025", publicationYear="2025", book="ICSE",
+                       toc="https://dblp.org/db/conf/icse/icse2025",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/icse/NIER25", title="New ideas",
+                       eventYear="2025", publicationYear="2025", book="ICSE (NIER)",
+                       toc="https://dblp.org/db/conf/icse/nier2025",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/icse/SEIS25", title="Industry study",
+                       eventYear="2025", publicationYear="2025", book="ICSE-SEIS",
+                       toc="https://dblp.org/db/conf/icse/seis2025",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"))
+        with patch("scripts.ai_research_bibliography.urlopen", return_value=rows):
+            papers, coverage = collect_venue_year({"id": "icse"}, 2025, source, self.cache)
+        self.assertEqual([paper["title"] for paper in papers], ["Main research"])
+        self.assertEqual(coverage["bibliography_total"], 1)
+
+    def test_configured_record_prefix_excludes_different_conference_on_shared_stream(self):
+        source = rule("https://dblp.org/streams/conf/cloud", "acm-proceedings", {},
+                      dblp_book_labels=["SoCC"],
+                      dblp_record_prefix="https://dblp.org/rec/conf/cloud/")
+        rows = sparql_result(
+            sparql_row(pub="https://dblp.org/rec/conf/cloud/Main25", title="Cloud systems",
+                       eventYear="2025", publicationYear="2025", book="SoCC",
+                       toc="https://dblp.org/db/conf/cloud/socc2025",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"),
+            sparql_row(pub="https://dblp.org/rec/conf/IEEEcloud/Wrong25", title="Other CLOUD",
+                       eventYear="2025", publicationYear="2025", book="CLOUD",
+                       toc="https://dblp.org/db/conf/IEEEcloud/cloud2025",
+                       type="http://purl.org/net/nknouf/ns/bibtex#Inproceedings"))
+        with patch("scripts.ai_research_bibliography.urlopen", return_value=rows):
+            papers, coverage = collect_venue_year({"id": "socc"}, 2025, source, self.cache)
+        self.assertEqual([paper["title"] for paper in papers], ["Cloud systems"])
+        self.assertEqual(coverage["bibliography_total"], 1)
+
+    def test_manifest_names_only_audited_main_volumes_and_socc_gaps(self):
+        manifest = json.loads((Path(__file__).resolve().parents[1] /
+                               "data/ai_research_observatory/cross_area_sources.json").read_text())
+        for venue, labels in (("icse", ["ICSE"]), ("fse", ["ESEC/SIGSOFT FSE"]),
+                              ("sc", ["SC"]), ("middleware", ["Middleware"])):
+            self.assertEqual(manifest[venue]["dblp_book_labels"], labels)
+        self.assertEqual(manifest["socc"]["dblp_record_prefix"],
+                         "https://dblp.org/rec/conf/cloud/")
+        for year in range(2020, 2027):
+            with self.subTest(year=year):
+                self.assertIn("track", manifest["socc"]["years"][str(year)]["match_rule"].lower())
+
+    def test_future_2026_editions_are_not_published_counts(self):
+        manifest = json.loads((Path(__file__).resolve().parents[1] /
+                               "data/ai_research_observatory/cross_area_sources.json").read_text())
+        for venue in ("pact", "micro", "sc", "socc", "middleware", "usenix-atc"):
+            with self.subTest(venue=venue):
+                edition = manifest[venue]["years"]["2026"]
+                self.assertEqual(edition["status"], "not-yet-published")
+                self.assertTrue(any(url.startswith("https://") and "dblp.org" not in url
+                                    for url in edition["provenance_urls"]))
+
     def test_socc_generic_mixed_track_is_unresolved_not_eligible(self):
         manifest = json.loads((Path(__file__).resolve().parents[1] /
                                "data/ai_research_observatory/cross_area_sources.json").read_text())

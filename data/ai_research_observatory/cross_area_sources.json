@@ -541,6 +541,7 @@
   },
   "fse": {
     "dblp_stream": "https://dblp.org/streams/conf/sigsoft",
+    "dblp_book_labels": ["ESEC/SIGSOFT FSE"],
     "source_family": "acm-proceedings",
     "year_basis": "event-year; verify journal-issue year against the event",
     "excluded_material": [
@@ -1028,6 +1029,7 @@
   },
   "icse": {
     "dblp_stream": "https://dblp.org/streams/conf/icse",
+    "dblp_book_labels": ["ICSE"],
     "source_family": "acm-proceedings",
     "year_basis": "event-year; verify journal-issue year against the event",
     "excluded_material": [
@@ -1495,16 +1497,18 @@
       "2026": {
         "official_url": null,
         "track_scope": "MICRO main research papers",
-        "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "status": "not-yet-published",
+        "gap_reason": "MICRO 2026 meets October 31-November 4; no main-track proceedings are indexed as of 2026-10-16.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/micro"
+          "https://dblp.org/streams/conf/micro",
+          "https://www.microarch.org/micro59/"
         ]
       }
     }
   },
   "middleware": {
     "dblp_stream": "https://dblp.org/streams/conf/middleware",
+    "dblp_book_labels": ["Middleware"],
     "source_family": "acm-proceedings",
     "year_basis": "event-year; verify journal-issue year against the event",
     "excluded_material": [
@@ -1574,10 +1578,11 @@
       "2026": {
         "official_url": null,
         "track_scope": "Middleware main research papers",
-        "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "status": "not-yet-published",
+        "gap_reason": "Middleware 2026 meets December 14-18; no main-track proceedings are indexed as of 2026-10-16.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/middleware"
+          "https://dblp.org/streams/conf/middleware",
+          "https://middleware-conf.github.io/2026/"
         ]
       }
     }
@@ -2028,10 +2033,11 @@
       "2026": {
         "official_url": null,
         "track_scope": "PACT main research papers",
-        "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "status": "not-yet-published",
+        "gap_reason": "PACT 2026 meets October 19-22; accepted technical papers are not a published proceedings count as of 2026-10-16.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/IEEEpact"
+          "https://dblp.org/streams/conf/IEEEpact",
+          "https://pact2026.github.io/"
         ]
       }
     }
@@ -2429,6 +2435,7 @@
   },
   "sc": {
     "dblp_stream": "https://dblp.org/streams/conf/sc",
+    "dblp_book_labels": ["SC"],
     "source_family": "ieee-proceedings",
     "year_basis": "event-year; verify journal-issue year against the event",
     "excluded_material": [
@@ -2496,10 +2503,11 @@
       "2026": {
         "official_url": null,
         "track_scope": "SC technical research papers",
-        "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "status": "not-yet-published",
+        "gap_reason": "SC 2026 meets November 15-20; no technical-paper proceedings are indexed as of 2026-10-16.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/sc"
+          "https://dblp.org/streams/conf/sc",
+          "https://sc26.supercomputing.org/all-dates-deadlines/"
         ]
       }
     }
@@ -2683,6 +2691,7 @@
   },
   "socc": {
     "dblp_stream": "https://dblp.org/streams/conf/cloud",
+    "dblp_record_prefix": "https://dblp.org/rec/conf/cloud/",
     "source_family": "acm-proceedings",
     "year_basis": "event-year; verify journal-issue year against the event",
     "excluded_material": [
@@ -2697,45 +2706,55 @@
         "official_url": null,
         "track_scope": "SoCC full research papers",
         "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "gap_reason": "DBLP's SoCC proceedings mix research, industry/system, and vision papers without a per-paper track marker.",
+        "match_rule": "Mixed SoCC tracks require a track-labelled official paper index before full research papers can be isolated.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cloud"
+          "https://dblp.org/streams/conf/cloud",
+          "https://acmsocc.org/2020/papers.html"
         ]
       },
       "2021": {
         "official_url": null,
         "track_scope": "SoCC full research papers",
         "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "gap_reason": "DBLP's SoCC proceedings mix research, industry/system, and vision papers without a per-paper track marker.",
+        "match_rule": "Mixed SoCC tracks require a track-labelled official paper index before full research papers can be isolated.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cloud"
+          "https://dblp.org/streams/conf/cloud",
+          "https://acmsocc.org/2021/papers.html"
         ]
       },
       "2022": {
         "official_url": null,
         "track_scope": "SoCC full research papers",
         "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "gap_reason": "DBLP's SoCC proceedings lack a per-paper research-track marker.",
+        "match_rule": "Mixed SoCC tracks require a track-labelled official paper index before full research papers can be isolated.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cloud"
+          "https://dblp.org/streams/conf/cloud",
+          "https://acmsocc.org/2022/papers.html"
         ]
       },
       "2023": {
         "official_url": null,
         "track_scope": "SoCC full research papers",
         "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "gap_reason": "DBLP's SoCC proceedings mix research, industry, vision, and work-in-progress papers without a per-paper track marker.",
+        "match_rule": "Mixed SoCC tracks require a track-labelled official paper index before full research papers can be isolated.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cloud"
+          "https://dblp.org/streams/conf/cloud",
+          "https://acmsocc.org/2023/papers.html"
         ]
       },
       "2024": {
         "official_url": null,
         "track_scope": "SoCC full research papers",
         "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "gap_reason": "DBLP's SoCC proceedings lack a per-paper research-track marker.",
+        "match_rule": "Mixed SoCC tracks require a track-labelled official paper index before full research papers can be isolated.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cloud"
+          "https://dblp.org/streams/conf/cloud",
+          "https://acmsocc.org/2024/papers.html"
         ]
       },
       "2025": {
@@ -2757,10 +2776,12 @@
       "2026": {
         "official_url": null,
         "track_scope": "SoCC full research papers",
-        "status": "unresolved",
-        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "status": "not-yet-published",
+        "gap_reason": "SoCC 2026 is scheduled for November; the shared DBLP cloud stream currently returns IEEE CLOUD records, not SoCC proceedings.",
+        "match_rule": "A track-labelled SoCC 2026 publication index is required before full research papers can be counted.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cloud"
+          "https://dblp.org/streams/conf/cloud",
+          "https://acmsocc.org/2026/papers"
         ]
       }
     }
