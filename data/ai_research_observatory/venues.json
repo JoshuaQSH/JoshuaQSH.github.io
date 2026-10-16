@@ -106,6 +106,58 @@
     }
   },
   {
+    "id": "ase",
+    "name": "ASE",
+    "area": "Software Engineering",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "ase",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/279/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/279/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/279/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    }
+  },
+  {
+    "id": "asplos",
+    "name": "ASPLOS",
+    "area": "Computer Architecture",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "asplos",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/147/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/147/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/147/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    }
+  },
+  {
     "id": "bmvc",
     "name": "BMVC",
     "area": "Computer Vision",
@@ -143,6 +195,55 @@
       "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
       "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
       "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "cc",
+    "name": "CC",
+    "area": "Compilers / Programming Languages",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "cc",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "B",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/936/",
+    "rankings": {
+      "CORE": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/936/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/936/"
+    }
+  },
+  {
+    "id": "cgo",
+    "name": "CGO",
+    "area": "Compilers / Programming Languages",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "cgo",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/1362/",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1362/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1362/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
     }
   },
   {
@@ -397,6 +498,58 @@
     }
   },
   {
+    "id": "euro-par",
+    "name": "Euro-Par",
+    "area": "Parallel / Distributed",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "euro-par",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "B",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/2022/",
+    "rankings": {
+      "CORE": "B",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/2022/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/2022/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    }
+  },
+  {
+    "id": "eurosys",
+    "name": "EuroSys",
+    "area": "Systems",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "eurosys",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/525/",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/525/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/525/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    }
+  },
+  {
     "id": "foga",
     "name": "FOGA",
     "area": "AI / ML",
@@ -417,6 +570,32 @@
     }
   },
   {
+    "id": "fse",
+    "name": "FSE",
+    "area": "Software Engineering",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "fse",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/52/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/52/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/52/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    }
+  },
+  {
     "id": "gecco",
     "name": "GECCO",
     "area": "AI / ML",
@@ -434,6 +613,32 @@
       "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
       "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
       "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "hpca",
+    "name": "HPCA",
+    "area": "Computer Architecture",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "hpca",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/1386/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1386/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1386/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
     }
   },
   {
@@ -537,6 +742,32 @@
       "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
       "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
       "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "icdcs",
+    "name": "ICDCS",
+    "area": "Parallel / Distributed",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "icdcs",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/1002/",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1002/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1002/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
     }
   },
   {
@@ -668,6 +899,32 @@
     }
   },
   {
+    "id": "icse",
+    "name": "ICSE",
+    "area": "Software Engineering",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "icse",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/1209/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1209/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1209/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    }
+  },
+  {
     "id": "ijcai",
     "name": "IJCAI",
     "area": "AI / ML",
@@ -729,6 +986,32 @@
     }
   },
   {
+    "id": "ipdps",
+    "name": "IPDPS",
+    "area": "Parallel / Distributed",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "ipdps",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/688/",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/688/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/688/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    }
+  },
+  {
     "id": "iros",
     "name": "IROS",
     "area": "Robotics",
@@ -746,6 +1029,58 @@
       "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
       "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
       "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "isca",
+    "name": "ISCA",
+    "area": "Computer Architecture",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "isca",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/32/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/32/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/32/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    }
+  },
+  {
+    "id": "issta",
+    "name": "ISSTA",
+    "area": "Software Engineering",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "issta",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/1412/",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1412/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1412/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
     }
   },
   {
@@ -852,6 +1187,27 @@
     }
   },
   {
+    "id": "mlsys",
+    "name": "MLSys",
+    "area": "ML Systems",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "mlsys",
+    "rank_status": "unranked-in-audited-lists",
+    "ranking_scheme": null,
+    "edition": null,
+    "rank": null,
+    "rank_url": null,
+    "rankings": {},
+    "ranking_urls": {},
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&source=CORE2023&do=Export",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/By_category/",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
     "id": "naacl",
     "name": "NAACL",
     "area": "LLMs / NLP",
@@ -892,6 +1248,162 @@
       "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
       "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
       "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "oopsla",
+    "name": "OOPSLA",
+    "area": "Compilers / Programming Languages",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "oopsla",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/18/",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/18/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/18/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    }
+  },
+  {
+    "id": "osdi",
+    "name": "OSDI",
+    "area": "Systems",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "osdi",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/1842/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1842/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1842/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    }
+  },
+  {
+    "id": "pact",
+    "name": "PACT",
+    "area": "Computer Architecture",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "pact",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "B",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/1165/",
+    "rankings": {
+      "CORE": "B",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1165/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1165/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    }
+  },
+  {
+    "id": "pldi",
+    "name": "PLDI",
+    "area": "Compilers / Programming Languages",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "pldi",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/84/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/84/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/84/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    }
+  },
+  {
+    "id": "popl",
+    "name": "POPL",
+    "area": "Compilers / Programming Languages",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "popl",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/82/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/82/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/82/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    }
+  },
+  {
+    "id": "ppopp",
+    "name": "PPoPP",
+    "area": "Parallel / Distributed",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "ppopp",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "B",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/1691/",
+    "rankings": {
+      "CORE": "B",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1691/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1691/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
     }
   },
   {
@@ -977,6 +1489,32 @@
     }
   },
   {
+    "id": "sc",
+    "name": "SC",
+    "area": "Parallel / Distributed",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "sc",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/77/",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/77/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/77/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    }
+  },
+  {
     "id": "sdm",
     "name": "SDM",
     "area": "Data Mining / Retrieval",
@@ -1019,6 +1557,32 @@
     }
   },
   {
+    "id": "sosp",
+    "name": "SOSP",
+    "area": "Systems",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "sosp",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/48/",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/48/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/48/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"
+    }
+  },
+  {
     "id": "uai",
     "name": "UAI",
     "area": "AI / ML",
@@ -1037,6 +1601,32 @@
       "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
       "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
       "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "usenix-atc",
+    "name": "USENIX ATC / ACM SIGOPS ATC",
+    "area": "Systems",
+    "ai_native": false,
+    "source_id": null,
+    "source_name": null,
+    "source_rule_id": "usenix-atc",
+    "rank_status": "ranked",
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/1838/",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1838/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
+    },
+    "ranking_evidence": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/1838/",
+      "CCF": "https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"
     }
   },
   {
