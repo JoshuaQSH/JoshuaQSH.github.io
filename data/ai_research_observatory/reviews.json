@@ -1,1 +1,14 @@
-{}
+{
+  "https://proceedings.neurips.cc/paper_files/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract-Conference.html": {
+    "repository_url": "https://github.com/Dao-AILab/flash-attention",
+    "repository_evidence_url": "https://github.com/Dao-AILab/flash-attention",
+    "adoption_status": "integration",
+    "adoption_evidence_url": "https://docs.pytorch.org/blog/pytorch2-2/",
+    "maintenance_status": "active",
+    "maintenance_evidence_url": "https://github.com/Dao-AILab/flash-attention/releases",
+    "review_note": "Official implementation; PyTorch documents FlashAttention-2 integration. October 2026 releases support active maintenance as of this review, not a guarantee of future support or verified business deployment.",
+    "reviewer": "Site curator",
+    "date": "2026-10-15",
+    "evidence_url": "https://proceedings.neurips.cc/paper_files/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract-Conference.html"
+  }
+}

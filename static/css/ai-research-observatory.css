@@ -83,7 +83,7 @@ main:has(> .aro) { display: block; }
 .aro td:first-child { min-width: 260px; max-width: 490px; }
 .aro td button { border: 0; padding: 0; background: transparent; text-align: left; color: var(--link-color); font-weight: 700; }
 .aro td small { display: block; color: var(--text-muted); font-size: .73rem; margin-top: 3px; }
-.aro td:nth-child(8), .aro td:nth-child(9) { font-variant-numeric: tabular-nums; }
+.aro td:nth-child(7), .aro td:nth-child(10), .aro td:nth-child(11) { font-variant-numeric: tabular-nums; }
 .aro-pagination { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-top: 12px; font: .8rem Arial, sans-serif; }
 .aro-pagination span { margin-right: auto; color: var(--text-muted); }
 .aro-method { border-top: 2px solid var(--text-strong); padding-top: 15px; font-size: .9rem; }
@@ -92,6 +92,12 @@ main:has(> .aro) { display: block; }
 .aro-method summary { cursor: pointer; font-weight: bold; }
 #aro-coverage { max-height: 320px; overflow: auto; font: .76rem/1.4 Arial, sans-serif; }
 .aro-coverage-row { display: grid; grid-template-columns: 100px 55px 1fr; gap: 8px; border-bottom: 1px solid var(--divider-color); padding: 5px 0; }
+#aro-ranked-venues { max-height: 390px; overflow: auto; font: .78rem/1.5 Arial, sans-serif; }
+.aro-venue-row { display: grid; grid-template-columns: 95px minmax(140px,1fr) minmax(190px,1.5fr) 105px; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--divider-color); }
+.aro-venue-row a { display: inline-block; margin-right: 8px; }
+.aro-preprints { padding-left: 18px; line-height: 1.65; }
+.aro-preprints li { margin-bottom: 7px; }
+@media (max-width: 650px) { .aro-venue-row { grid-template-columns: 80px minmax(0,1fr); } .aro-venue-row > span:last-child { text-align: left; } }
 .aro-error { color: var(--aro-industry); }
 #aro-detail { width: min(710px, calc(100vw - 24px)); max-height: min(85vh, 850px); border: 1px solid var(--divider-color); border-radius: 5px; background: var(--panel-elevated); color: var(--text-main); padding: 25px; overflow: auto; }
 #aro-detail::backdrop { background: rgba(0,0,0,.5); }

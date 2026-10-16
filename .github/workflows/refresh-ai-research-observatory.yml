@@ -17,13 +17,20 @@ jobs:
         with:
           python-version: "3.11"
       - name: Test ingestion logic
-        run: python3 -m unittest discover -s scripts -p 'test_ai_research_observatory.py'
+        run: python3 -m unittest discover -s scripts -p 'test_ai_research*.py'
       - name: Test dashboard calculations
         run: node scripts/test_ai_research_observatory_core.cjs
       - name: Refresh current and previous year
         env:
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
-        run: python3 scripts/refresh_ai_research_observatory.py
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          if [ -n "$OPENALEX_API_KEY" ]; then
+            python3 scripts/refresh_ai_research_observatory.py --github-cap 250
+          else
+            echo "No OPENALEX_API_KEY; refreshing official proceedings and GitHub evidence only"
+            python3 scripts/refresh_ai_research_observatory.py --skip-openalex --github-cap 250
+          fi
       - uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: "0.136.5"

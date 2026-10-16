@@ -104,6 +104,55 @@
     }
   }
 
+  function renderIndex(snapshot) {
+    const venue = snapshot.venues.find(v => v.id === $("research-index-venue").value);
+    if (!venue) return;
+    const rows = snapshot.coverage.filter(c => c.venue_id === venue.id);
+    const chart = $("research-index-chart"); empty(chart);
+    const values = rows.flatMap(row => [row.source_total, row.official_total]).filter(value => Number.isFinite(value) && value > 0);
+    const max = Math.max(100, Math.ceil(Math.max(0, ...values) / 500) * 500);
+    const top = 18, bottom = 267, left = 56, right = 735;
+    axes(chart, top, bottom, left, right, max, "");
+    for (const [field, color, label] of [["source_total", "#367580", "OpenAlex indexed"], ["official_total", "#c33e42", "Official proceedings index"]]) {
+      line(chart, rows.map(row => ({year:row.year, value:row[field] > 0 ? row[field] : null, row,
+        label:`${venue.name} ${row.year}: ${fmt(row[field])} ${label.toLowerCase()} records`})), color, "", left, right, top, bottom, max, point => {
+        const detail = $("research-index-detail"); empty(detail);
+        detail.append(document.createTextNode(`${point.label}. This is an index count, not an acceptance total. `));
+        const url = field === "official_total" ? point.row.official_url : venue.source_id;
+        if (url) {
+          const link = document.createElement("a"); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer";
+          link.textContent = "Inspect source"; detail.append(link);
+        }
+      });
+    }
+    const found = rows.filter(row => row.source_total > 0 || row.official_total > 0).length;
+    $("research-index-detail").textContent = `${venue.name}: ${found} of ${years.length} years have indexed records. ${venue.source_id ? "Other years may be unindexed or not held." : "No verified OpenAlex source is mapped; a missing count is not zero."}`;
+  }
+
+  function renderCatalog(snapshot) {
+    const area = $("research-catalog-area").value;
+    const tbody = $("research-catalog-rows"); empty(tbody);
+    for (const venue of snapshot.venues.filter(item => !area || item.area === area)) {
+      const tr = document.createElement("tr");
+      for (const value of [venue.name, venue.area]) {
+        const td = document.createElement("td"); td.textContent = value; tr.append(td);
+      }
+      for (const scheme of ["CORE", "CCF", "TH-CPL"]) {
+        const td = document.createElement("td");
+        if (venue.rankings?.[scheme]) {
+          const link = document.createElement("a"); link.href = venue.ranking_urls[scheme];
+          link.target = "_blank"; link.rel = "noopener noreferrer"; link.textContent = venue.rankings[scheme]; td.append(link);
+        } else td.textContent = "—";
+        tr.append(td);
+      }
+      const rows = snapshot.coverage.filter(row => row.venue_id === venue.id);
+      const observed = rows.filter(row => row.source_total > 0 || row.official_total > 0).length;
+      const td = document.createElement("td"); td.textContent = `${observed} / ${years.length}`;
+      td.title = observed === 0 ? "No indexed records; not zero accepted papers" : "Years with at least one indexed record, not necessarily full proceedings";
+      tr.append(td); tbody.append(tr);
+    }
+  }
+
   function renderAwards(history) {
     const counts = new Map();
     for (const award of history.awards) for (const topic of award.topics) counts.set(topic, (counts.get(topic) || 0) + 1);
@@ -153,9 +202,22 @@
   }
   Promise.all([load(root.dataset.historyUrl),load(root.dataset.observatoryUrl)]).then(([history,snapshot]) => {
     if (!Array.isArray(history.counts) || !Array.isArray(history.awards) || !Array.isArray(snapshot.papers)) throw new Error("Invalid dataset");
-    renderCounts(history); renderLedger(history); renderAwards(history); renderTopics(snapshot);
+    for (const venue of snapshot.venues) {
+      const option = document.createElement("option"); option.value = venue.id; option.textContent = venue.name;
+      $("research-index-venue").append(option);
+    }
+    $("research-index-venue").value = "neurips";
+    for (const area of [...new Set(snapshot.venues.map(venue => venue.area))].sort()) {
+      const option = document.createElement("option"); option.value = area; option.textContent = area;
+      $("research-catalog-area").append(option);
+    }
+    renderCounts(history); renderLedger(history); renderIndex(snapshot); renderCatalog(snapshot); renderAwards(history); renderTopics(snapshot);
     $("research-count-mode").addEventListener("change", () => renderCounts(history));
+    $("research-index-venue").addEventListener("change", () => renderIndex(snapshot));
+    $("research-catalog-area").addEventListener("change", () => renderCatalog(snapshot));
     $("research-topic").addEventListener("change", () => renderTopics(snapshot));
-    $("research-status").textContent = `Conference figures reviewed ${history.reviewed_at} · publication sample updated ${new Date(snapshot.generated_at).toLocaleDateString("en-GB")}`;
+    const indexed = snapshot.coverage.filter(row => row.source_total > 0 || row.official_total > 0).length;
+    const unrefreshed = snapshot.coverage.filter(row => ["not-refreshed", "unmapped", "rate-limited"].includes(row.status)).length;
+    $("research-status").textContent = `Organizer figures reviewed ${history.reviewed_at} · sample updated ${new Date(snapshot.generated_at).toLocaleDateString("en-GB")} · ${indexed} indexed venue-years · ${unrefreshed} unrefreshed or unmapped calendar cells`;
   }).catch(() => { $("research-status").textContent = "The research datasets could not be loaded. Please retry later."; });
 })();

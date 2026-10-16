@@ -4,7 +4,7 @@
   const $ = id => document.getElementById(id);
   const number = n => new Intl.NumberFormat("en-GB", { maximumFractionDigits: 1 }).format(n);
   const countryName = code => { try { return new Intl.DisplayNames(["en"], { type: "region" }).of(code); } catch (_) { return code; } };
-  const weights = { citation: 55, venue: 25, award: 15, code: 5 };
+  const weights = { citation: 40, venue: 15, award: 10, code: 5, stars: 5, activity: 5, maintenance: 10, adoption: 10 };
   const sectors = ["Industry", "University", "Research Institute", "Joint"];
   const coords = { US:[-98,39],GB:[-3,54],CN:[104,35],CA:[-106,57],DE:[10,51],FR:[2,47],IN:[79,22],JP:[138,36],KR:[128,36],SG:[104,1.4],AU:[134,-25],CH:[8.2,47],NL:[5,52],IT:[12,42],ES:[-4,40],SE:[15,62],FI:[26,64],NO:[8,62],IL:[35,31],BR:[-51,-12],TW:[121,24],HK:[114,22],AT:[14,47],BE:[4.5,51],DK:[10,56],IE:[-8,53],NZ:[174,-41],PL:[19,52],RU:[90,59],AE:[54,24],TR:[35,39],ZA:[24,-29],SA:[45,24],MX:[-102,24],CZ:[15,49],PT:[-8,39],GR:[23,39],TH:[101,15],MY:[102,4],ID:[118,-3],VN:[107,16],EG:[30,27],PK:[69,30],IR:[54,32],UA:[32,49],LU:[6,50],HU:[19,47],RO:[25,45],CL:[-71,-33],CO:[-74,4] };
   const milestones = [
@@ -62,11 +62,7 @@
     const scored = classified.map(p => ({ sector: p.first_author_sector, value: core.score(p, weights).value })).filter(x => x.value !== null);
     const total = scored.reduce((a, x) => a + x.value, 0);
     setText("aro-impact-share", total ? `${Math.round(100 * scored.filter(x => x.sector === "Industry").reduce((a, x) => a + x.value, 0) / total)}%` : "—");
-    const counts = new Map();
-    for (const p of papers) counts.set(p.year, (counts.get(p.year) || 0) + 1);
-    const years = [...counts.keys()].sort((a, b) => a - b);
-    const latest = years.at(-1), previous = years.at(-2);
-    setText("aro-year-change", previous && counts.get(previous) ? `${Math.round(100 * (counts.get(latest) / counts.get(previous) - 1))}%` : "—");
+    setText("aro-repo-count", number(new Set(papers.map(p => p.repository_url).filter(Boolean)).size));
     const reviewed = papers.filter(p => p.leadership !== "Unknown");
     setText("aro-leadership-note", `Leadership evidence: ${reviewed.length} of ${papers.length} filtered records have a reviewed classification. First-author and team sectors above are not leadership claims.`);
   }
@@ -176,10 +172,10 @@
   }
   function sortedPapers(papers) {
     const sort = $("aro-sort").value;
-    return [...papers].sort((a, b) => sort === "citations" ? b.citations - a.citations
+    return [...papers].sort((a, b) => sort === "citations" ? (b.citations ?? -1) - (a.citations ?? -1)
       : sort === "newest" ? (b.year - a.year || String(b.date).localeCompare(String(a.date)))
       : sort === "title" ? a.title.localeCompare(b.title)
-      : (core.score(b, weights).value ?? -1) - (core.score(a, weights).value ?? -1) || b.citations - a.citations);
+      : (core.score(b, weights).value ?? -1) - (core.score(a, weights).value ?? -1) || (b.citations ?? -1) - (a.citations ?? -1));
   }
   function renderTable(papers) {
     const tbody = $("aro-table-body"); tbody.replaceChildren();
@@ -187,15 +183,19 @@
     page = Math.min(page, maxPage);
     for (const paper of ordered.slice(page * pageSize, (page + 1) * pageSize)) {
       const row = node("tr"), titleCell = node("td"), button = node("button", paper.title);
+      const scored = core.score(paper, weights);
       button.type = "button"; button.addEventListener("click", () => openDetail(paper));
       titleCell.append(button, node("small", `${paper.first_author} · ${(paper.first_author_affiliations || []).join("; ") || "Affiliation unknown"}`));
       row.append(titleCell, node("td", `${paper.venue} · ${paper.year}`), node("td", paper.first_author_sector),
         node("td", (paper.countries || []).join(", ") || "—"), node("td", paper.team_sector), node("td", paper.leadership),
-        node("td", paper.compute_evidence || paper.resources || Object.values(paper.compute || {}).some(value => value !== null && value !== undefined && value !== "") ? "Reviewed" : "Unknown"),
-        node("td", number(paper.citations)), node("td", core.score(paper, weights).value?.toFixed(2) ?? "—"));
+        node("td", paper.github?.stars == null ? (paper.repository_url ? "Linked · stars unknown" : "Unknown") : number(paper.github.stars)),
+        node("td", paper.adoption_status || "Unknown"), node("td", paper.maintenance_status && paper.maintenance_status !== "Unknown"
+          ? (core.score(paper, { maintenance: 1 }).components.maintenance === undefined ? "Review due" : paper.maintenance_status) : "Unknown"),
+        node("td", paper.citations == null ? "Unknown" : number(paper.citations)),
+        node("td", scored.value === null ? "—" : `${scored.value.toFixed(2)} · ${Math.round(scored.coverage * 100)}%`));
       tbody.appendChild(row);
     }
-    if (!ordered.length) { const row = node("tr"), cell = node("td", "No papers match these filters."); cell.colSpan = 9; row.appendChild(cell); tbody.appendChild(row); }
+    if (!ordered.length) { const row = node("tr"), cell = node("td", "No papers match these filters."); cell.colSpan = 11; row.appendChild(cell); tbody.appendChild(row); }
     setText("aro-page-status", `${ordered.length ? page * pageSize + 1 : 0}–${Math.min(ordered.length, (page + 1) * pageSize)} of ${ordered.length}`);
     $("aro-prev").disabled = page === 0; $("aro-next").disabled = page >= maxPage;
   }
@@ -212,10 +212,15 @@
     detailRow(dl, "Leadership", paper.leadership); detailRow(dl, "Corresponding", (paper.corresponding_authors || []).map(a => a.name).join(", "));
     detailRow(dl, "Senior author", paper.senior_author); detailRow(dl, "Countries", (paper.countries || []).map(countryName).join(", "));
     detailRow(dl, "Senior affiliation", (paper.senior_author_affiliations || []).join("; "));
-    detailRow(dl, "Citations", number(paper.citations)); detailRow(dl, "Citation percentile", paper.citation_percentile === null ? null : paper.citation_percentile.toFixed(3));
+    detailRow(dl, "Citations", paper.citations == null ? null : number(paper.citations)); detailRow(dl, "Citation percentile", paper.citation_percentile == null ? null : paper.citation_percentile.toFixed(3));
     detailRow(dl, "Venue ranking", `${paper.ranking.ranking_scheme} ${paper.ranking.edition} ${paper.ranking.rank}`);
     detailRow(dl, "Award", paper.award === null ? null : paper.award ? "Verified award" : "Reviewed: no award");
-    detailRow(dl, "Public code", paper.code_available === null ? null : paper.code_available ? "Verified public code" : "Reviewed: unavailable");
+    detailRow(dl, "Public code", paper.code_available == null ? null : paper.code_available ? "Linked in proceedings or reviewed" : "Reviewed: unavailable");
+    detailRow(dl, "GitHub repository", paper.repository_url ? paper.repository_url.replace("https://github.com/", "") : null);
+    detailRow(dl, "GitHub stars", paper.github?.stars == null ? null : `${number(paper.github.stars)} · checked ${paper.github.checked_at.slice(0, 10)}`);
+    detailRow(dl, "Latest repo push", paper.github?.pushed_at ? `${paper.github.pushed_at.slice(0, 10)}${paper.github.archived ? " · archived" : ""}` : null);
+    detailRow(dl, "Use / adoption", paper.adoption_status === "Unknown" || !paper.adoption_status ? null : paper.adoption_status);
+    detailRow(dl, "Maintenance review", paper.maintenance_status === "Unknown" || !paper.maintenance_status ? null : `${paper.maintenance_status} · as of ${paper.review?.date || "unknown"}${core.score(paper, { maintenance: 1 }).components.maintenance === undefined ? " · review due" : ""}`);
     detailRow(dl, "Compute/resources", paper.resources); detailRow(dl, "Funding", paper.funding);
     for (const [key, label] of [["gpu_type", "GPU type"], ["gpu_count", "GPU count"], ["gpu_hours", "GPU-hours"],
       ["accelerator_type", "Accelerator"], ["training_flops", "Training FLOPs"], ["model_parameters", "Model parameters"], ["training_cost", "Training cost"]]) {
@@ -223,11 +228,14 @@
     }
     detailRow(dl, "Score", result.value === null ? "Insufficient component coverage" : `${result.value.toFixed(2)} / 6`);
     detailRow(dl, "Score availability", `${Math.round(result.coverage * 100)}% of selected weight; ${Object.keys(result.components).join(", ") || "none"}`);
-    detailRow(dl, "Topic rule", paper.topic_rule); detailRow(dl, "Metadata source", `${paper.source} · checked ${(paper.checked_at || "").slice(0, 10)}`);
+    detailRow(dl, "Topic rule", paper.topic_rule); detailRow(dl, "Metadata sources", (paper.sources || [{ provider: paper.source }]).map(s => s.provider).join(" + "));
     body.appendChild(dl);
     if (paper.abstract) { body.append(node("h3", "Abstract"), node("p", paper.abstract)); }
     const links = node("p");
-    for (const [label, href] of [["OpenAlex metadata", paper.id], ["Rank evidence", paper.ranking.rank_url], ["Review evidence", paper.review?.evidence_url]]) {
+    for (const [label, href] of [["Proceedings", paper.proceedings_url], ["OpenAlex metadata", String(paper.id).startsWith("https://openalex.org/") ? paper.id : null],
+      ["Code", paper.code_url], ["Repository", paper.repository_url], ["Code association evidence", paper.repository_evidence_url || paper.code_evidence_url],
+      ["Adoption evidence", paper.adoption_evidence_url], ["Maintenance evidence", paper.maintenance_evidence_url],
+      ["Rank evidence", paper.ranking.rank_url], ["Review evidence", paper.review?.evidence_url]]) {
       if (!href) continue; const link = node("a", label + " ↗"); link.href = safeHref(href); link.target = "_blank"; link.rel = "noopener noreferrer"; links.append(link, node("span", "  ·  "));
     }
     body.appendChild(links); $("aro-detail").showModal();
@@ -236,14 +244,42 @@
     const target = $("aro-coverage"); target.replaceChildren();
     for (const item of snapshot.coverage) {
       const row = node("div", null, "aro-coverage-row");
+      const openalex = item.status === "unmapped" ? "No verified OpenAlex venue source" : item.status === "not-refreshed"
+        ? item.source_total > 0 ? `OpenAlex: last known ${number(item.source_total)} indexed; not refreshed` : "OpenAlex: not refreshed; count unknown"
+        : item.status === "rate-limited" ? "OpenAlex: quota reached; count unknown" : item.status === "error"
+        ? `OpenAlex error: ${item.error}` : ["no-index-records", "no-source-matches"].includes(item.status)
+        ? "OpenAlex: no indexed records (not an acceptance count)" : `OpenAlex: ${item.scanned ?? 0} sampled / ${number(item.source_total)} indexed`;
+      const official = item.official_status === "error" ? ` · official index error: ${item.official_error}`
+        : item.official_provider ? ` · ${item.official_provider}: ${number(item.official_sampled)} sampled / ${number(item.official_total)} indexed` : "";
       row.append(node("span", item.venue), node("span", item.year),
-        node("span", item.status === "error" ? `Error: ${item.error}` : item.status === "no-source-matches" ? "No matches for this OpenAlex source ID; not zero conference papers" : `${item.scanned} scanned / ${number(item.source_total)} source results; ${item.included} included${item.partial ? " · capped/partial" : " · source scan"}`, item.status === "error" || item.status === "no-source-matches" ? "aro-error" : ""));
+        node("span", openalex + official, item.status === "error" || item.official_status === "error" ? "aro-error" : ""));
       target.appendChild(row);
     }
   }
+  function renderRankedVenues() {
+    const target = $("aro-ranked-venues"); target.replaceChildren();
+    for (const venue of snapshot.venues) {
+      const row = node("div", null, "aro-venue-row");
+      row.append(node("strong", venue.name), node("span", venue.area));
+      const ranks = node("span");
+      for (const scheme of ["CORE", "CCF", "TH-CPL"]) {
+        if (!venue.rankings?.[scheme]) continue;
+        const link = node("a", `${scheme} ${venue.rankings[scheme]}`);
+        link.href = safeHref(venue.ranking_urls[scheme]); link.target = "_blank"; link.rel = "noopener noreferrer";
+        ranks.append(link, document.createTextNode(" "));
+      }
+      row.append(ranks);
+      const covered = snapshot.coverage.filter(item => item.venue_id === venue.id && (item.source_total > 0 || item.official_total > 0)).length;
+      row.append(node("span", `${covered} indexed years`)); target.append(row);
+    }
+  }
   function exportPapers(format) {
-    const papers = sortedPapers(selected()).map(p => ({ ...p, current_score: core.score(p, weights).value }));
-    const fields = ["id", "doi", "title", "year", "venue", "area", "first_author", "first_author_sector", "team_sector", "leadership", "countries", "citations", "citation_percentile", "current_score", "url"];
+    const papers = sortedPapers(selected()).map(p => {
+      const scored = core.score(p, weights);
+      return { ...p, github_stars: p.github?.stars ?? null, github_checked_at: p.github?.checked_at ?? null,
+        github_pushed_at: p.github?.pushed_at ?? null, current_score: scored.value, score_coverage: scored.coverage };
+    });
+    const fields = ["id", "doi", "title", "year", "venue", "area", "first_author", "first_author_sector", "team_sector", "leadership", "countries", "citations", "citation_percentile", "code_url", "repository_url", "github_stars", "github_checked_at", "github_pushed_at", "adoption_status", "adoption_evidence_url", "maintenance_status", "maintenance_evidence_url", "current_score", "score_coverage", "url"];
     const csvCell = value => `"${String(Array.isArray(value) ? value.join("; ") : value ?? "").replaceAll('"', '""')}"`;
     const content = format === "json" ? JSON.stringify({ exported_at: new Date().toISOString(), scope: snapshot.scope, papers }, null, 2)
       : [fields.join(","), ...papers.map(p => fields.map(key => csvCell(p[key])).join(","))].join("\r\n");
@@ -278,14 +314,16 @@
       snapshot = await response.json();
       if (!Array.isArray(snapshot.papers) || !Array.isArray(snapshot.coverage)) throw new Error("Invalid snapshot schema");
       selectOptions("aro-year", [...new Set(snapshot.papers.map(p => p.year))].sort());
-      selectOptions("aro-area", [...new Set(snapshot.papers.map(p => p.area))].sort());
+      selectOptions("aro-area", [...new Set([...snapshot.venues.map(v => v.area), ...snapshot.papers.map(p => p.area)])].sort());
       selectOptions("aro-venue", snapshot.venues.map(v => v.id), id => snapshot.venues.find(v => v.id === id).name);
       selectOptions("aro-country", [...new Set(snapshot.papers.flatMap(p => p.countries || []))].sort(), countryName);
-      renderCoverage(); render();
-      const partial = snapshot.coverage.filter(c => c.partial && c.scanned).length,
-        empty = snapshot.coverage.filter(c => !c.scanned && c.status !== "error").length,
-        errors = snapshot.coverage.filter(c => c.status === "error").length;
-      setText("aro-status", `OpenAlex snapshot · updated ${snapshot.generated_at.slice(0, 10)} · ${number(snapshot.papers.length)} records · ${partial} capped venue-years · ${empty} empty source matches · ${errors} fetch errors`);
+      renderCoverage(); renderRankedVenues(); render();
+      const official = snapshot.coverage.filter(c => c.official_status && c.official_status !== "error").length,
+        errors = snapshot.coverage.filter(c => c.status === "error" || c.official_status === "error").length,
+        unrefreshed = snapshot.coverage.filter(c => ["not-refreshed", "unmapped", "rate-limited"].includes(c.status)).length,
+        linkedRepos = new Set(snapshot.papers.map(p => p.repository_url).filter(Boolean)),
+        checkedRepos = new Set(snapshot.papers.filter(p => p.github).map(p => p.repository_url));
+      setText("aro-status", `OpenAlex + official proceedings · updated ${snapshot.generated_at.slice(0, 10)} · ${number(snapshot.papers.length)} tracked records · ${official} official venue-years · ${unrefreshed} unrefreshed or unmapped calendar cells · ${checkedRepos.size}/${linkedRepos.size} GitHub links checked · ${errors} source errors`);
     } catch (error) {
       setText("aro-status", `Could not load the real publication snapshot: ${error.message}. No demo records are substituted.`);
       emptyChart($("aro-sector-chart"), "Publication data unavailable.");

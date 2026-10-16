@@ -1,8 +1,1104 @@
 [
-  {"id":"neurips","name":"NeurIPS","area":"AI / ML","ai_native":true,"source_id":"https://openalex.org/S4363606243","source_name":"neural information processing systems","ranking_scheme":"CORE","edition":"2023","rank":"A*","rank_url":"https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=NeurIPS&sort=arank&source=CORE2023"},
-  {"id":"icml","name":"ICML","area":"AI / ML","ai_native":true,"source_id":"https://openalex.org/S4306419644","source_name":"International Conference on Machine Learning","ranking_scheme":"CORE","edition":"2023","rank":"A*","rank_url":"https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=ICML&sort=arank&source=CORE2023"},
-  {"id":"acl","name":"ACL","area":"LLMs / NLP","ai_native":true,"source_id":"https://openalex.org/S4363608652","source_name":"Annual Meeting of the Association for Computational Linguistics (ACL)","ranking_scheme":"CCF","edition":"2022","rank":"A","rank_url":"https://www.ccf.org.cn/Academic_Evaluation/AI/"},
-  {"id":"cvpr","name":"CVPR","area":"Computer Vision","ai_native":true,"source_id":"https://openalex.org/S4210176548","source_name":"IEEE Computer Society Conference on Computer Vision and Pattern Recognition/Proceedings - IEEE Computer Society Conference on Computer Vision and Pattern Recognition/Proceedings","ranking_scheme":"CCF","edition":"2022","rank":"A","rank_url":"https://www.ccf.org.cn/Academic_Evaluation/AI/"},
-  {"id":"osdi","name":"OSDI","area":"Systems","ai_native":false,"source_id":"https://openalex.org/S4306420647","source_name":"Operating Systems Design and Implementation","ranking_scheme":"CCF","edition":"2022","rank":"A","rank_url":"https://www.ccf.org.cn/Academic_Evaluation/TCSE_SS_PDL/"},
-  {"id":"asplos","name":"ASPLOS","area":"Systems","ai_native":false,"source_id":"https://openalex.org/S7407087580","source_name":"ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS)","ranking_scheme":"CCF","edition":"2022","rank":"A","rank_url":"https://www.ccf.org.cn/Academic_Evaluation/ARCH_DCP_SS/"}
+  {
+    "id": "aaai",
+    "name": "AAAI",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4210191458",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=aaai&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "aamas",
+    "name": "AAMAS",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306417597",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=aamas&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "acl",
+    "name": "ACL",
+    "area": "LLMs / NLP",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363608652",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=acl&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "acmmm",
+    "name": "ACM MM",
+    "area": "Multimedia",
+    "ai_native": false,
+    "source_id": "https://openalex.org/S4363608757",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=acmmm&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "aistats",
+    "name": "AISTATS",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306419146",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=aistats&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "bmvc",
+    "name": "BMVC",
+    "area": "Computer Vision",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S7407088578",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=bmvc&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "cade",
+    "name": "CADE",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306418023",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=cade&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "cikm",
+    "name": "CIKM",
+    "area": "Data Mining / Retrieval",
+    "ai_native": false,
+    "source_id": "https://openalex.org/S7407085931",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=cikm&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "coling",
+    "name": "COLING",
+    "area": "LLMs / NLP",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306419219",
+    "source_name": null,
+    "ranking_scheme": "CCF",
+    "edition": "2026",
+    "rank": "B",
+    "rank_url": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+    "rankings": {
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "colt",
+    "name": "COLT",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306418075",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=colt&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "B",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "cp",
+    "name": "CP",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306420726",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=cp&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "cvpr",
+    "name": "CVPR",
+    "area": "Computer Vision",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4210176548",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=cvpr&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "eacl",
+    "name": "EACL",
+    "area": "LLMs / NLP",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306418011",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=eacl&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "ec",
+    "name": "EC",
+    "area": "AI / ML",
+    "ai_native": false,
+    "source_id": "https://openalex.org/S4363608973",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=ec&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "ecai",
+    "name": "ECAI",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306418308",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=ecai&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "eccv",
+    "name": "ECCV",
+    "area": "Computer Vision",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306418318",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=eccv&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "B",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "ecir",
+    "name": "ECIR",
+    "area": "Data Mining / Retrieval",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306418323",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=ecir&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "ecml-pkdd",
+    "name": "ECML PKDD",
+    "area": "Data Mining / Retrieval",
+    "ai_native": true,
+    "source_id": null,
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=ecml-pkdd&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "emnlp",
+    "name": "EMNLP",
+    "area": "LLMs / NLP",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363608991",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=emnlp&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "B",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "foga",
+    "name": "FOGA",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306422346",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=foga&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "gecco",
+    "name": "GECCO",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363608932",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=gecco&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "hri",
+    "name": "HRI",
+    "area": "Robotics",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363608246",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=hri&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "icaps",
+    "name": "ICAPS",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4387283601",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=icaps&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "icassp",
+    "name": "ICASSP",
+    "area": "LLMs / NLP",
+    "ai_native": true,
+    "source_id": null,
+    "source_name": null,
+    "ranking_scheme": "CCF",
+    "edition": "2026",
+    "rank": "B",
+    "rank_url": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+    "rankings": {
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "iccbr",
+    "name": "ICCBR",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306419182",
+    "source_name": null,
+    "ranking_scheme": "CCF",
+    "edition": "2026",
+    "rank": "B",
+    "rank_url": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+    "rankings": {
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "iccv",
+    "name": "ICCV",
+    "area": "Computer Vision",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363607764",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=iccv&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "icdm",
+    "name": "ICDM",
+    "area": "Data Mining / Retrieval",
+    "ai_native": true,
+    "source_id": null,
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=icdm&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "iclr",
+    "name": "ICLR",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306419637",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=iclr&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "icme",
+    "name": "ICME",
+    "area": "Multimedia",
+    "ai_native": false,
+    "source_id": "https://openalex.org/S4363607799",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=icme&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "icml",
+    "name": "ICML",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306419644",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=icml&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "icmr",
+    "name": "ICMR",
+    "area": "Multimedia",
+    "ai_native": true,
+    "source_id": null,
+    "source_name": null,
+    "ranking_scheme": "CCF",
+    "edition": "2026",
+    "rank": "B",
+    "rank_url": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+    "rankings": {
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "icra",
+    "name": "ICRA",
+    "area": "Robotics",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4210217939",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=icra&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "B",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "ijcai",
+    "name": "IJCAI",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306419999",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=ijcai&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "ijcar",
+    "name": "IJCAR",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306420000",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=ijcar&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "interspeech",
+    "name": "Interspeech",
+    "area": "LLMs / NLP",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4393918409",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=interspeech&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "iros",
+    "name": "IROS",
+    "area": "Robotics",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363608614",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=iros&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "iswc",
+    "name": "ISWC",
+    "area": "Data Mining / Retrieval",
+    "ai_native": false,
+    "source_id": "https://openalex.org/S4306420056",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=iswc&sort=arank&source=CORE2023",
+    "rankings": {
+      "CCF": "B",
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "jelia",
+    "name": "JELIA",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306418329",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=jelia&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "kdd",
+    "name": "KDD",
+    "area": "Data Mining / Retrieval",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S7407088418",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=kdd&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "kr",
+    "name": "KR",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306420732",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=kr&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "miccai",
+    "name": "MICCAI",
+    "area": "Computer Vision",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306420499",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=miccai&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "naacl",
+    "name": "NAACL",
+    "area": "LLMs / NLP",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363608774",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=naacl&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "neurips",
+    "name": "NeurIPS",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363606243",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=neurips&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A*",
+      "CCF": "A",
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "ppsn",
+    "name": "PPSN",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306420682",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=ppsn&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "recsys",
+    "name": "RecSys",
+    "area": "Data Mining / Retrieval",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S7407086088",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=recsys&sort=arank&source=CORE2023",
+    "rankings": {
+      "CCF": "B",
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "rss",
+    "name": "RSS",
+    "area": "Robotics",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306420803",
+    "source_name": null,
+    "ranking_scheme": "TH-CPL",
+    "edition": "2019",
+    "rank": "A",
+    "rank_url": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf",
+    "rankings": {
+      "TH-CPL": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "sat",
+    "name": "SAT",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306421062",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=sat&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "sdm",
+    "name": "SDM",
+    "area": "Data Mining / Retrieval",
+    "ai_native": true,
+    "source_id": null,
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=sdm&sort=arank&source=CORE2023",
+    "rankings": {
+      "CCF": "B",
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "sigir",
+    "name": "SIGIR",
+    "area": "Data Mining / Retrieval",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363608773",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=sigir&sort=arank&source=CORE2023",
+    "rankings": {
+      "CCF": "A",
+      "CORE": "A*"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "uai",
+    "name": "UAI",
+    "area": "AI / ML",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4306421103",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=uai&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "wacv",
+    "name": "WACV",
+    "area": "Computer Vision",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363607736",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=wacv&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "wsdm",
+    "name": "WSDM",
+    "area": "Data Mining / Retrieval",
+    "ai_native": true,
+    "source_id": "https://openalex.org/S4363608885",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=wsdm&sort=arank&source=CORE2023",
+    "rankings": {
+      "CORE": "A",
+      "CCF": "B"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  },
+  {
+    "id": "www",
+    "name": "The Web Conference",
+    "area": "Data Mining / Retrieval",
+    "ai_native": false,
+    "source_id": "https://openalex.org/S4363608783",
+    "source_name": null,
+    "ranking_scheme": "CORE",
+    "edition": "2023",
+    "rank": "A*",
+    "rank_url": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=www&sort=arank&source=CORE2023",
+    "rankings": {
+      "CCF": "A",
+      "CORE": "A*"
+    },
+    "ranking_urls": {
+      "CORE": "https://portal.core.edu.au/conf-ranks/?by=all&page=1&search=&sort=arank&source=CORE2023",
+      "CCF": "https://lib.ecnu.edu.cn/_upload/article/files/e2/d9/dd45764345088869915f6b3617a4/28891f1f-eb8a-4000-a279-6e7141d92488.pdf",
+      "TH-CPL": "https://numbda.cs.tsinghua.edu.cn/~yuwj/TH-CPL.pdf"
+    }
+  }
 ]

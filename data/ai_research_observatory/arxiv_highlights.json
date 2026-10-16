@@ -1,0 +1,5 @@
+[
+  {"year": 2023, "title": "GPT-4 Technical Report", "area": "Foundation models", "url": "https://arxiv.org/abs/2303.08774", "note": "Standalone technical report; not attributed to a conference here."},
+  {"year": 2024, "title": "The Llama 3 Herd of Models", "area": "Open-weight language models", "url": "https://arxiv.org/abs/2407.21783", "note": "Standalone model report; not attributed to a conference here."},
+  {"year": 2025, "title": "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning", "area": "Reasoning models", "url": "https://arxiv.org/abs/2501.12948", "note": "Standalone model report; not attributed to a conference here."}
+]

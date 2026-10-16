@@ -1,15 +1,36 @@
 (function (root) {
   "use strict";
   const COMPONENTS = { citation: "citation_percentile", venue: "prestige", award: "award", code: "code_available" };
-  function score(paper, weights) {
+  function ageDays(value, now) {
+    const date = Date.parse(value);
+    return Number.isFinite(date) ? Math.max(0, (now.getTime() - date) / 86400000) : null;
+  }
+  function evidenceValue(paper, name, now) {
+    if (name === "stars" || name === "activity") {
+      const repo = paper.github;
+      const checkedAge = ageDays(repo?.checked_at, now);
+      if (!repo || checkedAge === null || checkedAge > 45 || repo.fork === true) return null;
+      if (name === "stars") return Number.isInteger(repo.stars) && repo.stars >= 0
+        ? Math.min(1, Math.log1p(repo.stars) / Math.log1p(1000)) : null;
+      const pushedAge = ageDays(repo.pushed_at, now);
+      return pushedAge === null ? null : repo.archived ? 0 : Math.max(0, Math.min(1, (365 - pushedAge) / 185));
+    }
+    if (name === "maintenance") return paper.maintenance_evidence_url && ageDays(paper.review?.date, now) !== null
+      && ageDays(paper.review.date, now) <= 365
+      ? ({ active: 1, inactive: 0 }[paper.maintenance_status] ?? null) : null;
+    if (name === "adoption") return paper.adoption_evidence_url
+      ? ({ integration: .6, pilot: .35, production: 1 }[paper.adoption_status] ?? null) : null;
+    const raw = paper[COMPONENTS[name]];
+    return (name === "award" || name === "code") && typeof raw === "boolean" ? Number(raw) : raw;
+  }
+  function score(paper, weights, now = new Date()) {
     const selected = Object.entries(weights).filter(([, weight]) => weight > 0);
     const total = selected.reduce((sum, [, weight]) => sum + weight, 0);
     if (!total) return { value: null, coverage: 0, components: {} };
     let numerator = 0, available = 0, count = 0;
     const components = {};
     for (const [name, weight] of selected) {
-      const raw = paper[COMPONENTS[name]];
-      const value = (name === "award" || name === "code") && typeof raw === "boolean" ? Number(raw) : raw;
+      const value = evidenceValue(paper, name, now);
       if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 1) continue;
       components[name] = value;
       numerator += value * weight;
@@ -17,7 +38,9 @@
       count++;
     }
     const coverage = available / total;
-    return { value: count >= 2 && coverage >= 0.55 ? 6 * numerator / available : null, coverage, components };
+    const enoughEvidence = count >= 2 && coverage >= .55
+      || count >= 4 && coverage >= .5 && "code" in components && ("adoption" in components || "maintenance" in components);
+    return { value: enoughEvidence ? 6 * numerator / available : null, coverage, components };
   }
   function filterPapers(papers, filters) {
     const needle = (filters.search || "").trim().toLowerCase();
