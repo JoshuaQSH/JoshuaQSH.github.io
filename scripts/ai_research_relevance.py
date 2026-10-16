@@ -35,11 +35,15 @@ _NEGATIVE_CONTEXT = re.compile(r"\b(?:not|never|without|excluded|unrelated|"
 _SCOPE_EXCLUSION = re.compile(r"\b(?:outside (?:the )?scope|out of scope|beyond (?:the )?scope|"
                               r"unrelated|future work)\b", re.I)
 _SHORT_AI_REFERENCE = re.compile(r"\b(?:ai|ml)\b", re.I)
+# An "and" boundary needs a new outside-work claim, not a coordinated verb or possessive object.
 _CLAUSE_BREAK = re.compile(r"[.!?;,:()\[\]{}]+|[\u2013\u2014]+|"
                            r"\b(?:but|while|whereas|although|however)\b|"
                            r"\band\s+(?=(?:we\s+)?(?:do\s+not|never|avoid\w*)|"
                            r"(?:the\s+)?(?:previous|prior|related|other)\s+"
-                           r"(?:studies|study|work|research|papers?|researchers?)\b)|"
+                           r"(?:studies|study|work|research|papers?|researchers?)\b"
+                           r"(?!['\u2019])\s+(?:use[ds]?|train(?:s|ed)?|serv(?:e|es|ed)|"
+                           r"evaluat(?:e|es|ed)|deploy(?:s|ed)?|builds?|built|"
+                           r"benchmark(?:s|ed)?|report(?:s|ed)?)\b)|"
                            r"\b(?:related|prior) work\b", re.I)
 
 

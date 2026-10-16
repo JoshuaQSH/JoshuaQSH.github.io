@@ -94,6 +94,25 @@ class RelevanceTests(unittest.TestCase):
         abstract = "We use a GPU scheduler and previous studies use large language models."
         self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], "unresolved")
 
+    def test_other_researchers_possessive_models_are_own_work_object(self):
+        paper = row("GPU Scheduling in Datacenters")
+        abstract = "We use GPUs and other researchers\u2019 large language models."
+        self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], "matched")
+
+    def test_possessive_object_and_outside_subject_near_misses(self):
+        paper = row("GPU Scheduling in Datacenters")
+        cases = (
+            ("We use GPUs and other researchers' large language models.", "matched"),
+            ("We use GPUs and previous studies\u2019 large language models.", "matched"),
+            ("We use GPUs and other work's large language models.", "matched"),
+            ("We use GPUs and other researchers train large language models.", "unresolved"),
+            ("We use GPUs and prior studies evaluate large language models.", "unresolved"),
+            ("We use GPUs and other work serves large language models.", "unresolved"),
+        )
+        for abstract, expected in cases:
+            with self.subTest(abstract=abstract):
+                self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], expected)
+
     def test_explicit_alternate_subject_near_misses(self):
         paper = row("GPU Scheduling in Datacenters")
         cases = (
