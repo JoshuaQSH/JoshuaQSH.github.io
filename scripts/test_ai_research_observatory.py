@@ -101,6 +101,12 @@ class ObservatoryTests(unittest.TestCase):
         self.assertIsNone(p["citation_percentile"])
         self.assertEqual(p["topic_rule"], "title-keyword")
 
+    def test_article_in_verified_conference_source_is_eligible(self):
+        work = {"id": "https://openalex.org/W3", "title": "GPU inference for language models",
+                "publication_year": 2025, "type": "article"}
+        self.assertIsNotNone(normalize_work(work, VENUE))
+        self.assertIsNone(normalize_work({**work, "type": "preprint"}, VENUE))
+
     def test_cross_sector_does_not_imply_leadership(self):
         w = {"id": "https://openalex.org/W2", "title": "GPU inference", "publication_year": 2025,
              "authorships": [{"author_position": "first", "author": {"display_name": "A"},
@@ -243,6 +249,22 @@ class ObservatoryTests(unittest.TestCase):
             self.assertEqual([p["id"] for p in papers], [work["id"]])
             self.assertEqual(papers[0]["manual_evidence_url"], "https://example.org/proceedings")
 
+    def test_manual_article_with_verified_conference_source_is_retained(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            venues, reviews, manual, output = (root / name for name in ("venues.json", "reviews.json", "manual.json", "snapshot.json"))
+            venues.write_text(json.dumps([VENUE]))
+            reviews.write_text("{}")
+            manual.write_text(json.dumps([{"id": "https://openalex.org/W7", "venue_id": "osdi", "year": 2025,
+                "evidence_url": "https://example.org/proceedings"}]))
+            work = {"id": "https://openalex.org/W7", "title": "GPU inference for LLMs", "publication_year": 2025,
+                    "type": "article", "primary_location": {"source": {"id": VENUE["source_id"]}}}
+            with patch.multiple(pipeline, VENUES=venues, REVIEWS=reviews, MANUAL=manual, OUTPUT=output), \
+                 patch.object(pipeline, "fetch_works", return_value=([], 0, "2026-10-15T00:00:00+00:00", False)), \
+                 patch.object(pipeline, "fetch_work_by_id", return_value=work):
+                pipeline.refresh(2025, 2025, 25, official_cap=0, github_cap=0)
+            self.assertEqual([p["id"] for p in json.loads(output.read_text())["papers"]], [work["id"]])
+
     def test_manual_work_rejects_non_conference_type(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -252,7 +274,7 @@ class ObservatoryTests(unittest.TestCase):
             manual.write_text(json.dumps([{"id": "https://openalex.org/W7", "venue_id": "osdi", "year": 2025,
                 "evidence_url": "https://example.org/proceedings"}]))
             work = {"id": "https://openalex.org/W7", "title": "GPU inference", "publication_year": 2025,
-                    "type": "article", "primary_location": {"source": {"id": VENUE["source_id"]}}}
+                    "type": "preprint", "primary_location": {"source": {"id": VENUE["source_id"]}}}
             with patch.multiple(pipeline, VENUES=venues, REVIEWS=reviews, MANUAL=manual, OUTPUT=output), \
                  patch.object(pipeline, "fetch_works", return_value=([], 0, "2026-10-15T00:00:00+00:00", False)), \
                  patch.object(pipeline, "fetch_work_by_id", return_value=work):
@@ -278,6 +300,13 @@ class ObservatoryTests(unittest.TestCase):
             sent = request.call_args.args[0]
             self.assertNotIn("private-test-key", sent.full_url)
             self.assertEqual(sent.get_header("Authorization"), "Bearer private-test-key")
+
+    def test_openalex_query_does_not_exclude_article_typed_conference_works(self):
+        payload = {"meta": {"count": 1}, "results": []}
+        with tempfile.TemporaryDirectory() as directory, patch.object(pipeline, "CACHE", Path(directory)), \
+             patch.object(pipeline, "urlopen", return_value=io.BytesIO(json.dumps(payload).encode())) as request:
+            pipeline.fetch_works(VENUE, 2025, 25, "")
+            self.assertNotIn("type%3Aconference-paper", request.call_args.args[0].full_url)
 
     def test_manual_openalex_lookup_keeps_key_out_of_url(self):
         with patch.object(pipeline, "urlopen", return_value=io.BytesIO(b'{}')) as request:

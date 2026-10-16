@@ -77,7 +77,7 @@ def abstract_text(inverted):
 
 
 def normalize_work(work, venue):
-    if not work.get("id") or not work.get("title") or work.get("type") != "conference-paper" and work.get("type") is not None:
+    if not work.get("id") or not work.get("title") or work.get("type") not in (None, "conference-paper", "article"):
         return None
     title = work["title"]
     if re.search(r"\b(?:workshop|tutorial|demo(?:nstration)?|poster|challenge|student research)\b", title, re.I):
@@ -244,7 +244,7 @@ def fetch_work_by_id(work_id, key):
 
 
 def fetch_works(venue, year, cap, key):
-    params = {"filter": f"publication_year:{year},primary_location.source.id:{venue['source_id']},type:conference-paper",
+    params = {"filter": f"publication_year:{year},primary_location.source.id:{venue['source_id']}",
               "per_page": min(cap, 100), "sort": "publication_date:asc"}
     cache_key = hashlib.sha256(urlencode(params).encode()).hexdigest()
     cache_path = CACHE / f"{cache_key}.json"
@@ -280,7 +280,7 @@ def fetch_works(venue, year, cap, key):
 
 
 def cached_works(venue, year, cap):
-    params = {"filter": f"publication_year:{year},primary_location.source.id:{venue['source_id']},type:conference-paper",
+    params = {"filter": f"publication_year:{year},primary_location.source.id:{venue['source_id']}",
               "per_page": min(cap, 100), "sort": "publication_date:asc"}
     path = CACHE / (hashlib.sha256(urlencode(params).encode()).hexdigest() + ".json")
     if not path.exists():
@@ -393,11 +393,12 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
         try:
             work = fetch_work_by_id(item["id"], key)
             source = ((work.get("primary_location") or {}).get("source") or {}).get("id")
-            if work.get("id") != item["id"] or work.get("publication_year") != item["year"] or work.get("type") != "conference-paper" or source != venue["source_id"]:
+            if (work.get("id") != item["id"] or work.get("publication_year") != item["year"]
+                    or work.get("type") not in ("conference-paper", "article") or source != venue["source_id"]):
                 raise ValueError("Manual work does not match its verified venue, year, and source")
             paper = normalize_work(work, venue)
             if not paper:
-                raise ValueError("Manual work fails the conference-paper and topic filters")
+                raise ValueError("Manual work fails the conference-source work and topic filters")
             paper["manual_evidence_url"] = item["evidence_url"]
             papers[paper["id"]] = paper
         except Exception as exc:
