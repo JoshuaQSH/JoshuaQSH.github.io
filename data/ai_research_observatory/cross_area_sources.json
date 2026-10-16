@@ -638,7 +638,7 @@
     }
   },
   "hpca": {
-    "dblp_stream": "https://dblp.org/streams/conf/cnhpca",
+    "dblp_stream": "https://dblp.org/streams/conf/hpca",
     "source_family": "ieee-proceedings",
     "year_basis": "event-year; verify journal-issue year against the event",
     "excluded_material": [
@@ -655,7 +655,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cnhpca"
+          "https://dblp.org/streams/conf/hpca"
         ]
       },
       "2021": {
@@ -664,7 +664,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cnhpca"
+          "https://dblp.org/streams/conf/hpca"
         ]
       },
       "2022": {
@@ -673,7 +673,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cnhpca"
+          "https://dblp.org/streams/conf/hpca"
         ]
       },
       "2023": {
@@ -682,7 +682,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cnhpca"
+          "https://dblp.org/streams/conf/hpca"
         ]
       },
       "2024": {
@@ -691,7 +691,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cnhpca"
+          "https://dblp.org/streams/conf/hpca"
         ]
       },
       "2025": {
@@ -700,7 +700,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cnhpca"
+          "https://dblp.org/streams/conf/hpca"
         ]
       },
       "2026": {
@@ -709,7 +709,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/cnhpca"
+          "https://dblp.org/streams/conf/hpca"
         ]
       }
     }
@@ -1934,6 +1934,8 @@
       },
       "2025": {
         "official_url": "https://www.usenix.org/conference/osdi25/technical-sessions",
+        "official_index_type": "usenix-technical-sessions",
+        "official_index_verified": true,
         "track_scope": "OSDI technical research papers",
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
@@ -2075,39 +2077,71 @@
       },
       "2023": {
         "official_url": null,
-        "track_scope": "PLDI main research papers",
+        "track_scope": "PACMPL PLDI research issue",
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/pldi"
-        ]
+          "https://dblp.org/streams/journals/pacmpl",
+          "https://dblp.org/db/journals/pacmpl/pacmpl7.html",
+          "https://blog.sigplan.org/2022/08/08/pldi-will-join-pacmpl/"
+        ],
+        "dblp_stream": "https://dblp.org/streams/journals/pacmpl",
+        "dblp_issue_field": "publishedInJournalVolumeIssue",
+        "dblp_issues": [
+          "PLDI"
+        ],
+        "source_family": "acm-journal-issue"
       },
       "2024": {
         "official_url": null,
-        "track_scope": "PLDI main research papers",
+        "track_scope": "PACMPL PLDI research issue",
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/pldi"
-        ]
+          "https://dblp.org/streams/journals/pacmpl",
+          "https://dblp.org/db/journals/pacmpl/pacmpl8.html",
+          "https://blog.sigplan.org/2022/08/08/pldi-will-join-pacmpl/"
+        ],
+        "dblp_stream": "https://dblp.org/streams/journals/pacmpl",
+        "dblp_issue_field": "publishedInJournalVolumeIssue",
+        "dblp_issues": [
+          "PLDI"
+        ],
+        "source_family": "acm-journal-issue"
       },
       "2025": {
         "official_url": null,
-        "track_scope": "PLDI main research papers",
+        "track_scope": "PACMPL PLDI research issue",
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/pldi"
-        ]
+          "https://dblp.org/streams/journals/pacmpl",
+          "https://dblp.org/db/journals/pacmpl/pacmpl9.html",
+          "https://www.sigplan.org/announce/2024-09-21-pldi-2025/"
+        ],
+        "dblp_stream": "https://dblp.org/streams/journals/pacmpl",
+        "dblp_issue_field": "publishedInJournalVolumeIssue",
+        "dblp_issues": [
+          "PLDI"
+        ],
+        "source_family": "acm-journal-issue"
       },
       "2026": {
         "official_url": null,
-        "track_scope": "PLDI main research papers",
+        "track_scope": "PACMPL PLDI research issue",
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/pldi"
-        ]
+          "https://dblp.org/streams/journals/pacmpl",
+          "https://dblp.org/db/journals/pacmpl/pacmpl10.html",
+          "https://www.sigplan.org/announce/2025-09-24-pldi-2026/"
+        ],
+        "dblp_stream": "https://dblp.org/streams/journals/pacmpl",
+        "dblp_issue_field": "publishedInJournalVolumeIssue",
+        "dblp_issues": [
+          "PLDI"
+        ],
+        "source_family": "acm-journal-issue"
       }
     }
   },
@@ -2315,7 +2349,7 @@
     }
   },
   "saner": {
-    "dblp_stream": "https://dblp.org/streams/conf/wcre",
+    "dblp_stream": "https://dblp.org/streams/conf/saner",
     "source_family": "ieee-proceedings",
     "year_basis": "event-year; verify journal-issue year against the event",
     "excluded_material": [
@@ -2333,7 +2367,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/wcre"
+          "https://dblp.org/streams/conf/saner"
         ]
       },
       "2021": {
@@ -2342,7 +2376,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/wcre"
+          "https://dblp.org/streams/conf/saner"
         ]
       },
       "2022": {
@@ -2351,7 +2385,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/wcre"
+          "https://dblp.org/streams/conf/saner"
         ]
       },
       "2023": {
@@ -2360,7 +2394,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/wcre"
+          "https://dblp.org/streams/conf/saner"
         ]
       },
       "2024": {
@@ -2369,7 +2403,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/wcre"
+          "https://dblp.org/streams/conf/saner"
         ]
       },
       "2025": {
@@ -2378,7 +2412,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/wcre",
+          "https://dblp.org/streams/conf/saner",
           "https://conf.researchr.org/track/saner-2025/saner-2025-papers"
         ]
       },
@@ -2388,7 +2422,7 @@
         "status": "unresolved",
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
-          "https://dblp.org/streams/conf/wcre"
+          "https://dblp.org/streams/conf/saner"
         ]
       }
     }
