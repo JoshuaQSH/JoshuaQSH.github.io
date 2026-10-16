@@ -3,6 +3,8 @@ title: "AI Research Observatory — Industry vs Academia"
 date: 2026-10-15
 categories: ["Hodgepodge"]
 tags: ["ai-research", "bibliometrics", "data-viz", "openalex"]
+image: "/images/hodgepodge/AI_Research_ Academia Meets Industry.png"
+imageAlt: "Illustrated figures representing academia and industry face a networked globe beneath AI symbols and a rising chart."
 summary: "An auditable, interactive sample of top-conference AI papers since 2020, comparing research sectors, influence, and geography."
 layout: "ai-research-observatory"
 ---
