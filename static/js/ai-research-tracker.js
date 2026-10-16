@@ -23,6 +23,15 @@
   };
   const empty = node => { while (node.firstChild) node.removeChild(node.firstChild); };
   const fmt = number => number == null ? "—" : new Intl.NumberFormat("en-GB").format(number);
+  const catalog = JSON.parse($("ai-research-catalog-data").textContent);
+  const sourceUrls = row => [...new Set([...(row?.source_urls || []), row?.source_url, row?.official_url, row?.source_id].filter(url => /^https?:\/\//.test(url)))];
+  const rowFor = (snapshot, venueId, year) => snapshot.coverage.find(row => row.venue_id === venueId && row.year === year);
+  const mainCount = row => row?.status === "verified" && !row.stale && Number.isFinite(row.main_track_total) ? row.main_track_total : null;
+  const bibliographyCount = row => row && !row.stale && Number.isFinite(row.bibliography_total) ? row.bibliography_total : null;
+  const aiCount = row => row && !row.stale && Number.isFinite(row.ai_matched_count) ? row.ai_matched_count : null;
+  const legacyCount = row => row && mainCount(row) === null && bibliographyCount(row) === null &&
+    (row.source_total > 0 || row.official_total > 0);
+  const availability = row => row ? `${legacyCount(row) ? "legacy index only · " : ""}${row.status || "unresolved"}${row.stale ? " · stale" : ""}${row.gap_reason ? ` · ${row.gap_reason}` : ""}` : "not yet available in the published snapshot";
   const xAt = (year, left, width) => left + (year - 2020) * width / (years.length - 1);
 
   function axes(node, top, bottom, left, right, max, suffix) {
@@ -52,7 +61,7 @@
       previous = {x,y};
     }
     for (const {x,y,point} of markers) {
-      const marker = svg("circle", {cx:x,cy:y,r:5,fill:color,class:"point",tabindex:"0",role:"button","aria-label":point.label}, node);
+      const marker = svg("circle", {cx:x,cy:y,r:5,fill:color,class:`point ${className}`,tabindex:"0",role:"button","aria-label":point.label}, node);
       marker.addEventListener("click", () => detail(point));
       marker.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); detail(point); } });
       svg("title", {}, marker).textContent = point.label;
@@ -105,34 +114,61 @@
   }
 
   function renderIndex(snapshot) {
-    const venue = snapshot.venues.find(v => v.id === $("research-index-venue").value);
+    const venue = catalog.find(v => v.id === $("research-index-venue").value);
     if (!venue) return;
-    const rows = snapshot.coverage.filter(c => c.venue_id === venue.id);
     const chart = $("research-index-chart"); empty(chart);
-    const values = rows.flatMap(row => [row.source_total, row.official_total]).filter(value => Number.isFinite(value) && value > 0);
+    const rows = years.map(year => ({year, row: rowFor(snapshot, venue.id, year)}));
+    const values = rows.flatMap(({row}) => [mainCount(row), bibliographyCount(row), aiCount(row)]).filter(Number.isFinite);
     const max = Math.max(100, Math.ceil(Math.max(0, ...values) / 500) * 500);
     const top = 18, bottom = 267, left = 56, right = 735;
     axes(chart, top, bottom, left, right, max, "");
-    for (const [field, color, label] of [["source_total", "#367580", "OpenAlex indexed"], ["official_total", "#c33e42", "Official proceedings index"]]) {
-      line(chart, rows.map(row => ({year:row.year, value:row[field] > 0 ? row[field] : null, row,
-        label:`${venue.name} ${row.year}: ${fmt(row[field])} ${label.toLowerCase()} records`})), color, "", left, right, top, bottom, max, point => {
+    for (const [kind, color, label, valueFor] of [
+      ["main-track", "#c33e42", "verified main-track papers", mainCount],
+      ["ai-matched", "#367580", "observed AI matches", aiCount],
+      ["bibliography", "#a86824", "bibliography records (not verified main-track)", row => mainCount(row) === null ? bibliographyCount(row) : null]
+    ]) {
+      line(chart, rows.map(({year, row}) => ({year, value:valueFor(row), row,
+        label:`${venue.name} ${year}: ${fmt(valueFor(row))} ${label}${kind === "ai-matched" ? ` among ${fmt(row?.scanned_count ?? row?.eligible_count)} scanned eligible records${row?.ai_scan_status === "partial" ? "; partial scan" : ""}` : ""}${row?.track_scope ? `; ${row.track_scope}` : ""}`})), color, kind, left, right, top, bottom, max, point => {
         const detail = $("research-index-detail"); empty(detail);
-        detail.append(document.createTextNode(`${point.label}. This is an index count, not an acceptance total. `));
-        const url = field === "official_total" ? point.row.official_url : venue.source_id;
-        if (url) {
+        detail.append(document.createTextNode(`${point.label}. ${availability(point.row)}. Not an organizer acceptance count. `));
+        for (const url of sourceUrls(point.row)) {
           const link = document.createElement("a"); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer";
-          link.textContent = "Inspect source"; detail.append(link);
+          link.textContent = "Inspect source"; link.setAttribute("aria-label", `Inspect ${venue.name} ${point.year} source`);
+          detail.append(link, document.createTextNode(" "));
         }
       });
     }
-    const found = rows.filter(row => row.source_total > 0 || row.official_total > 0).length;
-    $("research-index-detail").textContent = `${venue.name}: ${found} of ${years.length} years have indexed records. ${venue.source_id ? "Other years may be unindexed or not held." : "No verified OpenAlex source is mapped; a missing count is not zero."}`;
+    const verified = rows.filter(({row}) => mainCount(row) !== null).length;
+    const fallback = rows.filter(({row}) => mainCount(row) === null && bibliographyCount(row) !== null).length;
+    const legacy = rows.filter(({row}) => legacyCount(row)).length;
+    const gaps = rows.filter(({row}) => mainCount(row) === null && bibliographyCount(row) === null && !legacyCount(row))
+      .map(({year, row}) => `${year} ${availability(row)}`);
+    $("research-index-detail").textContent = `${venue.name}: ${verified} verified main-track years; ${fallback} bibliography-only years; ${legacy} legacy index years not plotted as main-track. ${gaps.length ? `Gaps: ${gaps.join("; ")}.` : "No unresolved calendar gaps."}`;
+    const tbody = $("research-index-rows"); empty(tbody);
+    for (const {year, row} of rows) {
+      const tr = document.createElement("tr");
+      for (const value of [year, availability(row), fmt(mainCount(row)), fmt(bibliographyCount(row)),
+        aiCount(row) === null ? "—" : `${fmt(aiCount(row))} / ${fmt(row.scanned_count ?? row.eligible_count)} scanned${row.ai_scan_status === "partial" ? " · partial" : ""}`]) {
+        const td = document.createElement("td"); td.textContent = value; tr.append(td);
+      }
+      const source = document.createElement("td"); source.append(document.createTextNode(row?.track_scope || "Track scope unverified"));
+      if (legacyCount(row)) source.append(document.createTextNode(` · ${Number.isFinite(row.source_total) ? `OpenAlex: ${fmt(row.source_total)}` : `publisher index: ${fmt(row.official_total)}`} index matches; not verified main-track`));
+      for (const url of sourceUrls(row)) {
+        const link = document.createElement("a"); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer";
+        link.textContent = "Source"; link.setAttribute("aria-label", `Source for ${venue.name} ${year}`);
+        source.append(document.createTextNode(" · "), link);
+      }
+      tr.append(source); tbody.append(tr);
+    }
   }
 
   function renderCatalog(snapshot) {
     const area = $("research-catalog-area").value;
+    const rank = $("research-catalog-rank").value;
+    const year = Number($("research-catalog-year").value);
     const tbody = $("research-catalog-rows"); empty(tbody);
-    for (const venue of snapshot.venues.filter(item => !area || item.area === area)) {
+    for (const venue of catalog.filter(item => (!area || item.area === area) &&
+      (!rank || (rank === "unranked" ? !Object.keys(item.rankings || {}).length : Object.values(item.rankings || {}).includes(rank))))) {
       const tr = document.createElement("tr");
       for (const value of [venue.name, venue.area]) {
         const td = document.createElement("td"); td.textContent = value; tr.append(td);
@@ -145,10 +181,14 @@
         } else td.textContent = "—";
         tr.append(td);
       }
-      const rows = snapshot.coverage.filter(row => row.venue_id === venue.id);
-      const observed = rows.filter(row => row.source_total > 0 || row.official_total > 0).length;
-      const td = document.createElement("td"); td.textContent = `${observed} / ${years.length}`;
-      td.title = observed === 0 ? "No indexed records; not zero accepted papers" : "Years with at least one indexed record, not necessarily full proceedings";
+      const rows = (year ? [year] : years).map(cellYear => rowFor(snapshot, venue.id, cellYear));
+      const verified = rows.filter(row => mainCount(row) !== null).length;
+      const fallback = rows.filter(row => mainCount(row) === null && bibliographyCount(row) !== null).length;
+      const legacy = rows.filter(legacyCount).length;
+      const td = document.createElement("td"); td.textContent = year
+        ? legacy ? `legacy index: ${fmt(rows[0].source_total ?? rows[0].official_total)} matches; not verified main-track` : availability(rows[0])
+        : `${verified} verified · ${fallback} bibliography · ${legacy} legacy index · ${rows.length - verified - fallback - legacy} gaps`;
+      td.title = "Verified main-track, bibliography-only, and unresolved calendar years; not organizer acceptances";
       tr.append(td); tbody.append(tr);
     }
   }
@@ -202,22 +242,28 @@
   }
   Promise.all([load(root.dataset.historyUrl),load(root.dataset.observatoryUrl)]).then(([history,snapshot]) => {
     if (!Array.isArray(history.counts) || !Array.isArray(history.awards) || !Array.isArray(snapshot.papers)) throw new Error("Invalid dataset");
-    for (const venue of snapshot.venues) {
+    for (const venue of catalog) {
       const option = document.createElement("option"); option.value = venue.id; option.textContent = venue.name;
       $("research-index-venue").append(option);
     }
     $("research-index-venue").value = "neurips";
-    for (const area of [...new Set(snapshot.venues.map(venue => venue.area))].sort()) {
+    for (const area of [...new Set(catalog.map(venue => venue.area))].sort()) {
       const option = document.createElement("option"); option.value = area; option.textContent = area;
       $("research-catalog-area").append(option);
+    }
+    for (const year of years) {
+      const option = document.createElement("option"); option.value = year; option.textContent = year;
+      $("research-catalog-year").append(option);
     }
     renderCounts(history); renderLedger(history); renderIndex(snapshot); renderCatalog(snapshot); renderAwards(history); renderTopics(snapshot);
     $("research-count-mode").addEventListener("change", () => renderCounts(history));
     $("research-index-venue").addEventListener("change", () => renderIndex(snapshot));
     $("research-catalog-area").addEventListener("change", () => renderCatalog(snapshot));
+    $("research-catalog-rank").addEventListener("change", () => renderCatalog(snapshot));
+    $("research-catalog-year").addEventListener("change", () => renderCatalog(snapshot));
     $("research-topic").addEventListener("change", () => renderTopics(snapshot));
-    const indexed = snapshot.coverage.filter(row => row.source_total > 0 || row.official_total > 0).length;
-    const unrefreshed = snapshot.coverage.filter(row => ["not-refreshed", "unmapped", "rate-limited"].includes(row.status)).length;
-    $("research-status").textContent = `Organizer figures reviewed ${history.reviewed_at} · sample updated ${new Date(snapshot.generated_at).toLocaleDateString("en-GB")} · ${indexed} indexed venue-years · ${unrefreshed} unrefreshed or unmapped calendar cells`;
+    const verified = snapshot.coverage.filter(row => mainCount(row) !== null).length;
+    const fallback = snapshot.coverage.filter(row => mainCount(row) === null && bibliographyCount(row) !== null).length;
+    $("research-status").textContent = `Organizer figures reviewed ${history.reviewed_at} · sample updated ${new Date(snapshot.generated_at).toLocaleDateString("en-GB")} · ${catalog.length} ranked series, including ${catalog.filter(venue => venue.source_rule_id).length} new cross-area series · ${verified} verified main-track venue-years · ${fallback} bibliography-only venue-years · legacy index matches remain separately labelled`;
   }).catch(() => { $("research-status").textContent = "The research datasets could not be loaded. Please retry later."; });
 })();

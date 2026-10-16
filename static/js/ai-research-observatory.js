@@ -15,7 +15,7 @@
     ["2025", [["DeepSeek-R1", "https://github.com/deepseek-ai/DeepSeek-R1"], ["GPT-5", "https://openai.com/index/introducing-gpt-5/"]]],
     ["2026", []]
   ];
-  let snapshot = null, page = 0;
+  let snapshot = null, catalog = [], page = 0;
   const pageSize = 20;
 
   function node(tag, text, cls) {
@@ -242,23 +242,48 @@
   }
   function renderCoverage() {
     const target = $("aro-coverage"); target.replaceChildren();
-    for (const item of snapshot.coverage) {
+    const cells = new Map(snapshot.coverage.map(item => [`${item.venue_id}:${item.year}`, item]));
+    const yearFilter = Number($("aro-coverage-year").value);
+    const years = yearFilter ? [yearFilter] : Array.from({ length: new Date().getFullYear() - 2019 }, (_, index) => 2020 + index);
+    for (const venue of coverageVenues()) for (const year of years) {
+      const item = cells.get(`${venue.id}:${year}`);
       const row = node("div", null, "aro-coverage-row");
-      const openalex = item.status === "unmapped" ? "No verified OpenAlex venue source" : item.status === "not-refreshed"
-        ? item.source_total > 0 ? `OpenAlex: last known ${number(item.source_total)} indexed; not refreshed` : "OpenAlex: not refreshed; count unknown"
-        : item.status === "rate-limited" ? "OpenAlex: quota reached; count unknown" : item.status === "error"
-        ? `OpenAlex error: ${item.error}` : ["no-index-records", "no-source-matches"].includes(item.status)
-        ? "OpenAlex: no indexed records (not an acceptance count)" : `OpenAlex: ${item.scanned ?? 0} sampled / ${number(item.source_total)} indexed`;
-      const official = item.official_status === "error" ? ` · official index error: ${item.official_error}`
-        : item.official_provider ? ` · ${item.official_provider}: ${number(item.official_sampled)} sampled / ${number(item.official_total)} indexed` : "";
-      row.append(node("span", item.venue), node("span", item.year),
-        node("span", openalex + official, item.status === "error" || item.official_status === "error" ? "aro-error" : ""));
+      const parts = [];
+      if (!item) parts.push("not yet available in the published snapshot");
+      else {
+        parts.push(item.status || "unresolved");
+        if (item.stale) parts.push("stale; last successful check " + (item.last_successful_checked_at?.slice(0, 10) || "unknown"));
+        if (item.partial) parts.push("partial coverage");
+        if (Number.isFinite(item.main_track_total)) parts.push(`${item.status === "verified" && !item.stale ? "verified" : "last known"} main-track: ${number(item.main_track_total)}`);
+        if (Number.isFinite(item.bibliography_total)) parts.push(`bibliography: ${number(item.bibliography_total)} indexed records${item.stale ? " (last known)" : ""}`);
+        if (Number.isFinite(item.ai_matched_count)) parts.push(`observed AI matches: ${number(item.ai_matched_count)} / ${Number.isFinite(item.scanned_count) ? number(item.scanned_count) : "unknown"} scanned eligible records${item.ai_scan_status && item.ai_scan_status !== "complete" ? ` (${item.ai_scan_status})` : ""}${item.stale ? " (last known)" : ""}`);
+        if (Number.isFinite(item.ai_unresolved_count)) parts.push(`${number(item.ai_unresolved_count)} AI decisions unresolved`);
+        if (Number.isFinite(item.sampled_papers)) parts.push(`${number(item.sampled_papers)} sampled AI papers`);
+        if (Number.isFinite(item.source_total)) parts.push(`OpenAlex: ${number(item.source_total)} indexed matches, not a proceedings census`);
+        if (Number.isFinite(item.official_total)) parts.push(`${item.official_provider || "publisher"} index: ${number(item.official_total)} records, not verified main-track`);
+        if (item.track_scope) parts.push(`track: ${item.track_scope}`);
+        if (item.gap_reason || item.error) parts.push(item.gap_reason || item.error);
+        if (item.checked_at) parts.push(`checked ${item.checked_at.slice(0, 10)}`);
+      }
+      const detail = node("span", parts.join(" · "), item?.status === "source-error" || item?.status === "error" ? "aro-error" : "");
+      for (const url of [...new Set([...(item?.source_urls || []), item?.source_url, item?.official_url, item?.source_id].filter(Boolean))]) {
+        const link = node("a", "Source ↗"); link.href = safeHref(url); link.target = "_blank"; link.rel = "noopener noreferrer";
+        link.setAttribute("aria-label", `Source for ${venue.name} ${year}`);
+        detail.append(node("span", " · "), link);
+      }
+      row.append(node("span", venue.name), node("span", year), detail);
       target.appendChild(row);
     }
   }
+  function coverageVenues() {
+    const venue = $("aro-coverage-venue").value, area = $("aro-coverage-area").value, rank = $("aro-coverage-rank").value;
+    return catalog.filter(item => (!venue || item.id === venue) && (!area || item.area === area) &&
+      (!rank || (rank === "unranked" ? !Object.keys(item.rankings || {}).length : Object.values(item.rankings || {}).includes(rank))));
+  }
   function renderRankedVenues() {
     const target = $("aro-ranked-venues"); target.replaceChildren();
-    for (const venue of snapshot.venues) {
+    const years = $("aro-coverage-year").value ? [Number($("aro-coverage-year").value)] : Array.from({ length: new Date().getFullYear() - 2019 }, (_, index) => 2020 + index);
+    for (const venue of coverageVenues()) {
       const row = node("div", null, "aro-venue-row");
       row.append(node("strong", venue.name), node("span", venue.area));
       const ranks = node("span");
@@ -269,8 +294,12 @@
         ranks.append(link, document.createTextNode(" "));
       }
       row.append(ranks);
-      const covered = snapshot.coverage.filter(item => item.venue_id === venue.id && (item.source_total > 0 || item.official_total > 0)).length;
-      row.append(node("span", `${covered} indexed years`)); target.append(row);
+      const cells = years.map(year => snapshot.coverage.find(item => item.venue_id === venue.id && item.year === year));
+      const verified = cells.filter(item => item?.status === "verified" && !item.stale && Number.isFinite(item.main_track_total)).length;
+      const bibliography = cells.filter(item => item && !item.stale && Number.isFinite(item.bibliography_total) && !(item.status === "verified" && Number.isFinite(item.main_track_total))).length;
+      const legacy = cells.filter(item => item && !item.stale && !Number.isFinite(item.main_track_total) &&
+        !Number.isFinite(item.bibliography_total) && (item.source_total > 0 || item.official_total > 0)).length;
+      row.append(node("span", `${verified} verified · ${bibliography} bibliography · ${legacy} legacy index · ${cells.length - verified - bibliography - legacy} gaps`)); target.append(row);
     }
   }
   function exportPapers(format) {
@@ -305,6 +334,9 @@
     $("aro-export-json").addEventListener("click", () => exportPapers("json"));
     $("aro-detail-close").addEventListener("click", () => $("aro-detail").close());
     $("aro-detail").addEventListener("click", event => { if (event.target === $("aro-detail")) $("aro-detail").close(); });
+    for (const id of ["aro-coverage-venue", "aro-coverage-area", "aro-coverage-rank", "aro-coverage-year"]) {
+      $(id).addEventListener("change", () => { renderCoverage(); renderRankedVenues(); });
+    }
   }
   async function init() {
     bind(); renderMilestones();
@@ -313,17 +345,24 @@
       if (!response.ok) throw new Error(`Snapshot HTTP ${response.status}`);
       snapshot = await response.json();
       if (!Array.isArray(snapshot.papers) || !Array.isArray(snapshot.coverage)) throw new Error("Invalid snapshot schema");
+      catalog = JSON.parse($("ai-research-catalog-data").textContent);
+      if (!Array.isArray(catalog)) throw new Error("Invalid venue catalog");
       selectOptions("aro-year", [...new Set(snapshot.papers.map(p => p.year))].sort());
-      selectOptions("aro-area", [...new Set([...snapshot.venues.map(v => v.area), ...snapshot.papers.map(p => p.area)])].sort());
-      selectOptions("aro-venue", snapshot.venues.map(v => v.id), id => snapshot.venues.find(v => v.id === id).name);
+      selectOptions("aro-area", [...new Set([...catalog.map(v => v.area), ...snapshot.papers.map(p => p.area)])].sort());
+      selectOptions("aro-venue", catalog.map(v => v.id), id => catalog.find(v => v.id === id).name);
       selectOptions("aro-country", [...new Set(snapshot.papers.flatMap(p => p.countries || []))].sort(), countryName);
+      selectOptions("aro-coverage-venue", catalog.map(v => v.id), id => catalog.find(v => v.id === id).name);
+      selectOptions("aro-coverage-area", [...new Set(catalog.map(v => v.area))].sort());
+      selectOptions("aro-coverage-year", Array.from({ length: new Date().getFullYear() - 2019 }, (_, index) => 2020 + index));
       renderCoverage(); renderRankedVenues(); render();
-      const official = snapshot.coverage.filter(c => c.official_status && c.official_status !== "error").length,
-        errors = snapshot.coverage.filter(c => c.status === "error" || c.official_status === "error").length,
-        unrefreshed = snapshot.coverage.filter(c => ["not-refreshed", "unmapped", "rate-limited"].includes(c.status)).length,
+      const verified = snapshot.coverage.filter(c => c.status === "verified" && !c.stale && Number.isFinite(c.main_track_total)).length,
+        errors = snapshot.coverage.filter(c => ["source-error", "error"].includes(c.status) || c.official_status === "error").length,
+        bibliography = snapshot.coverage.filter(c => Number.isFinite(c.bibliography_total) && !c.stale && c.status !== "verified").length,
+        legacy = snapshot.coverage.filter(c => !c.stale && !Number.isFinite(c.main_track_total) && !Number.isFinite(c.bibliography_total) && (c.source_total > 0 || c.official_total > 0)).length,
+        gaps = catalog.length * (new Date().getFullYear() - 2019) - verified - bibliography - legacy,
         linkedRepos = new Set(snapshot.papers.map(p => p.repository_url).filter(Boolean)),
         checkedRepos = new Set(snapshot.papers.filter(p => p.github).map(p => p.repository_url));
-      setText("aro-status", `OpenAlex + official proceedings · updated ${snapshot.generated_at.slice(0, 10)} · ${number(snapshot.papers.length)} tracked records · ${official} official venue-years · ${unrefreshed} unrefreshed or unmapped calendar cells · ${checkedRepos.size}/${linkedRepos.size} GitHub links checked · ${errors} source errors`);
+      setText("aro-status", `Updated ${snapshot.generated_at.slice(0, 10)} · ${catalog.length} ranked series including ${catalog.filter(v => v.source_rule_id).length} new cross-area series · ${number(snapshot.papers.length)} tracked AI records · ${verified} verified main-track venue-years · ${bibliography} bibliography-only years · ${legacy} legacy index years · ${gaps} gaps · ${checkedRepos.size}/${linkedRepos.size} GitHub links checked · ${errors} source errors`);
     } catch (error) {
       setText("aro-status", `Could not load the real publication snapshot: ${error.message}. No demo records are substituted.`);
       emptyChart($("aro-sector-chart"), "Publication data unavailable.");
