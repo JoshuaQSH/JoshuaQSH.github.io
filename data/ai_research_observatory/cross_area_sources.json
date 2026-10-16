@@ -307,6 +307,84 @@
       }
     }
   },
+  "cluster": {
+    "dblp_stream": "https://dblp.org/streams/conf/cluster",
+    "source_family": "ieee-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "IEEE Cluster main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cluster"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "IEEE Cluster main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cluster"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "IEEE Cluster main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cluster"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "IEEE Cluster main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cluster"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "IEEE Cluster main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cluster"
+        ]
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "IEEE Cluster main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cluster",
+          "https://clustercomp.org/2025/papers/"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "IEEE Cluster main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cluster"
+        ]
+      }
+    }
+  },
   "euro-par": {
     "dblp_stream": "https://dblp.org/streams/conf/europar",
     "source_family": "springer-proceedings",
@@ -636,6 +714,84 @@
       }
     }
   },
+  "hpdc": {
+    "dblp_stream": "https://dblp.org/streams/conf/hpdc",
+    "source_family": "acm-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "HPDC technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/hpdc"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "HPDC technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/hpdc"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "HPDC technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/hpdc"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "HPDC technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/hpdc"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "HPDC technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/hpdc"
+        ]
+      },
+      "2025": {
+        "official_url": "https://hpdc.sci.utah.edu/2025/program.html",
+        "track_scope": "HPDC technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/hpdc",
+          "https://hpdc.sci.utah.edu/2025/program.html"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "HPDC technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/hpdc"
+        ]
+      }
+    }
+  },
   "icdcs": {
     "dblp_stream": "https://dblp.org/streams/conf/icdcs",
     "source_family": "ieee-proceedings",
@@ -713,6 +869,163 @@
       }
     }
   },
+  "icpp": {
+    "dblp_stream": "https://dblp.org/streams/conf/icpp",
+    "source_family": "acm-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial",
+      "ICPP workshop proceedings"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "ICPP main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icpp"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "ICPP main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icpp"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "ICPP main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icpp"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "ICPP main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icpp"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "ICPP main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icpp"
+        ]
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "ICPP main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icpp",
+          "https://icpp2025.sdsc.edu/"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "ICPP main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icpp"
+        ]
+      }
+    }
+  },
+  "ics": {
+    "dblp_stream": "https://dblp.org/streams/conf/ics",
+    "source_family": "acm-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "ICS main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/ics"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "ICS main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/ics"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "ICS main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/ics"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "ICS main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/ics"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "ICS main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/ics"
+        ]
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "ICS main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/ics",
+          "https://hpcrl.github.io/ICS2025-webpage/call-for/call-for-papers.html"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "ICS main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/ics"
+        ]
+      }
+    }
+  },
   "icse": {
     "dblp_stream": "https://dblp.org/streams/conf/icse",
     "source_family": "acm-proceedings",
@@ -786,6 +1099,84 @@
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
           "https://dblp.org/streams/conf/icse"
+        ]
+      }
+    }
+  },
+  "icst": {
+    "dblp_stream": "https://dblp.org/streams/conf/icst",
+    "source_family": "ieee-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "ICST research-track papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icst"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "ICST research-track papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icst"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "ICST research-track papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icst"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "ICST research-track papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icst"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "ICST research-track papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icst"
+        ]
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "ICST research-track papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icst",
+          "https://conf.researchr.org/track/icst-2025/icst-2025-papers"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "ICST research-track papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/icst"
         ]
       }
     }
@@ -1034,6 +1425,163 @@
       }
     }
   },
+  "micro": {
+    "dblp_stream": "https://dblp.org/streams/conf/micro",
+    "source_family": "acm-ieee-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "MICRO main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/micro"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "MICRO main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/micro"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "MICRO main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/micro"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "MICRO main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/micro"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "MICRO main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/micro"
+        ]
+      },
+      "2025": {
+        "official_url": "https://microarch.org/micro58/program/index.php",
+        "track_scope": "MICRO main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/micro",
+          "https://microarch.org/micro58/program/index.php"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "MICRO main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/micro"
+        ]
+      }
+    }
+  },
+  "middleware": {
+    "dblp_stream": "https://dblp.org/streams/conf/middleware",
+    "source_family": "acm-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial",
+      "industrial-track proceedings"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "Middleware main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/middleware"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "Middleware main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/middleware"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "Middleware main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/middleware"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "Middleware main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/middleware"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "Middleware main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/middleware"
+        ]
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "Middleware main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/middleware",
+          "https://middleware-conf.github.io/2025/calls/call-for-research-papers/"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "Middleware main research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/middleware"
+        ]
+      }
+    }
+  },
   "mlsys": {
     "dblp_stream": "https://dblp.org/streams/conf/mlsys",
     "source_family": "mlsys-proceedings",
@@ -1107,6 +1655,87 @@
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
           "https://dblp.org/streams/conf/mlsys"
+        ]
+      }
+    }
+  },
+  "msr": {
+    "dblp_stream": "https://dblp.org/streams/conf/msr",
+    "source_family": "ieee-acm-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial",
+      "data and tool showcase",
+      "mining challenge",
+      "industry track"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "MSR technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/msr"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "MSR technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/msr"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "MSR technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/msr"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "MSR technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/msr"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "MSR technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/msr"
+        ]
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "MSR technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/msr",
+          "https://2025.msrconf.org/track/msr-2025-technical-papers"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "MSR technical research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/msr"
         ]
       }
     }
@@ -1685,6 +2314,85 @@
       }
     }
   },
+  "saner": {
+    "dblp_stream": "https://dblp.org/streams/conf/wcre",
+    "source_family": "ieee-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial",
+      "companion proceedings"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "SANER research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/wcre"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "SANER research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/wcre"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "SANER research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/wcre"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "SANER research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/wcre"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "SANER research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/wcre"
+        ]
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "SANER research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/wcre",
+          "https://conf.researchr.org/track/saner-2025/saner-2025-papers"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "SANER research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/wcre"
+        ]
+      }
+    }
+  },
   "sc": {
     "dblp_stream": "https://dblp.org/streams/conf/sc",
     "source_family": "ieee-proceedings",
@@ -1758,6 +2466,265 @@
         "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
         "provenance_urls": [
           "https://dblp.org/streams/conf/sc"
+        ]
+      }
+    }
+  },
+  "seams": {
+    "dblp_stream": "https://dblp.org/streams/conf/seams",
+    "source_family": "ieee-acm-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial",
+      "short papers"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "SEAMS research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/seams"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "SEAMS research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/seams"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "SEAMS research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/seams"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "SEAMS research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/seams"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "SEAMS research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/seams"
+        ]
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "SEAMS research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/seams",
+          "https://conf.researchr.org/track/seams-2025/seams-2025-research-track"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "SEAMS research-track full papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/seams"
+        ]
+      }
+    }
+  },
+  "sigmetrics": {
+    "dblp_stream": "https://dblp.org/streams/journals/pomacs",
+    "source_family": "acm-journal-issue",
+    "year_basis": "SIGMETRICS event-year; reconcile POMACS issues and conference program because publication may precede the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial",
+      "non-presented POMACS papers",
+      "PER abstracts",
+      "journal opt-outs without a verified conference presentation"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "SIGMETRICS-presented POMACS research papers and verified opt-outs",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/journals/pomacs",
+          "https://dblp.org/streams/conf/sigmetrics"
+        ],
+        "match_rule": "Match DOI/title to the event-year conference program; do not count the whole POMACS volume or the conference stream alone."
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "SIGMETRICS-presented POMACS research papers and verified opt-outs",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/journals/pomacs",
+          "https://dblp.org/streams/conf/sigmetrics"
+        ],
+        "match_rule": "Match DOI/title to the event-year conference program; do not count the whole POMACS volume or the conference stream alone."
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "SIGMETRICS-presented POMACS research papers and verified opt-outs",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/journals/pomacs",
+          "https://dblp.org/streams/conf/sigmetrics"
+        ],
+        "match_rule": "Match DOI/title to the event-year conference program; do not count the whole POMACS volume or the conference stream alone."
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "SIGMETRICS-presented POMACS research papers and verified opt-outs",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/journals/pomacs",
+          "https://dblp.org/streams/conf/sigmetrics"
+        ],
+        "match_rule": "Match DOI/title to the event-year conference program; do not count the whole POMACS volume or the conference stream alone."
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "SIGMETRICS-presented POMACS research papers and verified opt-outs",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/journals/pomacs",
+          "https://dblp.org/streams/conf/sigmetrics"
+        ],
+        "match_rule": "Match DOI/title to the event-year conference program; do not count the whole POMACS volume or the conference stream alone."
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "SIGMETRICS-presented POMACS research papers and verified opt-outs",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/journals/pomacs",
+          "https://dblp.org/streams/conf/sigmetrics",
+          "https://www.sigmetrics.org/sigmetrics2025/call_for_papers.html"
+        ],
+        "match_rule": "Match DOI/title to the event-year conference program; do not count the whole POMACS volume or the conference stream alone."
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "SIGMETRICS-presented POMACS research papers and verified opt-outs",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/journals/pomacs",
+          "https://dblp.org/streams/conf/sigmetrics"
+        ],
+        "match_rule": "Match DOI/title to the event-year conference program; do not count the whole POMACS volume or the conference stream alone."
+      }
+    },
+    "related_dblp_streams": [
+      "https://dblp.org/streams/conf/sigmetrics"
+    ]
+  },
+  "socc": {
+    "dblp_stream": "https://dblp.org/streams/conf/cloud",
+    "source_family": "acm-proceedings",
+    "year_basis": "event-year; verify journal-issue year against the event",
+    "excluded_material": [
+      "workshops",
+      "companion",
+      "short/demo",
+      "artifact",
+      "editorial"
+    ],
+    "years": {
+      "2020": {
+        "official_url": null,
+        "track_scope": "SoCC full research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cloud"
+        ]
+      },
+      "2021": {
+        "official_url": null,
+        "track_scope": "SoCC full research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cloud"
+        ]
+      },
+      "2022": {
+        "official_url": null,
+        "track_scope": "SoCC full research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cloud"
+        ]
+      },
+      "2023": {
+        "official_url": null,
+        "track_scope": "SoCC full research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cloud"
+        ]
+      },
+      "2024": {
+        "official_url": null,
+        "track_scope": "SoCC full research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cloud"
+        ]
+      },
+      "2025": {
+        "official_url": null,
+        "track_scope": "SoCC full research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cloud",
+          "https://acmsocc.org/2025/papers.html"
+        ],
+        "excluded_material": [
+          "Short Research Papers",
+          "Industry Papers"
+        ]
+      },
+      "2026": {
+        "official_url": null,
+        "track_scope": "SoCC full research papers",
+        "status": "unresolved",
+        "gap_reason": "Official main-track index and DBLP bibliography have not been reconciled.",
+        "provenance_urls": [
+          "https://dblp.org/streams/conf/cloud"
         ]
       }
     }

@@ -5,11 +5,9 @@ its works_count equals an organizer's accepted-paper count.
 
 Inventory audit (2026-10-16): the 53 existing AI-facing IDs remain intact.
 CCF's 2026 AI A list is covered by those IDs. Additional ranked cross-area
-candidates such as MICRO, HPDC, ICS, VEE, and SoCC need separate source-rule
-and AI-relevance review before inclusion; they are not silently treated as
-part of the requested 23. Database-only SIGMOD/VLDB and security-only CCS/NDSS
-are outside the approved boundary. The CORE 2023 export and CCF 2026 lists
-are the ranking evidence; a venue's subject area never implies a rank.
+decisions, organizer evidence and explicit exclusions are recorded in
+docs/AI_RESEARCH_OBSERVATORY_VENUE_AUDIT.md. The CORE 2023 export and CCF
+2026 lists are ranking evidence; subject area never implies a rank.
 """
 from __future__ import annotations
 
@@ -100,6 +98,18 @@ CROSS_AREA = {
     "ase": ("ASE", "Software Engineering", 279, "A*", "A", CCF_SOFTWARE_URL),
     "icse": ("ICSE", "Software Engineering", 1209, "A*", "A", CCF_SOFTWARE_URL),
     "issta": ("ISSTA", "Software Engineering", 1412, "A", "A", CCF_SOFTWARE_URL),
+    "micro": ("MICRO", "Computer Architecture", None, None, "A", CCF_ARCH_URL),
+    "hpdc": ("HPDC", "Parallel / Distributed", 33, "A", "B", CCF_ARCH_URL),
+    "ics": ("ICS", "Parallel / Distributed", 30, "A", "B", CCF_ARCH_URL),
+    "socc": ("SoCC", "Systems", None, None, "B", CCF_ARCH_URL),
+    "sigmetrics": ("SIGMETRICS", "Systems", 39, "A*", "B", CCF_ARCH_URL),
+    "cluster": ("IEEE Cluster", "Parallel / Distributed", 632, "B", "B", CCF_ARCH_URL),
+    "middleware": ("Middleware", "Systems", 79, "A", "B", CCF_SOFTWARE_URL),
+    "saner": ("SANER", "Software Engineering", 2280, "A", "B", CCF_SOFTWARE_URL),
+    "msr": ("MSR", "Software Engineering", 711, "A", None, None),
+    "icst": ("ICST", "Software Engineering", 1221, "A", None, None),
+    "seams": ("SEAMS", "Software Engineering", 2281, "A", None, None),
+    "icpp": ("ICPP", "Parallel / Distributed", 1167, "B", "B", CCF_ARCH_URL),
 }
 
 
