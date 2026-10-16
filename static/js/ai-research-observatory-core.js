@@ -117,13 +117,16 @@
   }
   function trendSelection(papers, coverage, catalog, filters) {
     const selectedPapers = filterPapers(papers, { ...filters, year: "", sector: "" });
-    const paperCells = new Set(selectedPapers.map(paper => `${paper.venue_id}:${paper.year}`));
     const venueIds = new Set(catalog.filter(venue => (!filters.venue || venue.id === filters.venue)
       && (!filters.area || venue.area === filters.area)).map(venue => venue.id));
-    const usable = coverage.filter(row => (venueIds.has(row.venue_id) || paperCells.has(`${row.venue_id}:${row.year}`)) && !row.stale
+    const eligible = coverage.filter(row => (!filters.venue || row.venue_id === filters.venue) && !row.stale
       && !["source-error", "error", "unresolved", "not-held", "not-yet-published", "unmapped", "no-index-records"].includes(row.status)
       && (row.ai_scan_status === "complete" || row.ai_scan_status === "partial" && row.sampled_papers > 0
         || !row.ai_scan_status && ["sample", "source-scan"].includes(row.status) && row.included > 0));
+    const eligibleCells = new Set(eligible.map(row => `${row.venue_id}:${row.year}`));
+    const paperVenueIds = new Set(selectedPapers.filter(paper => eligibleCells.has(`${paper.venue_id}:${paper.year}`))
+      .map(paper => paper.venue_id));
+    const usable = eligible.filter(row => venueIds.has(row.venue_id) || paperVenueIds.has(row.venue_id));
     const cells = new Set(usable.map(row => `${row.venue_id}:${row.year}`));
     return {
       papers: selectedPapers.filter(paper => cells.has(`${paper.venue_id}:${paper.year}`)),

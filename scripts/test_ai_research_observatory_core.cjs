@@ -173,9 +173,17 @@ const crossAreaSelection = core.trendSelection([
   { venue_id: 'systems', year: 2026, status: 'source-error', ai_scan_status: 'source-error', stale: true, sampled_papers: 1 }
 ], [{ id: 'systems', area: 'Systems' }], { area: 'LLMs / NLP' });
 assert.deepEqual(crossAreaSelection.papers.map(paper => paper.title), ['LLM systems paper']);
-assert.deepEqual([...crossAreaSelection.usableYears], [2025]);
+assert.deepEqual([...crossAreaSelection.usableYears], [2024, 2025]);
+assert.equal(core.trend(crossAreaSelection.papers, weights, 'count', 2026, crossAreaSelection.usableYears).find(row => row.year === 2024).Industry, 0);
 assert.equal(core.trend(crossAreaSelection.papers, weights, 'count', 2026, crossAreaSelection.usableYears).find(row => row.year === 2025).Industry, 1);
 assert.equal(core.trend(crossAreaSelection.papers, weights, 'count', 2026, crossAreaSelection.usableYears).find(row => row.year === 2026).Industry, null);
+const staleOnlyCrossArea = core.trendSelection([
+  { venue_id: 'systems', year: 2026, area: 'LLMs / NLP', first_author_sector: 'Industry' }
+], [
+  { venue_id: 'systems', year: 2024, status: 'partial', ai_scan_status: 'complete', sampled_papers: 1 },
+  { venue_id: 'systems', year: 2026, status: 'source-error', ai_scan_status: 'source-error', stale: true, sampled_papers: 1 }
+], [{ id: 'systems', area: 'Systems' }], { area: 'LLMs / NLP' });
+assert.deepEqual([...staleOnlyCrossArea.usableYears], []);
 assert.deepEqual(core.trendSeries(''), ['Industry', 'University', 'Research Institute']);
 assert.deepEqual(core.trendSeries('Industry'), ['Industry']);
 assert.deepEqual(core.trendSeries('University'), ['University']);
