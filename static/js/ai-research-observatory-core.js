@@ -102,6 +102,10 @@
       usableYears: new Set(usable.map(row => row.year))
     };
   }
+  function trendSeries(sector) {
+    const sectors = ["Industry", "University", "Research Institute"];
+    return sector ? sectors.filter(item => item === sector) : sectors;
+  }
   function lineSegments(data, sector) {
     const segments = [];
     let current = [];
@@ -127,5 +131,5 @@
     }
     return [...countries].map(([code, count]) => ({ code, count })).sort((a, b) => b.count - a.count);
   }
-  root.AIResearchCore = { score, filterPapers, sectorStats, trend, trendSelection, lineSegments, trendRange, geography };
+  root.AIResearchCore = { score, filterPapers, sectorStats, trend, trendSelection, trendSeries, lineSegments, trendRange, geography };
 })(typeof window !== "undefined" ? window : globalThis);

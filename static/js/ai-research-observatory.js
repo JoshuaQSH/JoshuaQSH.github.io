@@ -106,17 +106,30 @@
     const end = Math.ceil(range[1] / step) * step;
     return Array.from({ length: Math.round((end - start) / step) + 1 }, (_, index) => Number((start + index * step).toPrecision(12)));
   }
-  function renderTrend(papers, selectedYear, coveredYears) {
+  function renderTrend(papers, selectedYear, coveredYears, selectedSector) {
     const target = $("aro-trend-chart"), mode = $("aro-trend-mode").value;
-    if (!coveredYears.size) return emptyChart(target, "No usable source coverage for these filters.");
+    if (!coveredYears.size) {
+      const message = "No usable source coverage for these filters.";
+      target.setAttribute("aria-label", message);
+      return emptyChart(target, message);
+    }
+    const lines = core.trendSeries(selectedSector);
+    if (!lines.length) {
+      const message = `No first-author sector trajectory for ${selectedSector}.`;
+      target.setAttribute("aria-label", message);
+      return emptyChart(target, message);
+    }
+    target.setAttribute("aria-label", selectedSector
+      ? `Yearly tracked AI papers for ${selectedSector}` : "Yearly tracked AI papers by first-author sector");
     const endYear = Math.max(2020, ...snapshot.coverage.map(row => row.year));
     const data = core.trend(papers, weights, mode, endYear, coveredYears);
     const counts = mode === "count" ? data : core.trend(papers, weights, "count", endYear, coveredYears);
-    const lines = ["Industry", "University", "Research Institute"];
     if (!data.some(row => lines.some(sector => Number.isFinite(row[sector])))) {
-      return emptyChart(target, mode === "share"
+      const message = mode === "share"
         ? "Publication share is undefined without sector-classified tracked AI papers in covered years."
-        : "Year-over-year growth is undefined without a usable prior-year sector count.");
+        : "Year-over-year growth is undefined without a usable prior-year sector count.";
+      target.setAttribute("aria-label", message);
+      return emptyChart(target, message);
     }
     const ticks = trendTicks(core.trendRange(data, mode), mode);
     const min = ticks[0], max = ticks.at(-1);
@@ -125,7 +138,7 @@
     const plotLeft = compact ? 65 : 82, plotRight = compact ? 380 : 600;
     const axisLeft = compact ? 55 : 72, axisRight = compact ? 390 : 607;
     const canvas = svg("svg", { viewBox: `0 0 ${viewWidth} 270`, role: "img",
-      "aria-label": "Annual tracked AI sample by first-author sector; gaps mark missing source coverage",
+      "aria-label": `Annual tracked AI sample by ${selectedSector || "first-author sector"}; gaps mark missing source coverage`,
       preserveAspectRatio: "xMidYMid meet" });
     target.replaceChildren(canvas);
     const yearX = index => plotLeft + index * (plotRight - plotLeft) / Math.max(1, data.length - 1);
@@ -155,8 +168,8 @@
     }
     data.forEach((d, i) => canvas.appendChild(svg("text", { x: yearX(i), y: 243, "text-anchor": "middle",
       class: i === activeIndex ? "aro-year-selected" : "" }, String(d.year))));
-    lines.forEach((sector, s) => {
-      const color = ["aro-industry", "aro-university", "aro-research"][s];
+    lines.forEach(sector => {
+      const color = { Industry: "aro-industry", University: "aro-university", "Research Institute": "aro-research" }[sector];
       for (const segment of core.lineSegments(data, sector)) {
         if (segment.length < 2) continue;
         const points = segment.map(row => `${yearX(data.indexOf(row))},${valueY(row[sector])}`).join(" ");
@@ -374,7 +387,7 @@
     const papers = selected();
     const active = filters();
     const trendSelection = core.trendSelection(snapshot.papers, snapshot.coverage, catalog, active);
-    renderStats(papers); renderBar(papers); renderTrend(trendSelection.papers, active.year, trendSelection.usableYears); renderMap(papers); renderTable(papers);
+    renderStats(papers); renderBar(papers); renderTrend(trendSelection.papers, active.year, trendSelection.usableYears, active.sector); renderMap(papers); renderTable(papers);
   }
   function bind() {
     for (const id of ["aro-year", "aro-area", "aro-venue", "aro-sector", "aro-country", "aro-trend-mode", "aro-sort"]) $(id).addEventListener("change", () => { page = 0; render(); });

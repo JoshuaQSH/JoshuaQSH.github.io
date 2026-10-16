@@ -135,5 +135,10 @@ assert.equal(selectedCounts.find(row => row.year === 2025).Industry, 1);
 assert.equal(selectedCounts.find(row => row.year === 2026).Industry, 0);
 assert.equal(core.trend(trendSelection.papers, weights, 'share', 2026, trendSelection.usableYears).find(row => row.year === 2026).Industry, null);
 assert.equal(core.trend(trendSelection.papers, weights, 'growth', 2026, trendSelection.usableYears).find(row => row.year === 2026).Industry, null);
+assert.deepEqual(core.trendSeries(''), ['Industry', 'University', 'Research Institute']);
+assert.deepEqual(core.trendSeries('Industry'), ['Industry']);
+assert.deepEqual(core.trendSeries('University'), ['University']);
+assert.deepEqual(core.trendSeries('Research Institute'), ['Research Institute']);
+assert.deepEqual(core.trendSeries('Joint'), []);
 
 console.log('Observatory scoring and aggregation checks passed.');
