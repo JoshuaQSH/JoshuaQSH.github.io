@@ -107,4 +107,33 @@ assert.deepEqual(core.trendRange([{ Industry: -40, University: -10, 'Research In
 assert.deepEqual(core.trendRange([{ Industry: 3, University: 2, 'Research Institute': null }], 'count'), [0, 3]);
 assert.deepEqual(core.trendRange([{ Industry: 25, University: 75, 'Research Institute': null }], 'share'), [0, 100]);
 
+const trendCatalog = [
+  { id: 'alpha', area: 'AI' }, { id: 'beta', area: 'AI' }, { id: 'gamma', area: 'AI' }
+];
+const trendCoverage = [
+  { venue_id: 'alpha', year: 2024, status: 'verified', ai_scan_status: 'complete', sampled_papers: 1 },
+  { venue_id: 'alpha', year: 2025, status: 'verified', ai_scan_status: 'complete', sampled_papers: 2 },
+  { venue_id: 'beta', year: 2025, status: 'source-error', ai_scan_status: 'source-error', stale: true, sampled_papers: 4 },
+  { venue_id: 'gamma', year: 2025, status: 'unresolved', ai_scan_status: 'partial', sampled_papers: 3 },
+  { venue_id: 'alpha', year: 2026, status: 'verified', ai_scan_status: 'complete', sampled_papers: 0 }
+];
+const trendPapers = [
+  { title: 'baseline', venue_id: 'alpha', year: 2024, area: 'AI', first_author_sector: 'Industry' },
+  { title: 'industry', venue_id: 'alpha', year: 2025, area: 'AI', first_author_sector: 'Industry' },
+  { title: 'university', venue_id: 'alpha', year: 2025, area: 'AI', first_author_sector: 'University' },
+  { title: 'stale industry', venue_id: 'beta', year: 2025, area: 'AI', first_author_sector: 'Industry' },
+  { title: 'unresolved industry', venue_id: 'gamma', year: 2025, area: 'AI', first_author_sector: 'Industry' }
+];
+const trendSelection = core.trendSelection(trendPapers, trendCoverage, trendCatalog, { area: 'AI', year: '2025', sector: 'Industry' });
+assert.deepEqual(trendSelection.papers.map(paper => paper.title), ['baseline', 'industry', 'university']);
+assert.deepEqual([...trendSelection.usableYears], [2024, 2025, 2026]);
+const selectedShares = core.trend(trendSelection.papers, weights, 'share', 2026, trendSelection.usableYears);
+assert.equal(selectedShares.find(row => row.year === 2025).Industry, 50);
+assert.equal(selectedShares.find(row => row.year === 2025).classifiedCount, 2);
+const selectedCounts = core.trend(trendSelection.papers, weights, 'count', 2026, trendSelection.usableYears);
+assert.equal(selectedCounts.find(row => row.year === 2025).Industry, 1);
+assert.equal(selectedCounts.find(row => row.year === 2026).Industry, 0);
+assert.equal(core.trend(trendSelection.papers, weights, 'share', 2026, trendSelection.usableYears).find(row => row.year === 2026).Industry, null);
+assert.equal(core.trend(trendSelection.papers, weights, 'growth', 2026, trendSelection.usableYears).find(row => row.year === 2026).Industry, null);
+
 console.log('Observatory scoring and aggregation checks passed.');

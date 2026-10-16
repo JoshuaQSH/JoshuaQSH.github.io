@@ -89,6 +89,19 @@
       return result;
     });
   }
+  function trendSelection(papers, coverage, catalog, filters) {
+    const venueIds = new Set(catalog.filter(venue => (!filters.venue || venue.id === filters.venue)
+      && (!filters.area || venue.area === filters.area)).map(venue => venue.id));
+    const usable = coverage.filter(row => venueIds.has(row.venue_id) && !row.stale
+      && !["source-error", "error", "unresolved", "not-held", "not-yet-published", "unmapped", "no-index-records"].includes(row.status)
+      && (row.ai_scan_status === "complete" || row.ai_scan_status === "partial" && row.sampled_papers > 0
+        || !row.ai_scan_status && ["sample", "source-scan"].includes(row.status) && row.included > 0));
+    const cells = new Set(usable.map(row => `${row.venue_id}:${row.year}`));
+    return {
+      papers: filterPapers(papers, { ...filters, year: "", sector: "" }).filter(paper => cells.has(`${paper.venue_id}:${paper.year}`)),
+      usableYears: new Set(usable.map(row => row.year))
+    };
+  }
   function lineSegments(data, sector) {
     const segments = [];
     let current = [];
@@ -114,5 +127,5 @@
     }
     return [...countries].map(([code, count]) => ({ code, count })).sort((a, b) => b.count - a.count);
   }
-  root.AIResearchCore = { score, filterPapers, sectorStats, trend, lineSegments, trendRange, geography };
+  root.AIResearchCore = { score, filterPapers, sectorStats, trend, trendSelection, lineSegments, trendRange, geography };
 })(typeof window !== "undefined" ? window : globalThis);

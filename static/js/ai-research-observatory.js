@@ -94,16 +94,6 @@
     });
     setText("aro-sector-note", "Score labels show scored papers / all tracked papers. Unknown leadership is not attributed to a sector.");
   }
-  function trendCoveredYears() {
-    const active = filters();
-    const venueIds = new Set(catalog.filter(venue => (!active.venue || venue.id === active.venue)
-      && (!active.area || venue.area === active.area)).map(venue => venue.id));
-    const covered = snapshot.coverage.filter(row => venueIds.has(row.venue_id) && !row.stale
-      && !["source-error", "error", "unresolved", "not-held", "not-yet-published", "unmapped", "no-index-records"].includes(row.status)
-      && (row.ai_scan_status === "complete" || row.ai_scan_status === "partial" && row.sampled_papers > 0
-        || !row.ai_scan_status && ["sample", "source-scan"].includes(row.status) && row.included > 0));
-    return new Set(covered.map(row => row.year));
-  }
   function trendTicks(range, mode) {
     if (mode === "share") return [0, 25, 50, 75, 100];
     if (range[0] === range[1]) return mode === "growth" ? [-1, 0, 1] : [0, 1];
@@ -116,16 +106,17 @@
     const end = Math.ceil(range[1] / step) * step;
     return Array.from({ length: Math.round((end - start) / step) + 1 }, (_, index) => Number((start + index * step).toPrecision(12)));
   }
-  function renderTrend(papers, selectedYear) {
+  function renderTrend(papers, selectedYear, coveredYears) {
     const target = $("aro-trend-chart"), mode = $("aro-trend-mode").value;
-    if (!papers.length) return emptyChart(target, "No papers match these filters.");
+    if (!coveredYears.size) return emptyChart(target, "No usable source coverage for these filters.");
     const endYear = Math.max(2020, ...snapshot.coverage.map(row => row.year));
-    const coveredYears = trendCoveredYears();
     const data = core.trend(papers, weights, mode, endYear, coveredYears);
     const counts = mode === "count" ? data : core.trend(papers, weights, "count", endYear, coveredYears);
     const lines = ["Industry", "University", "Research Institute"];
     if (!data.some(row => lines.some(sector => Number.isFinite(row[sector])))) {
-      return emptyChart(target, "No sector-classified tracked papers with source coverage for these filters.");
+      return emptyChart(target, mode === "share"
+        ? "Publication share is undefined without sector-classified tracked AI papers in covered years."
+        : "Year-over-year growth is undefined without a usable prior-year sector count.");
     }
     const ticks = trendTicks(core.trendRange(data, mode), mode);
     const min = ticks[0], max = ticks.at(-1);
@@ -382,8 +373,8 @@
     if (!snapshot) return;
     const papers = selected();
     const active = filters();
-    const trendPapers = core.filterPapers(snapshot.papers, { ...active, year: "" });
-    renderStats(papers); renderBar(papers); renderTrend(trendPapers, active.year); renderMap(papers); renderTable(papers);
+    const trendSelection = core.trendSelection(snapshot.papers, snapshot.coverage, catalog, active);
+    renderStats(papers); renderBar(papers); renderTrend(trendSelection.papers, active.year, trendSelection.usableYears); renderMap(papers); renderTable(papers);
   }
   function bind() {
     for (const id of ["aro-year", "aro-area", "aro-venue", "aro-sector", "aro-country", "aro-trend-mode", "aro-sort"]) $(id).addEventListener("change", () => { page = 0; render(); });
