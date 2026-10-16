@@ -19,11 +19,17 @@
         <select id="research-count-mode"><option value="both">Both</option><option value="submitted">Submissions</option><option value="accepted">Acceptances</option></select>
       </label>
     </div>
-    <p class="research-note">Official main-program figures where available. Lines stop at missing years; dots are individual verified observations. Click a point or use the source table for its scope and organizer citation.</p>
-    <div id="research-count-legend" class="research-legend" aria-label="Conference legend"></div>
-    <div class="research-chart-scroll"><svg id="research-count-chart" class="research-chart" viewBox="0 0 760 310" role="img" aria-label="Conference submissions and acceptances by year from 2020"></svg></div>
-    <p class="research-chart-detail" id="research-count-detail" aria-live="polite">Select a point for its source.</p>
-    <details class="research-sources"><summary>Conference source ledger</summary><div class="research-table-scroll"><table><thead><tr><th>Conference</th><th>Year</th><th>Submitted</th><th>Accepted</th><th>Scope / source</th></tr></thead><tbody id="research-count-rows"></tbody></table></div></details>
+    <p class="research-note">Organizer-reported figures only. Each plot spans 2020–2026. A break means the figure was not verified or the event was not held, never zero. Track scope can change between years; check the source ledger before comparing rates.</p>
+    {{ range $index, $field := .Site.Data.ai_research_observatory.tracker_history.fields }}
+    <div class="research-field" aria-labelledby="research-field-title-{{ $index }}">
+      <h3 id="research-field-title-{{ $index }}">{{ $field.name }}</h3>
+      <div id="research-field-legend-{{ $index }}" class="research-legend" aria-label="{{ $field.name }} conference legend"></div>
+      <div class="research-chart-scroll"><svg id="research-field-chart-{{ $index }}" class="research-chart" viewBox="0 0 760 310" role="img" aria-label="{{ $field.name }} submissions and acceptances, 2020 to 2026; missing observations are gaps"></svg></div>
+      <p class="research-chart-detail" id="research-field-detail-{{ $index }}" aria-live="polite">Select a point for its source.</p>
+      <p class="research-field-gaps" id="research-field-gaps-{{ $index }}"></p>
+      <details class="research-sources"><summary>Year-by-year organizer figures and gaps</summary><div class="research-table-scroll"><table><thead><tr><th>Conference</th><th>Year</th><th>Submitted</th><th>Accepted</th><th>Status / scope / sources</th></tr></thead><tbody id="research-field-rows-{{ $index }}"></tbody></table></div></details>
+    </div>
+    {{ end }}
   </section>
 
   <section class="research-section" aria-labelledby="index-title">
@@ -37,7 +43,7 @@
     <p class="research-chart-detail" id="research-index-detail" aria-live="polite"></p>
     <details class="research-sources"><summary>Venue-year counts, gaps, and sources</summary><div class="research-table-scroll"><table><thead><tr><th>Year</th><th>Status</th><th>Verified main-track</th><th>Bibliography</th><th>Observed AI matches</th><th>Track / source</th></tr></thead><tbody id="research-index-rows"></tbody></table></div></details>
     <div class="research-section-head"><h3>Ranked venue inventory</h3><div class="research-catalog-filters"><label class="research-select">Area <select id="research-catalog-area"><option value="">All areas</option></select></label><label class="research-select">Ranking <select id="research-catalog-rank"><option value="">All ranks</option><option value="A*">A*</option><option value="A">A</option><option value="B">B</option><option value="unranked">Unranked</option></select></label><label class="research-select">Year <select id="research-catalog-year"><option value="">All years</option></select></label></div></div>
-    <p class="research-note">The catalog includes 35 newly added cross-area series alongside the earlier AI-facing inventory. Rank memberships are linked separately. Availability reports verified main-track years, bibliography-only years, and gaps; it does not imply organizer acceptance figures.</p>
+    <p class="research-note">This post follows the 26 conferences above. Rank memberships are linked separately. Availability reports verified main-track years, bibliography-only years, and gaps; it does not imply organizer acceptance figures. The Observatory retains the broader AI-related venue inventory.</p>
     <div class="research-table-scroll research-catalog-scroll"><table class="research-catalog"><thead><tr><th>Conference</th><th>Area</th><th>CORE</th><th>CCF</th><th>TH-CPL</th><th>Availability, 2020–present</th></tr></thead><tbody id="research-catalog-rows"></tbody></table></div>
   </section>
 

@@ -77,13 +77,15 @@ async function main() {
       assert.match(html, /bibliography/i);
       assert.match(html, /observed AI/i);
     }
-    assert.match(trackerHtml, /id="research-count-rows"/, 'organizer ledger stays separate');
+    for (let index = 0; index < 5; index++) {
+      assert.match(trackerHtml, new RegExp(`id="research-field-chart-${index}"`), `field ${index} chart is present`);
+      assert.match(trackerHtml, new RegExp(`id="research-field-rows-${index}"`), `field ${index} ledger is present`);
+    }
     assert.match(trackerHtml, /OpenAlex source matches/);
     assert.match(trackerHtml, /Publisher index entries/);
     assert.match(observatoryHtml, /Standalone arXiv reports/, 'arXiv stays outside conference totals');
 
-    const history = { reviewed_at: '2026-10-16', conferences: [{ id: 'neurips', name: 'NeurIPS', color: '#123456' }],
-      counts: [{ venue: 'neurips', year: 2024, submitted: 12000, accepted: 3000, scope: 'main program', source: 'https://example.org/organizer' }], awards: [] };
+    const history = JSON.parse(fs.readFileSync(path.join(repo, 'static/data/ai-research-conference-history.json')));
     const rows = [
       { venue_id: 'pldi', venue: 'PLDI', year: 2022, status: 'verified', main_track_total: 100, bibliography_total: 100,
         ai_matched_count: 12, scanned_count: 100, eligible_count: 100, ai_scan_status: 'complete', track_scope: 'research papers', source_urls: ['https://example.org/official'] },
@@ -98,8 +100,20 @@ async function main() {
     const snapshot = { generated_at: '2026-10-16T00:00:00Z', venues: catalog.filter(v => v.id === 'neurips'), coverage: rows, papers: [], scope: {} };
     const tracker = pageFixture(trackerHtml, snapshot, history);
     await run('static/js/ai-research-tracker.js', tracker);
-    assert.equal(tracker.elements['research-index-venue'].children.filter(option => catalog.some(venue => venue.source_rule_id && venue.id === option.value)).length, 35,
-      'Tracker venue selector exposes all new cross-area series');
+    assert.equal(tracker.elements['research-index-venue'].children.length, 26,
+      'Tracker venue selector contains only the requested conferences');
+    assert.equal(tracker.elements['research-catalog-rows'].children.length, 26,
+      'Tracker ranked catalog contains only the requested conferences');
+    const systemsChart = tracker.elements['research-field-chart-0'];
+    assert.equal(descendants(systemsChart, el => el.tagName === 'circle' && el.attributes['aria-label']?.includes('OSDI 2024')).length, 2,
+      'both sourced OSDI 2024 values are plotted');
+    assert.equal(descendants(systemsChart, el => el.tagName === 'line' && el.attributes.class?.includes('series')).length, 12,
+      'OSDI 2020 to 2026 is continuous once per metric');
+    assert.equal(descendants(systemsChart, el => el.tagName === 'circle' && el.attributes['aria-label']?.includes('SOSP 2022')).length, 0,
+      'not-held years never produce markers');
+    assert.match(tracker.elements['research-field-rows-0'].textContent, /SOSP.*2022.*Not held/s);
+    assert.match(tracker.elements['research-field-rows-0'].textContent, /PLDI.*2020.*Not reported/s);
+    assert.match(tracker.elements['research-field-chart-3'].textContent, /2020.*2026/s, 'AI chart has the complete year axis');
     tracker.elements['research-index-venue'].value = 'pldi';
     tracker.elements['research-index-venue'].dispatch('change');
     const chart = tracker.elements['research-index-chart'];
@@ -113,7 +127,7 @@ async function main() {
     assert.match(bibliography[0].attributes['aria-label'], /bibliography/i);
     assert.match(mainPoints[0].attributes['aria-label'], /verified main-track/i);
     assert.match(tracker.elements['research-index-detail'].textContent, /2023.*unresolved/i);
-    assert.match(tracker.elements['research-count-rows'].textContent, /12,000.*3,000.*Organizer/s);
+    assert.match(tracker.elements['research-field-rows-3'].textContent, /NeurIPS.*2022.*9,634.*2,672/s);
     assert.match(tracker.elements['research-catalog-rows'].textContent, /PLDI/);
 
     const oldSnapshot = { ...snapshot, coverage: [], venues: snapshot.venues };

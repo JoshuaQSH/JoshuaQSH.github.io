@@ -14,6 +14,7 @@ from contextlib import contextmanager
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import refresh_ai_research_observatory as pipeline
+import build_ai_research_tracker_history as tracker_history
 from refresh_ai_research_observatory import classify_sector, deduplicate, normalize_work, score_components
 from scripts.ai_research_venues import build_catalog
 
@@ -579,16 +580,48 @@ class ObservatoryTests(unittest.TestCase):
         for row in history["counts"]:
             self.assertIn(row["venue"], venue_ids)
             self.assertGreaterEqual(row["year"], 2020)
-            self.assertTrue(row["source"].startswith("https://"))
             self.assertIsInstance(row["scope"], str)
             for field in ("submitted", "accepted"):
                 if row[field] is not None:
                     self.assertGreater(row[field], 0)
+                    self.assertTrue(row[f"{field}_source"].startswith("https://"))
             if row["submitted"] is not None and row["accepted"] is not None:
                 self.assertLessEqual(row["accepted"], row["submitted"])
+            if row["status"] in ("not-held", "pending", "unverified"):
+                self.assertIsNone(row["submitted"])
+                self.assertIsNone(row["accepted"])
         for award in history["awards"]:
             self.assertTrue(award["source"].startswith("https://"))
             self.assertTrue(award["topics"])
+
+    def test_conference_history_is_the_requested_2020_2026_grid(self):
+        history = json.loads((pipeline.ROOT / "static/data/ai-research-conference-history.json").read_text())
+        self.assertEqual(history, tracker_history.build(json.loads(tracker_history.SOURCE.read_text()),
+                                                        json.loads(tracker_history.VENUES.read_text())))
+        groups = [
+            ("Systems / Operating systems", "pldi popl sosp osdi oopsla"),
+            ("Distributed / Parallel / Architecture", "ppopp sc hpca asplos isca usenix-atc eurosys"),
+            ("Compilers and others", "cgo cc pact euro-par icdcs ipdps mlsys"),
+            ("AI", "neurips icml ijcai"),
+            ("Software engineering", "fse ase icse issta"),
+        ]
+        expected = {venue for _, ids in groups for venue in ids.split()}
+        self.assertEqual([(group["name"], " ".join(group["venues"])) for group in history["fields"]], groups)
+        self.assertEqual({venue["id"] for venue in history["conferences"]}, expected)
+        self.assertEqual({(row["venue"], row["year"]) for row in history["counts"]},
+                         {(venue, year) for venue in expected for year in range(2020, 2027)})
+        self.assertEqual(len(history["counts"]), 26 * 7)
+        by_key = {(row["venue"], row["year"]): row for row in history["counts"]}
+        self.assertEqual((by_key["neurips", 2022]["submitted"], by_key["neurips", 2022]["accepted"]), (9634, 2672))
+        self.assertEqual([by_key["osdi", year]["accepted"] for year in range(2020, 2027)],
+                         [70, 31, 49, 50, 49, 48, 134])
+        self.assertEqual(by_key["sosp", 2020]["status"], "not-held")
+        self.assertEqual(by_key["sosp", 2022]["status"], "not-held")
+        self.assertTrue(all(award["venue"].lower() in expected for award in history["awards"]))
+        self.assertTrue(all(any(row["status"] in ("verified", "partial") and
+                                (row["submitted"] is not None or row["accepted"] is not None)
+                                for row in history["counts"] if row["venue"] in ids.split())
+                            for _, ids in groups))
 
     def test_paper_specific_dual_affiliation_is_mixed(self):
         self.assertEqual(classify_sector([{"type": "company"}, {"type": "education"}]), "Mixed")

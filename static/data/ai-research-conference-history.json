@@ -1,31 +1,2244 @@
 {
-  "reviewed_at": "2026-10-15",
-  "method": "Official organizer counts. Null means no comparable verified count, never zero.",
+  "reviewed_at": "2026-10-16",
+  "method": "Organizer-reported figures only. Null is an unverified or unpublished figure, never zero. Acceptance scope can vary between conferences and years; inspect scope before comparing ratios.",
+  "fields": [
+    {
+      "name": "Systems / Operating systems",
+      "venues": [
+        "pldi",
+        "popl",
+        "sosp",
+        "osdi",
+        "oopsla"
+      ]
+    },
+    {
+      "name": "Distributed / Parallel / Architecture",
+      "venues": [
+        "ppopp",
+        "sc",
+        "hpca",
+        "asplos",
+        "isca",
+        "usenix-atc",
+        "eurosys"
+      ]
+    },
+    {
+      "name": "Compilers and others",
+      "venues": [
+        "cgo",
+        "cc",
+        "pact",
+        "euro-par",
+        "icdcs",
+        "ipdps",
+        "mlsys"
+      ]
+    },
+    {
+      "name": "AI",
+      "venues": [
+        "neurips",
+        "icml",
+        "ijcai"
+      ]
+    },
+    {
+      "name": "Software engineering",
+      "venues": [
+        "fse",
+        "ase",
+        "icse",
+        "issta"
+      ]
+    }
+  ],
   "conferences": [
-    {"id": "neurips", "name": "NeurIPS", "color": "#c33e42"},
-    {"id": "icml", "name": "ICML", "color": "#367580"},
-    {"id": "cvpr", "name": "CVPR", "color": "#be7b26"}
+    {
+      "id": "pldi",
+      "name": "PLDI",
+      "color": "#b64046"
+    },
+    {
+      "id": "popl",
+      "name": "POPL",
+      "color": "#227c82"
+    },
+    {
+      "id": "sosp",
+      "name": "SOSP",
+      "color": "#ae7228"
+    },
+    {
+      "id": "osdi",
+      "name": "OSDI",
+      "color": "#5969ac"
+    },
+    {
+      "id": "oopsla",
+      "name": "OOPSLA",
+      "color": "#68813d"
+    },
+    {
+      "id": "ppopp",
+      "name": "PPoPP",
+      "color": "#b64046"
+    },
+    {
+      "id": "sc",
+      "name": "SC",
+      "color": "#227c82"
+    },
+    {
+      "id": "hpca",
+      "name": "HPCA",
+      "color": "#ae7228"
+    },
+    {
+      "id": "asplos",
+      "name": "ASPLOS",
+      "color": "#5969ac"
+    },
+    {
+      "id": "isca",
+      "name": "ISCA",
+      "color": "#68813d"
+    },
+    {
+      "id": "usenix-atc",
+      "name": "USENIX ATC / ACM SIGOPS ATC",
+      "color": "#9b5a8f"
+    },
+    {
+      "id": "eurosys",
+      "name": "EuroSys",
+      "color": "#576974"
+    },
+    {
+      "id": "cgo",
+      "name": "CGO",
+      "color": "#b64046"
+    },
+    {
+      "id": "cc",
+      "name": "CC",
+      "color": "#227c82"
+    },
+    {
+      "id": "pact",
+      "name": "PACT",
+      "color": "#ae7228"
+    },
+    {
+      "id": "euro-par",
+      "name": "Euro-Par",
+      "color": "#5969ac"
+    },
+    {
+      "id": "icdcs",
+      "name": "ICDCS",
+      "color": "#68813d"
+    },
+    {
+      "id": "ipdps",
+      "name": "IPDPS",
+      "color": "#9b5a8f"
+    },
+    {
+      "id": "mlsys",
+      "name": "MLSys",
+      "color": "#576974"
+    },
+    {
+      "id": "neurips",
+      "name": "NeurIPS",
+      "color": "#b64046"
+    },
+    {
+      "id": "icml",
+      "name": "ICML",
+      "color": "#227c82"
+    },
+    {
+      "id": "ijcai",
+      "name": "IJCAI",
+      "color": "#ae7228"
+    },
+    {
+      "id": "fse",
+      "name": "FSE",
+      "color": "#b64046"
+    },
+    {
+      "id": "ase",
+      "name": "ASE",
+      "color": "#227c82"
+    },
+    {
+      "id": "icse",
+      "name": "ICSE",
+      "color": "#ae7228"
+    },
+    {
+      "id": "issta",
+      "name": "ISSTA",
+      "color": "#5969ac"
+    }
   ],
   "counts": [
-    {"venue": "neurips", "year": 2020, "submitted": 9467, "accepted": 1898, "scope": "main conference", "source": "https://neurips.cc/media/Press/NeurIPS_2020-Fact_Sheet.pdf"},
-    {"venue": "neurips", "year": 2021, "submitted": 9122, "accepted": 2334, "scope": "main conference", "source": "https://neurips.cc/media/Press/NeurIPS_2021-Fact_Sheet.pdf"},
-    {"venue": "neurips", "year": 2023, "submitted": 12343, "accepted": 3218, "scope": "main conference track", "source": "https://media.neurips.cc/Conferences/NeurIPS2023/NeurIPS2023-Fact_Sheet.pdf"},
-    {"venue": "neurips", "year": 2024, "submitted": 15671, "accepted": 4037, "scope": "main conference track", "source": "https://media.neurips.cc/Conferences/NeurIPS2024/NeurIPS2024-Fact_Sheet.pdf"},
-    {"venue": "neurips", "year": 2025, "submitted": 21575, "accepted": 5290, "scope": "main track", "source": "https://media.neurips.cc/Conferences/NeurIPS2025/press/NeurIPS2025-Fact_Sheet.pdf"},
-    {"venue": "icml", "year": 2025, "submitted": null, "accepted": 3260, "scope": "main track; submission total unpublished in cited fact sheet", "source": "https://media.icml.cc/Conferences/ICML2025/ICML2025_Fact_Sheet.pdf"},
-    {"venue": "cvpr", "year": 2023, "submitted": 9155, "accepted": 2359, "scope": "main technical program", "source": "https://cvpr.thecvf.com/Conferences/2023/AcceptedPapers"},
-    {"venue": "cvpr", "year": 2024, "submitted": 11532, "accepted": 2719, "scope": "main technical program", "source": "https://cvpr.thecvf.com/Conferences/2024/News/Oral_Papers"},
-    {"venue": "cvpr", "year": 2025, "submitted": 13008, "accepted": 2872, "scope": "main technical program; organizer technical-program release (later wrap-up says 12,008 in apparent error)", "source": "https://cvpr.thecvf.com/Conferences/2025/News/Technical_Program"},
-    {"venue": "cvpr", "year": 2026, "submitted": 16092, "accepted": 4089, "scope": "main technical program", "source": "https://cvpr.thecvf.com/Conferences/2026/News/Technical_Program"}
+    {
+      "venue": "pldi",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pldi",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pldi",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pldi",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pldi",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pldi",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pldi",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "popl",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "popl",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "popl",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "popl",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "popl",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "popl",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "popl",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sosp",
+      "year": 2020,
+      "status": "not-held",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": "https://sosp.org/"
+    },
+    {
+      "venue": "sosp",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sosp",
+      "year": 2022,
+      "status": "not-held",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": "https://sosp.org/"
+    },
+    {
+      "venue": "sosp",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sosp",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sosp",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sosp",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "osdi",
+      "year": 2020,
+      "status": "verified",
+      "submitted": 400,
+      "accepted": 70,
+      "submitted_source": "https://www.usenix.org/sites/default/files/osdi20-full_proceedings.pdf",
+      "accepted_source": "https://www.usenix.org/sites/default/files/osdi20-full_proceedings.pdf",
+      "scope": "current-cycle research papers",
+      "status_source": null
+    },
+    {
+      "venue": "osdi",
+      "year": 2021,
+      "status": "verified",
+      "submitted": 165,
+      "accepted": 31,
+      "submitted_source": "https://www.usenix.org/system/files/osdi21_full_proceedings.pdf",
+      "accepted_source": "https://www.usenix.org/system/files/osdi21_full_proceedings.pdf",
+      "scope": "current-cycle research papers",
+      "status_source": null
+    },
+    {
+      "venue": "osdi",
+      "year": 2022,
+      "status": "verified",
+      "submitted": 253,
+      "accepted": 49,
+      "submitted_source": "https://www.usenix.org/sites/default/files/osdi22_full_proceedings_interior.pdf",
+      "accepted_source": "https://www.usenix.org/sites/default/files/osdi22_full_proceedings_interior.pdf",
+      "scope": "current-cycle research papers",
+      "status_source": null
+    },
+    {
+      "venue": "osdi",
+      "year": 2023,
+      "status": "verified",
+      "submitted": 255,
+      "accepted": 50,
+      "submitted_source": "https://www.usenix.org/system/files/osdi23_full_proceedings.pdf",
+      "accepted_source": "https://www.usenix.org/system/files/osdi23_full_proceedings.pdf",
+      "scope": "current-cycle papers; excludes 5 prior-cycle revise-and-resubmit papers in the 55-paper program",
+      "status_source": null
+    },
+    {
+      "venue": "osdi",
+      "year": 2024,
+      "status": "verified",
+      "submitted": 272,
+      "accepted": 49,
+      "submitted_source": "https://www.usenix.org/system/files/osdi24_full_proceedings.pdf",
+      "accepted_source": "https://www.usenix.org/system/files/osdi24_full_proceedings.pdf",
+      "scope": "current-cycle papers; excludes 4 prior-cycle revise-and-resubmit papers in the 53-paper program",
+      "status_source": null
+    },
+    {
+      "venue": "osdi",
+      "year": 2025,
+      "status": "verified",
+      "submitted": 339,
+      "accepted": 48,
+      "submitted_source": "https://www.usenix.org/sites/default/files/osdi25-message.pdf",
+      "accepted_source": "https://www.usenix.org/sites/default/files/osdi25-message.pdf",
+      "scope": "current-cycle papers; excludes 5 prior-cycle revise-and-resubmit papers in the 53-paper program",
+      "status_source": null
+    },
+    {
+      "venue": "osdi",
+      "year": 2026,
+      "status": "verified",
+      "submitted": 669,
+      "accepted": 134,
+      "submitted_source": "https://www.usenix.org/sites/default/files/osdi26-message.pdf",
+      "accepted_source": "https://www.usenix.org/sites/default/files/osdi26-message.pdf",
+      "scope": "reviewable current-cycle research and operational-systems submissions; excludes 2 prior-cycle revise-and-resubmit papers",
+      "status_source": null
+    },
+    {
+      "venue": "oopsla",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "oopsla",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "oopsla",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "oopsla",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "oopsla",
+      "year": 2024,
+      "status": "partial",
+      "submitted": null,
+      "accepted": 148,
+      "submitted_source": null,
+      "accepted_source": "https://2024.splashcon.org/track/splash-2024-oopsla",
+      "scope": "OOPSLA research papers across both publication rounds",
+      "status_source": null
+    },
+    {
+      "venue": "oopsla",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "oopsla",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ppopp",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ppopp",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ppopp",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ppopp",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ppopp",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ppopp",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ppopp",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sc",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sc",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sc",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sc",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sc",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sc",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "sc",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "hpca",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "hpca",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "hpca",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "hpca",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "hpca",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "hpca",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "hpca",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "asplos",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "asplos",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "asplos",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "asplos",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "asplos",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "asplos",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "asplos",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "isca",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "isca",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "isca",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "isca",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "isca",
+      "year": 2024,
+      "status": "verified",
+      "submitted": 423,
+      "accepted": 83,
+      "submitted_source": "https://www.sigarch.org/isca-2024-trip-report-buenos-aires/",
+      "accepted_source": "https://www.sigarch.org/isca-2024-trip-report-buenos-aires/",
+      "scope": "research program",
+      "status_source": null
+    },
+    {
+      "venue": "isca",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "isca",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "usenix-atc",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "usenix-atc",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "usenix-atc",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "usenix-atc",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "usenix-atc",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "usenix-atc",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "usenix-atc",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "eurosys",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "eurosys",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "eurosys",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "eurosys",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "eurosys",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "eurosys",
+      "year": 2025,
+      "status": "verified",
+      "submitted": 696,
+      "accepted": 85,
+      "submitted_source": "https://pure.tudelft.nl/ws/portalfiles/portal/243149497/3689031.fm.pdf",
+      "accepted_source": "https://pure.tudelft.nl/ws/portalfiles/portal/243149497/3689031.fm.pdf",
+      "scope": "main research program; spring and fall cycles combined",
+      "status_source": null
+    },
+    {
+      "venue": "eurosys",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cgo",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cgo",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cgo",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cgo",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cgo",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cgo",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cgo",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cc",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cc",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cc",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cc",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cc",
+      "year": 2024,
+      "status": "verified",
+      "submitted": 51,
+      "accepted": 21,
+      "submitted_source": "https://cc24.hotcrp.com/",
+      "accepted_source": "https://cc24.hotcrp.com/",
+      "scope": "CC main conference submission portal",
+      "status_source": null
+    },
+    {
+      "venue": "cc",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "cc",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pact",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pact",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pact",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pact",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pact",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pact",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "pact",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "euro-par",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "euro-par",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "euro-par",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "euro-par",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "euro-par",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "euro-par",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "euro-par",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icdcs",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icdcs",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icdcs",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icdcs",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icdcs",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icdcs",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icdcs",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ipdps",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ipdps",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ipdps",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ipdps",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ipdps",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ipdps",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ipdps",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "mlsys",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "mlsys",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "mlsys",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "mlsys",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "mlsys",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "mlsys",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "mlsys",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "neurips",
+      "year": 2020,
+      "status": "verified",
+      "submitted": 9467,
+      "accepted": 1898,
+      "submitted_source": "https://neurips.cc/media/Press/NeurIPS_2020-Fact_Sheet.pdf",
+      "accepted_source": "https://neurips.cc/media/Press/NeurIPS_2020-Fact_Sheet.pdf",
+      "scope": "main conference",
+      "status_source": null
+    },
+    {
+      "venue": "neurips",
+      "year": 2021,
+      "status": "verified",
+      "submitted": 9122,
+      "accepted": 2334,
+      "submitted_source": "https://neurips.cc/media/Press/NeurIPS_2021-Fact_Sheet.pdf",
+      "accepted_source": "https://neurips.cc/media/Press/NeurIPS_2021-Fact_Sheet.pdf",
+      "scope": "main conference",
+      "status_source": null
+    },
+    {
+      "venue": "neurips",
+      "year": 2022,
+      "status": "verified",
+      "submitted": 9634,
+      "accepted": 2672,
+      "submitted_source": "https://blog.neurips.cc/2022/08/01/updates-from-the-program-chairs/",
+      "accepted_source": "https://blog.neurips.cc/2022/11/22/getting-ready-for-neurips-3-2022-conference-highlights/",
+      "scope": "main conference; 9,634 full submissions as of July 26",
+      "status_source": null
+    },
+    {
+      "venue": "neurips",
+      "year": 2023,
+      "status": "verified",
+      "submitted": 12343,
+      "accepted": 3218,
+      "submitted_source": "https://media.neurips.cc/Conferences/NeurIPS2023/NeurIPS2023-Fact_Sheet.pdf",
+      "accepted_source": "https://media.neurips.cc/Conferences/NeurIPS2023/NeurIPS2023-Fact_Sheet.pdf",
+      "scope": "main conference track",
+      "status_source": null
+    },
+    {
+      "venue": "neurips",
+      "year": 2024,
+      "status": "verified",
+      "submitted": 15671,
+      "accepted": 4037,
+      "submitted_source": "https://media.neurips.cc/Conferences/NeurIPS2024/NeurIPS2024-Fact_Sheet.pdf",
+      "accepted_source": "https://media.neurips.cc/Conferences/NeurIPS2024/NeurIPS2024-Fact_Sheet.pdf",
+      "scope": "main conference track",
+      "status_source": null
+    },
+    {
+      "venue": "neurips",
+      "year": 2025,
+      "status": "verified",
+      "submitted": 21575,
+      "accepted": 5290,
+      "submitted_source": "https://media.neurips.cc/Conferences/NeurIPS2025/press/NeurIPS2025-Fact_Sheet.pdf",
+      "accepted_source": "https://media.neurips.cc/Conferences/NeurIPS2025/press/NeurIPS2025-Fact_Sheet.pdf",
+      "scope": "main conference track",
+      "status_source": null
+    },
+    {
+      "venue": "neurips",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icml",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icml",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icml",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icml",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icml",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icml",
+      "year": 2025,
+      "status": "partial",
+      "submitted": null,
+      "accepted": 3260,
+      "submitted_source": null,
+      "accepted_source": "https://media.icml.cc/Conferences/ICML2025/ICML2025_Fact_Sheet.pdf",
+      "scope": "main track; exact submission total not reported in cited fact sheet",
+      "status_source": null
+    },
+    {
+      "venue": "icml",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ijcai",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ijcai",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ijcai",
+      "year": 2022,
+      "status": "verified",
+      "submitted": 4537,
+      "accepted": 679,
+      "submitted_source": "https://www.ijcai.org/proceedings/2022/preface.pdf",
+      "accepted_source": "https://www.ijcai.org/proceedings/2022/preface.pdf",
+      "scope": "main track; IJCAI-ECAI 2022",
+      "status_source": null
+    },
+    {
+      "venue": "ijcai",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ijcai",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ijcai",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ijcai",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "fse",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "fse",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "fse",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "fse",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "fse",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "fse",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "fse",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ase",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ase",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ase",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ase",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ase",
+      "year": 2024,
+      "status": "verified",
+      "submitted": 587,
+      "accepted": 155,
+      "submitted_source": "https://ase2024.hotcrp.com/",
+      "accepted_source": "https://ase2024.hotcrp.com/",
+      "scope": "research track",
+      "status_source": null
+    },
+    {
+      "venue": "ase",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "ase",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icse",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icse",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icse",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icse",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icse",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icse",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "icse",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "issta",
+      "year": 2020,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "issta",
+      "year": 2021,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "issta",
+      "year": 2022,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "issta",
+      "year": 2023,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "issta",
+      "year": 2024,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "issta",
+      "year": 2025,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    },
+    {
+      "venue": "issta",
+      "year": 2026,
+      "status": "unverified",
+      "submitted": null,
+      "accepted": null,
+      "submitted_source": null,
+      "accepted_source": null,
+      "scope": "No comparable organizer figure verified",
+      "status_source": null
+    }
   ],
   "awards": [
-    {"venue": "CVPR", "year": 2026, "award": "Best Paper", "title": "Efficiently Reconstructing Dynamic Scenes One D4RT at a Time", "field": "Computer vision", "topics": ["4D reconstruction", "video", "transformers"], "source": "https://cvpr.thecvf.com/Conferences/2026/News/Best_Papers"},
-    {"venue": "CVPR", "year": 2026, "award": "Best Student Paper", "title": "Native and Compact Structured Latents for 3D Generation", "field": "3D generation", "topics": ["3D generation", "structured latents"], "source": "https://cvpr.thecvf.com/Conferences/2026/News/Best_Papers"},
-    {"venue": "CVPR", "year": 2025, "award": "Best Paper", "title": "VGGT: Visual Geometry Grounded Transformer", "field": "Computer vision", "topics": ["3D reconstruction", "transformers"], "source": "https://cvpr.thecvf.com/Conferences/2025/News/Wrap"},
-    {"venue": "CVPR", "year": 2024, "award": "Best Paper", "title": "Generative Image Dynamics", "field": "Generative vision", "topics": ["image generation", "video"], "source": "https://cvpr.thecvf.com/Conferences/2024/News/Wrap_Release"},
-    {"venue": "NeurIPS", "year": 2025, "award": "Best Paper", "title": "Gated Attention for Large Language Models: Non-linearity, Sparsity, and Attention-Sink-Free", "field": "Language models", "topics": ["attention", "LLMs", "transformers"], "source": "https://blog.neurips.cc/2025/11/26/announcing-the-neurips-2025-best-paper-awards/"},
-    {"venue": "NeurIPS", "year": 2025, "award": "Best Paper", "title": "1000 Layer Networks for Self-Supervised RL: Scaling Depth Can Enable New Goal-Reaching Capabilities", "field": "Reinforcement learning", "topics": ["reinforcement learning", "self-supervision"], "source": "https://blog.neurips.cc/2025/11/26/announcing-the-neurips-2025-best-paper-awards/"},
-    {"venue": "NeurIPS", "year": 2024, "award": "Best Paper", "title": "Visual Autoregressive Modeling: Scalable Image Generation via Next-Scale Prediction", "field": "Generative vision", "topics": ["image generation", "autoregression"], "source": "https://blog.neurips.cc/2024/12/10/announcing-the-neurips-2024-best-paper-awards/"},
-    {"venue": "NeurIPS", "year": 2024, "award": "Best Paper", "title": "Stochastic Taylor Derivative Estimator: Efficient amortization for arbitrary differential operators", "field": "Scientific machine learning", "topics": ["scientific ML", "neural networks"], "source": "https://blog.neurips.cc/2024/12/10/announcing-the-neurips-2024-best-paper-awards/"}
+    {
+      "venue": "NeurIPS",
+      "year": 2025,
+      "award": "Best Paper",
+      "title": "Gated Attention for Large Language Models: Non-linearity, Sparsity, and Attention-Sink-Free",
+      "field": "Language models",
+      "topics": [
+        "attention",
+        "LLMs",
+        "transformers"
+      ],
+      "source": "https://blog.neurips.cc/2025/11/26/announcing-the-neurips-2025-best-paper-awards/"
+    },
+    {
+      "venue": "NeurIPS",
+      "year": 2025,
+      "award": "Best Paper",
+      "title": "1000 Layer Networks for Self-Supervised RL: Scaling Depth Can Enable New Goal-Reaching Capabilities",
+      "field": "Reinforcement learning",
+      "topics": [
+        "reinforcement learning",
+        "self-supervision"
+      ],
+      "source": "https://blog.neurips.cc/2025/11/26/announcing-the-neurips-2025-best-paper-awards/"
+    },
+    {
+      "venue": "NeurIPS",
+      "year": 2024,
+      "award": "Best Paper",
+      "title": "Visual Autoregressive Modeling: Scalable Image Generation via Next-Scale Prediction",
+      "field": "Generative vision",
+      "topics": [
+        "image generation",
+        "autoregression"
+      ],
+      "source": "https://blog.neurips.cc/2024/12/10/announcing-the-neurips-2024-best-paper-awards/"
+    },
+    {
+      "venue": "NeurIPS",
+      "year": 2024,
+      "award": "Best Paper",
+      "title": "Stochastic Taylor Derivative Estimator: Efficient amortization for arbitrary differential operators",
+      "field": "Scientific machine learning",
+      "topics": [
+        "scientific ML",
+        "neural networks"
+      ],
+      "source": "https://blog.neurips.cc/2024/12/10/announcing-the-neurips-2024-best-paper-awards/"
+    }
   ]
 }

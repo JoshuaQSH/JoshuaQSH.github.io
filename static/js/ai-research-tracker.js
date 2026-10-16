@@ -3,7 +3,7 @@
   const root = document.querySelector(".research-tracker");
   if (!root) return;
   const ns = "http://www.w3.org/2000/svg";
-  const years = Array.from({length: new Date().getFullYear() - 2019}, (_, i) => 2020 + i);
+  const years = Array.from({length: 7}, (_, i) => 2020 + i);
   const topicRules = {
     language: /\b(?:llms?|language models?|transformers?|tokens?|prompts?|retrieval|text generation|instruction tuning)\b/i,
     vision: /\b(?:vision|image|visual|video|segmentation|object detection|3d|diffusion)\b/i,
@@ -24,6 +24,8 @@
   const empty = node => { while (node.firstChild) node.removeChild(node.firstChild); };
   const fmt = number => number == null ? "—" : new Intl.NumberFormat("en-GB").format(number);
   const catalog = JSON.parse($("ai-research-catalog-data").textContent);
+  let trackedCatalog = [];
+  let trackedIds = new Set();
   const sourceUrls = row => [...new Set([...(row?.source_urls || []), row?.source_url, row?.official_url, row?.source_id].filter(url => /^https?:\/\//.test(url)))];
   const rowFor = (snapshot, venueId, year) => snapshot.coverage.find(row => row.venue_id === venueId && row.year === year);
   const mainCount = row => row?.status === "verified" && !row.stale && Number.isFinite(row.main_track_total) ? row.main_track_total : null;
@@ -70,53 +72,77 @@
     }
   }
 
+  const countStatus = {verified:"Verified",partial:"Partial",unverified:"Not reported",pending:"Pending", "not-held":"Not held"};
+
   function renderCounts(history) {
     const mode = $("research-count-mode").value;
-    const node = $("research-count-chart"), legend = $("research-count-legend");
-    empty(node); empty(legend);
     const metrics = mode === "both" ? ["submitted", "accepted"] : [mode];
-    const values = history.counts.flatMap(row => metrics.map(metric => row[metric])).filter(Number.isFinite);
-    const max = Math.max(1000, Math.ceil(Math.max(...values) / 5000) * 5000);
-    const top = 18, bottom = 267, left = 56, right = 735;
-    axes(node, top, bottom, left, right, max, "");
-    for (const venue of history.conferences) {
-      const key = document.createElement("span");
-      const color = document.createElement("i"); color.className = "research-key"; color.style.setProperty("--key-color", venue.color);
-      key.append(color, document.createTextNode(venue.name)); legend.appendChild(key);
-      for (const metric of metrics) {
-        const points = history.counts.filter(row => row.venue === venue.id).map(row => ({
-          year:row.year,value:row[metric],row,
-          label:`${venue.name} ${row.year}: ${fmt(row[metric])} ${metric}. ${row.scope}`
-        }));
-        line(node, points, venue.color, metric === "accepted" ? "accepted" : "", left,right,top,bottom,max, point => {
-          const detail = $("research-count-detail"); empty(detail);
-          detail.append(document.createTextNode(`${point.label} `));
-          const link = document.createElement("a"); link.href = point.row.source; link.target = "_blank"; link.rel = "noopener noreferrer"; link.textContent = "Organizer source";
-          detail.appendChild(link);
-        });
+    const byId = new Map(history.conferences.map(venue => [venue.id, venue]));
+    history.fields.forEach((field, index) => {
+      const node = $(`research-field-chart-${index}`), legend = $(`research-field-legend-${index}`);
+      empty(node); empty(legend);
+      const fieldRows = history.counts.filter(row => field.venues.includes(row.venue));
+      const values = fieldRows.flatMap(row => metrics.map(metric => row[metric])).filter(Number.isFinite);
+      const largest = Math.max(0, ...values);
+      const step = largest > 10000 ? 5000 : largest > 1000 ? 1000 : largest > 100 ? 100 : 25;
+      const max = Math.max(step, Math.ceil(largest / step) * step);
+      const top = 18, bottom = 267, left = 56, right = 735;
+      axes(node, top, bottom, left, right, max, "");
+      for (const venueId of field.venues) {
+        const venue = byId.get(venueId);
+        const key = document.createElement("span");
+        const swatch = document.createElement("i"); swatch.className = "research-key"; swatch.style.setProperty("--key-color", venue.color);
+        key.append(swatch, document.createTextNode(venue.name)); legend.appendChild(key);
+        for (const metric of metrics) {
+          const points = fieldRows.filter(row => row.venue === venueId).map(row => ({
+            year:row.year,value:row[metric],row,metric,
+            label:`${venue.name} ${row.year}: ${fmt(row[metric])} ${metric}. ${row.scope}`
+          }));
+          line(node, points, venue.color, metric === "accepted" ? "accepted" : "", left,right,top,bottom,max, point => {
+            const detail = $(`research-field-detail-${index}`); empty(detail);
+            detail.append(document.createTextNode(`${point.label} `));
+            const link = document.createElement("a"); link.href = point.row[`${point.metric}_source`];
+            link.target = "_blank"; link.rel = "noopener noreferrer"; link.textContent = "Organizer source";
+            detail.appendChild(link);
+          });
+        }
       }
-    }
-    if (mode === "both") {
-      legend.append(document.createTextNode("Solid: submitted · Dashed: accepted"));
-    }
+      if (mode === "both") legend.append(document.createTextNode("Solid: submitted · Dashed: accepted"));
+      const gaps = years.map(year => {
+        const missing = fieldRows.filter(row => row.year === year && metrics.some(metric => row[metric] == null)).length;
+        return missing ? `${year}: ${missing}/${field.venues.length}` : "";
+      }).filter(Boolean);
+      const notHeld = fieldRows.filter(row => row.status === "not-held").map(row => `${byId.get(row.venue).name} ${row.year}`);
+      $(`research-field-gaps-${index}`).textContent = gaps.length
+        ? `Gaps by year (venues without verified ${mode === "both" ? "figures" : mode}): ${gaps.join(" · ")}. ${notHeld.length ? `Not held: ${notHeld.join(", ")}. ` : ""}Every venue-year is labeled in the source ledger.`
+        : "All years have verified figures.";
+    });
   }
 
   function renderLedger(history) {
-    const tbody = $("research-count-rows"); empty(tbody);
-    for (const row of [...history.counts].sort((a,b) => b.year - a.year || a.venue.localeCompare(b.venue))) {
-      const tr = document.createElement("tr");
-      const venue = history.conferences.find(item => item.id === row.venue);
-      for (const value of [venue.name, row.year, fmt(row.submitted), fmt(row.accepted)]) {
-        const td = document.createElement("td"); td.textContent = value; tr.appendChild(td);
+    const byId = new Map(history.conferences.map(venue => [venue.id, venue]));
+    history.fields.forEach((field, index) => {
+      const tbody = $(`research-field-rows-${index}`); empty(tbody);
+      for (const venueId of field.venues) for (const row of history.counts.filter(item => item.venue === venueId)) {
+        const tr = document.createElement("tr");
+        for (const value of [byId.get(venueId).name, row.year,
+          row.submitted == null ? countStatus[row.status] : fmt(row.submitted),
+          row.accepted == null ? countStatus[row.status] : fmt(row.accepted)]) {
+          const td = document.createElement("td"); td.textContent = value; tr.appendChild(td);
+        }
+        const detail = document.createElement("td"); detail.append(document.createTextNode(`${countStatus[row.status]} · ${row.scope}`));
+        for (const [metric, source] of [["Submitted",row.submitted_source],["Accepted",row.accepted_source],["Schedule",row.status_source]]) {
+          if (!source) continue;
+          const link = document.createElement("a"); link.href = source; link.target = "_blank"; link.rel = "noopener noreferrer"; link.textContent = metric;
+          detail.append(document.createTextNode(" · "),link);
+        }
+        tr.appendChild(detail); tbody.appendChild(tr);
       }
-      const td = document.createElement("td"); td.append(document.createTextNode(`${row.scope} · `));
-      const link = document.createElement("a"); link.href = row.source; link.target = "_blank"; link.rel = "noopener noreferrer"; link.textContent = "Organizer";
-      td.appendChild(link); tr.appendChild(td); tbody.appendChild(tr);
-    }
+    });
   }
 
   function renderIndex(snapshot) {
-    const venue = catalog.find(v => v.id === $("research-index-venue").value);
+    const venue = trackedCatalog.find(v => v.id === $("research-index-venue").value);
     if (!venue) return;
     const chart = $("research-index-chart"); empty(chart);
     const rows = years.map(year => ({year, row: rowFor(snapshot, venue.id, year)}));
@@ -172,7 +198,7 @@
     const rank = $("research-catalog-rank").value;
     const year = Number($("research-catalog-year").value);
     const tbody = $("research-catalog-rows"); empty(tbody);
-    for (const venue of catalog.filter(item => (!area || item.area === area) &&
+    for (const venue of trackedCatalog.filter(item => (!area || item.area === area) &&
       (!rank || (rank === "unranked" ? !Object.keys(item.rankings || {}).length : Object.values(item.rankings || {}).includes(rank))))) {
       const tr = document.createElement("tr");
       for (const value of [venue.name, venue.area]) {
@@ -226,7 +252,7 @@
     const groups = ["Industry", "University"].map((sector, index) => ({
       sector, color:index ? "#367580" : "#be7b26",
       points: years.map(year => {
-        const papers = snapshot.papers.filter(p => p.year === year && p.first_author_sector === sector);
+        const papers = snapshot.papers.filter(p => trackedIds.has(p.venue_id) && p.year === year && p.first_author_sector === sector);
         const hits = papers.filter(p => rule.test(p.title || "")).length;
         return {year,value:papers.length ? 100 * hits / papers.length : null,hits,total:papers.length,
           label:`${sector} ${year}: ${hits} of ${papers.length} sampled papers (${papers.length ? (100 * hits / papers.length).toFixed(1) : "n/a"}%)`};
@@ -239,7 +265,7 @@
     for (const group of groups) line(node,group.points,group.color,"",left,right,top,bottom,max,point => {
       $("research-topic-detail").textContent = point.label;
     });
-    const total = snapshot.papers.length;
+    const total = snapshot.papers.filter(p => trackedIds.has(p.venue_id)).length;
     $("research-topic-detail").textContent = `${fmt(total)} tracked papers · snapshot ${new Date(snapshot.generated_at).toLocaleDateString("en-GB")} · point labels show each year's denominator`;
   }
 
@@ -249,13 +275,15 @@
     return response.json();
   }
   Promise.all([load(root.dataset.historyUrl),load(root.dataset.observatoryUrl)]).then(([history,snapshot]) => {
-    if (!Array.isArray(history.counts) || !Array.isArray(history.awards) || !Array.isArray(snapshot.papers)) throw new Error("Invalid dataset");
-    for (const venue of catalog) {
+    if (!Array.isArray(history.counts) || !Array.isArray(history.fields) || !Array.isArray(history.awards) || !Array.isArray(snapshot.papers)) throw new Error("Invalid dataset");
+    trackedIds = new Set(history.fields.flatMap(field => field.venues));
+    trackedCatalog = catalog.filter(venue => trackedIds.has(venue.id));
+    for (const venue of trackedCatalog) {
       const option = document.createElement("option"); option.value = venue.id; option.textContent = venue.name;
       $("research-index-venue").append(option);
     }
     $("research-index-venue").value = "neurips";
-    for (const area of [...new Set(catalog.map(venue => venue.area))].sort()) {
+    for (const area of [...new Set(trackedCatalog.map(venue => venue.area))].sort()) {
       const option = document.createElement("option"); option.value = area; option.textContent = area;
       $("research-catalog-area").append(option);
     }
@@ -270,8 +298,9 @@
     $("research-catalog-rank").addEventListener("change", () => renderCatalog(snapshot));
     $("research-catalog-year").addEventListener("change", () => renderCatalog(snapshot));
     $("research-topic").addEventListener("change", () => renderTopics(snapshot));
-    const verified = snapshot.coverage.filter(row => mainCount(row) !== null).length;
-    const fallback = snapshot.coverage.filter(row => mainCount(row) === null && bibliographyCount(row) !== null).length;
-    $("research-status").textContent = `Organizer figures reviewed ${history.reviewed_at} · sample updated ${new Date(snapshot.generated_at).toLocaleDateString("en-GB")} · ${catalog.length} ranked series, including ${catalog.filter(venue => venue.source_rule_id).length} new cross-area series · ${verified} verified main-track venue-years · ${fallback} bibliography-only venue-years · legacy index matches remain separately labelled`;
+    const coverage = snapshot.coverage.filter(row => trackedIds.has(row.venue_id));
+    const verified = coverage.filter(row => mainCount(row) !== null).length;
+    const fallback = coverage.filter(row => mainCount(row) === null && bibliographyCount(row) !== null).length;
+    $("research-status").textContent = `Organizer figures reviewed ${history.reviewed_at} · sample updated ${new Date(snapshot.generated_at).toLocaleDateString("en-GB")} · ${trackedCatalog.length} selected conferences · ${verified} verified main-track venue-years · ${fallback} bibliography-only venue-years · legacy index matches remain separately labelled`;
   }).catch(() => { $("research-status").textContent = "The research datasets could not be loaded. Please retry later."; });
 })();

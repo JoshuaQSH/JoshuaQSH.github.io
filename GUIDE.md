@@ -453,7 +453,7 @@ Then open the page locally:
 
 ## AI Research Tracker
 
-The pinned [research tracker](content/posts/ai-research-tracker.md) uses organizer-verified conference counts and awards from `static/data/ai-research-conference-history.json`. Add or correct a record there only after checking the linked organizer source and track scope; use `null` for unverified counts. Its industry/academia keyword trend comes from `static/data/ai-research-observatory.json`, refreshed by `python3 scripts/refresh_ai_research_observatory.py`. For evidence-backed paper exclusions/additions and the full update checklist, read [the Observatory guide](docs/AI_RESEARCH_OBSERVATORY.md).
+The pinned [research tracker](content/posts/ai-research-tracker.md) follows 26 selected conferences in five fields. Edit `data/ai_research_observatory/tracker_history.json` to add an organizer-confirmed figure, correction, award, or venue grouping; record the exact track scope and direct HTTPS source for each figure. Then run `python3 scripts/build_ai_research_tracker_history.py` to regenerate `static/data/ai-research-conference-history.json`. Unverified 2020–2026 venue-years are generated as gaps, never zero. Its industry/academia keyword trend comes from `static/data/ai-research-observatory.json`, refreshed by `python3 scripts/refresh_ai_research_observatory.py`. For evidence-backed paper exclusions/additions and the full update checklist, read [the Observatory guide](docs/AI_RESEARCH_OBSERVATORY.md).
 
 ## Don't Starve Menu Guide
 

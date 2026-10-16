@@ -7,6 +7,10 @@
 .research-status{font-family:Arial,sans-serif;font-size:.78rem;color:var(--rt-muted);border-top:1px solid var(--rt-rule);padding-top:12px}
 .research-section{padding:34px 0;border-bottom:1px solid var(--rt-rule)}
 .research-section-head{display:flex;align-items:end;justify-content:space-between;gap:20px}
+.research-field{padding:24px 0;border-top:1px solid var(--rt-rule)}
+.research-field h3{margin:0 0 10px;font-size:1.12rem}
+.research-field-gaps{font-family:Arial,sans-serif;font-size:.77rem;line-height:1.45;color:var(--rt-muted);margin:8px 0}
+.research-field-gaps strong{color:var(--rt-ink)}
 .research-note{color:var(--rt-muted);font-size:.92rem;line-height:1.55;max-width:720px;margin:4px 0 18px}
 .research-select{display:grid;gap:5px;flex:0 0 auto;font-family:Arial,sans-serif;font-size:.72rem;color:var(--rt-muted)}
 .research-select select{font-family:inherit;font-size:.84rem;background:var(--control-bg);color:var(--text-main);border:1px solid var(--control-border);border-radius:4px;padding:8px 26px 8px 9px}

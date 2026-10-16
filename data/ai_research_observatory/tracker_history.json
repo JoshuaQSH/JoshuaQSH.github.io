@@ -1,0 +1,39 @@
+{
+  "reviewed_at": "2026-10-16",
+  "fields": [
+    {"name": "Systems / Operating systems", "venues": ["pldi", "popl", "sosp", "osdi", "oopsla"]},
+    {"name": "Distributed / Parallel / Architecture", "venues": ["ppopp", "sc", "hpca", "asplos", "isca", "usenix-atc", "eurosys"]},
+    {"name": "Compilers and others", "venues": ["cgo", "cc", "pact", "euro-par", "icdcs", "ipdps", "mlsys"]},
+    {"name": "AI", "venues": ["neurips", "icml", "ijcai"]},
+    {"name": "Software engineering", "venues": ["fse", "ase", "icse", "issta"]}
+  ],
+  "not_held": [{"venue": "sosp", "years": [2020, 2022], "source": "https://sosp.org/"}],
+  "known": [
+    {"venue": "osdi", "year": 2020, "submitted": 400, "accepted": 70, "scope": "current-cycle research papers", "source": "https://www.usenix.org/sites/default/files/osdi20-full_proceedings.pdf"},
+    {"venue": "osdi", "year": 2021, "submitted": 165, "accepted": 31, "scope": "current-cycle research papers", "source": "https://www.usenix.org/system/files/osdi21_full_proceedings.pdf"},
+    {"venue": "osdi", "year": 2022, "submitted": 253, "accepted": 49, "scope": "current-cycle research papers", "source": "https://www.usenix.org/sites/default/files/osdi22_full_proceedings_interior.pdf"},
+    {"venue": "osdi", "year": 2023, "submitted": 255, "accepted": 50, "scope": "current-cycle papers; excludes 5 prior-cycle revise-and-resubmit papers in the 55-paper program", "source": "https://www.usenix.org/system/files/osdi23_full_proceedings.pdf"},
+    {"venue": "osdi", "year": 2024, "submitted": 272, "accepted": 49, "scope": "current-cycle papers; excludes 4 prior-cycle revise-and-resubmit papers in the 53-paper program", "source": "https://www.usenix.org/system/files/osdi24_full_proceedings.pdf"},
+    {"venue": "osdi", "year": 2025, "submitted": 339, "accepted": 48, "scope": "current-cycle papers; excludes 5 prior-cycle revise-and-resubmit papers in the 53-paper program", "source": "https://www.usenix.org/sites/default/files/osdi25-message.pdf"},
+    {"venue": "osdi", "year": 2026, "submitted": 669, "accepted": 134, "scope": "reviewable current-cycle research and operational-systems submissions; excludes 2 prior-cycle revise-and-resubmit papers", "source": "https://www.usenix.org/sites/default/files/osdi26-message.pdf"},
+    {"venue": "oopsla", "year": 2024, "accepted": 148, "scope": "OOPSLA research papers across both publication rounds", "source": "https://2024.splashcon.org/track/splash-2024-oopsla"},
+    {"venue": "isca", "year": 2024, "submitted": 423, "accepted": 83, "scope": "research program", "source": "https://www.sigarch.org/isca-2024-trip-report-buenos-aires/"},
+    {"venue": "eurosys", "year": 2025, "submitted": 696, "accepted": 85, "scope": "main research program; spring and fall cycles combined", "source": "https://pure.tudelft.nl/ws/portalfiles/portal/243149497/3689031.fm.pdf"},
+    {"venue": "cc", "year": 2024, "submitted": 51, "accepted": 21, "scope": "CC main conference submission portal", "source": "https://cc24.hotcrp.com/"},
+    {"venue": "neurips", "year": 2020, "submitted": 9467, "accepted": 1898, "scope": "main conference", "source": "https://neurips.cc/media/Press/NeurIPS_2020-Fact_Sheet.pdf"},
+    {"venue": "neurips", "year": 2021, "submitted": 9122, "accepted": 2334, "scope": "main conference", "source": "https://neurips.cc/media/Press/NeurIPS_2021-Fact_Sheet.pdf"},
+    {"venue": "neurips", "year": 2022, "submitted": 9634, "accepted": 2672, "scope": "main conference; 9,634 full submissions as of July 26", "submitted_source": "https://blog.neurips.cc/2022/08/01/updates-from-the-program-chairs/", "accepted_source": "https://blog.neurips.cc/2022/11/22/getting-ready-for-neurips-3-2022-conference-highlights/"},
+    {"venue": "neurips", "year": 2023, "submitted": 12343, "accepted": 3218, "scope": "main conference track", "source": "https://media.neurips.cc/Conferences/NeurIPS2023/NeurIPS2023-Fact_Sheet.pdf"},
+    {"venue": "neurips", "year": 2024, "submitted": 15671, "accepted": 4037, "scope": "main conference track", "source": "https://media.neurips.cc/Conferences/NeurIPS2024/NeurIPS2024-Fact_Sheet.pdf"},
+    {"venue": "neurips", "year": 2025, "submitted": 21575, "accepted": 5290, "scope": "main conference track", "source": "https://media.neurips.cc/Conferences/NeurIPS2025/press/NeurIPS2025-Fact_Sheet.pdf"},
+    {"venue": "icml", "year": 2025, "accepted": 3260, "scope": "main track; exact submission total not reported in cited fact sheet", "source": "https://media.icml.cc/Conferences/ICML2025/ICML2025_Fact_Sheet.pdf"},
+    {"venue": "ijcai", "year": 2022, "submitted": 4537, "accepted": 679, "scope": "main track; IJCAI-ECAI 2022", "source": "https://www.ijcai.org/proceedings/2022/preface.pdf"},
+    {"venue": "ase", "year": 2024, "submitted": 587, "accepted": 155, "scope": "research track", "source": "https://ase2024.hotcrp.com/"}
+  ],
+  "awards": [
+    {"venue": "NeurIPS", "year": 2025, "award": "Best Paper", "title": "Gated Attention for Large Language Models: Non-linearity, Sparsity, and Attention-Sink-Free", "field": "Language models", "topics": ["attention", "LLMs", "transformers"], "source": "https://blog.neurips.cc/2025/11/26/announcing-the-neurips-2025-best-paper-awards/"},
+    {"venue": "NeurIPS", "year": 2025, "award": "Best Paper", "title": "1000 Layer Networks for Self-Supervised RL: Scaling Depth Can Enable New Goal-Reaching Capabilities", "field": "Reinforcement learning", "topics": ["reinforcement learning", "self-supervision"], "source": "https://blog.neurips.cc/2025/11/26/announcing-the-neurips-2025-best-paper-awards/"},
+    {"venue": "NeurIPS", "year": 2024, "award": "Best Paper", "title": "Visual Autoregressive Modeling: Scalable Image Generation via Next-Scale Prediction", "field": "Generative vision", "topics": ["image generation", "autoregression"], "source": "https://blog.neurips.cc/2024/12/10/announcing-the-neurips-2024-best-paper-awards/"},
+    {"venue": "NeurIPS", "year": 2024, "award": "Best Paper", "title": "Stochastic Taylor Derivative Estimator: Efficient amortization for arbitrary differential operators", "field": "Scientific machine learning", "topics": ["scientific ML", "neural networks"], "source": "https://blog.neurips.cc/2024/12/10/announcing-the-neurips-2024-best-paper-awards/"}
+  ]
+}
