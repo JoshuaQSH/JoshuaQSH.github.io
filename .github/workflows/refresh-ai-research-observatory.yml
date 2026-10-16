@@ -4,6 +4,15 @@ on:
   schedule:
     - cron: "23 5 * * 1"
   workflow_dispatch:
+    inputs:
+      refresh_scope:
+        description: "Recent years or backfill every catalog year from 2020"
+        type: choice
+        required: true
+        default: recent
+        options:
+          - recent
+          - backfill-2020
 
 permissions:
   contents: write
@@ -20,12 +29,19 @@ jobs:
         run: python3 -m unittest discover -s scripts -p 'test_ai_research*.py'
       - name: Test dashboard calculations
         run: node scripts/test_ai_research_observatory_core.cjs
-      - name: Refresh current and previous year
+      - name: Refresh AI research snapshot
         env:
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           GITHUB_TOKEN: ${{ github.token }}
+          REFRESH_SCOPE: ${{ inputs.refresh_scope || 'recent' }}
         run: |
-          if [ -n "$OPENALEX_API_KEY" ]; then
+          if [ "$REFRESH_SCOPE" = "backfill-2020" ]; then
+            if [ -z "$OPENALEX_API_KEY" ]; then
+              echo "OPENALEX_API_KEY is required for historical backfill" >&2
+              exit 1
+            fi
+            python3 scripts/refresh_ai_research_observatory.py --from-year 2020 --github-cap 250
+          elif [ -n "$OPENALEX_API_KEY" ]; then
             python3 scripts/refresh_ai_research_observatory.py --github-cap 250
           else
             echo "No OPENALEX_API_KEY; refreshing official proceedings and GitHub evidence only"

@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 import refresh_ai_research_observatory as pipeline
 from refresh_ai_research_observatory import classify_sector, deduplicate, normalize_work, score_components
@@ -268,6 +269,43 @@ class ObservatoryTests(unittest.TestCase):
             self.assertFalse(first[3])
             self.assertTrue(second[3])
             self.assertEqual(request.call_count, 1)
+
+    def test_openalex_key_is_sent_in_header_not_url(self):
+        payload = {"meta": {"count": 1}, "results": []}
+        with tempfile.TemporaryDirectory() as directory, patch.object(pipeline, "CACHE", Path(directory)), \
+             patch.object(pipeline, "urlopen", return_value=io.BytesIO(json.dumps(payload).encode())) as request:
+            pipeline.fetch_works(VENUE, 2025, 25, "private-test-key")
+            sent = request.call_args.args[0]
+            self.assertNotIn("private-test-key", sent.full_url)
+            self.assertEqual(sent.get_header("Authorization"), "Bearer private-test-key")
+
+    def test_manual_openalex_lookup_keeps_key_out_of_url(self):
+        with patch.object(pipeline, "urlopen", return_value=io.BytesIO(b'{}')) as request:
+            pipeline.fetch_work_by_id("https://openalex.org/W7", "private-test-key")
+            sent = request.call_args.args[0]
+            self.assertNotIn("private-test-key", sent.full_url)
+            self.assertEqual(sent.get_header("Authorization"), "Bearer private-test-key")
+
+    def test_invalid_openalex_key_aborts_without_retries(self):
+        denied = HTTPError("https://api.openalex.org/works", 403, "Forbidden", None, None)
+        with tempfile.TemporaryDirectory() as directory, patch.object(pipeline, "CACHE", Path(directory)), \
+             patch.object(pipeline, "urlopen", side_effect=denied) as request, \
+             patch.object(pipeline.time, "sleep"):
+            with self.assertRaisesRegex(RuntimeError, "authentication"):
+                pipeline.fetch_works(VENUE, 2025, 25, "private-test-key")
+            self.assertEqual(request.call_count, 1)
+
+    def test_invalid_openalex_key_does_not_publish_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            venues, reviews, output = (root / name for name in ("venues.json", "reviews.json", "snapshot.json"))
+            venues.write_text(json.dumps([VENUE]))
+            reviews.write_text("{}")
+            with patch.multiple(pipeline, VENUES=venues, REVIEWS=reviews, OUTPUT=output), \
+                 patch.object(pipeline, "fetch_works", side_effect=pipeline.AuthenticationFailed("OpenAlex authentication failed")):
+                with self.assertRaisesRegex(RuntimeError, "authentication"):
+                    pipeline.refresh(2025, 2025, 25, official_cap=0, github_cap=0)
+            self.assertFalse(output.exists())
 
     def test_review_survives_metadata_refresh(self):
         with tempfile.TemporaryDirectory() as directory:

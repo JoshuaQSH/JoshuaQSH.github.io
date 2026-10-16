@@ -31,6 +31,12 @@ API = "https://api.openalex.org/works"
 
 class RateLimited(RuntimeError):
     """The provider exhausted its request budget; stop further API attempts."""
+
+
+class AuthenticationFailed(RuntimeError):
+    """The OpenAlex credential is unavailable or invalid; abort the refresh."""
+
+
 AI_WORDS = re.compile(r"\b(?:ai|ml|llm|llms|machine learning|deep learning|neural|inference|training|transformer|attention|generative|foundation model|language model|reinforcement learning|model serving|gpu accelerat|tensor|diffusion model|vision model|agentic|large model|model parallel|cuda|triton|pytorch|object detection|neural network|graph learning|data parallel|gradient)\b", re.I)
 TOPICS = [("LLMs / NLP", re.compile(r"\b(?:llm|language model|transformer|tokeni[sz]|text generation|instruction tuning|retrieval.augmented)\b", re.I)),
           ("Systems", re.compile(r"\b(?:inference serv|gpu kernel|gpu schedul|distributed training|model parallel|accelerator|compiler|memory management)\b", re.I)),
@@ -229,9 +235,10 @@ def fetch_work_by_id(work_id, key):
     if not re.fullmatch(r"https://openalex.org/W\d+", work_id):
         raise ValueError("Manual work needs an OpenAlex work ID")
     url = API + "/" + work_id.rsplit("/", 1)[-1]
+    headers = {"User-Agent": "JoshuaQSH-AIResearchObservatory/1.0", "Accept": "application/json"}
     if key:
-        url += "?" + urlencode({"api_key": key})
-    request = Request(url, headers={"User-Agent": "JoshuaQSH-AIResearchObservatory/1.0", "Accept": "application/json"})
+        headers["Authorization"] = f"Bearer {key}"
+    request = Request(url, headers=headers)
     with urlopen(request, timeout=40) as response:
         return json.load(response)
 
@@ -244,12 +251,14 @@ def fetch_works(venue, year, cap, key):
     if cache_path.exists() and time.time() - cache_path.stat().st_mtime < 6 * 3600:
         cached = json.loads(cache_path.read_text())
         return cached.get("results", []), (cached.get("meta") or {}).get("count", 0), datetime.fromtimestamp(cache_path.stat().st_mtime, timezone.utc).isoformat(), True
-    if key:
-        params["api_key"] = key
     url = API + "?" + urlencode(params)
+    headers = {"User-Agent": "JoshuaQSH-AIResearchObservatory/1.0 (academic metadata dashboard)",
+               "Accept": "application/json"}
+    if key:
+        headers["Authorization"] = f"Bearer {key}"
     for attempt in range(4):
         try:
-            request = Request(url, headers={"User-Agent": "JoshuaQSH-AIResearchObservatory/1.0 (academic metadata dashboard)", "Accept": "application/json"})
+            request = Request(url, headers=headers)
             with urlopen(request, timeout=40) as response:
                 payload = json.load(response)
             CACHE.mkdir(parents=True, exist_ok=True)
@@ -258,6 +267,8 @@ def fetch_works(venue, year, cap, key):
         except HTTPError as exc:
             if exc.code == 429:
                 raise RateLimited("OpenAlex request budget exhausted (HTTP 429)") from exc
+            if exc.code in (401, 403):
+                raise AuthenticationFailed("OpenAlex authentication failed; check the activated API key") from exc
             if attempt == 3:
                 raise RuntimeError(f"OpenAlex request failed: {exc}") from exc
             time.sleep(2 ** attempt)
@@ -327,6 +338,8 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
                     print(f"WARNING: {exc}; remaining OpenAlex calls skipped", file=sys.stderr)
                     openalex_blocked = True
                     row.update({"status": "rate-limited", "partial": True, "error": str(exc)})
+                except AuthenticationFailed:
+                    raise
                 except Exception as exc:
                     print(f"WARNING: OpenAlex {venue['name']} {year}: {exc}", file=sys.stderr)
                     row.update({"partial": True, "status": "error", "error": str(exc),
