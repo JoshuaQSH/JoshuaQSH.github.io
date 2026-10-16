@@ -268,24 +268,25 @@
   function detailRow(dl, label, value) {
     dl.append(node("dt", label), node("dd", value === null || value === undefined || value === "" ? "Unknown / not reviewed" : value));
   }
-  function scoreExplanation(target, paper, result) {
+  function scoreExplanation(target, paper, result, showMethod = true) {
     const breakdown = result.breakdown;
     const selectedWeight = breakdown.reduce((sum, row) => sum + row.weight, 0);
     const included = breakdown.filter(row => row.included);
     const availableWeight = included.reduce((sum, row) => sum + row.weight, 0);
     const numerator = included.reduce((sum, row) => sum + row.contribution, 0);
     const section = node("section", null, "aro-score-explanation");
-    section.append(node("h3", `Score audit: ${paper.title}`),
+    section.appendChild(node("h3", `Score audit: ${paper.title}`));
+    if (showMethod) section.append(
       node("p", "Editorial 0–6 proxy, not measured business adoption. GitHub stars and pushes are repository signals only."),
       node("p", "score = 6 × sum(weight × available component value) / sum(available weights)"),
-      node("p", "evidence coverage = sum(available weights) / sum(selected weights)"));
+      node("p", "evidence coverage = sum(available weights) / sum(selected weights)"),
+      node("p", "Minimum evidence: 2 available components and 55% coverage, or 4 including code and reviewed adoption or maintenance with 50% coverage."));
     section.append(node("p", selectedWeight
       ? `Evidence coverage: ${availableWeight} / ${selectedWeight} = ${(result.coverage * 100).toFixed(1)}%.`
       : "Evidence coverage: no weights selected; ratio undefined."));
     section.append(node("p", availableWeight
       ? `Numerator: ${numerator}. 6 × ${numerator} / ${availableWeight} ≈ ${(6 * numerator / availableWeight).toFixed(2)}${result.value === null ? " (not published: minimum evidence unmet)." : "."}`
       : "No available weighted components; score unavailable."));
-    section.append(node("p", "Minimum evidence: 2 available components and 55% coverage, or 4 including code and reviewed adoption or maintenance with 50% coverage."));
     const list = node("ul", null, "aro-score-breakdown");
     for (const row of breakdown) {
       list.appendChild(node("li", row.included
@@ -299,7 +300,7 @@
   function renderScorePanel(papers) {
     const target = $("aro-weight-score");
     const paper = focusedPaper && papers.includes(focusedPaper) ? focusedPaper : papers[0];
-    if (paper) scoreExplanation(target, paper, core.score(paper, weights));
+    if (paper) scoreExplanation(target, paper, core.score(paper, weights), false);
     else target.replaceChildren(node("p", "No paper matches these filters."));
   }
   function openDetail(paper) {
@@ -328,8 +329,10 @@
       ["accelerator_type", "Accelerator"], ["training_flops", "Training FLOPs"], ["model_parameters", "Model parameters"], ["training_cost", "Training cost"]]) {
       detailRow(dl, label, paper.compute?.[key]);
     }
-    detailRow(dl, "Score", result.value === null ? "Insufficient component coverage" : `${result.value.toFixed(2)} / 6`);
-    detailRow(dl, "Score availability", `${Math.round(result.coverage * 100)}% of selected weight; ${Object.keys(result.components).join(", ") || "none"}`);
+    detailRow(dl, "Score", !result.breakdown.length ? "No weights selected"
+      : result.value === null ? "Insufficient component coverage" : `${result.value.toFixed(2)} / 6`);
+    detailRow(dl, "Score availability", !result.breakdown.length ? "No weights selected; evidence coverage undefined"
+      : `${Math.round(result.coverage * 100)}% of selected weight; ${Object.keys(result.components).join(", ") || "none"}`);
     detailRow(dl, "Topic rule", paper.topic_rule); detailRow(dl, "Metadata sources", (paper.sources || [{ provider: paper.source }]).map(s => s.provider).join(" + "));
     body.appendChild(dl);
     const scoreAudit = node("div");

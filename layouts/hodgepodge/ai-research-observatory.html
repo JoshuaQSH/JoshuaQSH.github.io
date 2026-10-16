@@ -51,6 +51,11 @@
       <label>Recent repo activity <input id="aro-w-activity" type="range" min="0" max="100" value="5"><output for="aro-w-activity">5%</output></label>
       <label>Reviewed maintenance <input id="aro-w-maintenance" type="range" min="0" max="100" value="10"><output for="aro-w-maintenance">10%</output></label>
       <label>Reviewed adoption <input id="aro-w-adoption" type="range" min="0" max="100" value="10"><output for="aro-w-adoption">10%</output></label>
+    </div><div class="aro-score-explanation aro-score-method"><h3>Score method</h3>
+      <p>Editorial 0–6 proxy, not measured business adoption. GitHub stars and pushes are repository signals only.</p>
+      <p>score = 6 × sum(weight × available component value) / sum(available weights)</p>
+      <p>evidence coverage = sum(available weights) / sum(selected weights)</p>
+      <p>Minimum evidence: 2 available components and 55% coverage, or 4 including code and reviewed adoption or maintenance with 50% coverage.</p>
     </div><div id="aro-weight-score" aria-live="polite"></div><p>Unknown evidence is omitted, never scored as zero. Open a paper in the ledger to inspect its own score audit.</p></details>
   </section>
 
