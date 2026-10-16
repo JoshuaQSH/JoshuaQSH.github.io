@@ -21,7 +21,10 @@
 .research-openalex-key{background:repeating-linear-gradient(90deg,var(--key-color) 0 2px,transparent 2px 5px)}
 .research-publisher-key{background:repeating-linear-gradient(90deg,var(--key-color) 0 8px,transparent 8px 11px)}
 .research-industry{--key-color:#be7b26}.research-academia{--key-color:#367580}
-.research-chart-scroll{width:100%;overflow-x:auto}
+.research-chart-scroll{width:100%;overflow-x:auto;scrollbar-color:var(--rt-muted) var(--rt-rule);scrollbar-width:thin}
+.research-chart-scroll::-webkit-scrollbar{height:7px}
+.research-chart-scroll::-webkit-scrollbar-thumb{background:var(--rt-muted);border-radius:4px}
+.research-chart-scroll::-webkit-scrollbar-track{background:var(--rt-rule)}
 .research-chart{display:block;width:100%;height:auto;min-width:540px;font-family:Arial,sans-serif}
 .research-chart .axis{stroke:var(--rt-muted);stroke-width:1}
 .research-chart .grid{stroke:var(--rt-rule);stroke-width:1}

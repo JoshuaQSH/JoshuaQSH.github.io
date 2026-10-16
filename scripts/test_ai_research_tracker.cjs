@@ -107,12 +107,22 @@ async function main() {
     const systemsChart = tracker.elements['research-field-chart-0'];
     assert.equal(descendants(systemsChart, el => el.tagName === 'circle' && el.attributes['aria-label']?.includes('OSDI 2024')).length, 2,
       'both sourced OSDI 2024 values are plotted');
-    assert.equal(descendants(systemsChart, el => el.tagName === 'line' && el.attributes.class?.includes('series')).length, 12,
+    const osdiColor = history.conferences.find(venue => venue.id === 'osdi').color;
+    assert.equal(descendants(systemsChart, el => el.tagName === 'line' && el.attributes.class?.includes('series') && el.attributes.stroke === osdiColor).length, 12,
       'OSDI 2020 to 2026 is continuous once per metric');
+    assert.equal(descendants(systemsChart, el => el.tagName === 'circle' && el.attributes['aria-label']?.includes('PLDI 2025')).length, 2,
+      'the source-verified PLDI 2025 figures are plotted');
+    const compilerChart = tracker.elements['research-field-chart-2'];
+    const euroParColor = history.conferences.find(venue => venue.id === 'euro-par').color;
+    assert.equal(descendants(compilerChart, el => el.tagName === 'line' && el.attributes.class?.includes('series') && el.attributes.stroke === euroParColor).length, 12,
+      'Euro-Par has seven source-verified years, continuous in both metrics');
+    assert.match(tracker.elements['research-field-rows-1'].textContent, /ASPLOS.*2024.*Not reported/s,
+      'cycle-only figures do not become an annual ASPLOS total');
     assert.equal(descendants(systemsChart, el => el.tagName === 'circle' && el.attributes['aria-label']?.includes('SOSP 2022')).length, 0,
       'not-held years never produce markers');
     assert.match(tracker.elements['research-field-rows-0'].textContent, /SOSP.*2022.*Not held/s);
-    assert.match(tracker.elements['research-field-rows-0'].textContent, /PLDI.*2020.*Not reported/s);
+    assert.match(tracker.elements['research-field-rows-0'].textContent, /PLDI.*2020.*341.*77/s);
+    assert.match(tracker.elements['research-field-rows-0'].textContent, /PLDI.*2021.*Not reported/s);
     assert.match(tracker.elements['research-field-chart-3'].textContent, /2020.*2026/s, 'AI chart has the complete year axis');
     tracker.elements['research-index-venue'].value = 'pldi';
     tracker.elements['research-index-venue'].dispatch('change');
