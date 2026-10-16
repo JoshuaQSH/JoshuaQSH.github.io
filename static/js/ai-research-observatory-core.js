@@ -23,24 +23,50 @@
     const raw = paper[COMPONENTS[name]];
     return (name === "award" || name === "code") && typeof raw === "boolean" ? Number(raw) : raw;
   }
+  function omissionReason(paper, name, now) {
+    if (name === "stars" || name === "activity") {
+      if (!paper.github) return "No verified GitHub snapshot";
+      const checkedAge = ageDays(paper.github.checked_at, now);
+      if (checkedAge === null) return "GitHub check date unavailable";
+      if (checkedAge > 45) return "GitHub check older than 45 days";
+      if (paper.github.fork === true) return "Fork metrics excluded";
+      return name === "stars" ? "GitHub stars unavailable" : "Latest repository push unavailable";
+    }
+    if (name === "maintenance") {
+      if (!paper.maintenance_evidence_url) return "Maintenance evidence not reviewed";
+      const reviewAge = ageDays(paper.review?.date, now);
+      if (reviewAge === null) return "Maintenance review date unavailable";
+      if (reviewAge > 365) return "Maintenance review older than 365 days";
+      return "Maintenance status unknown";
+    }
+    if (name === "adoption") return paper.adoption_evidence_url
+      ? "Adoption status unknown" : "Adoption evidence not reviewed";
+    return ({ citation: "Citation percentile unavailable", venue: "Venue prestige unavailable",
+      award: "Award status not reviewed", code: "Code availability not reviewed" })[name] || "Component unavailable";
+  }
   function score(paper, weights, now = new Date()) {
     const selected = Object.entries(weights).filter(([, weight]) => weight > 0);
     const total = selected.reduce((sum, [, weight]) => sum + weight, 0);
-    if (!total) return { value: null, coverage: 0, components: {} };
+    if (!total) return { value: null, coverage: 0, components: {}, breakdown: [] };
     let numerator = 0, available = 0, count = 0;
-    const components = {};
+    const components = {}, breakdown = [];
     for (const [name, weight] of selected) {
       const value = evidenceValue(paper, name, now);
-      if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 1) continue;
+      if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 1) {
+        breakdown.push({ name, weight, value: null, contribution: null, included: false, reason: omissionReason(paper, name, now) });
+        continue;
+      }
       components[name] = value;
-      numerator += value * weight;
+      const contribution = value * weight;
+      breakdown.push({ name, weight, value, contribution, included: true, reason: null });
+      numerator += contribution;
       available += weight;
       count++;
     }
     const coverage = available / total;
     const enoughEvidence = count >= 2 && coverage >= .55
       || count >= 4 && coverage >= .5 && "code" in components && ("adoption" in components || "maintenance" in components);
-    return { value: enoughEvidence ? 6 * numerator / available : null, coverage, components };
+    return { value: enoughEvidence ? 6 * numerator / available : null, coverage, components, breakdown };
   }
   function filterPapers(papers, filters) {
     const needle = (filters.search || "").trim().toLowerCase();

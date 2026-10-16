@@ -8,12 +8,24 @@ const scored = core.score(reviewed, weights);
 assert.equal(scored.coverage, .7);
 assert.ok(Math.abs(scored.value - (6 * (40 * .8 + 15 + 10) / 70)) < 1e-9);
 assert.equal(scored.components.code, 0);
+assert.deepEqual(scored.breakdown.filter(row => row.included).map(row => [row.name, row.weight, row.value, row.contribution]), [
+  ['citation', 40, .8, 32], ['venue', 15, 1, 15], ['award', 10, 1, 10], ['code', 5, 0, 0]
+]);
+assert.equal(scored.breakdown.filter(row => row.included).reduce((sum, row) => sum + row.contribution, 0), 57);
+assert.equal(scored.breakdown.filter(row => row.included).reduce((sum, row) => sum + row.weight, 0), 70);
+assert.equal(scored.breakdown.reduce((sum, row) => sum + row.weight, 0), 100);
 
 const unknown = core.score({ citation_percentile: .8, prestige: 1, award: null, code_available: null }, weights);
 assert.equal(unknown.coverage, .55);
 assert.ok(Math.abs(unknown.value - (6 * (40 * .8 + 15) / 55)) < 1e-9);
+assert.equal(unknown.breakdown.find(row => row.name === 'code').included, false);
+assert.equal(unknown.breakdown.find(row => row.name === 'code').value, null);
+assert.equal(unknown.breakdown.find(row => row.name === 'code').contribution, null);
+assert.match(unknown.breakdown.find(row => row.name === 'code').reason, /not reviewed|unknown/i);
+assert.equal(Object.hasOwn(unknown.components, 'code'), false);
 assert.equal(core.score({ prestige: 1 }, weights).value, null);
-assert.equal(core.score(reviewed, Object.fromEntries(Object.keys(weights).map(key => [key, 0]))).value, null);
+const zeroWeights = core.score(reviewed, Object.fromEntries(Object.keys(weights).map(key => [key, 0])));
+assert.deepEqual(zeroWeights, { value: null, coverage: 0, components: {}, breakdown: [] });
 
 const evidence = { ...reviewed, github: { stars: 1000, pushed_at: '2026-09-10T00:00:00Z', checked_at: '2026-10-15T00:00:00Z', archived: false, fork: false }, maintenance_status: 'active', maintenance_evidence_url: 'https://github.com/org/repo/releases', review: { date: '2026-10-15' }, adoption_status: 'integration', adoption_evidence_url: 'https://pytorch.org/blog/example/' };
 const impact = core.score(evidence, weights, new Date('2026-10-15T00:00:00Z'));
@@ -22,14 +34,30 @@ assert.equal(impact.components.stars, 1);
 assert.equal(impact.components.activity, 1);
 assert.equal(impact.components.maintenance, 1);
 assert.equal(impact.components.adoption, .6);
+assert.equal(impact.breakdown.find(row => row.name === 'adoption').contribution, 6);
+assert.equal(impact.breakdown.reduce((sum, row) => sum + row.contribution, 0), 83);
 const officialImpact = core.score({ ...evidence, citation_percentile: null, award: null }, weights, new Date('2026-10-15T00:00:00Z'));
 assert.equal(officialImpact.coverage, .5);
 assert.ok(officialImpact.value !== null);
 assert.equal(core.score({ ...evidence, citation_percentile: null, award: null, adoption_status: 'Unknown', maintenance_status: 'Unknown' }, weights, new Date('2026-10-15T00:00:00Z')).value, null);
 assert.equal(core.score({ ...evidence, adoption_status: 'production', adoption_evidence_url: null }, weights).components.adoption, undefined);
 assert.equal(core.score({ ...evidence, github: { ...evidence.github, checked_at: '2024-01-01T00:00:00Z' } }, weights).components.stars, undefined);
+const staleGithub = core.score({ ...evidence, github: { ...evidence.github, checked_at: '2024-01-01T00:00:00Z' } }, weights, new Date('2026-10-15T00:00:00Z'));
+for (const name of ['stars', 'activity']) {
+  const row = staleGithub.breakdown.find(item => item.name === name);
+  assert.equal(row.included, false);
+  assert.equal(row.value, null);
+  assert.equal(row.contribution, null);
+  assert.match(row.reason, /older than 45 days|stale/i);
+}
+assert.equal(staleGithub.coverage, .9);
 assert.equal(core.score({ ...evidence, github: { ...evidence.github, pushed_at: null } }, weights).components.activity, undefined);
 assert.equal(core.score({ ...evidence, review: { date: '2024-01-01' } }, weights, new Date('2026-10-15T00:00:00Z')).components.maintenance, undefined);
+const expiredMaintenance = core.score({ ...evidence, review: { date: '2024-01-01' } }, weights, new Date('2026-10-15T00:00:00Z'));
+assert.deepEqual(expiredMaintenance.breakdown.find(row => row.name === 'maintenance').value, null);
+assert.equal(expiredMaintenance.breakdown.find(row => row.name === 'maintenance').included, false);
+assert.match(expiredMaintenance.breakdown.find(row => row.name === 'maintenance').reason, /older than 365 days|expired/i);
+assert.equal(expiredMaintenance.coverage, .9);
 
 const papers = [
   { title: 'Paper A', year: 2025, area: 'AI', venue_id: 'acl', first_author: 'One', first_author_sector: 'Industry',

@@ -5,6 +5,8 @@
   const number = n => new Intl.NumberFormat("en-GB", { maximumFractionDigits: 1 }).format(n);
   const countryName = code => { try { return new Intl.DisplayNames(["en"], { type: "region" }).of(code); } catch (_) { return code; } };
   const weights = { citation: 40, venue: 15, award: 10, code: 5, stars: 5, activity: 5, maintenance: 10, adoption: 10 };
+  const componentLabels = { citation: "Citation percentile", venue: "Venue prestige", award: "Award", code: "Public code",
+    stars: "GitHub stars", activity: "Repository activity", maintenance: "Reviewed maintenance", adoption: "Reviewed adoption" };
   const sectors = ["Industry", "University", "Research Institute", "Joint"];
   const coords = { US:[-98,39],GB:[-3,54],CN:[104,35],CA:[-106,57],DE:[10,51],FR:[2,47],IN:[79,22],JP:[138,36],KR:[128,36],SG:[104,1.4],AU:[134,-25],CH:[8.2,47],NL:[5,52],IT:[12,42],ES:[-4,40],SE:[15,62],FI:[26,64],NO:[8,62],IL:[35,31],BR:[-51,-12],TW:[121,24],HK:[114,22],AT:[14,47],BE:[4.5,51],DK:[10,56],IE:[-8,53],NZ:[174,-41],PL:[19,52],RU:[90,59],AE:[54,24],TR:[35,39],ZA:[24,-29],SA:[45,24],MX:[-102,24],CZ:[15,49],PT:[-8,39],GR:[23,39],TH:[101,15],MY:[102,4],ID:[118,-3],VN:[107,16],EG:[30,27],PK:[69,30],IR:[54,32],UA:[32,49],LU:[6,50],HU:[19,47],RO:[25,45],CL:[-71,-33],CO:[-74,4] };
   const milestones = [
@@ -15,7 +17,7 @@
     ["2025", [["DeepSeek-R1", "https://github.com/deepseek-ai/DeepSeek-R1"], ["GPT-5", "https://openai.com/index/introducing-gpt-5/"]]],
     ["2026", []]
   ];
-  let snapshot = null, catalog = [], page = 0;
+  let snapshot = null, catalog = [], page = 0, focusedPaper = null;
   const pageSize = 20;
 
   function node(tag, text, cls) {
@@ -266,7 +268,43 @@
   function detailRow(dl, label, value) {
     dl.append(node("dt", label), node("dd", value === null || value === undefined || value === "" ? "Unknown / not reviewed" : value));
   }
+  function scoreExplanation(target, paper, result) {
+    const breakdown = result.breakdown;
+    const selectedWeight = breakdown.reduce((sum, row) => sum + row.weight, 0);
+    const included = breakdown.filter(row => row.included);
+    const availableWeight = included.reduce((sum, row) => sum + row.weight, 0);
+    const numerator = included.reduce((sum, row) => sum + row.contribution, 0);
+    const section = node("section", null, "aro-score-explanation");
+    section.append(node("h3", `Score audit: ${paper.title}`),
+      node("p", "Editorial 0–6 proxy, not measured business adoption. GitHub stars and pushes are repository signals only."),
+      node("p", "score = 6 × sum(weight × available component value) / sum(available weights)"),
+      node("p", "evidence coverage = sum(available weights) / sum(selected weights)"));
+    section.append(node("p", selectedWeight
+      ? `Evidence coverage: ${availableWeight} / ${selectedWeight} = ${(result.coverage * 100).toFixed(1)}%.`
+      : "Evidence coverage: no weights selected; ratio undefined."));
+    section.append(node("p", availableWeight
+      ? `Numerator: ${numerator}. 6 × ${numerator} / ${availableWeight} ≈ ${(6 * numerator / availableWeight).toFixed(2)}${result.value === null ? " (not published: minimum evidence unmet)." : "."}`
+      : "No available weighted components; score unavailable."));
+    section.append(node("p", "Minimum evidence: 2 available components and 55% coverage, or 4 including code and reviewed adoption or maintenance with 50% coverage."));
+    const list = node("ul", null, "aro-score-breakdown");
+    for (const row of breakdown) {
+      list.appendChild(node("li", row.included
+        ? `${componentLabels[row.name] || row.name}: weight ${row.weight}, value ${row.value}, contribution ${row.contribution}; included.`
+        : `${componentLabels[row.name] || row.name}: weight ${row.weight}, value unknown, contribution omitted; omitted: ${row.reason}.`));
+    }
+    if (!breakdown.length) list.appendChild(node("li", "No components selected."));
+    section.appendChild(list);
+    target.replaceChildren(section);
+  }
+  function renderScorePanel(papers) {
+    const target = $("aro-weight-score");
+    const paper = focusedPaper && papers.includes(focusedPaper) ? focusedPaper : papers[0];
+    if (paper) scoreExplanation(target, paper, core.score(paper, weights));
+    else target.replaceChildren(node("p", "No paper matches these filters."));
+  }
   function openDetail(paper) {
+    focusedPaper = paper;
+    renderScorePanel(selected());
     const body = $("aro-detail-content"), result = core.score(paper, weights);
     body.replaceChildren(node("div", `${paper.venue} · ${paper.year}`, "aro-eyebrow"), node("h2", paper.title));
     const url = node("a", "Open original paper ↗"); url.href = safeHref(paper.url || paper.id, safeHref(paper.id)); url.target = "_blank"; url.rel = "noopener noreferrer"; body.appendChild(url);
@@ -294,6 +332,9 @@
     detailRow(dl, "Score availability", `${Math.round(result.coverage * 100)}% of selected weight; ${Object.keys(result.components).join(", ") || "none"}`);
     detailRow(dl, "Topic rule", paper.topic_rule); detailRow(dl, "Metadata sources", (paper.sources || [{ provider: paper.source }]).map(s => s.provider).join(" + "));
     body.appendChild(dl);
+    const scoreAudit = node("div");
+    scoreExplanation(scoreAudit, paper, result);
+    body.appendChild(scoreAudit);
     if (paper.abstract) { body.append(node("h3", "Abstract"), node("p", paper.abstract)); }
     const links = node("p");
     for (const [label, href] of [["Proceedings", paper.proceedings_url], ["OpenAlex metadata", String(paper.id).startsWith("https://openalex.org/") ? paper.id : null],
@@ -387,7 +428,7 @@
     const papers = selected();
     const active = filters();
     const trendSelection = core.trendSelection(snapshot.papers, snapshot.coverage, catalog, active);
-    renderStats(papers); renderBar(papers); renderTrend(trendSelection.papers, active.year, trendSelection.usableYears, active.sector); renderMap(papers); renderTable(papers);
+    renderStats(papers); renderBar(papers); renderTrend(trendSelection.papers, active.year, trendSelection.usableYears, active.sector); renderMap(papers); renderTable(papers); renderScorePanel(papers);
   }
   function bind() {
     for (const id of ["aro-year", "aro-area", "aro-venue", "aro-sector", "aro-country", "aro-trend-mode", "aro-sort"]) $(id).addEventListener("change", () => { page = 0; render(); });
