@@ -94,36 +94,96 @@
     });
     setText("aro-sector-note", "Score labels show scored papers / all tracked papers. Unknown leadership is not attributed to a sector.");
   }
-  function renderTrend(papers) {
+  function trendCoveredYears() {
+    const active = filters();
+    const venueIds = new Set(catalog.filter(venue => (!active.venue || venue.id === active.venue)
+      && (!active.area || venue.area === active.area)).map(venue => venue.id));
+    const covered = snapshot.coverage.filter(row => venueIds.has(row.venue_id) && !row.stale
+      && !["source-error", "error", "unresolved", "not-held", "not-yet-published", "unmapped", "no-index-records"].includes(row.status)
+      && (row.ai_scan_status === "complete" || row.ai_scan_status === "partial" && row.sampled_papers > 0
+        || !row.ai_scan_status && ["sample", "source-scan"].includes(row.status) && row.included > 0));
+    return new Set(covered.map(row => row.year));
+  }
+  function trendTicks(range, mode) {
+    if (mode === "share") return [0, 25, 50, 75, 100];
+    if (range[0] === range[1]) return mode === "growth" ? [-1, 0, 1] : [0, 1];
+    const target = (range[1] - range[0]) / 4;
+    const base = 10 ** Math.floor(Math.log10(target));
+    const steps = [1, 2, 2.5, 5, 10].map(multiplier => multiplier * base);
+    const closest = steps.reduce((best, step) => Math.abs(step - target) < Math.abs(best - target) ? step : best);
+    const step = mode === "count" ? Math.max(1, closest) : closest;
+    const start = Math.floor(range[0] / step) * step;
+    const end = Math.ceil(range[1] / step) * step;
+    return Array.from({ length: Math.round((end - start) / step) + 1 }, (_, index) => Number((start + index * step).toPrecision(12)));
+  }
+  function renderTrend(papers, selectedYear) {
     const target = $("aro-trend-chart"), mode = $("aro-trend-mode").value;
     if (!papers.length) return emptyChart(target, "No papers match these filters.");
-    const data = core.trend(papers, weights, mode, Math.max(...snapshot.coverage.map(c => c.year))), lines = ["Industry", "University", "Research Institute"];
-    const maxValue = mode === "count" ? Math.max(1, ...data.flatMap(x => lines.map(s => x[s]))) : 100;
-    const canvas = chartCanvas(target, "Annual tracked sample by first-author sector; gaps in source coverage make trends incomplete");
-    const yearX = index => 58 + index * 480 / Math.max(1, data.length - 1);
+    const endYear = Math.max(2020, ...snapshot.coverage.map(row => row.year));
+    const coveredYears = trendCoveredYears();
+    const data = core.trend(papers, weights, mode, endYear, coveredYears);
+    const counts = mode === "count" ? data : core.trend(papers, weights, "count", endYear, coveredYears);
+    const lines = ["Industry", "University", "Research Institute"];
+    if (!data.some(row => lines.some(sector => Number.isFinite(row[sector])))) {
+      return emptyChart(target, "No sector-classified tracked papers with source coverage for these filters.");
+    }
+    const ticks = trendTicks(core.trendRange(data, mode), mode);
+    const min = ticks[0], max = ticks.at(-1);
+    const compact = target.clientWidth < 520;
+    const viewWidth = compact ? 400 : 620;
+    const plotLeft = compact ? 65 : 82, plotRight = compact ? 380 : 600;
+    const axisLeft = compact ? 55 : 72, axisRight = compact ? 390 : 607;
+    const canvas = svg("svg", { viewBox: `0 0 ${viewWidth} 270`, role: "img",
+      "aria-label": "Annual tracked AI sample by first-author sector; gaps mark missing source coverage",
+      preserveAspectRatio: "xMidYMid meet" });
+    target.replaceChildren(canvas);
+    const yearX = index => plotLeft + index * (plotRight - plotLeft) / Math.max(1, data.length - 1);
+    const valueY = value => 220 - (value - min) / (max - min) * 176;
+    const activeIndex = data.findIndex(row => String(row.year) === selectedYear);
+    if (activeIndex >= 0) {
+      const x = yearX(activeIndex);
+      canvas.appendChild(svg("line", { x1: x, x2: x, y1: 36, y2: 220, class: "aro-trend-highlight" }));
+    }
     milestones.filter(([, events]) => events.length).forEach(([year, events]) => {
       const index = data.findIndex(d => d.year === Number(year));
       if (index < 0) return;
       const x = yearX(index);
-      const mark = svg("line", { x1: x, x2: x, y1: 27, y2: 220, stroke: "var(--aro-industry)", "stroke-width": 1, "stroke-dasharray": "3 5", opacity: .42 });
+      const mark = svg("line", { x1: x, x2: x, y1: 36, y2: 220, stroke: "var(--aro-industry)", "stroke-width": 1, "stroke-dasharray": "3 5", opacity: .42 });
       mark.appendChild(svg("title", {}, `${year}: ${events.map(event => event[0]).join(", ")}; contextual releases, not causes`));
       canvas.appendChild(mark);
     });
-    for (let tick = 0; tick <= 4; tick++) {
-      const y = 220 - tick * 44;
-      canvas.appendChild(svg("line", { x1: 46, y1: y, x2: 545, y2: y, class: tick ? "aro-grid" : "aro-axis" }));
-      canvas.appendChild(svg("text", { x: 38, y: y + 4, "text-anchor": "end" }, mode === "count" ? String(Math.round(maxValue * tick / 4)) : `${25 * tick}%`));
+    ticks.forEach((value, index) => {
+      const y = valueY(value);
+      canvas.appendChild(svg("line", { x1: axisLeft, y1: y, x2: axisRight, y2: y, class: index ? "aro-grid" : "aro-axis" }));
+      canvas.appendChild(svg("text", { x: compact ? 48 : 64, y: y + 4, "text-anchor": "end" }, `${number(value)}${mode === "count" ? "" : "%"}`));
+    });
+    if (mode === "growth" && min < 0 && max > 0) {
+      const zero = svg("line", { x1: axisLeft, y1: valueY(0), x2: axisRight, y2: valueY(0), class: "aro-trend-zero" });
+      zero.appendChild(svg("title", {}, "0% year-over-year growth"));
+      canvas.appendChild(zero);
     }
-    data.forEach((d, i) => canvas.appendChild(svg("text", { x: yearX(i), y: 243, "text-anchor": "middle" }, String(d.year))));
+    data.forEach((d, i) => canvas.appendChild(svg("text", { x: yearX(i), y: 243, "text-anchor": "middle",
+      class: i === activeIndex ? "aro-year-selected" : "" }, String(d.year))));
     lines.forEach((sector, s) => {
-      const points = data.map((d, i) => `${yearX(i)},${220 - d[sector] / maxValue * 176}`).join(" ");
-      canvas.appendChild(svg("polyline", { points, fill: "none", "stroke-width": 2.6, class: ["aro-industry", "aro-university", "aro-research"][s] }));
+      const color = ["aro-industry", "aro-university", "aro-research"][s];
+      for (const segment of core.lineSegments(data, sector)) {
+        if (segment.length < 2) continue;
+        const points = segment.map(row => `${yearX(data.indexOf(row))},${valueY(row[sector])}`).join(" ");
+        canvas.appendChild(svg("polyline", { points, fill: "none", "stroke-width": 1.6, class: color }));
+      }
       data.forEach((d, i) => {
-        const dot = svg("circle", { cx: yearX(i), cy: 220 - d[sector] / maxValue * 176, r: 3.5, class: ["aro-industry", "aro-university", "aro-research"][s] });
-        dot.appendChild(svg("title", {}, `${d.year} ${sector}: ${number(d[sector])}${mode === "count" ? " tracked papers" : "%"}`));
+        if (!Number.isFinite(d[sector])) return;
+        const rawCount = counts[i][sector], denominator = counts[i].classifiedCount;
+        const measure = mode === "count" ? `${number(d[sector])} tracked classified AI papers`
+          : `${number(d[sector])}% ${mode === "share" ? "publication share" : "year-over-year growth"}`;
+        const previous = mode === "growth" ? `; previous year ${data[i - 1].year} ${sector}: ${counts[i - 1][sector]} papers` : "";
+        const dot = svg("circle", { cx: yearX(i), cy: valueY(d[sector]), r: i === activeIndex ? 2.8 : 2.2, class: color });
+        dot.appendChild(svg("title", {}, `${d.year} ${sector}: ${measure}; raw count ${rawCount} of ${denominator} sector-classified tracked AI papers${previous}`));
         canvas.appendChild(dot);
       });
     });
+    target.scrollLeft = activeIndex < 0 ? 0
+      : Math.max(0, yearX(activeIndex) * canvas.getBoundingClientRect().width / viewWidth - target.clientWidth / 2);
   }
   function renderMap(papers) {
     const target = $("aro-map"), list = $("aro-map-list"), countries = core.geography(papers);
@@ -321,7 +381,9 @@
   function render() {
     if (!snapshot) return;
     const papers = selected();
-    renderStats(papers); renderBar(papers); renderTrend(papers); renderMap(papers); renderTable(papers);
+    const active = filters();
+    const trendPapers = core.filterPapers(snapshot.papers, { ...active, year: "" });
+    renderStats(papers); renderBar(papers); renderTrend(trendPapers, active.year); renderMap(papers); renderTable(papers);
   }
   function bind() {
     for (const id of ["aro-year", "aro-area", "aro-venue", "aro-sector", "aro-country", "aro-trend-mode", "aro-sort"]) $(id).addEventListener("change", () => { page = 0; render(); });

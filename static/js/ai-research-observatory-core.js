@@ -89,6 +89,23 @@
       return result;
     });
   }
+  function lineSegments(data, sector) {
+    const segments = [];
+    let current = [];
+    for (const row of data) {
+      if (Number.isFinite(row[sector])) current.push(row);
+      else if (current.length) { segments.push(current); current = []; }
+    }
+    if (current.length) segments.push(current);
+    return segments;
+  }
+  function trendRange(data, mode) {
+    const sectors = ["Industry", "University", "Research Institute"];
+    const values = data.flatMap(row => sectors.map(sector => row[sector])).filter(Number.isFinite);
+    if (mode === "share") return [0, 100];
+    if (mode === "growth") return [Math.min(0, ...values), Math.max(0, ...values)];
+    return [0, Math.max(0, ...values)];
+  }
   function geography(papers) {
     const countries = new Map();
     for (const paper of papers) {
@@ -97,5 +114,5 @@
     }
     return [...countries].map(([code, count]) => ({ code, count })).sort((a, b) => b.count - a.count);
   }
-  root.AIResearchCore = { score, filterPapers, sectorStats, trend, geography };
+  root.AIResearchCore = { score, filterPapers, sectorStats, trend, lineSegments, trendRange, geography };
 })(typeof window !== "undefined" ? window : globalThis);

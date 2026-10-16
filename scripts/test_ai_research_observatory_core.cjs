@@ -95,4 +95,16 @@ const coveredGrowth = core.trend(publicationPapers, weights, 'growth', 2026, cov
 assert.equal(coveredGrowth.find(row => row.year === 2025).Industry, null);
 assert.equal(coveredGrowth.find(row => row.year === 2026).Industry, null);
 
+const segmentRows = [
+  { year: 2020, Industry: 2 }, { year: 2021, Industry: 3 },
+  { year: 2022, Industry: null }, { year: 2023, Industry: -1 },
+  { year: 2024, Industry: NaN }, { year: 2025, Industry: 0 }
+];
+assert.deepEqual(core.lineSegments(segmentRows, 'Industry').map(segment => segment.map(row => row.year)),
+  [[2020, 2021], [2023], [2025]]);
+assert.deepEqual(core.trendRange(segmentRows, 'growth'), [-1, 3]);
+assert.deepEqual(core.trendRange([{ Industry: -40, University: -10, 'Research Institute': null }], 'growth'), [-40, 0]);
+assert.deepEqual(core.trendRange([{ Industry: 3, University: 2, 'Research Institute': null }], 'count'), [0, 3]);
+assert.deepEqual(core.trendRange([{ Industry: 25, University: 75, 'Research Institute': null }], 'share'), [0, 100]);
+
 console.log('Observatory scoring and aggregation checks passed.');
