@@ -15,6 +15,7 @@ on:
           - backfill-2020
 
 permissions:
+  actions: write
   contents: write
 
 concurrency:
@@ -62,6 +63,7 @@ jobs:
           hugo --minify --cleanDestinationDir
           ./scripts/check_internal_links.sh public
       - name: Commit changed snapshot
+        id: commit_snapshot
         run: |
           if git diff --quiet -- static/data/ai-research-observatory.json; then
             echo "No snapshot change"
@@ -72,4 +74,15 @@ jobs:
           git add static/data/ai-research-observatory.json
           git commit -m "Refresh AI research observatory snapshot"
           git pull --rebase origin master
+          if git diff --quiet origin/master HEAD -- static/data/ai-research-observatory.json; then
+            echo "No snapshot change after rebase"
+            exit 0
+          fi
           git push origin master
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Dispatch Pages deploy
+        if: steps.commit_snapshot.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh workflow run gh-pages.yml --ref master
