@@ -65,14 +65,15 @@ class ObservatoryTests(unittest.TestCase):
         self.assertTrue(all(item["url"] not in {paper["url"] for paper in snapshot["papers"]} for item in highlights))
 
     @contextmanager
-    def cross_area_fixture(self, old=None, reviews=None):
+    def cross_area_fixture(self, old=None, reviews=None, years=(2025,)):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             venues = root / "venues.json"
             venue = {**VENUE, "source_id": None, "source_rule_id": "osdi"}
             venues.write_text(json.dumps([venue]))
             rules = root / "rules.json"
-            rules.write_text(json.dumps({"osdi": {"years": {"2025": {"status": "unresolved"}}}}))
+            rules.write_text(json.dumps({"osdi": {"years": {
+                str(year): {"status": "unresolved"} for year in years}}}))
             review_path = root / "reviews.json"
             review_path.write_text(json.dumps(reviews or {}))
             manual = root / "manual.json"
@@ -250,6 +251,27 @@ class ObservatoryTests(unittest.TestCase):
         self.assertEqual(snapshot["papers"][0]["first_author_sector"], "University")
         self.assertEqual(snapshot["papers"][0]["citations"], 7)
 
+    def test_cross_area_structured_topic_survives_second_refresh_without_doi_lookup(self):
+        bibliography = self.bibliography_row("GPU Scheduling in Datacenters", "one", "10.1145/1")
+        metadata = {"id": "https://openalex.org/W1", "doi": "https://doi.org/10.1145/1",
+                    "title": bibliography["title"], "publication_year": 2025,
+                    "type": "conference-paper", "primary_topic": {"display_name": "Machine Learning"}}
+        coverage = {**self.bibliography_coverage(), "main_track_total": 1,
+                    "bibliography_total": 1, "scanned_count": 1}
+        with self.cross_area_fixture() as output, \
+             patch.object(pipeline, "collect_venue_year", return_value=([bibliography], coverage)), \
+             patch.object(pipeline, "fetch_openalex_doi_batch", return_value=[metadata]) as fetch:
+            pipeline.refresh(2025, 2025, 1, official_cap=0, github_cap=0)
+            first = json.loads(output.read_text())
+            pipeline.refresh(2025, 2025, 1, official_cap=0, github_cap=0)
+            second = json.loads(output.read_text())
+        self.assertEqual(fetch.call_count, 1)
+        self.assertEqual(first["papers"][0]["primary_topic"], metadata["primary_topic"])
+        self.assertEqual(second["papers"][0]["primary_topic"], metadata["primary_topic"])
+        self.assertEqual(second["papers"][0]["topic_rule"], "ai-relevance-v1:metadata-primary-topic")
+        self.assertEqual(second["coverage"][0]["ai_matched_count"], 1)
+        self.assertEqual(second["coverage"][0]["ai_unresolved_count"], 0)
+
     def test_cross_area_metadata_429_keeps_prior_ai_counts_and_paper(self):
         bibliography = self.bibliography_row("GPU Scheduling in Datacenters", "one", "10.1145/1")
         old_paper = {"id": "https://dblp.org/rec/conf/osdi/old", "url": "https://dblp.org/rec/conf/osdi/old",
@@ -267,6 +289,34 @@ class ObservatoryTests(unittest.TestCase):
         self.assertEqual(snapshot["coverage"][0]["ai_scan_status"], "source-error")
         self.assertTrue(snapshot["coverage"][0]["stale"])
 
+    def test_cross_area_doi_429_blocks_later_years_in_same_refresh(self):
+        old_papers = [{"id": f"https://dblp.org/rec/conf/osdi/old-{year}",
+                       "url": f"https://dblp.org/rec/conf/osdi/old-{year}",
+                       "title": "LLM inference", "year": year, "venue_id": "osdi", "source": "DBLP"}
+                      for year in (2025, 2026)]
+        old_rows = [{**self.bibliography_coverage(), "year": year,
+                     "ai_matched_count": 1, "sampled_papers": 1} for year in (2025, 2026)]
+
+        def bibliography_for_year(_venue, year, _rule, _cache):
+            bibliography = {**self.bibliography_row("GPU Scheduling in Datacenters", str(year),
+                                                    f"10.1145/{year}"), "event_year": year}
+            return [bibliography], {**self.bibliography_coverage(), "year": year}
+
+        with self.cross_area_fixture({"papers": old_papers, "coverage": old_rows},
+                                     years=(2025, 2026)) as output, \
+             patch.object(pipeline, "collect_venue_year", side_effect=bibliography_for_year), \
+             patch.object(pipeline, "fetch_openalex_doi_batch",
+                          side_effect=pipeline.RateLimited("HTTP 429")) as fetch:
+            pipeline.refresh(2025, 2026, 1, official_cap=0, github_cap=0)
+            snapshot = json.loads(output.read_text())
+        self.assertEqual(fetch.call_count, 1)
+        self.assertEqual({paper["id"] for paper in snapshot["papers"]},
+                         {paper["id"] for paper in old_papers})
+        for row in snapshot["coverage"]:
+            self.assertEqual(row["ai_matched_count"], 1)
+            self.assertEqual(row["ai_scan_status"], "source-error")
+            self.assertTrue(row["stale"])
+
     def test_truncated_bibliography_does_not_replace_prior_ai_sample(self):
         old_paper = {"id": "https://dblp.org/rec/conf/osdi/old", "url": "https://dblp.org/rec/conf/osdi/old",
                      "title": "LLM inference", "year": 2025, "venue_id": "osdi", "source": "DBLP"}
@@ -282,6 +332,36 @@ class ObservatoryTests(unittest.TestCase):
         self.assertEqual(snapshot["coverage"][0]["ai_matched_count"], 1)
         self.assertEqual(snapshot["coverage"][0]["ai_scan_status"], "partial")
         self.assertTrue(snapshot["coverage"][0]["stale"])
+
+    def test_truncated_bibliography_retains_verified_coverage_with_zero_sample(self):
+        old_row = {**self.bibliography_coverage(), "ai_matched_count": 2,
+                   "ai_reviewed_count": 1, "ai_unresolved_count": 0,
+                   "eligible_count": 4, "ai_scan_status": "complete", "sampled_papers": 0}
+        partial = {**self.bibliography_coverage("partial"), "main_track_total": None,
+                   "bibliography_total": None, "scanned_count": 1,
+                   "gap_reason": "DBLP query exceeded row limit"}
+        bibliography = self.bibliography_row("AI-Assisted Program Repair", "new")
+        with self.cross_area_fixture({"papers": [], "coverage": [old_row]}) as output, \
+             patch.object(pipeline, "collect_venue_year", return_value=([bibliography], partial)):
+            pipeline.refresh(2025, 2025, 1, official_cap=0, github_cap=0, skip_openalex=True)
+            snapshot = json.loads(output.read_text())
+        self.assertEqual(snapshot["papers"], [])
+        row = snapshot["coverage"][0]
+        self.assertEqual(row["status"], "partial")
+        self.assertEqual(row["main_track_total"], 4)
+        self.assertEqual(row["bibliography_total"], 4)
+        self.assertEqual(row["scanned_count"], 4)
+        self.assertEqual(row["latest_bibliography_scanned_count"], 1)
+        self.assertEqual(row["ai_matched_count"], 2)
+        self.assertEqual(row["ai_reviewed_count"], 1)
+        self.assertEqual(row["ai_unresolved_count"], 0)
+        self.assertEqual(row["eligible_count"], 4)
+        self.assertEqual(row["sampled_papers"], 0)
+        self.assertEqual(row["ai_scan_status"], "partial")
+        self.assertTrue(row["partial"])
+        self.assertTrue(row["stale"])
+        self.assertEqual(row["last_successful_checked_at"], old_row["checked_at"])
+        self.assertEqual(row["last_successful_ai_checked_at"], old_row["checked_at"])
 
     def test_openalex_doi_batch_cache_and_secret_header(self):
         metadata = {"results": [{"id": "https://openalex.org/W1", "doi": "https://doi.org/10.1145/1"}],

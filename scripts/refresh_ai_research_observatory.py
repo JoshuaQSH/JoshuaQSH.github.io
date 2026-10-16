@@ -106,6 +106,7 @@ def normalize_work(work, venue, confirmed_ai=False):
     corresponding = [a for a in authors if a.get("is_corresponding")]
     last = next((a for a in reversed(authors) if a.get("author_position") == "last"), None)
     return {"id": work["id"], "doi": work.get("doi"), "url": work.get("doi") or (work.get("primary_location") or {}).get("landing_page_url") or work["id"],
+            "primary_topic": work.get("primary_topic") if isinstance(work.get("primary_topic"), dict) else None,
             "title": title, "abstract": abstract_text(work.get("abstract_inverted_index")), "year": work.get("publication_year"), "date": work.get("publication_date"),
             "venue": venue["name"], "venue_id": venue["id"], "area": area, "topic_rule": topic_rule,
             "first_author": (first.get("author") or {}).get("display_name") or first.get("raw_author_name") or "Unknown",
@@ -345,7 +346,7 @@ def fetch_openalex_doi_batch(dois, key, cached_only=False):
 
 
 def refresh_cross_area_year(venue, year, rule, prior, previous_row, papers, reviews, cap,
-                            key, skip_openalex, cached_only):
+                            key, skip_openalex, cached_only, openalex_blocked):
     from ai_research_relevance import RULE_VERSION, link_openalex_metadata, scan_ai_bibliography
 
     now = datetime.now(timezone.utc).isoformat()
@@ -369,22 +370,25 @@ def refresh_cross_area_year(venue, year, rule, prior, previous_row, papers, revi
         for field in ("main_track_total", "bibliography_total", "ai_matched_count",
                       "ai_reviewed_count", "ai_unresolved_count", "eligible_count", "sampled_papers"):
             row.setdefault(field, None)
-        return row
+        return row, openalex_blocked
 
     row = dict(previous_row)
     row.update(source_row)
     row.update({"venue": venue["name"], "source_total": previous_row.get("source_total"),
                 "official_total": previous_row.get("official_total"), "stale": False})
     row.pop("last_successful_checked_at", None)
-    if row["status"] == "partial" and row.get("bibliography_total") is None and prior:
+    if (row["status"] == "partial" and row.get("bibliography_total") is None
+            and any(previous_row.get(field) is not None for field in
+                    ("main_track_total", "bibliography_total", "ai_matched_count", "eligible_count"))):
         row["latest_bibliography_scanned_count"] = source_row["scanned_count"]
-        row["scanned_count"] = previous_row.get("scanned_count", 0)
-        for field in ("ai_matched_count", "ai_reviewed_count", "ai_unresolved_count", "eligible_count"):
+        for field in ("main_track_total", "bibliography_total", "scanned_count",
+                      "ai_matched_count", "ai_reviewed_count", "ai_unresolved_count", "eligible_count"):
             row[field] = previous_row.get(field)
         row.update({"ai_scan_status": "partial", "classification_rule": RULE_VERSION,
                     "stale": True, "partial": True,
-                    "last_successful_ai_checked_at": previous_row.get("checked_at")})
-        return row
+                    "last_successful_checked_at": previous_row.get("last_successful_checked_at") or previous_row.get("checked_at"),
+                    "last_successful_ai_checked_at": previous_row.get("last_successful_ai_checked_at") or previous_row.get("checked_at")})
+        return row, openalex_blocked
     if eligible:
         # Prior OpenAlex work metadata can add structured topic evidence without
         # allowing a free-text abstract to confirm an AI match.
@@ -395,6 +399,8 @@ def refresh_cross_area_year(venue, year, rule, prior, previous_row, papers, revi
                                           if bibliography.get("doi") and bibliography["doi"] not in known_dois))
         if not skip_openalex:
             try:
+                if openalex_blocked and missing_dois and not cached_only:
+                    raise RateLimited("OpenAlex request budget exhausted earlier in this refresh")
                 for offset in range(0, len(missing_dois), 25):
                     works.extend(fetch_openalex_doi_batch(missing_dois[offset:offset + 25], key, cached_only))
                     if not cached_only:
@@ -402,6 +408,8 @@ def refresh_cross_area_year(venue, year, rule, prior, previous_row, papers, revi
             except AuthenticationFailed:
                 raise
             except (HTTPError, URLError, TimeoutError, OSError, ValueError, RuntimeError) as exc:
+                if isinstance(exc, RateLimited):
+                    openalex_blocked = True
                 print(f"WARNING: OpenAlex DOI lookup {venue['name']} {year}: {exc}", file=sys.stderr)
                 row.update({"ai_scan_status": "source-error", "stale": True,
                             "last_successful_ai_checked_at": previous_row.get("checked_at"),
@@ -410,7 +418,7 @@ def refresh_cross_area_year(venue, year, rule, prior, previous_row, papers, revi
                 for field in ("ai_matched_count", "ai_reviewed_count", "ai_unresolved_count", "eligible_count"):
                     row[field] = previous_row.get(field)
                 row["scanned_count"] = 0
-                return row
+                return row, openalex_blocked
         decisions, ai = scan_ai_bibliography(eligible, works, reviews, include_abstract_evidence=False)
         linked = link_openalex_metadata(eligible, works)
         row.update(ai_matched_count=ai["ai_matched_count"], ai_reviewed_count=ai["ai_reviewed_count"],
@@ -454,7 +462,7 @@ def refresh_cross_area_year(venue, year, rule, prior, previous_row, papers, revi
         row["classification_rule"] = RULE_VERSION
         row["partial"] = row["status"] != "not-held"
         row["sampled_papers"] = len(prior)
-    return row
+    return row, openalex_blocked
 
 
 def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, skip_openalex=False, cached_only=False):
@@ -480,9 +488,9 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
             prior = [p for p in papers.values() if p.get("venue_id") == venue["id"] and p.get("year") == year]
             if venue.get("source_rule_id"):
                 rule = cross_area_rules[venue["source_rule_id"]]
-                coverage[(venue["id"], year)] = refresh_cross_area_year(
+                coverage[(venue["id"], year)], openalex_blocked = refresh_cross_area_year(
                     venue, year, rule, prior, coverage.get((venue["id"], year), {}), papers, reviews,
-                    cap, key, skip_openalex, cached_only)
+                    cap, key, skip_openalex, cached_only, openalex_blocked)
                 continue
             row = dict(coverage.get((venue["id"], year), {"venue_id": venue["id"], "venue": venue["name"], "year": year}))
             row.setdefault("source_total", None)
