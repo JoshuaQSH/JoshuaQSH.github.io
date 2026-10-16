@@ -35,6 +35,10 @@ _NEGATIVE_CONTEXT = re.compile(r"\b(?:not|never|without|excluded|unrelated|"
 _SCOPE_EXCLUSION = re.compile(r"\b(?:outside (?:the )?scope|out of scope|beyond (?:the )?scope|"
                               r"unrelated|future work)\b", re.I)
 _SHORT_AI_REFERENCE = re.compile(r"\b(?:ai|ml)\b", re.I)
+_CLAUSE_BREAK = re.compile(r"[.!?;,:()\[\]{}]+|[\u2013\u2014]+|"
+                           r"\b(?:but|while|whereas|although|however)\b|"
+                           r"\band\s+(?=(?:we\s+)?(?:do\s+not|never|avoid\w*))|"
+                           r"\b(?:related|prior) work\b", re.I)
 
 
 def _title_key(value: str) -> str:
@@ -65,7 +69,7 @@ def _metadata_match(metadata: dict) -> str | None:
     scope_exclusion = False
     positive_label = None
     abstract = re.sub(r"[-_/]+", " ", _abstract(metadata))
-    for clause in re.split(r"[.!?;,]+|\b(?:but|while|whereas|although|however|and)\b", abstract, flags=re.I):
+    for clause in _CLAUSE_BREAK.split(abstract):
         labels = [label for label, pattern in _EXPLICIT if pattern.search(clause)]
         if labels or _SHORT_AI_REFERENCE.search(clause):
             if _SCOPE_EXCLUSION.search(clause):

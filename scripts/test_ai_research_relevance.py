@@ -79,6 +79,32 @@ class RelevanceTests(unittest.TestCase):
         abstract = "We train large language models but do not evaluate LLMs."
         self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], "matched")
 
+    def test_parenthetical_related_work_does_not_confirm_generic_gpu_title(self):
+        paper = row("GPU Scheduling in Datacenters")
+        abstract = "We use a GPU scheduler (related work uses large language models)."
+        self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], "unresolved")
+
+    def test_coordinated_own_ai_actions_confirm_generic_gpu_title(self):
+        paper = row("GPU Scheduling in Datacenters")
+        abstract = "We train and evaluate large language models."
+        self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], "matched")
+
+    def test_abstract_clause_boundary_near_misses(self):
+        paper = row("GPU Scheduling in Datacenters")
+        cases = (
+            ("We use a GPU scheduler: related work uses large language models.", "unresolved"),
+            ("We use a GPU scheduler [related work uses large language models].", "unresolved"),
+            ("We use a GPU scheduler \u2014 related work uses large language models.", "unresolved"),
+            ("We use a GPU scheduler and related work uses large language models.", "unresolved"),
+            ("We train and evaluate large language models but do not deploy them.", "matched"),
+            ("We train large language models and do not evaluate them.", "matched"),
+            ("We train LLMs (related work uses GPUs).", "matched"),
+            ("We avoid training and evaluating large language models.", "unresolved"),
+        )
+        for abstract, expected in cases:
+            with self.subTest(abstract=abstract):
+                self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], expected)
+
     def test_ai_relevance_review_requires_durable_bibliography_alias(self):
         base = {"review_note": "Reviewed AI relevance", "evidence_url": "https://example.org/paper"}
         for decision in ("include", "exclude"):
