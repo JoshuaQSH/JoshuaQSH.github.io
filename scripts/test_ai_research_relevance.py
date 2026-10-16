@@ -67,10 +67,98 @@ class RelevanceTests(unittest.TestCase):
             with self.subTest(metadata=metadata):
                 self.assertEqual(classify_ai_work(paper, metadata, None)[0], "unresolved")
 
+    def test_abstract_requires_affirmative_claim_about_this_paper(self):
+        paper = row("GPU Scheduling in Datacenters")
+        for abstract in ("Related work uses large language models.",
+                         "We avoid training large language models."):
+            with self.subTest(abstract=abstract):
+                self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], "unresolved")
+
+    def test_negated_later_clause_does_not_erase_own_positive_claim(self):
+        paper = row("GPU Scheduling in Datacenters")
+        abstract = "We train large language models but do not evaluate LLMs."
+        self.assertEqual(classify_ai_work(paper, {"abstract": abstract}, None)[0], "matched")
+
+    def test_ai_relevance_review_requires_durable_bibliography_alias(self):
+        base = {"review_note": "Reviewed AI relevance", "evidence_url": "https://example.org/paper"}
+        for decision in ("include", "exclude"):
+            with self.subTest(decision=decision):
+                review = {**base, "ai_relevance": decision}
+                with self.assertRaisesRegex(ValueError, "bibliography_doi or bibliography_url"):
+                    pipeline.validate_review(review)
+                with self.assertRaisesRegex(ValueError, "bibliography_doi or bibliography_url"):
+                    scan_ai_bibliography([row("LLM inference")], [], {"https://openalex.org/W1": review})
+        pipeline.validate_review({**base, "exclude": True})
+        pipeline.validate_review({**base, "repository_url": "https://github.com/org/repo",
+                                  "repository_evidence_url": "https://example.org/paper"})
+        with self.assertRaises(ValueError):
+            pipeline.validate_review({**base, "ai_relevance": ["include"],
+                                      "bibliography_url": "https://dblp.org/rec/conf/pldi/paper"})
+
+    def test_paper_level_exclusion_is_not_an_ai_relevance_override(self):
+        paper = row("LLM inference", "10.1145/100")
+        work = {"id": "https://openalex.org/W100", "doi": "https://doi.org/10.1145/100",
+                "title": paper["title"], "publication_year": 2025}
+        reviews = {work["id"]: {"exclude": True, "review_note": "Companion paper",
+                                "evidence_url": "https://example.org/paper"}}
+        normal, _ = scan_ai_bibliography([paper], [work], reviews)
+        outage, _ = scan_ai_bibliography([paper], [], reviews)
+        self.assertEqual(normal, outage)
+        self.assertEqual(outage, [("matched", "ai-relevance-v1:title-llm")])
+
+    def test_invalid_id_only_ai_review_fails_refresh_before_fetch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            venues, reviews, output = (root / name for name in ("venues.json", "reviews.json", "snapshot.json"))
+            venues.write_text(json.dumps([VENUE]))
+            for decision in ("include", "exclude"):
+                reviews.write_text(json.dumps({"https://openalex.org/W1": {
+                    "ai_relevance": decision, "review_note": "Reviewed AI relevance",
+                    "evidence_url": "https://example.org/paper"}}))
+                with self.subTest(decision=decision), \
+                     patch.multiple(pipeline, VENUES=venues, REVIEWS=reviews, OUTPUT=output), \
+                     patch.object(pipeline, "fetch_works") as fetch:
+                    with self.assertRaisesRegex(ValueError, "bibliography_doi or bibliography_url"):
+                        pipeline.refresh(2025, 2025, 1, official_cap=0)
+                    fetch.assert_not_called()
+                    self.assertFalse(output.exists())
+
+    def test_reviewed_decisions_survive_metadata_outage_without_title_matching(self):
+        paper = row("LLM inference", "10.1145/100")
+        work = {"id": "https://openalex.org/W100", "doi": "https://doi.org/10.1145/100",
+                "title": "LLM inference", "publication_year": 2025}
+        for decision, expected in (("include", "matched"), ("exclude", "not-ai")):
+            with self.subTest(decision=decision):
+                reviews = {work["id"]: {"ai_relevance": decision, "bibliography_doi": "10.1145/100",
+                         "review_note": "Reviewed AI relevance", "evidence_url": "https://example.org/paper"}}
+                normal, normal_summary = scan_ai_bibliography([paper], [work], reviews)
+                outage, outage_summary = scan_ai_bibliography([paper], [], reviews)
+                self.assertEqual(normal, outage)
+                self.assertEqual(outage, [(expected, f"ai-relevance-v1:review-{decision}")])
+                self.assertEqual(normal_summary, outage_summary)
+                self.assertEqual(outage_summary["ai_reviewed_count"], 1)
+                self.assertEqual(outage_summary["ai_matched_count"], int(decision == "include"))
+
+    def test_source_url_relevance_review_survives_metadata_outage(self):
+        paper = row("GPU Scheduling", url="https://dblp.org/rec/conf/pldi/one")
+        paper["source_urls"] = ["https://proceedings.example.org/pldi/one"]
+        work = {"id": "https://openalex.org/W100", "title": paper["title"],
+                "publication_year": 2025}
+        review = {"ai_relevance": "exclude", "bibliography_url": paper["source_urls"][0],
+                  "review_note": "Graphics only", "evidence_url": "https://example.org/paper"}
+        reviews = {work["id"]: review}
+        normal, _ = scan_ai_bibliography([paper], [work], reviews)
+        outage, summary = scan_ai_bibliography([paper], [], reviews)
+        self.assertEqual(normal, outage)
+        self.assertEqual(outage, [("not-ai", "ai-relevance-v1:review-exclude")])
+        self.assertEqual(summary["status"], "complete")
+
     def test_reviewed_include_and_exclude_take_precedence_and_require_evidence(self):
-        include = {"include": True, "review_note": "AI-assisted software engineering",
+        include = {"ai_relevance": "include", "bibliography_url": "https://dblp.org/rec/conf/pldi/paper",
+                   "review_note": "AI-assisted software engineering",
                    "evidence_url": "https://example.org/paper"}
-        exclude = {"exclude": True, "review_note": "Not an AI paper",
+        exclude = {"ai_relevance": "exclude", "bibliography_url": "https://dblp.org/rec/conf/pldi/paper",
+                   "review_note": "Not an AI paper",
                    "evidence_url": "https://example.org/paper"}
         self.assertEqual(classify_ai_work(row("A faster filesystem"), None, include),
                          ("matched", "ai-relevance-v1:review-include"))
@@ -126,14 +214,15 @@ class RelevanceTests(unittest.TestCase):
 
     def test_scan_classifies_every_eligible_row_before_any_public_sample(self):
         rows = [row("GPU Scheduling"),
-                row("LLM Inference", "10.1/llm", "https://dblp.org/rec/conf/pldi/two"),
+                row("LLM Inference", "10.1145/llm", "https://dblp.org/rec/conf/pldi/two"),
                 row("A faster filesystem", url="https://dblp.org/rec/conf/pldi/three")]
         works = [{"id": "https://openalex.org/W3", "title": "A faster filesystem",
                   "publication_year": 2025, "abstract": "A storage paper."}]
-        reviews = {"https://doi.org/10.1/llm": {"exclude": True, "review_note": "Not AI",
-                    "evidence_url": "https://example.org/llm"},
-                   "https://openalex.org/W3": {"include": True, "review_note": "AI-assisted storage",
-                    "evidence_url": "https://example.org/storage"}}
+        reviews = {"https://doi.org/10.1145/llm": {"ai_relevance": "exclude", "bibliography_doi": "10.1145/llm",
+                    "review_note": "Not AI", "evidence_url": "https://example.org/llm"},
+                   "https://openalex.org/W3": {"ai_relevance": "include",
+                    "bibliography_url": "https://dblp.org/rec/conf/pldi/three",
+                    "review_note": "AI-assisted storage", "evidence_url": "https://example.org/storage"}}
         decisions, summary = scan_ai_bibliography(rows, works, reviews)
         self.assertEqual([decision for decision, _ in decisions], ["unresolved", "not-ai", "matched"])
         self.assertEqual(summary["scanned_count"], 3)
@@ -144,7 +233,7 @@ class RelevanceTests(unittest.TestCase):
     def test_bibliography_doi_review_survives_missing_openalex_metadata(self):
         rows = [row("GPU Scheduling", "10.1145/100", "https://dblp.org/rec/conf/pldi/one"),
                 row("GPU Scheduling", "10.1145/101", "https://dblp.org/rec/conf/pldi/two")]
-        reviews = {"https://openalex.org/W100": {"include": True,
+        reviews = {"https://openalex.org/W100": {"ai_relevance": "include",
             "bibliography_doi": "https://doi.org/10.1145/100", "review_note": "AI training scheduler",
             "evidence_url": "https://example.org/paper/100"}}
         decisions, summary = scan_ai_bibliography(rows, [], reviews)
@@ -155,9 +244,10 @@ class RelevanceTests(unittest.TestCase):
     def test_bibliography_source_review_survives_missing_metadata_and_exclusion_wins(self):
         paper = row("GPU Scheduling", url="https://dblp.org/rec/conf/pldi/one")
         paper["source_urls"] = [paper["url"], "https://proceedings.example.org/pldi/one"]
-        include = {"include": True, "bibliography_url": "https://proceedings.example.org/pldi/one",
+        include = {"ai_relevance": "include", "bibliography_url": "https://proceedings.example.org/pldi/one",
                    "review_note": "AI system", "evidence_url": "https://example.org/include"}
-        exclude = {"exclude": True, "review_note": "Not an AI study",
+        exclude = {"ai_relevance": "exclude", "bibliography_url": paper["url"],
+                   "review_note": "Not an AI study",
                    "evidence_url": "https://example.org/exclude"}
         decisions, _ = scan_ai_bibliography([paper], [], {"https://openalex.org/W100": include})
         self.assertEqual(decisions[0], ("matched", "ai-relevance-v1:review-include"))
@@ -166,7 +256,7 @@ class RelevanceTests(unittest.TestCase):
         self.assertEqual(decisions[0], ("not-ai", "ai-relevance-v1:review-exclude"))
 
     def test_review_aliases_need_explicit_publication_identifiers(self):
-        review = {"include": True, "review_note": "AI system",
+        review = {"ai_relevance": "include", "review_note": "AI system",
                   "evidence_url": "https://example.org/paper"}
         with self.assertRaises(ValueError):
             pipeline.validate_review({**review, "bibliography_url": "http://example.org/paper"})

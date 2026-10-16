@@ -23,12 +23,17 @@ _AMBIGUOUS = re.compile(r"\b(?:gpus?|compilers?|accelerators?|inference|training
 _PRIMARY_AI_TOPICS = {"artificial intelligence", "machine learning", "deep learning",
                       "natural language processing", "computer vision", "reinforcement learning",
                       "large language models", "generative artificial intelligence", "ml systems"}
-_POSITIVE_CONTEXT = re.compile(r"\b(?:train\w*|serv\w*|deploy\w*|optimi[sz]\w*|"
-                               r"accelerat\w*|compil\w*|infer\w*|fine.tun\w*|"
-                               r"evaluat\w*|benchmark\w*|appl\w*|use[ds]?|build\w*)\b", re.I)
+_OWN_AI_ACTION = re.compile(r"\b(?:we|our (?:system|method|approach|compiler|framework|model|"
+                            r"scheduler|pipeline|implementation)|this (?:paper|work|study|system))"
+                            r"\s+(?:\w+ly\s+)?(?:train\w*|serv\w*|deploy\w*|optimi[sz]\w*|"
+                            r"accelerat\w*|compil\w*|infer\w*|fine.tun\w*|evaluat\w*|"
+                            r"benchmark\w*|appl\w*|use[ds]?|build\w*)\b", re.I)
 _NEGATIVE_CONTEXT = re.compile(r"\b(?:not|never|without|excluded|unrelated|"
                                r"outside (?:the )?scope|out of scope|beyond (?:the )?scope|"
-                               r"rather than|future work|only as (?:a )?(?:baseline|example|comparison))\b", re.I)
+                               r"rather than|future work|avoid\w*|"
+                               r"only as (?:a )?(?:baseline|example|comparison))\b", re.I)
+_SCOPE_EXCLUSION = re.compile(r"\b(?:outside (?:the )?scope|out of scope|beyond (?:the )?scope|"
+                              r"unrelated|future work)\b", re.I)
 _SHORT_AI_REFERENCE = re.compile(r"\b(?:ai|ml)\b", re.I)
 
 
@@ -57,18 +62,24 @@ def _abstract(metadata: dict) -> str:
 
 def _metadata_match(metadata: dict) -> str | None:
     negated_ai = False
+    scope_exclusion = False
     positive_label = None
     abstract = re.sub(r"[-_/]+", " ", _abstract(metadata))
     for clause in re.split(r"[.!?;,]+|\b(?:but|while|whereas|although|however|and)\b", abstract, flags=re.I):
         labels = [label for label, pattern in _EXPLICIT if pattern.search(clause)]
-        if _NEGATIVE_CONTEXT.search(clause) and (labels or _SHORT_AI_REFERENCE.search(clause)):
-            negated_ai = True
-        elif labels and _POSITIVE_CONTEXT.search(clause) and positive_label is None:
-            positive_label = f"abstract-{labels[0]}"
-    if negated_ai:
+        if labels or _SHORT_AI_REFERENCE.search(clause):
+            if _SCOPE_EXCLUSION.search(clause):
+                scope_exclusion = True
+            elif _NEGATIVE_CONTEXT.search(clause):
+                negated_ai = True
+            elif labels and _OWN_AI_ACTION.search(clause) and positive_label is None:
+                positive_label = f"abstract-{labels[0]}"
+    if scope_exclusion:
         return None
     if positive_label:
         return positive_label
+    if negated_ai:
+        return None
     primary_topic = metadata.get("primary_topic")
     if isinstance(primary_topic, dict):
         name = primary_topic.get("display_name")
@@ -81,11 +92,12 @@ def classify_ai_work(row: dict, metadata: dict | None, review: dict | None) -> t
     """Classify one eligible bibliography row; review decisions override the rule."""
     if not isinstance(row, dict) or not row.get("title") or not row.get("track_evidence"):
         raise ValueError("An eligible bibliography row needs title and track evidence")
-    if review and ("include" in review or "exclude" in review):
+    if review and ("ai_relevance" in review or "include" in review):
         validate_review(review)
-        if review.get("exclude"):
+        relevance = review.get("ai_relevance") or ("include" if review.get("include") else None)
+        if relevance == "exclude":
             return "not-ai", f"{RULE_VERSION}:review-exclude"
-        if review.get("include"):
+        if relevance == "include":
             return "matched", f"{RULE_VERSION}:review-include"
     title = re.sub(r"[-_/]+", " ", row["title"])
     for label, pattern in _EXPLICIT:
@@ -153,23 +165,24 @@ def scan_ai_bibliography(rows: list[dict], works: list[dict], reviews: dict) -> 
     linked = link_openalex_metadata(rows, works)
     by_url = defaultdict(list)
     by_doi = defaultdict(list)
-    for key, review in reviews.items():
+    for review in reviews.values():
         validate_review(review)
-        for url in (key, review.get("bibliography_url"), review.get("evidence_url")):
-            if isinstance(url, str) and url.startswith("https://"):
+        if review.get("ai_relevance") or review.get("include"):
+            url = review.get("bibliography_url")
+            if url:
                 by_url[url].append(review)
-        for value in (key, review.get("bibliography_doi"), review.get("evidence_url")):
-            doi = _doi(value)
-            if doi and doi.startswith("10."):
+            doi = _doi(review.get("bibliography_doi"))
+            if doi:
                 by_doi[doi].append(review)
     decisions = []
     for row, metadata in zip(rows, linked):
         source_urls = [row.get("url"), *row.get("source_urls", [])]
-        candidates = [reviews[metadata["id"]]] if metadata and metadata.get("id") in reviews else []
-        candidates.extend(review for url in source_urls for review in by_url.get(url, ()))
+        candidates = [review for url in source_urls for review in by_url.get(url, ())]
         candidates.extend(by_doi.get(_doi(row.get("doi")), ()))
-        review = next((candidate for candidate in candidates if candidate.get("exclude")), None)
+        review = next((candidate for candidate in candidates
+                       if candidate.get("ai_relevance") == "exclude"), None)
         if review is None:
-            review = next((candidate for candidate in candidates if candidate.get("include")), None)
+            review = next((candidate for candidate in candidates
+                           if candidate.get("ai_relevance") == "include" or candidate.get("include")), None)
         decisions.append(classify_ai_work(row, metadata, review))
     return decisions, summarize_ai_scan(rows, decisions)

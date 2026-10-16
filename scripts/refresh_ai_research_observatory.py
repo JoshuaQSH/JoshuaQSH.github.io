@@ -165,10 +165,19 @@ def validate_review(review):
         raise ValueError("include must be a boolean")
     if review.get("include") and review.get("exclude"):
         raise ValueError("A review cannot include and exclude the same work")
+    relevance = review.get("ai_relevance")
+    if relevance is not None and (not isinstance(relevance, str) or relevance not in {"include", "exclude"}):
+        raise ValueError("ai_relevance must be include or exclude")
+    if (relevance == "include" and review.get("exclude")) or (relevance == "exclude" and review.get("include")):
+        raise ValueError("Conflicting AI relevance and publication review decisions")
     if review.get("include") and not review.get("review_note"):
         raise ValueError("An inclusion needs a reason in review_note")
     if review.get("exclude") and not review.get("review_note"):
         raise ValueError("An exclusion needs a reason in review_note")
+    if relevance and not review.get("review_note"):
+        raise ValueError("An AI relevance decision needs a reason in review_note")
+    if (relevance or review.get("include")) and not (review.get("bibliography_doi") or review.get("bibliography_url")):
+        raise ValueError("AI relevance reviews need bibliography_doi or bibliography_url")
     if "bibliography_doi" in review:
         doi = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", str(review["bibliography_doi"]), flags=re.I)
         if not re.fullmatch(r"10\.\d{4,9}/\S+", doi):
