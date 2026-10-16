@@ -20,6 +20,16 @@ _EXPLICIT = (
 )
 _AMBIGUOUS = re.compile(r"\b(?:gpus?|compilers?|accelerators?|inference|training|"
                         r"kernels?|tensor|scheduling|optimization)\b", re.I)
+_PRIMARY_AI_TOPICS = {"artificial intelligence", "machine learning", "deep learning",
+                      "natural language processing", "computer vision", "reinforcement learning",
+                      "large language models", "generative artificial intelligence", "ml systems"}
+_POSITIVE_CONTEXT = re.compile(r"\b(?:train\w*|serv\w*|deploy\w*|optimi[sz]\w*|"
+                               r"accelerat\w*|compil\w*|infer\w*|fine.tun\w*|"
+                               r"evaluat\w*|benchmark\w*|appl\w*|use[ds]?|build\w*)\b", re.I)
+_NEGATIVE_CONTEXT = re.compile(r"\b(?:not|never|without|excluded|unrelated|"
+                               r"outside (?:the )?scope|out of scope|beyond (?:the )?scope|"
+                               r"rather than|future work|only as (?:a )?(?:baseline|example|comparison))\b", re.I)
+_SHORT_AI_REFERENCE = re.compile(r"\b(?:ai|ml)\b", re.I)
 
 
 def _title_key(value: str) -> str:
@@ -45,16 +55,26 @@ def _abstract(metadata: dict) -> str:
     return " ".join(word for _, word in sorted(positions))
 
 
-def _metadata_text(metadata: dict) -> str:
-    names = []
+def _metadata_match(metadata: dict) -> str | None:
+    negated_ai = False
+    positive_label = None
+    abstract = re.sub(r"[-_/]+", " ", _abstract(metadata))
+    for clause in re.split(r"[.!?;,]+|\b(?:but|while|whereas|although|however|and)\b", abstract, flags=re.I):
+        labels = [label for label, pattern in _EXPLICIT if pattern.search(clause)]
+        if _NEGATIVE_CONTEXT.search(clause) and (labels or _SHORT_AI_REFERENCE.search(clause)):
+            negated_ai = True
+        elif labels and _POSITIVE_CONTEXT.search(clause) and positive_label is None:
+            positive_label = f"abstract-{labels[0]}"
+    if negated_ai:
+        return None
+    if positive_label:
+        return positive_label
     primary_topic = metadata.get("primary_topic")
-    if isinstance(primary_topic, dict) and isinstance(primary_topic.get("display_name"), str):
-        names.append(primary_topic["display_name"])
-    for key in ("topics", "keywords"):
-        for item in metadata.get(key) or []:
-            if isinstance(item, dict) and isinstance(item.get("display_name"), str):
-                names.append(item["display_name"])
-    return " ".join([_abstract(metadata), *names])
+    if isinstance(primary_topic, dict):
+        name = primary_topic.get("display_name")
+        if isinstance(name, str) and name.casefold().strip() in _PRIMARY_AI_TOPICS:
+            return "primary-topic"
+    return None
 
 
 def classify_ai_work(row: dict, metadata: dict | None, review: dict | None) -> tuple[str, str]:
@@ -72,10 +92,9 @@ def classify_ai_work(row: dict, metadata: dict | None, review: dict | None) -> t
         if pattern.search(title):
             return "matched", f"{RULE_VERSION}:title-{label}"
     if metadata:
-        evidence = re.sub(r"[-_/]+", " ", _metadata_text(metadata))
-        for label, pattern in _EXPLICIT:
-            if pattern.search(evidence):
-                return "matched", f"{RULE_VERSION}:metadata-{label}"
+        evidence = _metadata_match(metadata)
+        if evidence:
+            return "matched", f"{RULE_VERSION}:metadata-{evidence}"
     if _AMBIGUOUS.search(title):
         return "unresolved", f"{RULE_VERSION}:generic-systems"
     return "not-ai", f"{RULE_VERSION}:no-evidence"
@@ -132,14 +151,25 @@ def summarize_ai_scan(rows: list[dict], classifications: list[tuple[str, str]]) 
 def scan_ai_bibliography(rows: list[dict], works: list[dict], reviews: dict) -> tuple[list[tuple[str, str]], dict]:
     """Scan every eligible row before a caller chooses any public sample."""
     linked = link_openalex_metadata(rows, works)
-    by_doi = {_doi(key): review for key, review in reviews.items() if _doi(key)}
+    by_url = defaultdict(list)
+    by_doi = defaultdict(list)
+    for key, review in reviews.items():
+        validate_review(review)
+        for url in (key, review.get("bibliography_url"), review.get("evidence_url")):
+            if isinstance(url, str) and url.startswith("https://"):
+                by_url[url].append(review)
+        for value in (key, review.get("bibliography_doi"), review.get("evidence_url")):
+            doi = _doi(value)
+            if doi and doi.startswith("10."):
+                by_doi[doi].append(review)
     decisions = []
     for row, metadata in zip(rows, linked):
         source_urls = [row.get("url"), *row.get("source_urls", [])]
-        review = (reviews.get(metadata.get("id")) if metadata else None)
+        candidates = [reviews[metadata["id"]]] if metadata and metadata.get("id") in reviews else []
+        candidates.extend(review for url in source_urls for review in by_url.get(url, ()))
+        candidates.extend(by_doi.get(_doi(row.get("doi")), ()))
+        review = next((candidate for candidate in candidates if candidate.get("exclude")), None)
         if review is None:
-            review = next((reviews[url] for url in source_urls if url in reviews), None)
-        if review is None:
-            review = by_doi.get(_doi(row.get("doi")))
+            review = next((candidate for candidate in candidates if candidate.get("include")), None)
         decisions.append(classify_ai_work(row, metadata, review))
     return decisions, summarize_ai_scan(rows, decisions)

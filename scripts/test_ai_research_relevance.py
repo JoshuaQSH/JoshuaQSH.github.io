@@ -44,9 +44,28 @@ class RelevanceTests(unittest.TestCase):
     def test_metadata_can_resolve_ambiguous_title_only_when_explicit(self):
         paper = row("GPU Scheduling in Datacenters")
         self.assertEqual(classify_ai_work(paper, {"abstract": "We train large language models."}, None)[0], "matched")
+        self.assertEqual(classify_ai_work(paper, {"abstract": "We optimize GPU inference for large language models."}, None)[0], "matched")
         self.assertEqual(classify_ai_work(paper, {"primary_topic": {"display_name": "Machine Learning"}}, None)[0], "matched")
         self.assertEqual(classify_ai_work(paper, {"abstract": "We schedule graphics workloads."}, None)[0], "unresolved")
         self.assertEqual(classify_ai_work(row("A faster filesystem"), None, None)[0], "not-ai")
+
+    def test_incidental_or_negated_metadata_does_not_confirm_generic_gpu_title(self):
+        paper = row("GPU Scheduling in Datacenters")
+        cases = (
+            {"keywords": [{"display_name": "Machine Learning"}]},
+            {"topics": [{"display_name": "Machine Learning"}]},
+            {"abstract": "Machine learning is outside scope; we schedule graphics jobs."},
+            {"abstract": "We schedule GPU jobs, but do not train LLMs."},
+            {"abstract": "We optimize GPU scheduling, while machine learning is mentioned as related work."},
+            {"primary_topic": {"display_name": "Machine Learning"},
+             "abstract": "Machine learning is outside scope; this is a graphics scheduler."},
+            {"primary_topic": {"display_name": "Machine Learning"},
+             "abstract": "ML is outside scope; this is a graphics scheduler."},
+            {"abstract": "We train large language models. ML is outside scope for this system."},
+        )
+        for metadata in cases:
+            with self.subTest(metadata=metadata):
+                self.assertEqual(classify_ai_work(paper, metadata, None)[0], "unresolved")
 
     def test_reviewed_include_and_exclude_take_precedence_and_require_evidence(self):
         include = {"include": True, "review_note": "AI-assisted software engineering",
@@ -121,6 +140,38 @@ class RelevanceTests(unittest.TestCase):
         self.assertEqual(summary["ai_reviewed_count"], 2)
         self.assertEqual(summary["ai_matched_count"], 1)
         self.assertEqual(summary["status"], "partial")
+
+    def test_bibliography_doi_review_survives_missing_openalex_metadata(self):
+        rows = [row("GPU Scheduling", "10.1145/100", "https://dblp.org/rec/conf/pldi/one"),
+                row("GPU Scheduling", "10.1145/101", "https://dblp.org/rec/conf/pldi/two")]
+        reviews = {"https://openalex.org/W100": {"include": True,
+            "bibliography_doi": "https://doi.org/10.1145/100", "review_note": "AI training scheduler",
+            "evidence_url": "https://example.org/paper/100"}}
+        decisions, summary = scan_ai_bibliography(rows, [], reviews)
+        self.assertEqual(decisions[0], ("matched", "ai-relevance-v1:review-include"))
+        self.assertEqual(decisions[1][0], "unresolved")
+        self.assertEqual(summary["ai_reviewed_count"], 1)
+
+    def test_bibliography_source_review_survives_missing_metadata_and_exclusion_wins(self):
+        paper = row("GPU Scheduling", url="https://dblp.org/rec/conf/pldi/one")
+        paper["source_urls"] = [paper["url"], "https://proceedings.example.org/pldi/one"]
+        include = {"include": True, "bibliography_url": "https://proceedings.example.org/pldi/one",
+                   "review_note": "AI system", "evidence_url": "https://example.org/include"}
+        exclude = {"exclude": True, "review_note": "Not an AI study",
+                   "evidence_url": "https://example.org/exclude"}
+        decisions, _ = scan_ai_bibliography([paper], [], {"https://openalex.org/W100": include})
+        self.assertEqual(decisions[0], ("matched", "ai-relevance-v1:review-include"))
+        decisions, _ = scan_ai_bibliography([paper], [], {
+            "https://openalex.org/W100": include, paper["url"]: exclude})
+        self.assertEqual(decisions[0], ("not-ai", "ai-relevance-v1:review-exclude"))
+
+    def test_review_aliases_need_explicit_publication_identifiers(self):
+        review = {"include": True, "review_note": "AI system",
+                  "evidence_url": "https://example.org/paper"}
+        with self.assertRaises(ValueError):
+            pipeline.validate_review({**review, "bibliography_url": "http://example.org/paper"})
+        with self.assertRaises(ValueError):
+            pipeline.validate_review({**review, "bibliography_doi": "GPU Scheduling"})
 
 
 class RepositoryEvidenceTests(unittest.TestCase):

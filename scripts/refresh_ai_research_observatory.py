@@ -12,7 +12,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 from urllib.request import Request, urlopen
 
 from ai_research_sources import (ANTHOLOGY_VOLUMES, PMLR_VOLUMES, PMLR_OTHER, merge_official, normalize_official,
@@ -169,6 +169,14 @@ def validate_review(review):
         raise ValueError("An inclusion needs a reason in review_note")
     if review.get("exclude") and not review.get("review_note"):
         raise ValueError("An exclusion needs a reason in review_note")
+    if "bibliography_doi" in review:
+        doi = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", str(review["bibliography_doi"]), flags=re.I)
+        if not re.fullmatch(r"10\.\d{4,9}/\S+", doi):
+            raise ValueError("bibliography_doi must be a DOI")
+    if "bibliography_url" in review:
+        parsed = urlparse(str(review["bibliography_url"]))
+        if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+            raise ValueError("bibliography_url must be an HTTPS paper URL")
     if "repository_url" in review:
         if not repo_slug(review["repository_url"]) or not str(review.get("repository_evidence_url", "")).startswith("https://"):
             raise ValueError("A reviewed repository needs a GitHub URL and HTTPS association evidence")
