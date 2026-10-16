@@ -15,6 +15,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urlparse
 from urllib.request import Request, urlopen
 
+from ai_research_bibliography import collect_venue_year
 from ai_research_sources import (ANTHOLOGY_VOLUMES, PMLR_VOLUMES, PMLR_OTHER, merge_official, normalize_official,
                                  official_source, parse_acl, parse_cvf, parse_neurips, parse_pmlr,
                                  repo_slug, select_records, title_key)
@@ -26,6 +27,7 @@ MANUAL = ROOT / "data/ai_research_observatory/manual_works.json"
 FEATURED = ROOT / "data/ai_research_observatory/featured_proceedings.json"
 OUTPUT = ROOT / "static/data/ai-research-observatory.json"
 CACHE = ROOT / ".cache/ai-research-observatory"
+CROSS_AREA_SOURCES = ROOT / "data/ai_research_observatory/cross_area_sources.json"
 API = "https://api.openalex.org/works"
 
 
@@ -76,7 +78,7 @@ def abstract_text(inverted):
     return " ".join(word or "" for word in words).strip() or None
 
 
-def normalize_work(work, venue):
+def normalize_work(work, venue, confirmed_ai=False):
     if not work.get("id") or not work.get("title") or work.get("type") not in (None, "conference-paper", "article"):
         return None
     title = work["title"]
@@ -84,7 +86,7 @@ def normalize_work(work, venue):
         return None
     keywords = " ".join(x.get("display_name", "") for x in (work.get("keywords") or [])[:12])
     topic_text = " ".join(x.get("display_name", "") for x in (work.get("topics") or [])[:4])
-    if not venue["ai_native"] and not AI_WORDS.search(" ".join((title, keywords, topic_text))):
+    if not venue["ai_native"] and not confirmed_ai and not AI_WORDS.search(" ".join((title, keywords, topic_text))):
         return None
     topic_rule = "native-venue" if venue["ai_native"] else ("title-keyword" if AI_WORDS.search(title) else "metadata-keyword")
     authors = work.get("authorships") or []
@@ -313,8 +315,151 @@ def cached_works(venue, year, cap):
     return payload.get("results", []), (payload.get("meta") or {}).get("count", 0), datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat(), True
 
 
+def fetch_openalex_doi_batch(dois, key, cached_only=False):
+    if not dois or len(dois) > 25:
+        raise ValueError("A DOI batch needs 1..25 identifiers")
+    params = {"filter": "doi:" + "|".join(dois), "per_page": 50}
+    cache_path = CACHE / ("doi-" + hashlib.sha256(urlencode(params).encode()).hexdigest() + ".json")
+    if cache_path.exists() and (cached_only or time.time() - cache_path.stat().st_mtime < 6 * 3600):
+        return json.loads(cache_path.read_text())["results"]
+    if cached_only:
+        return []
+    headers = {"User-Agent": "JoshuaQSH-AIResearchObservatory/1.0", "Accept": "application/json"}
+    if key:
+        headers["Authorization"] = f"Bearer {key}"
+    request = Request(API + "?" + urlencode(params), headers=headers)
+    try:
+        with urlopen(request, timeout=40) as response:
+            payload = json.load(response)
+    except HTTPError as exc:
+        if exc.code == 429:
+            raise RateLimited("OpenAlex DOI lookup budget exhausted (HTTP 429)") from exc
+        if exc.code in (401, 403):
+            raise AuthenticationFailed("OpenAlex authentication failed; check the activated API key") from exc
+        raise
+    if not isinstance(payload.get("results"), list) or (payload.get("meta") or {}).get("count", 0) > 50:
+        raise ValueError("OpenAlex DOI lookup returned incomplete results")
+    CACHE.mkdir(parents=True, exist_ok=True)
+    cache_path.write_text(json.dumps(payload, separators=(",", ":")))
+    return payload["results"]
+
+
+def refresh_cross_area_year(venue, year, rule, prior, previous_row, papers, reviews, cap,
+                            key, skip_openalex, cached_only):
+    from ai_research_relevance import RULE_VERSION, link_openalex_metadata, scan_ai_bibliography
+
+    now = datetime.now(timezone.utc).isoformat()
+    try:
+        eligible, source_row = collect_venue_year(venue, year, rule, CACHE)
+    except (HTTPError, URLError, TimeoutError, OSError, ValueError, RuntimeError) as exc:
+        source_row = {"venue_id": venue["id"], "year": year, "status": "source-error",
+                      "checked_at": now, "gap_reason": f"Bibliography: {exc}",
+                      "source_urls": [rule["dblp_stream"]] if rule.get("dblp_stream") else []}
+        eligible = []
+    if source_row["status"] == "source-error":
+        row = dict(previous_row)
+        for field in ("source_urls", "track_scope"):
+            if source_row.get(field):
+                row[field] = source_row[field]
+        row.update({"venue_id": venue["id"], "venue": venue["name"], "year": year,
+                    "status": "source-error", "partial": True, "stale": True,
+                    "checked_at": source_row["checked_at"], "gap_reason": source_row.get("gap_reason"),
+                    "ai_scan_status": "not-scanned", "classification_rule": RULE_VERSION})
+        row["last_successful_checked_at"] = previous_row.get("last_successful_checked_at") or previous_row.get("checked_at")
+        for field in ("main_track_total", "bibliography_total", "ai_matched_count",
+                      "ai_reviewed_count", "ai_unresolved_count", "eligible_count", "sampled_papers"):
+            row.setdefault(field, None)
+        return row
+
+    row = dict(previous_row)
+    row.update(source_row)
+    row.update({"venue": venue["name"], "source_total": previous_row.get("source_total"),
+                "official_total": previous_row.get("official_total"), "stale": False})
+    row.pop("last_successful_checked_at", None)
+    if row["status"] == "partial" and row.get("bibliography_total") is None and prior:
+        row["latest_bibliography_scanned_count"] = source_row["scanned_count"]
+        row["scanned_count"] = previous_row.get("scanned_count", 0)
+        for field in ("ai_matched_count", "ai_reviewed_count", "ai_unresolved_count", "eligible_count"):
+            row[field] = previous_row.get(field)
+        row.update({"ai_scan_status": "partial", "classification_rule": RULE_VERSION,
+                    "stale": True, "partial": True,
+                    "last_successful_ai_checked_at": previous_row.get("checked_at")})
+        return row
+    if eligible:
+        # Prior OpenAlex work metadata can add structured topic evidence without
+        # allowing a free-text abstract to confirm an AI match.
+        works = [{**paper, "publication_year": paper.get("publication_year", paper.get("year"))}
+                 for paper in prior if str(paper.get("id", "")).startswith("https://openalex.org/")]
+        known_dois = {str(paper.get("doi", "")).lower().removeprefix("https://doi.org/") for paper in works}
+        missing_dois = list(dict.fromkeys(bibliography["doi"] for bibliography in eligible
+                                          if bibliography.get("doi") and bibliography["doi"] not in known_dois))
+        if not skip_openalex:
+            try:
+                for offset in range(0, len(missing_dois), 25):
+                    works.extend(fetch_openalex_doi_batch(missing_dois[offset:offset + 25], key, cached_only))
+                    if not cached_only:
+                        time.sleep(.12)
+            except AuthenticationFailed:
+                raise
+            except (HTTPError, URLError, TimeoutError, OSError, ValueError, RuntimeError) as exc:
+                print(f"WARNING: OpenAlex DOI lookup {venue['name']} {year}: {exc}", file=sys.stderr)
+                row.update({"ai_scan_status": "source-error", "stale": True,
+                            "last_successful_ai_checked_at": previous_row.get("checked_at"),
+                            "ai_error": str(exc), "classification_rule": RULE_VERSION,
+                            "partial": True})
+                for field in ("ai_matched_count", "ai_reviewed_count", "ai_unresolved_count", "eligible_count"):
+                    row[field] = previous_row.get(field)
+                row["scanned_count"] = 0
+                return row
+        decisions, ai = scan_ai_bibliography(eligible, works, reviews, include_abstract_evidence=False)
+        linked = link_openalex_metadata(eligible, works)
+        row.update(ai_matched_count=ai["ai_matched_count"], ai_reviewed_count=ai["ai_reviewed_count"],
+                   ai_unresolved_count=ai["ai_unresolved_count"], eligible_count=ai["eligible_count"],
+                   scanned_count=ai["scanned_count"], ai_scan_status=ai["status"],
+                   classification_rule=ai["classification_rule"],
+                   partial=row["status"] != "verified" or ai["status"] != "complete")
+        matched = [(index, bibliography, evidence)
+                   for index, (bibliography, (decision, evidence)) in enumerate(zip(eligible, decisions))
+                   if decision == "matched"]
+        sampled = select_records([item[1] for item in matched], cap)
+        selected_urls = {item["url"] for item in sampled}
+        for paper in prior:
+            papers.pop(paper["id"], None)
+        for index, bibliography, evidence in matched:
+            if bibliography["url"] not in selected_urls:
+                continue
+            provider = bibliography["track_evidence"]["source"]
+            metadata = linked[index]
+            enriched = (dict(metadata) if metadata and metadata.get("source") == "OpenAlex" else
+                        normalize_work(metadata, venue, confirmed_ai=True) if metadata else None)
+            paper = enriched or normalize_official(bibliography, venue, year, provider)
+            source_links = paper.get("sources", []) + [{"provider": provider, "url": url}
+                                                     for url in bibliography.get("source_urls", [bibliography["url"]])]
+            paper.update({"doi": bibliography.get("doi"), "topic_rule": evidence,
+                          "year": year, "venue_id": venue["id"], "venue": venue["name"],
+                          "proceedings_url": bibliography["url"],
+                          "classification_rule": ai["classification_rule"],
+                          "track_evidence": bibliography["track_evidence"],
+                          "bibliography_urls": bibliography.get("source_urls", [bibliography["url"]]),
+                          "sources": list({source["url"]: source for source in source_links}.values()),
+                          "bibliography_checked_at": source_row["checked_at"]})
+            papers[paper["id"]] = paper
+    else:
+        if row["status"] == "not-held":
+            for paper in prior:
+                papers.pop(paper["id"], None)
+        for field in ("ai_matched_count", "ai_reviewed_count", "ai_unresolved_count", "eligible_count"):
+            row[field] = None
+        row["ai_scan_status"] = "not-scanned"
+        row["classification_rule"] = RULE_VERSION
+        row["partial"] = row["status"] != "not-held"
+        row["sampled_papers"] = len(prior)
+    return row
+
+
 def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, skip_openalex=False, cached_only=False):
     venues = json.loads(VENUES.read_text())
+    cross_area_rules = json.loads(CROSS_AREA_SOURCES.read_text())
     reviews = json.loads(REVIEWS.read_text())
     manual = json.loads(MANUAL.read_text()) if MANUAL.exists() else []
     featured = json.loads(FEATURED.read_text()) if FEATURED.exists() else []
@@ -333,6 +478,12 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
         for year in range(start, end + 1):
             print(f"Fetching {venue['name']} {year}", flush=True)
             prior = [p for p in papers.values() if p.get("venue_id") == venue["id"] and p.get("year") == year]
+            if venue.get("source_rule_id"):
+                rule = cross_area_rules[venue["source_rule_id"]]
+                coverage[(venue["id"], year)] = refresh_cross_area_year(
+                    venue, year, rule, prior, coverage.get((venue["id"], year), {}), papers, reviews,
+                    cap, key, skip_openalex, cached_only)
+                continue
             row = dict(coverage.get((venue["id"], year), {"venue_id": venue["id"], "venue": venue["name"], "year": year}))
             row.setdefault("source_total", None)
             row.setdefault("scanned", 0)
@@ -355,24 +506,30 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
                         row.update({"source_total": total, "scanned": len(works), "included": len(openalex_papers),
                             "partial": not total or len(works) < total, "source_id": venue["source_id"],
                             "status": "no-index-records" if not total else "sample" if len(works) < total else "source-scan",
-                            "checked_at": fetched_at, "cache_hit": cached})
+                            "checked_at": fetched_at, "cache_hit": cached, "stale": False})
+                        row.pop("last_successful_checked_at", None)
                         row.pop("error", None)
                         openalex_ok = True
                 except RateLimited as exc:
                     print(f"WARNING: {exc}; remaining OpenAlex calls skipped", file=sys.stderr)
                     openalex_blocked = True
-                    row.update({"status": "rate-limited", "partial": True, "error": str(exc)})
+                    row.update({"status": "rate-limited", "partial": True, "error": str(exc),
+                                "last_successful_checked_at": row.get("last_successful_checked_at") or row.get("checked_at"),
+                                "checked_at": datetime.now(timezone.utc).isoformat(), "stale": True})
                 except AuthenticationFailed:
                     raise
                 except Exception as exc:
                     print(f"WARNING: OpenAlex {venue['name']} {year}: {exc}", file=sys.stderr)
                     row.update({"partial": True, "status": "error", "error": str(exc),
-                        "checked_at": datetime.now(timezone.utc).isoformat()})
+                        "last_successful_checked_at": row.get("last_successful_checked_at") or row.get("checked_at"),
+                        "checked_at": datetime.now(timezone.utc).isoformat(), "stale": True})
                 if not cached_only:
                     time.sleep(.12)
             elif openalex_blocked and venue.get("source_id"):
                 row.update({"status": "rate-limited", "partial": True,
-                            "error": "OpenAlex request budget exhausted earlier in this refresh"})
+                            "error": "OpenAlex request budget exhausted earlier in this refresh",
+                            "last_successful_checked_at": row.get("last_successful_checked_at") or row.get("checked_at"),
+                            "checked_at": datetime.now(timezone.utc).isoformat(), "stale": True})
             elif not venue.get("source_id"):
                 row.update({"source_total": None, "status": "unmapped", "partial": True,
                             "source_id": None})
@@ -482,12 +639,16 @@ def refresh(start, end, cap, selected=None, official_cap=250, github_cap=30, ski
             except Exception as exc:
                 print(f"WARNING: GitHub {slug}: {exc}", file=sys.stderr)
                 paper["github"] = None
+                paper["repository_checked_at"] = datetime.now(timezone.utc).isoformat()
                 failed_slugs.add(slug)
                 fetched += 1
         if paper.get("github"):
             checked[slug] = paper["github"]
     result.sort(key=lambda p: (p.get("year") or 0, p.get("citations") or 0), reverse=True)
-    snapshot = {"generated_at": datetime.now(timezone.utc).isoformat(), "source": "OpenAlex and official proceedings", "scope": "Capped, merged venue-year sample; not complete conference output", "cap_per_venue_year": cap, "official_cap_per_venue_year": official_cap,
+    for row in coverage.values():
+        if row["venue_id"] in cross_area_rules:
+            row["sampled_papers"] = sum(p.get("venue_id") == row["venue_id"] and p.get("year") == row["year"] for p in result)
+    snapshot = {"generated_at": datetime.now(timezone.utc).isoformat(), "source": "OpenAlex, official proceedings, and DBLP", "scope": "Capped AI-paper sample with separate venue-year bibliography coverage; not organizer acceptance totals", "cap_per_venue_year": cap, "official_cap_per_venue_year": official_cap,
                 "venues": venues, "coverage": sorted(coverage.values(), key=lambda c: (c["year"], c["venue_id"])), "papers": result}
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(snapshot, ensure_ascii=False, separators=(",", ":")) + "\n")
@@ -504,7 +665,13 @@ if __name__ == "__main__":
     parser.add_argument("--skip-openalex", action="store_true", help="Backfill official proceedings while retaining earlier OpenAlex records")
     parser.add_argument("--cached-only", action="store_true", help="Use cached OpenAlex responses, make no OpenAlex network requests")
     parser.add_argument("--venues", nargs="*", help="Optional venue IDs")
+    parser.add_argument("--output", type=Path, help="Write a separate snapshot instead of the published file")
+    parser.add_argument("--cache-dir", type=Path, help="Use a separate request cache")
     args = parser.parse_args()
     if not 2020 <= args.from_year <= args.to_year <= datetime.now().year or not 1 <= args.cap <= 100 or args.official_cap < 0 or args.github_cap < 0:
         parser.error("years must be 2020..current, OpenAlex cap 1..100, and other caps non-negative")
+    if args.output:
+        OUTPUT = args.output
+    if args.cache_dir:
+        CACHE = args.cache_dir
     refresh(args.from_year, args.to_year, args.cap, args.venues, args.official_cap, args.github_cap, args.skip_openalex, args.cached_only)

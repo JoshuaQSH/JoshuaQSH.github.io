@@ -49,6 +49,21 @@ class RelevanceTests(unittest.TestCase):
         self.assertEqual(classify_ai_work(paper, {"abstract": "We schedule graphics workloads."}, None)[0], "unresolved")
         self.assertEqual(classify_ai_work(row("A faster filesystem"), None, None)[0], "not-ai")
 
+    def test_production_scan_ignores_abstract_but_keeps_topic_and_review(self):
+        paper = row("GPU Scheduling in Datacenters", "10.1145/100")
+        work = {"id": "https://openalex.org/W100", "doi": "https://doi.org/10.1145/100",
+                "title": paper["title"], "publication_year": 2025,
+                "abstract": "We use a GPU scheduler and previous studies apply large language models."}
+        decisions, summary = scan_ai_bibliography([paper], [work], {}, include_abstract_evidence=False)
+        self.assertEqual(decisions[0][0], "unresolved")
+        self.assertEqual(summary["ai_matched_count"], 0)
+        work["primary_topic"] = {"display_name": "Machine Learning"}
+        self.assertEqual(scan_ai_bibliography([paper], [work], {}, include_abstract_evidence=False)[0][0][0], "matched")
+        review = {"ai_relevance": "include", "bibliography_doi": "10.1145/100",
+                  "review_note": "Manual AI confirmation", "evidence_url": "https://example.org/paper"}
+        self.assertEqual(scan_ai_bibliography([paper], [work], {"decision": review},
+                                              include_abstract_evidence=False)[0][0][0], "matched")
+
     def test_incidental_or_negated_metadata_does_not_confirm_generic_gpu_title(self):
         paper = row("GPU Scheduling in Datacenters")
         cases = (

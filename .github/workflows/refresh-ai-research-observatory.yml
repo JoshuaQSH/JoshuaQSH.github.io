@@ -17,6 +17,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: ai-research-observatory-snapshot
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest

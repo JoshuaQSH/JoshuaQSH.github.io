@@ -170,7 +170,8 @@ def summarize_ai_scan(rows: list[dict], classifications: list[tuple[str, str]]) 
             "classification_rule": RULE_VERSION}
 
 
-def scan_ai_bibliography(rows: list[dict], works: list[dict], reviews: dict) -> tuple[list[tuple[str, str]], dict]:
+def scan_ai_bibliography(rows: list[dict], works: list[dict], reviews: dict,
+                         *, include_abstract_evidence: bool = True) -> tuple[list[tuple[str, str]], dict]:
     """Scan every eligible row before a caller chooses any public sample."""
     linked = link_openalex_metadata(rows, works)
     by_url = defaultdict(list)
@@ -186,6 +187,9 @@ def scan_ai_bibliography(rows: list[dict], works: list[dict], reviews: dict) -> 
                 by_doi[doi].append(review)
     decisions = []
     for row, metadata in zip(rows, linked):
+        if metadata and not include_abstract_evidence:
+            metadata = {key: value for key, value in metadata.items()
+                        if key not in {"abstract", "abstract_inverted_index"}}
         source_urls = [row.get("url"), *row.get("source_urls", [])]
         candidates = [review for url in source_urls for review in by_url.get(url, ())]
         candidates.extend(by_doi.get(_doi(row.get("doi")), ()))
