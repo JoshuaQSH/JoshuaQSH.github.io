@@ -260,7 +260,9 @@
         if (Number.isFinite(item.ai_unresolved_count)) parts.push(`${number(item.ai_unresolved_count)} AI decisions unresolved`);
         if (Number.isFinite(item.sampled_papers)) parts.push(`${number(item.sampled_papers)} sampled AI papers`);
         if (Number.isFinite(item.source_total)) parts.push(`OpenAlex: ${number(item.source_total)} indexed matches, not a proceedings census`);
+        if (Number.isFinite(item.scanned)) parts.push(`${number(item.scanned)} OpenAlex sampled records (legacy sample, not AI scan)`);
         if (Number.isFinite(item.official_total)) parts.push(`${item.official_provider || "publisher"} index: ${number(item.official_total)} records, not verified main-track`);
+        if (Number.isFinite(item.official_sampled)) parts.push(`${number(item.official_sampled)} publisher sampled records (legacy sample, not AI scan)`);
         if (item.track_scope) parts.push(`track: ${item.track_scope}`);
         if (item.gap_reason || item.error) parts.push(item.gap_reason || item.error);
         if (item.checked_at) parts.push(`checked ${item.checked_at.slice(0, 10)}`);

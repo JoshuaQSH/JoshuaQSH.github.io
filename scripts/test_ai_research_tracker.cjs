@@ -78,6 +78,8 @@ async function main() {
       assert.match(html, /observed AI/i);
     }
     assert.match(trackerHtml, /id="research-count-rows"/, 'organizer ledger stays separate');
+    assert.match(trackerHtml, /OpenAlex source matches/);
+    assert.match(trackerHtml, /Publisher index entries/);
     assert.match(observatoryHtml, /Standalone arXiv reports/, 'arXiv stays outside conference totals');
 
     const history = { reviewed_at: '2026-10-16', conferences: [{ id: 'neurips', name: 'NeurIPS', color: '#123456' }],
@@ -90,7 +92,8 @@ async function main() {
       { venue_id: 'pldi', venue: 'PLDI', year: 2024, status: 'verified', main_track_total: 120, bibliography_total: 120,
         ai_matched_count: 14, scanned_count: 120, eligible_count: 120, ai_scan_status: 'complete', track_scope: 'research papers', source_urls: ['https://example.org/official-2024'] },
       { venue_id: 'pldi', venue: 'PLDI', year: 2025, status: 'partial', main_track_total: null, bibliography_total: 130,
-        ai_matched_count: 9, scanned_count: 130, eligible_count: 130, ai_scan_status: 'complete', track_scope: 'research papers', source_urls: ['https://dblp.org/db/conf/pldi/'] }
+        ai_matched_count: 9, scanned_count: 130, eligible_count: 130, scanned: 25, ai_scan_status: 'complete',
+        track_scope: 'research papers', source_urls: ['https://dblp.org/db/conf/pldi/'] }
     ];
     const snapshot = { generated_at: '2026-10-16T00:00:00Z', venues: catalog.filter(v => v.id === 'neurips'), coverage: rows, papers: [], scope: {} };
     const tracker = pageFixture(trackerHtml, snapshot, history);
@@ -119,14 +122,33 @@ async function main() {
     oldTracker.elements['research-index-venue'].value = 'pldi'; oldTracker.elements['research-index-venue'].dispatch('change');
     assert.equal(descendants(oldTracker.elements['research-index-chart'], el => el.tagName === 'circle').length, 0, 'old snapshot creates no invented points');
     assert.match(oldTracker.elements['research-index-detail'].textContent, /not yet available/i);
-    const legacySnapshot = { ...snapshot, coverage: [{ venue_id: 'neurips', venue: 'NeurIPS', year: 2024,
-      source_total: 300, scanned: 25, status: 'ok', source_id: 'https://openalex.org/S1' }] };
+    const legacySnapshot = { ...snapshot, coverage: [
+      { venue_id: 'neurips', venue: 'NeurIPS', year: 2023, source_total: 280, scanned: 24,
+        official_total: 480, official_sampled: 150, official_provider: 'NeurIPS proceedings', status: 'sample',
+        source_id: 'https://openalex.org/S1', official_url: 'https://example.org/neurips/2023' },
+      { venue_id: 'neurips', venue: 'NeurIPS', year: 2024, source_total: 300, scanned: 25,
+        official_total: 500, official_sampled: 175, official_provider: 'NeurIPS proceedings', status: 'sample',
+        source_id: 'https://openalex.org/S1', official_url: 'https://example.org/neurips/2024' }
+    ] };
     const legacyTracker = pageFixture(trackerHtml, legacySnapshot, history);
     await run('static/js/ai-research-tracker.js', legacyTracker);
     assert.match(legacyTracker.elements['research-catalog-rows'].textContent, /NeurIPS.*legacy index/s,
       'legacy OpenAlex records are not collapsed into unknown availability');
-    assert.match(legacyTracker.elements['research-index-detail'].textContent, /legacy index.*not plotted/i);
-    assert.match(legacyTracker.elements['research-index-rows'].textContent, /OpenAlex.*300.*not verified main-track/i);
+    const legacyChart = legacyTracker.elements['research-index-chart'];
+    const openalexPoints = descendants(legacyChart, el => el.tagName === 'circle' && el.attributes.class?.includes('legacy-openalex'));
+    const publisherPoints = descendants(legacyChart, el => el.tagName === 'circle' && el.attributes.class?.includes('legacy-publisher'));
+    assert.equal(openalexPoints.length, 2, 'default venue plots two published OpenAlex source-match years');
+    assert.equal(publisherPoints.length, 2, 'default venue plots two published publisher-index years');
+    assert.notEqual(openalexPoints[0].attributes.fill, publisherPoints[0].attributes.fill, 'legacy series have distinct colors');
+    assert.match(openalexPoints[0].attributes['aria-label'], /OpenAlex source matches/i);
+    assert.match(publisherPoints[0].attributes['aria-label'], /publisher index entries/i);
+    assert.ok([...openalexPoints, ...publisherPoints].every(point => Number(point.attributes.cy) >= 18 && Number(point.attributes.cy) <= 267),
+      'legacy series participate in the chart scale');
+    assert.equal(descendants(legacyChart, el => el.tagName === 'circle' && el.attributes.class?.includes('main-track')).length, 0,
+      'legacy index values never become verified main-track points');
+    assert.match(legacyTracker.elements['research-index-detail'].textContent, /legacy index.*not organizer acceptances/i);
+    assert.match(legacyTracker.elements['research-index-rows'].textContent, /OpenAlex source matches: 300.*publisher index entries: 500/s,
+      'the source table retains both legacy totals for one year');
 
     const observatory = pageFixture(observatoryHtml, snapshot, history);
     await run('static/js/ai-research-observatory.js', observatory, true);
@@ -136,6 +158,8 @@ async function main() {
     const coverageText = observatory.elements['aro-coverage'].textContent;
     assert.match(coverageText, /2023.*unresolved.*issue mapping unresolved/s);
     assert.match(coverageText, /2025.*bibliography.*130.*observed AI.*9.*130/s);
+    assert.match(coverageText, /2025.*observed AI matches: 9 \/ 130 scanned eligible records.*25 OpenAlex sampled records.*not AI scan/s,
+      'legacy OpenAlex sample size is not used as the AI classification denominator');
     assert.match(observatory.elements['aro-ranked-venues'].textContent, /PLDI/);
     assert.match(observatory.elements['aro-paper-count'].textContent, /^0$/, 'venue totals do not enter the AI paper ledger');
     const oldObservatory = pageFixture(observatoryHtml, oldSnapshot, history);
@@ -146,6 +170,9 @@ async function main() {
     await run('static/js/ai-research-observatory.js', legacyObservatory, true);
     legacyObservatory.elements['aro-coverage-venue'].value = 'neurips'; legacyObservatory.elements['aro-coverage-venue'].dispatch('change');
     assert.match(legacyObservatory.elements['aro-ranked-venues'].textContent, /NeurIPS.*legacy index/s);
+    assert.match(legacyObservatory.elements['aro-coverage'].textContent,
+      /2024.*OpenAlex: 300 indexed matches.*25 OpenAlex sampled records.*index: 500 records.*175 publisher sampled records/s,
+      'legacy sample sizes remain separately labelled from index totals and AI scans');
     console.log('Tracker and Observatory HTML/fixture checks passed.');
   } finally { fs.rmSync(destination, { recursive: true, force: true }); }
 }

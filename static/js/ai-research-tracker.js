@@ -29,6 +29,8 @@
   const mainCount = row => row?.status === "verified" && !row.stale && Number.isFinite(row.main_track_total) ? row.main_track_total : null;
   const bibliographyCount = row => row && !row.stale && Number.isFinite(row.bibliography_total) ? row.bibliography_total : null;
   const aiCount = row => row && !row.stale && Number.isFinite(row.ai_matched_count) ? row.ai_matched_count : null;
+  const legacyOpenAlexCount = row => row && !row.stale && row.source_total > 0 ? row.source_total : null;
+  const legacyPublisherCount = row => row && !row.stale && row.official_total > 0 ? row.official_total : null;
   const legacyCount = row => row && mainCount(row) === null && bibliographyCount(row) === null &&
     (row.source_total > 0 || row.official_total > 0);
   const availability = row => row ? `${legacyCount(row) ? "legacy index only · " : ""}${row.status || "unresolved"}${row.stale ? " · stale" : ""}${row.gap_reason ? ` · ${row.gap_reason}` : ""}` : "not yet available in the published snapshot";
@@ -118,14 +120,16 @@
     if (!venue) return;
     const chart = $("research-index-chart"); empty(chart);
     const rows = years.map(year => ({year, row: rowFor(snapshot, venue.id, year)}));
-    const values = rows.flatMap(({row}) => [mainCount(row), bibliographyCount(row), aiCount(row)]).filter(Number.isFinite);
+    const values = rows.flatMap(({row}) => [mainCount(row), bibliographyCount(row), aiCount(row), legacyOpenAlexCount(row), legacyPublisherCount(row)]).filter(Number.isFinite);
     const max = Math.max(100, Math.ceil(Math.max(0, ...values) / 500) * 500);
     const top = 18, bottom = 267, left = 56, right = 735;
     axes(chart, top, bottom, left, right, max, "");
     for (const [kind, color, label, valueFor] of [
       ["main-track", "#c33e42", "verified main-track papers", mainCount],
       ["ai-matched", "#367580", "observed AI matches", aiCount],
-      ["bibliography", "#a86824", "bibliography records (not verified main-track)", row => mainCount(row) === null ? bibliographyCount(row) : null]
+      ["bibliography", "#a86824", "bibliography records (not verified main-track)", row => mainCount(row) === null ? bibliographyCount(row) : null],
+      ["legacy-openalex", "#77549b", "OpenAlex source matches (legacy index, not main-track)", legacyOpenAlexCount],
+      ["legacy-publisher", "#2d7957", "publisher index entries (legacy index, not main-track)", legacyPublisherCount]
     ]) {
       line(chart, rows.map(({year, row}) => ({year, value:valueFor(row), row,
         label:`${venue.name} ${year}: ${fmt(valueFor(row))} ${label}${kind === "ai-matched" ? ` among ${fmt(row?.scanned_count ?? row?.eligible_count)} scanned eligible records${row?.ai_scan_status === "partial" ? "; partial scan" : ""}` : ""}${row?.track_scope ? `; ${row.track_scope}` : ""}`})), color, kind, left, right, top, bottom, max, point => {
@@ -143,7 +147,7 @@
     const legacy = rows.filter(({row}) => legacyCount(row)).length;
     const gaps = rows.filter(({row}) => mainCount(row) === null && bibliographyCount(row) === null && !legacyCount(row))
       .map(({year, row}) => `${year} ${availability(row)}`);
-    $("research-index-detail").textContent = `${venue.name}: ${verified} verified main-track years; ${fallback} bibliography-only years; ${legacy} legacy index years not plotted as main-track. ${gaps.length ? `Gaps: ${gaps.join("; ")}.` : "No unresolved calendar gaps."}`;
+    $("research-index-detail").textContent = `${venue.name}: ${verified} verified main-track years; ${fallback} bibliography-only years; ${legacy} legacy index years shown as source matches, not organizer acceptances. ${gaps.length ? `Gaps: ${gaps.join("; ")}.` : "No unresolved calendar gaps."}`;
     const tbody = $("research-index-rows"); empty(tbody);
     for (const {year, row} of rows) {
       const tr = document.createElement("tr");
@@ -152,7 +156,8 @@
         const td = document.createElement("td"); td.textContent = value; tr.append(td);
       }
       const source = document.createElement("td"); source.append(document.createTextNode(row?.track_scope || "Track scope unverified"));
-      if (legacyCount(row)) source.append(document.createTextNode(` · ${Number.isFinite(row.source_total) ? `OpenAlex: ${fmt(row.source_total)}` : `publisher index: ${fmt(row.official_total)}`} index matches; not verified main-track`));
+      if (Number.isFinite(row?.source_total)) source.append(document.createTextNode(` · OpenAlex source matches: ${fmt(row.source_total)}; not verified main-track`));
+      if (Number.isFinite(row?.official_total)) source.append(document.createTextNode(` · publisher index entries: ${fmt(row.official_total)}; not verified main-track`));
       for (const url of sourceUrls(row)) {
         const link = document.createElement("a"); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer";
         link.textContent = "Source"; link.setAttribute("aria-label", `Source for ${venue.name} ${year}`);

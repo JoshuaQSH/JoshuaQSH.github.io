@@ -14,6 +14,8 @@
 .research-legend span{display:inline-flex;align-items:center;gap:7px}
 .research-key{display:inline-block;width:17px;height:3px;background:var(--key-color)}
 .research-bibliography-key{background:repeating-linear-gradient(90deg,var(--key-color) 0 5px,transparent 5px 8px)}
+.research-openalex-key{background:repeating-linear-gradient(90deg,var(--key-color) 0 2px,transparent 2px 5px)}
+.research-publisher-key{background:repeating-linear-gradient(90deg,var(--key-color) 0 8px,transparent 8px 11px)}
 .research-industry{--key-color:#be7b26}.research-academia{--key-color:#367580}
 .research-chart-scroll{width:100%;overflow-x:auto}
 .research-chart{display:block;width:100%;height:auto;min-width:540px;font-family:Arial,sans-serif}
@@ -23,6 +25,8 @@
 .research-chart .series{fill:none;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
 .research-chart .accepted{stroke-dasharray:5 4;stroke-width:1.8}
 .research-chart .bibliography{stroke-dasharray:4 4;stroke-width:1.8}
+.research-chart .series.legacy-openalex{stroke-dasharray:2 5;stroke-width:1.8}
+.research-chart .series.legacy-publisher{stroke-dasharray:8 3;stroke-width:1.8}
 .research-chart .point{cursor:pointer;stroke:var(--page-bg);stroke-width:2}
 .research-chart .point:focus{outline:none;stroke:var(--rt-ink);stroke-width:3}
 .research-chart-detail{min-height:1.5em;font-family:Arial,sans-serif;font-size:.77rem;color:var(--rt-muted);margin:8px 0 0}
