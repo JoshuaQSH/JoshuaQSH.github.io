@@ -31,7 +31,7 @@
   const aiCount = row => row && !row.stale && Number.isFinite(row.ai_matched_count) ? row.ai_matched_count : null;
   const legacyOpenAlexCount = row => row && !row.stale && row.source_total > 0 ? row.source_total : null;
   const legacyPublisherCount = row => row && !row.stale && row.official_total > 0 ? row.official_total : null;
-  const legacyCount = row => row && mainCount(row) === null && bibliographyCount(row) === null &&
+  const legacyCount = row => row && !row.stale && mainCount(row) === null && bibliographyCount(row) === null &&
     (row.source_total > 0 || row.official_total > 0);
   const availability = row => row ? `${legacyCount(row) ? "legacy index only · " : ""}${row.status || "unresolved"}${row.stale ? " · stale" : ""}${row.gap_reason ? ` · ${row.gap_reason}` : ""}` : "not yet available in the published snapshot";
   const xAt = (year, left, width) => left + (year - 2020) * width / (years.length - 1);
@@ -156,8 +156,8 @@
         const td = document.createElement("td"); td.textContent = value; tr.append(td);
       }
       const source = document.createElement("td"); source.append(document.createTextNode(row?.track_scope || "Track scope unverified"));
-      if (Number.isFinite(row?.source_total)) source.append(document.createTextNode(` · OpenAlex source matches: ${fmt(row.source_total)}; not verified main-track`));
-      if (Number.isFinite(row?.official_total)) source.append(document.createTextNode(` · publisher index entries: ${fmt(row.official_total)}; not verified main-track`));
+      if (Number.isFinite(row?.source_total)) source.append(document.createTextNode(` · OpenAlex source matches: ${fmt(row.source_total)}${row.stale ? " (last known)" : ""}; not verified main-track`));
+      if (Number.isFinite(row?.official_total)) source.append(document.createTextNode(` · publisher index entries: ${fmt(row.official_total)}${row.stale ? " (last known)" : ""}; not verified main-track`));
       for (const url of sourceUrls(row)) {
         const link = document.createElement("a"); link.href = url; link.target = "_blank"; link.rel = "noopener noreferrer";
         link.textContent = "Source"; link.setAttribute("aria-label", `Source for ${venue.name} ${year}`);

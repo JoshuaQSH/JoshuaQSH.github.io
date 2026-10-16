@@ -412,12 +412,17 @@ def refresh_cross_area_year(venue, year, rule, prior, previous_row, papers, revi
                     openalex_blocked = True
                 print(f"WARNING: OpenAlex DOI lookup {venue['name']} {year}: {exc}", file=sys.stderr)
                 row.update({"ai_scan_status": "source-error", "stale": True,
-                            "last_successful_ai_checked_at": previous_row.get("checked_at"),
+                            "last_successful_checked_at": previous_row.get("last_successful_checked_at") or previous_row.get("checked_at"),
+                            "last_successful_ai_checked_at": previous_row.get("last_successful_ai_checked_at") or previous_row.get("checked_at"),
                             "ai_error": str(exc), "classification_rule": RULE_VERSION,
                             "partial": True})
                 for field in ("ai_matched_count", "ai_reviewed_count", "ai_unresolved_count", "eligible_count"):
                     row[field] = previous_row.get(field)
-                row["scanned_count"] = 0
+                row["scanned_count"] = previous_row.get("scanned_count")
+                if isinstance(row["ai_matched_count"], (int, float)) and not (
+                        isinstance(row["scanned_count"], (int, float))
+                        and row["scanned_count"] >= row["ai_matched_count"]):
+                    row["scanned_count"] = None
                 return row, openalex_blocked
         decisions, ai = scan_ai_bibliography(eligible, works, reviews, include_abstract_evidence=False)
         linked = link_openalex_metadata(eligible, works)

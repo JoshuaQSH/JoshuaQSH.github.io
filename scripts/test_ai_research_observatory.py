@@ -290,8 +290,23 @@ class ObservatoryTests(unittest.TestCase):
             snapshot = json.loads(output.read_text())
         self.assertEqual(snapshot["papers"][0]["id"], old_paper["id"])
         self.assertEqual(snapshot["coverage"][0]["ai_matched_count"], 1)
+        self.assertEqual(snapshot["coverage"][0]["scanned_count"], 4)
+        self.assertEqual(snapshot["coverage"][0]["last_successful_ai_checked_at"], old_row["checked_at"])
         self.assertEqual(snapshot["coverage"][0]["ai_scan_status"], "source-error")
         self.assertTrue(snapshot["coverage"][0]["stale"])
+
+    def test_cross_area_metadata_failure_does_not_retain_invalid_prior_denominator(self):
+        bibliography = self.bibliography_row("LLM Inference on GPUs", "new", "10.1145/1")
+        old_row = {**self.bibliography_coverage(), "ai_matched_count": 1,
+                   "scanned_count": 0, "sampled_papers": 1}
+        with self.cross_area_fixture({"papers": [], "coverage": [old_row]}) as output, \
+             patch.object(pipeline, "collect_venue_year", return_value=([bibliography], self.bibliography_coverage())), \
+             patch.object(pipeline, "fetch_openalex_doi_batch", side_effect=pipeline.RateLimited("HTTP 429")):
+            pipeline.refresh(2025, 2025, 1, official_cap=0, github_cap=0)
+            row = json.loads(output.read_text())["coverage"][0]
+        self.assertEqual(row["ai_matched_count"], 1)
+        self.assertIsNone(row["scanned_count"])
+        self.assertEqual(row["last_successful_ai_checked_at"], old_row["checked_at"])
 
     def test_cross_area_doi_429_blocks_later_years_in_same_refresh(self):
         old_papers = [{"id": f"https://dblp.org/rec/conf/osdi/old-{year}",

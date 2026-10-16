@@ -163,6 +163,19 @@ assert.equal(selectedCounts.find(row => row.year === 2025).Industry, 1);
 assert.equal(selectedCounts.find(row => row.year === 2026).Industry, 0);
 assert.equal(core.trend(trendSelection.papers, weights, 'share', 2026, trendSelection.usableYears).find(row => row.year === 2026).Industry, null);
 assert.equal(core.trend(trendSelection.papers, weights, 'growth', 2026, trendSelection.usableYears).find(row => row.year === 2026).Industry, null);
+const crossAreaSelection = core.trendSelection([
+  { title: 'LLM systems paper', venue_id: 'systems', year: 2025, area: 'LLMs / NLP', first_author_sector: 'Industry' },
+  { title: 'stale LLM paper', venue_id: 'systems', year: 2026, area: 'LLMs / NLP', first_author_sector: 'Industry' },
+  { title: 'other systems paper', venue_id: 'systems', year: 2024, area: 'Systems', first_author_sector: 'Industry' }
+], [
+  { venue_id: 'systems', year: 2024, status: 'partial', ai_scan_status: 'complete', sampled_papers: 1 },
+  { venue_id: 'systems', year: 2025, status: 'partial', ai_scan_status: 'partial', sampled_papers: 1 },
+  { venue_id: 'systems', year: 2026, status: 'source-error', ai_scan_status: 'source-error', stale: true, sampled_papers: 1 }
+], [{ id: 'systems', area: 'Systems' }], { area: 'LLMs / NLP' });
+assert.deepEqual(crossAreaSelection.papers.map(paper => paper.title), ['LLM systems paper']);
+assert.deepEqual([...crossAreaSelection.usableYears], [2025]);
+assert.equal(core.trend(crossAreaSelection.papers, weights, 'count', 2026, crossAreaSelection.usableYears).find(row => row.year === 2025).Industry, 1);
+assert.equal(core.trend(crossAreaSelection.papers, weights, 'count', 2026, crossAreaSelection.usableYears).find(row => row.year === 2026).Industry, null);
 assert.deepEqual(core.trendSeries(''), ['Industry', 'University', 'Research Institute']);
 assert.deepEqual(core.trendSeries('Industry'), ['Industry']);
 assert.deepEqual(core.trendSeries('University'), ['University']);

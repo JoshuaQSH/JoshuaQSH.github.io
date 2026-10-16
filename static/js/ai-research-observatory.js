@@ -139,7 +139,7 @@
     const viewWidth = compact ? 400 : 620;
     const plotLeft = compact ? 65 : 82, plotRight = compact ? 380 : 600;
     const axisLeft = compact ? 55 : 72, axisRight = compact ? 390 : 607;
-    const canvas = svg("svg", { viewBox: `0 0 ${viewWidth} 270`, role: "img",
+    const canvas = svg("svg", { viewBox: `0 0 ${viewWidth} 270`, role: "group",
       "aria-label": `Annual tracked AI sample by ${selectedSector || "first-author sector"}; gaps mark missing source coverage`,
       preserveAspectRatio: "xMidYMid meet" });
     target.replaceChildren(canvas);
@@ -183,8 +183,13 @@
         const measure = mode === "count" ? `${number(d[sector])} tracked classified AI papers`
           : `${number(d[sector])}% ${mode === "share" ? "publication share" : "year-over-year growth"}`;
         const previous = mode === "growth" ? `; previous year ${data[i - 1].year} ${sector}: ${counts[i - 1][sector]} papers` : "";
-        const dot = svg("circle", { cx: yearX(i), cy: valueY(d[sector]), r: i === activeIndex ? 2.8 : 2.2, class: color });
-        dot.appendChild(svg("title", {}, `${d.year} ${sector}: ${measure}; raw count ${rawCount} of ${denominator} sector-classified tracked AI papers${previous}`));
+        const label = `${d.year} ${sector}: ${measure}; raw count ${rawCount} of ${denominator} sector-classified tracked AI papers${previous}`;
+        const radius = i === activeIndex ? 2.8 : 2.2;
+        const dot = svg("circle", { cx: yearX(i), cy: valueY(d[sector]), r: radius, class: color,
+          role: "img", tabindex: "0", focusable: "true", "aria-label": label });
+        dot.addEventListener("focus", () => dot.setAttribute("r", 5));
+        dot.addEventListener("blur", () => dot.setAttribute("r", radius));
+        dot.appendChild(svg("title", {}, label));
         canvas.appendChild(dot);
       });
     });
@@ -307,7 +312,8 @@
     focusedPaper = paper;
     renderScorePanel(selected());
     const body = $("aro-detail-content"), result = core.score(paper, weights);
-    body.replaceChildren(node("div", `${paper.venue} · ${paper.year}`, "aro-eyebrow"), node("h2", paper.title));
+    const title = node("h2", paper.title); title.id = "aro-detail-title";
+    body.replaceChildren(node("div", `${paper.venue} · ${paper.year}`, "aro-eyebrow"), title);
     const url = node("a", "Open original paper ↗"); url.href = safeHref(paper.url || paper.id, safeHref(paper.id)); url.target = "_blank"; url.rel = "noopener noreferrer"; body.appendChild(url);
     const dl = node("dl");
     detailRow(dl, "First author", paper.first_author); detailRow(dl, "Affiliation", (paper.first_author_affiliations || []).join("; "));

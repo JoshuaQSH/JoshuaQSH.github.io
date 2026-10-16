@@ -42,6 +42,8 @@ async function main() {
     assert.match(await page.locator('#aro-weight-score').innerText(), /No components selected/);
     await page.locator('#aro-table-body button').first().click();
     const detail = page.locator('#aro-detail');
+    assert.equal(await detail.getAttribute('aria-labelledby'), 'aro-detail-title');
+    assert.equal(await detail.locator('#aro-detail-title').innerText(), paper.title);
     const detailValue = label => detail.locator('dt').filter({ hasText: new RegExp(`^${label}$`) })
       .evaluate(element => element.nextElementSibling.textContent);
     assert.equal(await detailValue('Score'), 'No weights selected');

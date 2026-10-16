@@ -150,6 +150,21 @@ async function main() {
     assert.match(legacyTracker.elements['research-index-rows'].textContent, /OpenAlex source matches: 300.*publisher index entries: 500/s,
       'the source table retains both legacy totals for one year');
 
+    const staleLegacySnapshot = { ...legacySnapshot, coverage: [legacySnapshot.coverage[0],
+      { ...legacySnapshot.coverage[1], stale: true, last_successful_checked_at: '2026-10-01T00:00:00Z' }] };
+    const staleLegacyTracker = pageFixture(trackerHtml, staleLegacySnapshot, history);
+    await run('static/js/ai-research-tracker.js', staleLegacyTracker);
+    staleLegacyTracker.elements['research-catalog-year'].value = '2024';
+    staleLegacyTracker.elements['research-catalog-year'].dispatch('change');
+    assert.match(staleLegacyTracker.elements['research-catalog-rows'].textContent, /NeurIPS.*stale/s);
+    assert.doesNotMatch(staleLegacyTracker.elements['research-catalog-rows'].textContent, /publisher index: 500 entries/s,
+      'a stale index total must not be presented as a current catalog count');
+    assert.equal(descendants(staleLegacyTracker.elements['research-index-chart'], el => el.tagName === 'circle' && el.attributes['aria-label']?.includes('2024')).length, 0,
+      'stale legacy index totals remain absent from plotted series');
+    assert.match(staleLegacyTracker.elements['research-index-rows'].textContent,
+      /OpenAlex source matches: 300 \(last known\).*publisher index entries: 500 \(last known\)/s,
+      'retained source totals in the detailed ledger are explicitly last-known');
+
     const zeroIndexSnapshot = { ...snapshot, coverage: [
       { venue_id: 'neurips', venue: 'NeurIPS', year: 2020, source_total: 0,
         status: 'no-index-records', partial: true },
